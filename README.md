@@ -15,7 +15,7 @@ Samuti vaatasime ette järgmisse nädalasse (17.–23. veebruar). Planeerisime �
 Meeskonna sisene suhtlus toimis hästi – kõik panustasid aktiivselt ning leidsime ühiselt aega ka 19. veebruari hommikuseks koosolekuks, kus arutasime enne loengut kliendiga kohtumise sisu. Samal päeval toimus praktikumis protsesside kirjeldamine ning saime ka õppejõult tagasisidet tehtud tööde kohta. Kohtumine kliendiga toimus kell 14.00 Mare maja teadusköögis ning selle dokumenteerimise võtsid enda peale Age ja Triinu.
 
 
-### Kokkuvõte kliendiga kohtumisest
+### Kokkuvõte kliendiga kohtumisest 19.02.2025
 Kliendid kirjeldasid, kuidas 2024. aasta sügisel viidi eelvoor läbi Google Vormide abil ning millised olid selle eelised ja kitsaskohad. Eelvoorus osales 70 võistkonda ning kuna osalemine toimus vabalt (avaliku lingi kaudu), sooviti säilitada samasugune ligipääsetavus ka uues süsteemis – ilma autentimiseta. Eesmärk oli, et test oleks kättesaadav ilma sisselogimiseta, kuid vastajad peaksid sisestama meeskonna nime, liikmete nimed ja kontaktandmed vormi alguses.
 
 Uue lahenduse puhul sooviti säilitada järgmised põhifunktsioonid:

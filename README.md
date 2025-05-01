@@ -63,6 +63,7 @@ Et valmistuda 15. aprillil toimuva esitluse jaoks, seadsime eesmärgiks kokku pa
 14.aprill - 20.aprill
 14. aprillil toimus koosolek, kus vaatasime ühiselt üle valminud prototüübi versiooni, täiendasime testülesandeid ning tegime vajalikud viimase hetke parandused esitluse slaididesse. Otsustasime, et kahe meeskonna liikme peale jääb LoFi prototüübi testimine vastavalt testülesannetele, samuti testkasutajate leidmine  ja saadud andmete põhjal aruande kirjutamine. 18.aprill on IxD kodutöö tähtaeg, mistõttu peab LoFi (interaktiivne) prototüüp olema valmis hiljemalt 16.aprilliks, et ülejäänud meeskond saaks tegeleda prototüübi testimisega.
 17.04 ja 18.04 tegime valmis Lofi prototüübi figmas ja viisime läbi testid testkasutajatega.
+22. aprill toimus teine kohtumine kliendiga, kus tutvustasime oma esialgset LoFi prototüüpi, et saada tagasisidet. Olime juba kliendi soovitud värvid ja esialgse disaini paika pannud. 
 
 
 

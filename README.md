@@ -65,5 +65,14 @@ Et valmistuda 15. aprillil toimuva esitluse jaoks, seadsime eesmärgiks kokku pa
 17.04 ja 18.04 tegime valmis Lofi prototüübi figmas ja viisime läbi testid testkasutajatega.
 22. aprill toimus teine kohtumine kliendiga, kus tutvustasime oma esialgset LoFi prototüüpi, et saada tagasisidet. Olime juba kliendi soovitud värvid ja esialgse disaini paika pannud. 
 
+Mai
+HiFi prototüübi testimine. Valmis Hi-Fi prototüüp ja viisime läbi HiFi prototüübi testimise 20 inimesega. Testimise viisime läbi kasutated SUS skaalat ja tulemuseks saime 77,5/100, mis tõestas meile, et kasutajaliidese kasutatavus on hea. 
+
+7.05 toimus infosüsteemide kursusel loodud infosüsteemi koostamise plaani kaitsmine.
+12.05, esmaspäeval toimus interaktsioonidisaini kursuse töö kaitsmine, mille läbisime edukalt.
+15.05 toimus testplaani kaitsmine, mis möödus positiivselt
+21.05 toimus tiimikoosolek, kus arutasime andmebaasivalikuid ja keemiaülesannete vastuste klaviatuuri. 
+
+
 
 

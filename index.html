@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keemia Kalkulaator ja Joonistamine</title>
+  <!-- Poppins fontide import -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Stiililehe lisamine -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Kalkulaatori pealkiri -->
+  <h1 class="poppins-bold">Kalkulaator</h1>
+
+  <!-- Kalkulaatori juhend -->
+  <div class="tutorial poppins-regular">
+    <h3 class="poppins-medium">Juhend</h3>
+    <ul>
+      <li><strong>Tekstisümbolite</strong> lisamiseks kasuta klaviatuuri.</li>
+      <li><strong>Indeksid</strong> leiad ekraani-klaviatuuri ülemisest reast.</li>
+      <li>Keskmisest reast leiad erinevad <strong>muud sümbolid</strong>, mida võid vajada.</li>
+      <li><strong>Ülaindeksid</strong> leiad ekraani-klaviatuuri alumisest reast.</li>
+    </ul>
+  </div>
+
+  <!-- Sisestusväli -->
+  <textarea id="inputField" rows="2" placeholder="Alusta kirjutamist..." maxlength="10"></textarea>
+  <!-- Keemia klaviatuuri konteiner -->
+  <div class="keyboard-wrapper" id="chemistryKeyboard"></div>
+
+  <!-- Joonistamise pealkiri -->
+  <h1 class="poppins-bold">Joonised</h1>
+
+  <!-- Joonistamise juhend -->
+  <div class="tutorial poppins-regular">
+    <h3 class="poppins-medium">Juhend</h3>
+    <ul>
+      <li><strong>Lisa kujund:</strong> vajuta nuppu.</li>
+      <li><strong>Liiguta:</strong> klõpsa ja lohista kujundit.</li>
+      <li><strong>Pööra:</strong> vali joon ja kasuta ↑/↓ nooleklahve, et pöörata.</li>
+      <li><strong>Teksti muutmine:</strong> tee muutmist vajaval tekstil hiirega topeltklõps.</li>
+      <li><strong>Kustuta:</strong> vajuta “Kustuta” või klahvi Del.</li>
+      <li><strong>Undo/Redo:</strong> Z ja Y.</li>
+    </ul>
+  </div>
+  <!-- Joonistamise konteiner -->
+  <div class="drawing-container">
+    <!-- Joonistamise lõuend -->
+    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+    <!-- Esimene nupurida -->
+    <div class="drawing-keyboard">
+      <button onclick="addShape('line')" class="poppins-medium">Üksikside</button>
+      <button onclick="addShape('doubleLine')" class="poppins-medium">Kaksikside</button>
+      <button onclick="addShape('tripleLine')" class="poppins-medium">Kolmikside</button>
+      <button onclick="addShape('hexagon')" class="poppins-medium">Heksagon</button>
+      <button onclick="addShape('text')" class="poppins-medium">Tekst</button>
+    </div>
+    <!-- Teine nupurida -->
+    <div class="drawing-keyboard">
+       <button onclick="tool.undo()" class="poppins-medium">Undo (Z)</button>
+       <button onclick="tool.redo()" class="poppins-medium">Redo (Y)</button>
+       <button onclick="tool.deleteSelected()" class="poppins-medium">Kustuta</button>
+       <button onclick="tool.clearAll()" class="poppins-medium">Kustuta kõik</button>
+    </div>
+  </div>
+
+  <!-- JavaScripti failide lisamine -->
+  <script src="script.js"></script>
+  <script src="script2.js"></script>
+</body>
+</html>

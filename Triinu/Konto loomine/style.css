@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.poppins-thin {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+.poppins-extralight {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+.poppins-light {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+.poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+.poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+.poppins-extrabold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+.poppins-black {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+  background-color: white;
+}
+
+h1, h2, h3, h4, h5 {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  color: #821b25;
+}
+
+.logo-container img {
+  display: block;      
+  margin: 0 auto;     
+  max-width: 100%;  
+}
+
+
+#inputField {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 0px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #b52634;
+  border-radius: 5px;
+  resize: vertical;
+  font-family: 'Poppins', sans-serif;
+}
+
+.button-link {
+  padding: 4px 8px;
+  color: #821b25;
+  text-decoration: underline;
+  border-radius: 4px;
+}
+
+.button-link:hover {
+  color: #b52634;
+}
+
+.tutorial {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  width: 600px;
+  margin: 20px auto; 
+  text-align: left;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box; 
+}
+
+.tutorial h3 {
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;  
+  margin-bottom: 6px;
+  margin-top: 22px;
+}
+
+.tutorial h5 {
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+
+.tutorial li {
+  margin-bottom: 2px;
+  line-height: 1.15;
+  font-family: 'Poppins', sans-serif;
+}
+
+.big-checkbox {
+  transform: scale(1.5);
+  margin-right: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+button {
+  width: 20%;             
+  padding: 12px 0;          
+  font-size: 26px;         
+  font-weight: 600;      
+  background-color: #b52634; 
+  color: white;            
+  border: 1px #821b25;            
+  border-radius: 5px;       
+  cursor: pointer;        
+  transition: background-color 0.3s ease; 
+  margin-top: 10px;         
+}
+
+button:hover {
+  background-color: #821b25; 
+}

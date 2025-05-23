@@ -1,0 +1,1 @@
+//üks õige vastus

@@ -1,11 +1,9 @@
 import { LatexCalculator } from "./LatexCalculator.js";
 export class VisualCalculator {
     constructor(inputId, resultId) {
-        this.plusCounter = 0;
         this.inputField = document.getElementById(inputId);
         this.resultElement = document.getElementById(resultId);
         this.logic = new LatexCalculator();
-        this.plusCounterElement = document.getElementById('plus-counter');
         this.setupButtons();
         // Kuula MathLive input muutusi
         this.inputField.addEventListener('input', () => {
@@ -16,15 +14,6 @@ export class VisualCalculator {
     insertToInput(content) {
         this.inputField.insert(content); //Mathlive
         this.inputField.focus(); //kasutaja saab kohe edasi sisestada
-        if (content === '+') {
-            this.plusCounter++;
-            this.updatePlusCounter();
-        }
-    }
-    updatePlusCounter() {
-        if (this.plusCounterElement) {
-            this.plusCounterElement.textContent = `Plussmärgid: ${this.plusCounter}`;
-        }
     }
     setupButtons() {
         var _a, _b, _c;
@@ -46,8 +35,6 @@ export class VisualCalculator {
             this.resultElement.textContent = '';
             this.logic.clear();
             this.inputField.focus();
-            this.plusCounter = 0;
-            this.updatePlusCounter();
         });
         (_c = document.getElementById('calc-backspace')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
             this.inputField.executeCommand('deleteBackward'); //MathLive oma, mathlive nõuab korrektse latexi säilitamiseks

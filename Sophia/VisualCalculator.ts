@@ -4,14 +4,11 @@ export class VisualCalculator {
     private inputField: any; // MathField
     private resultElement: HTMLElement;
     private logic: LatexCalculator;
-    private plusCounter: number = 0;
-    private plusCounterElement: HTMLElement | null;
 
     constructor(inputId: string, resultId: string) {
         this.inputField = document.getElementById(inputId);
         this.resultElement = document.getElementById(resultId) as HTMLElement;
         this.logic = new LatexCalculator();
-        this.plusCounterElement = document.getElementById('plus-counter');
         this.setupButtons();
 
         
@@ -25,17 +22,6 @@ export class VisualCalculator {
     insertToInput(content: string) { //valemisse lisamiseks 
         this.inputField.insert(content); //Mathlive
         this.inputField.focus(); //kasutaja saab kohe edasi sisestada
-        if (content === '+') {
-            this.plusCounter++;
-            this.updatePlusCounter();
-        }
-    }
-
-    updatePlusCounter() {
-        if (this.plusCounterElement) {
-            this.plusCounterElement.textContent = `Plussmärgid: ${this.plusCounter}`;
-        }
-    
     }
 
     setupButtons() {
@@ -59,8 +45,6 @@ export class VisualCalculator {
             this.resultElement.textContent = '';
             this.logic.clear();
             this.inputField.focus();
-            this.plusCounter = 0;
-            this.updatePlusCounter();
         });
 
         document.getElementById('calc-backspace')?.addEventListener('click', () => {

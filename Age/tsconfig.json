@@ -10,6 +10,6 @@
     "strict": true,                                   /* Enable strict type checking */
     "skipLibCheck": true                              /* Skip checking .d.ts files */
   },
-  "include": ["*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }

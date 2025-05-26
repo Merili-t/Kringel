@@ -67,10 +67,20 @@ class DrawingTool {
         break;
 
       case 'text':
-        const txt = prompt('Sisesta tekst (max 10 sümbolit):');
-        if (!txt || txt.length > 10) return alert('Maksimaalselt 10 sümbolit!');
-        const quantityStr = prompt('Mitu korda lisada (kogus)?');
-        const qty = parseInt(quantityStr, 10);
+        const txt = prompt('Sisesta tekst (max 10 sümbolit, kleepimine pole lubatud):');
+        // Kontrolli pastetud teksti: liiga pikk, reavahetus, erimärgid
+        const pastedPattern = /[\n\r]|[^ -~]/; // detects newlines or non-printable ASCII
+
+        if (!txt || txt.length > 10 || pastedPattern.test(txt)) {
+          alert('Kleebitud või üle 10 sümboli pikkune tekst pole lubatud!');
+          return;
+        }
+
+        const qtyInput = prompt('Mitu korda soovid teksti lisada (kogus)?');
+        let qty = qtyInput === '' ? 1 : +qtyInput;
+
+        if (isNaN(qty) || qty < 1) return alert('Palun sisesta kehtiv number!');
+
         if (!qty || qty < 1) return;
 
         this.saveHistory();
@@ -110,17 +120,23 @@ class DrawingTool {
   redraw() {
     const { width, height } = this.canvas;
     this.ctx.clearRect(0, 0, width, height);
-    this.shapes.forEach(s => this.drawShape(s));
+    this.shapes.forEach((s, i) => this.drawShape(s, i === this.selectedIndex));
   }
 
+
   // Ühe kujundi joonistamine
-  drawShape(s) {
+  drawShape(s, isActive = false) {
     this.ctx.save();
     this.ctx.translate(s.x, s.y);
     this.ctx.rotate(s.angle || 0);
 
+    const activeColor = '#b52634';
+    const defaultStroke = 'black';
+
     switch (s.type) {
       case 'line':
+        this.ctx.strokeStyle = isActive ? activeColor : defaultStroke;
+        this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(s.length, 0);
@@ -128,6 +144,8 @@ class DrawingTool {
         break;
 
       case 'doubleLine':
+        this.ctx.strokeStyle = isActive ? activeColor : defaultStroke;
+        this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.moveTo(0, -3);
         this.ctx.lineTo(s.length, -3);
@@ -137,6 +155,8 @@ class DrawingTool {
         break;
 
       case 'tripleLine':
+        this.ctx.strokeStyle = isActive ? activeColor : defaultStroke;
+        this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.moveTo(0, -4);
         this.ctx.lineTo(s.length, -4);
@@ -148,8 +168,9 @@ class DrawingTool {
         break;
 
       case 'hexagon':
+        this.ctx.strokeStyle = isActive ? activeColor : defaultStroke;
+        this.ctx.lineWidth = 2;
         this.ctx.beginPath();
-        // Joonista kuusnurk vastavalt suurusele (size)
         for (let i = 0; i < 6; i++) {
           const a = i * Math.PI / 3;
           const x = (s.size || 30) * Math.cos(a);
@@ -161,12 +182,15 @@ class DrawingTool {
         break;
 
       case 'text':
+        this.ctx.fillStyle = isActive ? activeColor : defaultStroke;
         this.ctx.fillText(s.text, 0, 0);
         break;
     }
 
     this.ctx.restore();
   }
+
+
 
   // Kontrollib, kas hiireklõps tabas kujundit
   hitTest(s, mx, my) {
@@ -201,40 +225,57 @@ class DrawingTool {
   onMouseDown(e) {
     const rect = this.canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+
     for (let i = this.shapes.length - 1; i >= 0; i--) {
       if (this.hitTest(this.shapes[i], mx, my)) {
-        this.saveHistory();
-        this.dragged = i;
         this.selectedIndex = i;
+        this.dragged = i;
         this.offset.x = mx - this.shapes[i].x;
         this.offset.y = my - this.shapes[i].y;
+        this.isDragging = false; // Reset dragging flag
+        this.redraw();
         return;
       }
     }
     this.selectedIndex = null;
-  }
-
-  // Hiire liigutamine – lohistamine
-  onMouseMove(e) {
-    if (this.dragged == null) return;
-    const rect = this.canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-    const s = this.shapes[this.dragged];
-    s.x = mx - this.offset.x;
-    s.y = my - this.offset.y;
     this.redraw();
   }
 
-  // Hiire vabastamine
-  onMouseUp() {
-    this.dragged = null;
+  onMouseMove(e) {
+    if (this.dragged == null) return;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+
+    // If mouse moves more than a small threshold, start dragging
+    if (!this.isDragging) {
+      this.isDragging = true;
+      this.saveHistory(); // Save history only when actual dragging starts
+    }
+
+    if (this.isDragging) {
+      const s = this.shapes[this.dragged];
+      s.x = mx - this.offset.x;
+      s.y = my - this.offset.y;
+      this.redraw();
+    }
   }
+
+  onMouseUp(e) {
+    if (!this.isDragging) {
+      // No drag happened, so this was a click: just select shape (already done in mousedown)
+      // You can put any click-only logic here if needed
+    }
+    this.dragged = null;
+    this.isDragging = false;
+  }
+
 
   // Klaviatuurikäsud: kustutus, pööramine, undo/redo
   onKeyDown(e) {
     if (e.key === 'z' || e.key === 'Z') return this.undo();
     if (e.key === 'y' || e.key === 'Y') return this.redo();
-    if (e.key === 'Delete') return this.deleteSelected();
+    if (e.key === 'Delete' || e.key === 'Backspace') return this.deleteSelected();
 
     if (this.selectedIndex != null && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
       e.preventDefault();
@@ -275,4 +316,56 @@ function addShape(type) {
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('drawingCanvas');
   tool = new DrawingTool(canvas);
+
+  const modal = document.getElementById("videoModal");
+  const openBtn = document.getElementById("openVideoBtn");
+  const closeBtn = document.getElementById("closeVideoBtn");
+
+  openBtn.onclick = function () {
+    modal.style.display = "block";
+  };
+
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+    const video = modal.querySelector("video");
+    video.pause();
+    video.currentTime = 0;
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      const video = modal.querySelector("video");
+      video.pause();
+      video.currentTime = 0;
+    }
+  };
 });
+
+
+const modal = document.getElementById("videoModal");
+const openBtn = document.getElementById("openVideoBtn");
+const closeBtn = document.getElementById("closeVideoBtn");
+
+openBtn.onclick = function() {
+  modal.style.display = "block";
+}
+
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+  // Pause video when modal closes:
+  const video = modal.querySelector("video");
+  video.pause();
+  video.currentTime = 0;
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    const video = modal.querySelector("video");
+    video.pause();
+    video.currentTime = 0;
+  }
+}
+
+

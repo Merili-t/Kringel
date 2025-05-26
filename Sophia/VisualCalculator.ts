@@ -51,6 +51,14 @@ export class VisualCalculator {
             this.inputField.executeCommand('deleteBackward'); //MathLive oma, mathlive nõuab korrektse latexi säilitamiseks
             this.inputField.focus(); //focus teeb, et sisestus jääks aktiivseks / klaviatuur kinni ei läheks
         });
+
+        const symbolToggle = document.getElementById('toggle-symbols');
+        const symbolPanel = document.getElementById('symbol-panel');
+        if (symbolToggle && symbolPanel) {
+            symbolToggle.addEventListener('click', () => {
+                symbolPanel.style.display = symbolPanel.style.display === 'none' ? 'grid' : 'none';
+            })
+        }
     }
 }
 

@@ -20,6 +20,12 @@ export class LatexCalculator extends BaseCalculator { //Tegelik arvutamise loogi
             .replace(/\\(sin|cos|tan)\s*\(([^)]*)\)/g, 'Math.$1($2)')
             .replace(/\\(sin|cos|tan)\s*{([^}]*)}/g, 'Math.$1($2)')
 
+            // ln ja log käsitlemine
+            .replace(/\\ln\s*\(([^)]*)\)/g, 'Math.log($1)')
+            .replace(/\\ln\s*{([^}]*)}/g, 'Math.log($1)')
+            .replace(/\\log\s*\(([^)]*)\)/g, 'Math.log10($1)')
+            .replace(/\\log\s*{([^}]*)}/g, 'Math.log10($1)')
+
             // \sqrt{9} -> Math.sqrt(9)
             .replace(/\\sqrt\s*{([^}]*)}/g, 'Math.sqrt($1)')
             // \sqrt9 (tühi ruutjuur) ilma sulgudeta, d - number

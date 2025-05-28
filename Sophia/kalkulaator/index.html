@@ -9,77 +9,105 @@
   <link rel="stylesheet" href="/Sophia/kalkulaator/main.css">
 </head>
 <body>
-  <h2>Matemaatiline LaTeX-kalkulaator</h2>
-
-  <math-field id="latexInput" 
-    virtual-keyboard-mode="manual"
-    virtual-keyboard-toolbar="false"
-    smart-mode="false"
-    smart-fence="false">
-  </math-field>
-
-  <!-- Tulemus -->
-  <div id="resultArea" style="margin-top: 1rem; font-size: 1.4rem; font-weight: bold;"></div>
-
-  <!-- Klahvid -->
-  <div class="keypad">
-    <!-- Funktsioonide rida -->
-    <button class="calc-button" data-content="\sqrt{#0}">√</button>
-    <button class="calc-button" data-content="\pi">π</button>
-    <button class="calc-button" data-content="\sin(#0)">sin</button>
-    <button class="calc-button" data-content="\cos(#0)">cos</button>
-
-    <button class="calc-button" data-content="\tan(#0)">tan</button>
-    <button class="calc-button" data-content="^{#0}">xʸ</button>
-    <button class="calc-button" data-content="\frac{#0}{#?}">÷</button>
-    <button class="calc-button" data-content="*">×</button>
-    <button class="calc-button" data-content="\\ln(#0)">ln</button>
-    <button class="calc-button" data-content="\\log(#0)">log</button>
-
-
-    <!-- Numbrid ja tehete nupud -->
-    <button class="calc-button" data-content="7">7</button>
-    <button class="calc-button" data-content="8">8</button>
-    <button class="calc-button" data-content="9">9</button>
-    <button class="calc-button" data-content="-">−</button>
-
-    <button class="calc-button" data-content="4">4</button>
-    <button class="calc-button" data-content="5">5</button>
-    <button class="calc-button" data-content="6">6</button>
-    <button class="calc-button" data-content="+">+</button>
-
-    <button class="calc-button" data-content="1">1</button>
-    <button class="calc-button" data-content="2">2</button>
-    <button class="calc-button" data-content="3">3</button>
-    <button class="calc-button" data-content=".">.</button>
-
-    <button class="calc-button" data-content="0">0</button>
-    <button class="calc-button" data-content="(">(</button>
-    <button class="calc-button" data-content=")">)</button>
-    <button id="calc-backspace">←</button>
-
-    <!-- Kontrollnupud -->
-    <button id="calc-clear">AC</button>
-    <button id="calc-evaluate">=</button>
-  </div>
-
-  <div style="margin-top: 1rem;">
-    <button id="toggle-symbols">Valemimärgid</button>
-  </div>
+  <h2>Matemaatika ja füüsika kalkulaator</h2>
+<div class="wrapper">
+  <div id="main-wrapper">
+    <div id="juhend">
+      <h3>Kasutusjuhend</h3>
+      <ul>
+        <li>Sisesta valem ülalolevasse lahtrisse.</li>
+        <li>Kasuta nuppe või klaviatuuri valemi koostamiseks (Tähed ja numbrid, "+" , "-" , "=" võimalik klaviatuuriga sisestada).</li>
+        <li>Vajuta <b>"="</b> , et arvutada ja näha lõppvastust (juhul kui kasutaja soovib kontrollida arvulist vastus enne esitamist jms).</li>
+        <li>Lõppvastust ei saa alati arvutada, näiteks kui oled kasutanud <b>füüsika sümboleid</b> või <b>tähti</b> (Need on visuaalselt esitamiseks).</li>
+        <li>Klaviatuuril on võimalik ka vastuseväljale = sisestada, kui on soov valemit esitada, mitte arvutada!</li>
+        <li>Vajuta <b>"Valemimärgid"</b> nuppu, et näha rohkem sümboleid ja indekseid.</li>
+        <li>Eraldi on lisatud all ja ülalindeks, ning mõlemad indeksid koos (lisades ükshaaval mõlemad indeksid võivad need paigast liikuda). </li>
+        <li><b>"AC"</b> kustutab sisendi, <b>"←"</b> kustutab viimase märgi.</li>
+        <li><b>"xʸ"</b> Ülalindeks on olemas mõlemal lehel, sest seda saab kasutada astendamisel.</li>
+        <li><b>"π"</b> korrutamiseks piisab kui kirjutada "5π", ei pea panema "5 * π".</li>
+        <li>Hetkel võib veebileht mängida heli kui vajutada <b>"←"</b>, mida ei peaks juhtuma ja seda pole veel saanud eemaldada!</li>
+      </ul>
+    </div>
+    <div id="calculator-area">
+      <div class = "calc-wrapper">
+          <math-field 
+            id="latexInput" 
+            virtual-keyboard-mode="manual"
+            virtual-keyboard-toolbar="false"
+            smart-mode="false"
+            smart-fence="false">
+          </math-field>
   
-  <!-- valemimärkide ala (esialgu peidetud) -->
-  <div id="symbol-panel" style="display:none; margin-top: 1rem;">
-    <button class="calc-button" data-content="_{#0}">Allindeks</button>
-    <button class="calc-button" data-content="^{#0}">Ülaindeks</button>
-    <button class="calc-button" data-content="\\degree">°</button>
-    <button class="calc-button" data-content="<">&lt;</button>
-    <button class="calc-button" data-content=">">&gt;</button>
-    <button class="calc-button" data-content="\\alpha">α</button>
-    <button class="calc-button" data-content="\\beta">β</button>
-    <button class="calc-button" data-content="\\gamma">γ</button>
-    <button class="calc-button" data-content="%">%</button>
-    <button class="calc-button" data-content="\\approx">≈</button>
+          <!-- Tulemus -->
+          <div id="resultArea" style="margin-top: 1rem; font-size: 1.4rem; font-weight: bold;"></div>
+  
+          <!-- Klahvid -->
+          <div class="calc-buttons keypad">
+            <!-- Funktsioonide rida -->
+            <button class="calc-button" data-content="\sqrt{#0}">√</button>
+            <button class="calc-button" data-content="\pi">π</button>
+            <button class="calc-button" data-content="\sin(#0)">sin</button>
+            <button class="calc-button" data-content="\cos(#0)">cos</button>
+            
+            <button class="calc-button" data-content="\tan(#0)">tan</button>
+            <button class="calc-button" data-content="^{#0}">xʸ</button>
+            <button class="calc-button" data-content="\frac{#0}{#?}">÷</button>
+            <button class="calc-button" data-content="*">×</button>
+  
+            <button class="calc-button" data-content="\ln(#0)">ln</button>
+            <button class="calc-button" data-content="\log(#0)">log</button>
+            <button class="calc-button" data-content="(">(</button>
+            <button class="calc-button" data-content=")">)</button>
+  
+            <!-- Numbriklahvid -->
+            <button class="calc-button" data-content="7">7</button>
+            <button class="calc-button" data-content="8">8</button>
+            <button class="calc-button" data-content="9">9</button>
+            <button class="calc-button" data-content="-">−</button>
+  
+            <button class="calc-button" data-content="4">4</button>
+            <button class="calc-button" data-content="5">5</button>
+            <button class="calc-button" data-content="6">6</button>
+            <button class="calc-button" data-content="+">+</button>
+  
+            <button class="calc-button" data-content="1">1</button>
+            <button class="calc-button" data-content="2">2</button>
+            <button class="calc-button" data-content="3">3</button>
+            <button id="calc-backspace">←</button>
+  
+            <button class="calc-button" data-content="0">0</button>
+            <button class="calc-button" data-content=".">.</button>
+            <button id="calc-clear">AC</button>
+            <button id="calc-evaluate">=</button>
+          </div>
+  
+          
+          
+          <!-- valemimärkide ala (esialgu peidetud) -->
+          <div id="symbol-panel" style="display:none; margin-top: 1rem;">
+            <button class="calc-button" data-content="_{#0}">xᵧ</button>
+            <button class="calc-button" data-content="^{#0}">xʸ</button>
+            <button class="calc-button" data-content="_{#0}^{#?}">xᵧʸ</button>
+            <button class="calc-button" data-content="\degree">°</button>
+            <button class="calc-button" data-content="<">&lt;</button>
+            <button class="calc-button" data-content=">">&gt;</button>
+            <button class="calc-button" data-content="\alpha">α</button>
+            <button class="calc-button" data-content="\beta">β</button>
+            <button class="calc-button" data-content="\gamma">γ</button>
+            <button class="calc-button" data-content="\omega">ω</button>
+            <button class="calc-button" data-content="\%">%</button>
+            <button class="calc-button" data-content="\approx">≈</button>
+            <button id="symbol-backspace">←</button>
+            <button id="symbol-clear">AC</button>
+            <button id="back-to-calc" style="margin-top:1rem;">Tagasi kalkulaatori juurde</button>
+          </div>
+  
+          <div style="margin-top: 1rem;">
+            <button id="toggle-symbols">Valemimärgid</button>
+          </div>
+        </div>
+    </div>
   </div>
-
+</div>
 </body>
 </html>

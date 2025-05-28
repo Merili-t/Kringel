@@ -12,16 +12,32 @@ export class LatexCalculator extends BaseCalculator {
             // Lihtne ^ → ** (nt 2^3 või (1+2)^4.5)
             .replace(/(\d+(\.\d+)?|\([^()]+\))\s*\^\s*([-\d.]+)/g, '($1)**($3)') // $ tähistab gruppi eraldatakse sugludega
             // 9\cos(9) -> 9*Math.cos(9) sin cos tan 
-            .replace(/(\d+)\s*\\(sin|cos|tan)\s*\(([^)]*)\)/g, '($1)*Math.$2($3)') // ()
-            .replace(/(\d+)\s*\\(sin|cos|tan)\s*{([^}]*)}/g, '($1)*Math.$2($3)') // {}
+            .replace(/([\d.]+)\s*\\(sin|cos|tan)\s*\(([^)]*)\)/g, '($1)*Math.$2($3)')
+            .replace(/([\d.]+)\s*\\(sin|cos|tan)\s*{([^}]*)}/g, '($1)*Math.$2($3)')
             //tavaline \cos 9 -> Math.cos(9)
             .replace(/\\(sin|cos|tan)\s*\(([^)]*)\)/g, 'Math.$1($2)')
             .replace(/\\(sin|cos|tan)\s*{([^}]*)}/g, 'Math.$1($2)')
+            // ln ja log koos eesoleva arvuga (nt 2\ln(5))
+            .replace(/([\d.]+)\s*\\ln\s*\(([^)]+)\)/g, '($1)*Math.log($2)')
+            .replace(/([\d.]+)\s*\\ln\s*{([^}]+)}/g, '($1)*Math.log($2)')
+            .replace(/([\d.]+)\s*\\log\s*\(([^)]+)\)/g, '($1)*Math.log10($2)')
+            .replace(/([\d.]+)\s*\\log\s*{([^}]+)}/g, '($1)*Math.log10($2)')
+            // Tavaline ln ja log ilma ees oleva arvuta
+            .replace(/\\ln\s*\(([^)]*)\)/g, 'Math.log($1)')
+            .replace(/\\ln\s*{([^}]*)}/g, 'Math.log($1)')
+            .replace(/\\log\s*\(([^)]*)\)/g, 'Math.log10($1)')
+            .replace(/\\log\s*{([^}]*)}/g, 'Math.log10($1)')
             // \sqrt{9} -> Math.sqrt(9)
             .replace(/\\sqrt\s*{([^}]*)}/g, 'Math.sqrt($1)')
             // \sqrt9 (tühi ruutjuur) ilma sulgudeta, d - number
             .replace(/\\sqrt\s*(\d+(\.\d+)?)/g, 'Math.sqrt($1)')
-            // \pi -> Math.PI
+            .replace(/([\d.]+)\s*\\sqrt\s*{([^}]*)}/g, '($1)*Math.sqrt($2)')
+            .replace(/([\d.]+)\s*\\sqrt\s*(\d+(\.\d+)?)/g, '($1)*Math.sqrt($2)')
+            // 5\pi või 5pi või 2.5pii -> 5 * Math.PI
+            .replace(/([\d.]+)\s*(\\?pi{1,2})\b/g, (_, num, piPart) => {
+            return `(${num})*Math.PI`;
+        })
+            // tavaline \pi -> Math.PI
             .replace(/\\pi/g, 'Math.PI')
             // \frac93 → (9)/(3)
             .replace(/\\frac\s*(\d+)\s*(\d+)/g, '($1)/($2)')

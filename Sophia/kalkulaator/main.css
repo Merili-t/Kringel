@@ -1,24 +1,46 @@
 :root {
   --primary-red: #b32c3b;
+  --primary-red-hover: #a0212f;
   --light-gray: #f0f0f0;
-  --dark-gray: #666;
+  --white: #ffffff;
+  --dark-gray: #333;
   --border-radius: 12px;
   --button-font: "Segoe UI", sans-serif;
-  --button-size: 1.2rem;
-  --special-bg: #e0e0e0;
+  --button-size: 1.1rem;
 }
+
 
 /* Üldstiil */
 body {
   font-family: var(--button-font);
-  margin: 2rem auto;
-  max-width: 600px;
-  background-color: white;
+  background-color: var(--white);
   color: #222;
-  padding: 0 1rem;
+  padding: 1rem;
+  margin: 2rem auto;
 }
 
-/* MathField stiil */
+/* Lisa grid main-wrapperile */
+#main-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Juhendi paigutus */
+#juhend {
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+/* Kalkulaatori paigutus */
+#calculator-area {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  max-width: 650px;
+}
+
+/* Sisestusväli */
 math-field {
   width: 100%;
   font-size: 1.4rem;
@@ -29,103 +51,112 @@ math-field {
   box-sizing: border-box;
 }
 
-/* Tulemuse ala */
+/* Tulemus */
 #resultArea {
   margin-top: 1rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--dark-gray);
   text-align: right;
-  min-height: 2rem;
+  color: var(--dark-gray);
 }
 
-/* Klaviatuuri paigutus */
-.keypad {
+/* Grid paigutus */
+.keypad,
+.calc-buttons,
+#symbol-panel {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
 
-/* Üldine nupu stiil */
-.keypad button {
+/* Üldine nuppude stiil */
+.calc-button,
+#calc-clear,
+#calc-backspace,
+#calc-evaluate,
+#toggle-symbols,
+#back-to-calc,
+#symbol-backspace,
+#symbol-clear {
   padding: 1.2rem;
   font-size: var(--button-size);
-  background-color: var(--light-gray);
-  border: 1px solid #ccc;
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
   user-select: none;
-}
-
-.keypad button:hover {
-  background-color: #ddd;
-}
-
-.keypad button:active {
-  transform: scale(0.98);
-}
-
-/* Funktsiooni- ja tehete nupud */
-.keypad button[data-content*="\\"] {
-  background-color: var(--special-bg);
-  font-weight: bold;
-}
-
-/* Numbriklahvid */
-.keypad button[data-content="0"],
-.keypad button[data-content="1"],
-.keypad button[data-content="2"],
-.keypad button[data-content="3"],
-.keypad button[data-content="4"],
-.keypad button[data-content="5"],
-.keypad button[data-content="6"],
-.keypad button[data-content="7"],
-.keypad button[data-content="8"],
-.keypad button[data-content="9"] {
-  background-color: #fff;
-}
-
-/* Erilised nupud (AC, ←, =) */
-#calc-clear,
-#calc-backspace,
-#calc-evaluate {
-  background-color: var(--primary-red);
-  color: white;
   border: none;
 }
 
-#calc-clear:hover,
-#calc-backspace:hover,
-#calc-evaluate:hover {
-  background-color: #a0212f;
+/* Numbrid: valge taust, tume tekst */
+.calc-button[data-content="0"],
+.calc-button[data-content="1"],
+.calc-button[data-content="2"],
+.calc-button[data-content="3"],
+.calc-button[data-content="4"],
+.calc-button[data-content="5"],
+.calc-button[data-content="6"],
+.calc-button[data-content="7"],
+.calc-button[data-content="8"],
+.calc-button[data-content="9"] {
+  background-color: var(--white);
+  color: #222;
+  border: 1px solid #ccc;
+}
+
+/* Sümbolid: punane taust, valge tekst */
+.calc-button:not([data-content="0"]):not([data-content="1"]):not([data-content="2"])
+:not([data-content="3"]):not([data-content="4"]):not([data-content="5"])
+:not([data-content="6"]):not([data-content="7"]):not([data-content="8"])
+:not([data-content="9"]) {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+/* Erilised funktsiooninupud */
+#calc-clear,
+#calc-backspace,
+#calc-evaluate,
+#toggle-symbols,
+#back-to-calc,
+#symbol-backspace,
+#symbol-clear {
+  background-color: var(--primary-red);
+  color: white;
 }
 
 #calc-evaluate {
   grid-column: span 2;
 }
 
-/* Sulge ja koma */
-.keypad button[data-content="("],
-.keypad button[data-content=")"],
-.keypad button[data-content="."] {
-  background-color: #fafafa;
+#back-to-calc {
+  grid-column: span 4;
+  margin-top: 0.5rem;
 }
 
-/* MathLive virtuaalnupu peitmine */
-math-field::part(virtual-keyboard-toggle) {
+/* Hover + active efektid */
+button:hover {
+  filter: brightness(0.95);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* MathLive lisanuppude peitmine */
+math-field::part(virtual-keyboard-toggle),
+math-field::part(menu-toggle) {
   display: none;
 }
 
-/* Mobiilivaate kohandus */
+/* Väiksema ekraani tugi */
 @media (max-width: 480px) {
   .keypad {
     grid-template-columns: repeat(4, 1fr);
     gap: 0.4rem;
   }
 
-  .keypad button {
+  .calc-button {
     padding: 1rem;
     font-size: 1rem;
   }
@@ -139,7 +170,15 @@ math-field::part(virtual-keyboard-toggle) {
   }
 }
 
-#symbol-panel {
+/* Tee = nupp laiemaks */
+#calc-evaluate {
+  background-color: var(--primary-red);
+  color: white;
+  grid-column: span 1; /* Või span 2 kui soovid, et oleks laiem */
+}
+
+/* Klaviatuuril uus grid paigutus */
+.calc-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;

@@ -65,6 +65,12 @@ class ChemistryKeyboard extends Keyboard {
 class InputField {
   constructor(inputElement) {
     this.inputElement = inputElement;
+
+    // Paste sündmuse blokeerimine
+    this.inputElement.addEventListener('paste', (e) => {
+      e.preventDefault();
+      alert('Paste is disabled in this input field.');
+    });
   }
 
   // Välja tühjendamine
@@ -79,7 +85,7 @@ class InputField {
     const end = input.selectionEnd;
     const text = input.value;
 
-    // Lisab väärtuse (tähe või numbri) õigesse kohta
+    // Lisab väärtuse õigesse kohta
     input.value = text.slice(0, start) + value + text.slice(end);
     input.selectionStart = input.selectionEnd = start + value.length;
     input.focus();
@@ -103,5 +109,11 @@ window.onload = function () {
       event.preventDefault();
       inputField.append(event.key); // Lisab vajutatud märgi
     }
+  });
+
+  // Üldine paste blokeerimine kogu lehel (valikuline, võib eemaldada)
+  document.addEventListener('paste', (e) => {
+    e.preventDefault();
+    alert('Paste is disabled.');
   });
 };

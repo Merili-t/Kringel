@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "mathlive": "^0.105.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
   }
 }

@@ -63,9 +63,9 @@ Et valmistuda 15. aprillil toimuva esitluse jaoks, seadsime eesmärgiks kokku pa
 14.aprill - 20.aprill
 14. aprillil toimus koosolek, kus vaatasime ühiselt üle valminud prototüübi versiooni, täiendasime testülesandeid ning tegime vajalikud viimase hetke parandused esitluse slaididesse. Otsustasime, et kahe meeskonna liikme peale jääb LoFi prototüübi testimine vastavalt testülesannetele, samuti testkasutajate leidmine  ja saadud andmete põhjal aruande kirjutamine. 18.aprill on IxD kodutöö tähtaeg, mistõttu peab LoFi (interaktiivne) prototüüp olema valmis hiljemalt 16.aprilliks, et ülejäänud meeskond saaks tegeleda prototüübi testimisega.
 17.04 ja 18.04 tegime valmis Lofi prototüübi figmas ja viisime läbi testid testkasutajatega.
-22. aprill toimus teine kohtumine kliendiga, kus tutvustasime oma esialgset LoFi prototüüpi, et saada tagasisidet. Olime juba kliendi soovitud värvid ja esialgse disaini paika pannud. 
+22. aprill toimus teine kohtumine kliendiga, kus tutvustasime oma esialgset LoFi prototüüpi, et saada tagasisidet. Olime juba kliendi soovitud värvid ja esialgse disaini paika pannud. Aprilli viimasel nädalal hakkasime vaikselt ette valmistama infosüsteemi ja interaktsioonidisaini eksamiteks.
 
-Mai
+## Mai Lisette
 HiFi prototüübi testimine. Valmis Hi-Fi prototüüp ja viisime läbi HiFi prototüübi testimise 20 inimesega. Testimise viisime läbi kasutated SUS skaalat ja tulemuseks saime 77,5/100, mis tõestas meile, et kasutajaliidese kasutatavus on hea. 
 
 7.05 toimus infosüsteemide kursusel loodud infosüsteemi koostamise plaani kaitsmine.

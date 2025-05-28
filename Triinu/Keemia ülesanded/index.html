@@ -15,12 +15,12 @@
 
   <!-- Kalkulaatori juhend -->
   <div class="tutorial poppins-regular">
-    <h3 class="poppins-medium">Juhend</h3>
+    <h3 class="poppins-medium" style="text-align: center;">Juhend</h3>
     <ul>
-      <li><strong>Tekstisümbolite</strong> lisamiseks kasuta klaviatuuri.</li>
-      <li><strong>Indeksid</strong> leiad ekraani-klaviatuuri ülemisest reast.</li>
-      <li>Keskmisest reast leiad erinevad <strong>muud sümbolid</strong>, mida võid vajada.</li>
-      <li><strong>Ülaindeksid</strong> leiad ekraani-klaviatuuri alumisest reast.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Tekstisümbolite lisamiseks</span> kasuta tavalist klaviatuuri.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Indeksid</span> leiad ekraanil oleva klaviatuuri ülemisest reast.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Ülaindeksid</span> leiad ekraanil oleva klaviatuuri alumisest reast.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Muud sümbolid</span> , mida võid vajada leiad ekraanil oleva klaviatuuri keskmisest reast.</li>
     </ul>
   </div>
 
@@ -34,16 +34,21 @@
 
   <!-- Joonistamise juhend -->
   <div class="tutorial poppins-regular">
-    <h3 class="poppins-medium">Juhend</h3>
+    <h3 class="poppins-medium" style="text-align: center;">Juhend</h3>
     <ul>
-      <li><strong>Lisa kujund:</strong> vajuta nuppu.</li>
-      <li><strong>Liiguta:</strong> klõpsa ja lohista kujundit.</li>
-      <li><strong>Pööra:</strong> vali joon ja kasuta ↑/↓ nooleklahve, et pöörata.</li>
-      <li><strong>Teksti muutmine:</strong> tee muutmist vajaval tekstil hiirega topeltklõps.</li>
-      <li><strong>Kustuta:</strong> vajuta “Kustuta” või klahvi Del.</li>
-      <li><strong>Undo/Redo:</strong> Z ja Y.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Kujundi või teksti lisamiseks</span> vajuta vastavat nuppu joonistusala all.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Joonisele lisatud elementide liigutamiseks</span> kliki esemele ja lohista ta soovitud kohta.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Sidemete pööramiseks</span> kliki elemendile ning kasuta klaviatuuri ↑/↓ nooleklahve, et pöörata.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Teksti lisamiseks</span> vajuta vastavat nuppu joonistusala all ning sisesta soovitud tekst, seejärel kogus (nt kui joonistad süsinikuahelat saad lisada 5 süsinikku korraga).</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Teksti muutmiseks</span> tee topeltklõps tekstielemendil, mida soovid muuta ning muuda teksti sisu.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Undo/Redo tegemiseks</span> vajuta vastavalt klahve Z / Y või vastavaid nuppe joonistusala all.</li>
+      <li style="margin-bottom: 8px;"><span class="poppins-semibold">Konkreetse elemendi kustutamiseks</span> kliki elemendil mida soovid kustutada, seejärel kasuta backspace või delete klahvi või vastavat nuppu joonistusala all.</li>
+      <li><span id="openVideoBtn" class="poppins-medium clickable-text" style="text-decoration: underline; cursor: pointer; color: blue;">
+        Vaata videojuhendit
+      </span></li>
     </ul>
   </div>
+
   <!-- Joonistamise konteiner -->
   <div class="drawing-container">
     <!-- Joonistamise lõuend -->
@@ -61,7 +66,18 @@
        <button onclick="tool.undo()" class="poppins-medium">Undo (Z)</button>
        <button onclick="tool.redo()" class="poppins-medium">Redo (Y)</button>
        <button onclick="tool.deleteSelected()" class="poppins-medium">Kustuta</button>
-       <button onclick="tool.clearAll()" class="poppins-medium">Kustuta kõik</button>
+       <button onclick="tool.deleteAll()" class="poppins-medium">Kustuta kõik</button>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span id="closeVideoBtn" class="close">&times;</span>
+      <video width="100%" controls>
+        <source src="videojuhend.mp4" type="video/mp4" />
+        Sinu brauser ei toeta videot.
+      </video>
     </div>
   </div>
 

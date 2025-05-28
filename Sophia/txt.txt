@@ -1,0 +1,11 @@
+vaja teha need vahelehed: 
+- sooritaja juhend
+- kontaktandme video
+- testi lahendamine
+- maatriks üks ja mitu õiget
+
+video - kringli gmail nt? või salvestab video andmebaasi, sealt kuvab mingil lehel.
+- firebase storage (pilve laadimine). 
+
+vt üle mathlive osa (installisid juba midagi)
+https://unpkg.com/mathlive?module

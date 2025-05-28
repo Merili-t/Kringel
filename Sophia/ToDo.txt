@@ -1,0 +1,16 @@
+vaja teha need vahelehed: 
+- sooritaja juhend
+- kontaktandme video
+- testi lahendamine
+- maatriks üks ja mitu õiget
+
+video - kringli gmail nt? või salvestab video andmebaasi, sealt kuvab mingil lehel.
+- firebase storage (pilve laadimine). 
+
+MATH/FÜÜSIKA kalkulaator 
+- log/ln ette lisamisel arvu arvutamine regex
+- füsa nupud korda
+- nii all ja ülaindeksiga läheb paigast ära vahel
+- lisada = ? kui pole vaja arvutada aga kuvada. 
+- veel mingid füüsika valemite märgid?
+- disable mathlive sounds

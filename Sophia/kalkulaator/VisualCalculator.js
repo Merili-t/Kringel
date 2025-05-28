@@ -16,7 +16,7 @@ export class VisualCalculator {
         this.inputField.focus(); //kasutaja saab kohe edasi sisestada
     }
     setupButtons() {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         document.querySelectorAll('.calc-button').forEach((el) => {
             const button = el;
             button.addEventListener('click', () => {
@@ -36,10 +36,38 @@ export class VisualCalculator {
             this.logic.clear();
             this.inputField.focus();
         });
-        (_c = document.getElementById('calc-backspace')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
-            this.inputField.executeCommand('deleteBackward'); //MathLive oma, mathlive nõuab korrektse latexi säilitamiseks
-            this.inputField.focus(); //focus teeb, et sisestus jääks aktiivseks / klaviatuur kinni ei läheks
+        (_c = document.getElementById('symbol-clear')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
+            this.inputField.value = ''; //Mathlive 
+            this.resultElement.textContent = '';
+            this.logic.clear();
+            this.inputField.focus();
         });
+        (_d = document.getElementById('calc-backspace')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', () => {
+            this.inputField.executeCommand('deleteBackward');
+            this.inputField.focus();
+        });
+        (_e = document.getElementById('symbol-backspace')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', () => {
+            this.inputField.executeCommand('deleteBackward');
+            this.inputField.focus();
+        });
+        const symbolToggle = document.getElementById('toggle-symbols');
+        const symbolPanel = document.getElementById('symbol-panel');
+        const calcButtons = document.querySelector('.calc-buttons');
+        const backToCalc = document.getElementById('back-to-calc');
+        if (symbolToggle && symbolPanel && calcButtons) {
+            symbolToggle.addEventListener('click', () => {
+                calcButtons.style.display = 'none';
+                symbolPanel.style.display = 'grid';
+                symbolToggle.style.display = 'none';
+            });
+        }
+        if (backToCalc && symbolPanel && calcButtons && symbolToggle) {
+            backToCalc.addEventListener('click', () => {
+                symbolPanel.style.display = 'none';
+                calcButtons.style.display = 'grid';
+                symbolToggle.style.display = '';
+            });
+        }
     }
 }
 console.log("test");

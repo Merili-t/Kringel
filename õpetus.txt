@@ -10,8 +10,14 @@ Typescript faili kompileerimine
 - Kui soovid, et oleks typescriptile sarnane js fail (puhtam js kood):
  1. Mine  terminalis kausta kus su failid on (cd folder/)
  2. Kirjuta npx tsc (see compilib kõik sinu ts failid samasse kausta js failideks)
- väike update: pead kõige pealt enda main kausta lisama tsconfig.json faili, et see töötaks.
+ väike update: pead kõige pealt enda main kausta lisama tsconfig.json faili, et see töötaks.git 
 
  !! Ühe faili (npx tsc filename.ts) ei soovita kasutada, sest see ignoreerib tsconfig faili olulisi seadeid,
  mille tulemusena tuleb commonjs kujul compile.
  commonjs kujul ei pruugi veebilehel kõik alati töötada ja on üldiselt vanem.
+
+
+NODE versioon
+- Vaadake üle mis teie node versioon ja vajadusel updatei
+nvm install     # Paigaldab automaatselt versiooni .nvmrc alusel (kui ei siis vaata versiooni sealt failist)
+nvm use         # Kasutab seda versioonig

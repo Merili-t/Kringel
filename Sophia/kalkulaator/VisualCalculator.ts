@@ -1,5 +1,6 @@
 import { LatexCalculator } from "./LatexCalculator.js";
 
+
 export class VisualCalculator {
     private inputField: any; // MathField
     private resultElement: HTMLElement;
@@ -47,17 +48,39 @@ export class VisualCalculator {
             this.inputField.focus();
         });
 
+        document.getElementById('symbol-clear')?.addEventListener('click', () => {
+            this.inputField.value = ''; //Mathlive 
+            this.resultElement.textContent = '';
+            this.logic.clear();
+            this.inputField.focus();
+        });
+
         document.getElementById('calc-backspace')?.addEventListener('click', () => {
-            this.inputField.executeCommand('deleteBackward'); //MathLive oma, mathlive nõuab korrektse latexi säilitamiseks
-            this.inputField.focus(); //focus teeb, et sisestus jääks aktiivseks / klaviatuur kinni ei läheks
+            this.inputField.executeCommand('deleteBackward');
+            this.inputField.focus();
+        });
+        document.getElementById('symbol-backspace')?.addEventListener('click', () => {
+            this.inputField.executeCommand('deleteBackward');
+            this.inputField.focus();
         });
 
         const symbolToggle = document.getElementById('toggle-symbols');
         const symbolPanel = document.getElementById('symbol-panel');
-        if (symbolToggle && symbolPanel) {
+        const calcButtons = document.querySelector('.calc-buttons') as HTMLElement | null;
+        const backToCalc = document.getElementById('back-to-calc');
+        if (symbolToggle && symbolPanel && calcButtons) {
             symbolToggle.addEventListener('click', () => {
-                symbolPanel.style.display = symbolPanel.style.display === 'none' ? 'grid' : 'none';
-            })
+                calcButtons.style.display = 'none';
+                (symbolPanel as HTMLElement).style.display = 'grid';
+                symbolToggle.style.display = 'none';
+            });
+        }
+        if (backToCalc && symbolPanel && calcButtons && symbolToggle) {
+            backToCalc.addEventListener('click', () => {
+                (symbolPanel as HTMLElement).style.display = 'none';
+                calcButtons.style.display = 'grid';
+                symbolToggle.style.display = '';
+            });
         }
     }
 }

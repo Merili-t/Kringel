@@ -1,5 +1,5 @@
-1. testi lahendaja avaleht
-2. juhend sisselogimata
+1. testi lahendaja avaleht ✅
+2. juhend sisselogimata - work in progress
 3. kontakt sisselogimata
 5. detailid ✅
 6. küsimuste koostamine

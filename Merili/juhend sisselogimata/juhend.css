@@ -1,0 +1,161 @@
+body {
+    font-family: sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 120px;
+    align-items: left;
+    padding-left: 40px;
+    padding-top: 50px;
+  }
+  
+  .nav-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #555;
+  }
+  
+  .logo {
+    font-weight: bold;
+    margin-left: auto;
+  }
+  
+  .kringel {
+    height: 50px;
+    margin-left: 1rem;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .accordion {
+    margin-top: 2rem;
+  }
+  
+  .accordion-item {
+    background: #fff0f0;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .accordion-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .accordion-body {
+    padding: 1rem;
+    display: none;
+  }
+  
+  .accordion-item.active .accordion-body {
+    display: block;
+  }
+  
+  .toggle {
+    font-size: 1rem;
+  }
+
+  body {
+    font-family: sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1rem;
+    align-items: center;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .logo {
+    font-weight: bold;
+    margin-left: auto;
+  }
+  
+  .kringel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100px;
+    margin: 0;
+    z-index: 1000;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .accordion {
+    margin-top: 2rem;
+  }
+  
+  .accordion-item {
+    background: #fff0f0;
+    border-radius: 30px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .accordion-header {
+    padding: 3rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .accordion-body {
+    padding: 1rem;
+    display: none;
+  }
+  
+  .accordion-item.active .accordion-body {
+    display: block;
+  }
+  
+  .toggle {
+    font-size: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+  }

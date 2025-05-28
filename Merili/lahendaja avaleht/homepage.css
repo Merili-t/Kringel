@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  width: 100%;
+  padding-left: 20px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* LEFT NAVIGATION */
+.nav {
+  display: flex;
+  gap: 80px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #888;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #555;
+}
+
+/* RIGHT LOGO */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.banner-img {
+  height: 100px;
+  width: auto;
+}
+
+/* MAIN CONTENT */
+.main {
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+}
+
+.content-container {
+  background: #f7efef;
+  border-radius: 20px;
+  padding: 80px;
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  max-width: 1200px;
+  width: 100%;
+}
+
+.logo-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.main-logo {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.info-section {
+  flex: 1;
+  text-align: left;
+}
+
+.main-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.test-info,
+.test-time {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.test-time {
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+
+.start-button {
+  background: #c1112d;
+  color: white;
+  border: none;
+  padding: 14px 50px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.start-button:hover {
+  background: #a60f28;
+  transform: translateY(-1px);
+}
+
+.start-button:active {
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .nav {
+    gap: 20px;
+  }
+
+  .main {
+    padding: 200px 20px 30px;
+  }
+
+  .content-container {
+    flex-direction: column;
+    padding: 40px 30px;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .main-title {
+    font-size: 24px;
+  }
+
+  .logo-section,
+  .info-section {
+    width: 100%;
+  }
+}

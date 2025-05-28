@@ -11,7 +11,6 @@ var TaskDetail = /** @class */ (function () {
         this.endTimeInput = document.getElementById('endTime');
         this.form = document.getElementById('detailForm');
         this.backButton = document.querySelector('.back-button');
-        this.errorCounter = document.getElementById('errorCounter');
         this.initEventListeners();
         this.populateDurationDropdown();
     }
@@ -51,8 +50,6 @@ var TaskDetail = /** @class */ (function () {
     };
     TaskDetail.prototype.validateForm = function () {
         if (!this.titleInput.value.trim()) {
-            this.errorCount++;
-            this.errorCounter.textContent = this.errorCount.toString();
             alert('Palun sisestage pealkiri!');
             return false;
         }

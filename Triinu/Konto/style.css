@@ -31,6 +31,19 @@ h1, h2, h3, h4, h5 {
   color: #b52634;
 }
 
+.button-link-light {
+  padding: 4px 8px;
+  color: #821b25;
+  text-decoration: underline;
+  border-radius: 4px;
+  font-weight: 300;
+}
+
+.button-link-light:hover {
+  color: #b52634;
+}
+
+
 .tutorial {
   background: white;
   padding: 15px;
@@ -114,4 +127,39 @@ button {
 
 button:hover {
   background-color: #821b25;
+}
+
+/* New popup button style */
+.popup-btn {
+  width: auto;               /* Fit content */
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #b52634;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0;
+  margin-right: 10px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.popup-btn:hover {
+  background-color: #821b25;
+}
+
+/* Optional: cancel button variant */
+.popup-btn.cancel {
+  background-color: transparent;
+  color: #b52634;
+  border: 1px solid #b52634;
+  margin-right: 0;
+}
+
+.popup-btn.cancel:hover {
+  background-color: #b52634;
+  color: white;
 }

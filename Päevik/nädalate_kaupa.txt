@@ -1,0 +1,191 @@
+NÄDALATE KAUPA SEMESTRI PROJEKTI PÄEVIK
+
+Nädal 1 - 03.02-09.02
+    Esmaspäev 03.02: 
+        Interaktsioonidisaini loeng: sissejuhatus kursusesse, kursuse kirjeldus, tähtajad, õppetöö korraldus, näited kursuseprojektist, rühmatöö ettevalmistus. 
+        Gruppide moodustamine, õppekeskkonnaga liitumine.
+        Tarkvaraarenduse projekt: sissejuhatus kursusesse.
+    Kolmapäev 05.02:
+        Sissejuhatus infosüsteemidesse loeng: Sissejuhatus ainesse, õpikeskkonna tutvustus, mõisted, süsteemi defineerimine, ettevõtte ärimudel ja äri arendus, projekti algatamine, eesmärgistamine. 
+    Infosüsteemide iseseisev töö: projekti teema valik, ettevõtte üldkirjeldus, eesmärgid, sihtmärgid ja arhitektuur (diagramm), põhiprotsesside, objektide, tegutsejate loetelu, infovajaduste määratlemine.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 2 - 10.02-16.02
+    Esmaspäev 10.02: 
+        Interaktsioonidisaini praktikum: probleemide defineerimine, rollide jaotus, konkurentsianalüüsi algus, tööjaotus 
+    Interaktsioonidisaini iseseisev töö: Konkurentsianalüüs eesmärgiga kirjeldada probleem ja sõnastada disainiidee.
+    Kolmapäev 12.02:
+        Infosüsteemide iseseisva töö tähtaeg
+        Kokkusaamine enne loengu algust:
+            Leppisime kokku tööjaotuse infosüsteemide kodutööks ning arutasime lähiaja tähtsamaid ülesandeid.
+        Infosüsteemide loeng: Äriprotsessid ja koostöö, kvaliteedi hindamine, ärianalüüs vs süsteemianalüüs, infosüsteemi elutsükkel, projekteerimine ja analüüs, etapid, visuaalne modelleerimine ja UML põhielemendid. 
+    Infosüsteemide iseseisev töö: projekti teema vajadusel laiendamine tegelikule või kujutletavale organisatsioonile, organisatsiooni sõnaline üldvaade, ärianalüüsi koostamine, Intervjuu kliendiga, infovajaduste täpsustamine, kontekstiskeem (diagramm).
+    Reede 14.02: Tähtaeg konkurentsianalüüsi tabeli ja rakenduse profiilide esitamiseks.
+    Meeskonnatöö toimis sujuvalt – rollid jaotati selgelt ning igaüks vastutas oma osa eest: 
+        Alustasime konkurentsianalüüsiga, mille jaoks valisime välja viis konkureerivat lahendust ja jagasime need liikmete vahel analüüsimiseks. 
+        Iga tiimiliige uuris ühte konkreetset rakendust, võrreldes selle funktsionaalsust, kasutajakogemust ja kujunduspõhimõtteid. 
+        Koostöös kogusime info kokku ja koondasime tulemused ühisesse tabelisse – see aitas mõista, kuidas meie lahendus võiks teistest eristuda ja milliseid aspekte tasub vältida või edasi arendada.
+    Sõnastasime esialgse disainiidee, mis põhines varasemal uurimistööl ning analüüsil. 
+    Toimus esmane kontakt tellijaga – edastasime oma algse idee ning avaldasime soovi korraldada näost näkku kohtumine, palusime ka ligipääsu varasemale vormile, mis võimaldaks meil süsteemi paremini mõista.
+    Koostasime nimekirja küsimustest ja arutelupunktidest, mida klientidega kokkusaamisel arutada.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 3 - 17.02-23.02
+    Esmaspäev 17.02:
+        Interaktsioonidisaini loeng: sihtgrupi määratlemine, persoonad, stsenaariumidepõhine disain, idee ja kontseptsiooni hindamine. 
+        Konkurentsianalüüsi täiendus, kontekstiskeemi alustamine, kliendikohtumise ettevalmistus
+    Interaktsioonidisaini iseseisev töö: Persoonade kirjeldamine.
+    Kolmapäev 19.02: 
+        Koosolek kell 11 enne kliendikohtumist
+        Klientidega kohtumine Mare majas:
+            Kliendid kirjeldasid, kuidas 2024. aasta sügisel viidi eelvoor läbi Google Vormide abil ning millised olid selle eelised ja kitsaskohad. 
+            Eesmärk oli, et test oleks kättesaadav ilma sisselogimiseta, kuid vastajad peaksid sisestama meeskonna nime, liikmete nimed ja kontaktandmed vormi alguses.
+            Uue lahenduse puhul sooviti säilitada järgmised põhifunktsioonid:
+                Avalik ligipääs testile ilma sisselogimiseta
+                Võimalus muuta testi igal aastal (lisada uusi ülesandeid, muuta vanu)
+                Mitmekesised küsimuste vormid: valikvastused, järjestused, ühendused, pildi/video üleslaadimine, vabad vastused, interaktiivne pilt, valemite kasutamine
+                Video ja pildi üleslaadimine platvormi sees, mitte lingina
+                Võimalus testis kasutada valemite sümboleid ning vajadusel käsitsi valemite joonistamine
+                Ajapiirang testi lahendamiseks (1,5 tundi), mille järel test lukustub
+                Edenemisriba, mis näitab kui palju on tehtud/testimata
+                Funktsioon, mis takistab eelmistele küsimustele naasmist
+                Kaitsefunktsioonid, mis takistavad küsimuste kopeerimist, brauseri vahelehtede avamist jms
+            Lisaks sooviti disainielementide osas, et säiliks KRINGLI visuaalne identiteet – kasutusele tuleb võtta KRINGLI logo ja Tallinna Ülikooli veinipunased värvid. 
+            Andmete osas rõhutasid kliendid, et kõik vastused peavad salvestuma süsteemi andmebaasi ning tulemused peaksid olema eksporditavad, vajadusel ka käsitsi hinnatavate küsimuste korral. 
+                Tähtis oli, et üleslaetud videod oleksid kergesti alla laaditavad või vähemalt vaadatavad otse süsteemist. 
+                Käsitsi hinnatud küsimuste tulemusi peab olema võimalik hiljem süsteemi lisada, näiteks eraldi tabeli kujul.
+            Kliendid tõid esile ka mõned tulevikus selgitamist vajavad küsimused, näiteks: 
+                millises serveris süsteem hakkab asuma, 
+                kuidas ja kuhu andmeid salvestatakse, 
+                kui keerukaid matemaatilisi valemeid saab lisada ning 
+                kui suur andmemaht on vajalik videote ja piltide talletamiseks.
+            Kohtumise käigus jäi selgeks, et prioriteediks on praegu luua toimiv ja atraktiivne testikeskkond just KRINGLI eelvooru tarbeks. 
+            Platvorm peaks olema visuaalselt korras ja tehniliselt töökindel juba 2025. aasta sügiseks.
+            Kohtumine andis meile meeskonnana väga selge suuna ning kinnituse, et senine töö – nii probleemi defineerimine, disainiidee kui ka konkurentsianalüüs – liikus õiges suunas. 
+            Edasiseks tööks planeerisime küsimuste sõnastamist järgmiseks kliendikohtumiseks, süsteemi kontekstiskeemi täiendamist ning jätkasime arendusega vastavalt tellija ootustele ja vajadustele. 
+        Infosüsteemide praktikum: protsesside kirjeldamine, protsessidiagrammid, objektide seisundite ja olekute määramine, olekudiagrammid, olekute (seisundite) eristamine, põhiprotsesside kirjeldamine ja tegevusdiagrammide loomin, modelleerimine. 
+Infosüsteemide iseseisev töö: Iseseisvalt kõik protsessid kaardistada.
+Meeskond tegutses ühtselt, jaotades ülesanded mõistlikult ning pidades kinni tähtaegadest, mis aitas kogu projektitööl efektiivselt edasi liikuda– kõik panustasid aktiivselt ning leidsime ühiselt aega ka vajalikuks koosolekuks. 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 4 - 24.02-02.03
+    Esmaspäev 24.02: Eesti Vabariigi Aastapäev.
+    Interaktsioonidisaini iseseisev töö: konkurentsianalüüs.
+    Kolmapäev 26.02:
+        Infosüsteemide loeng: infosüsteemid, organisatsioonid ja strateegia, infosüsteemi eesmärk ja põhifunktsioonid – eristamine ja süsteemi kontekst. 
+    Infosüsteemide iseseisev töö: protsesside ja seisundite täiendamine kliendiga, diagrammide visualiseerimine ja täiendamine, protsessi tegevusdiagrammi täiendamine toimimisobjektidega, rollid, seisundidiagrammid (olekud), sündmuste-tegevuste-olemimuutuste vastavustabel, kooskõlastamine kliendiga.
+    Meeskond panustas ülesannetesse võrdselt.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 5 - 03.03-09.03
+    Esmaspäev 03.03:
+        Interaktsioonidisaini praktikum: konkurentsianalüüside esitlused ja tagasiside, sihtgrupi määratlemine, persoonade koostamine, stsenaariumide koostamine, idee ja kontseptsiooni hindamine.
+    Interaktsioonidisaini iseseisev töö: stsenaariumide kirjeldamine, idee ja kontseptsiooni hindamine. 
+    Kolmapäev 05.03:
+        Infosüsteemide loeng: infosüsteemi eesmärkide ja funktsioonide määramine, funktsionaalne vaade infosüsteemile, kasutusjuhtude määratlemine ja kirjeldamine. 
+    Infosüsteemide iseseisev töö: kasutusjuhtude määratlemine ja joonistamine, kasutuslugude kirjeldamine, USE ja CASE diagrammid.
+    Neljapäev 06.03:
+        Tarkvaraarenduse seminar Git kasutamise kohta
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 6 - 10.03-16.03
+    Esmaspäev 10.03: 
+        Interaktsioonidisaini loeng: kontseptuaalsed mudelid, informatsiooni arhitektuuri väljatöötamine ja esitusviisid (kaartide sorteerimine, sisukaardid, voodiagrammid), kasutajalugude koostamine ja väljalasete planeerimine, minimaalne elujõuline toode.
+        Meeskonna koosolek: arutasime oma persoonasid ja stsenaariume ning leppisime kokku intervjuu aja.
+    Teisipäev 11.03: 
+        Intervjuud kasutaja persoonadega gümnasist ja õpetaja:
+            Intervjueeritavad tuvusid kahe peamise persoonaga ja nende stsenaariumitega ning andsid tagasisidet.
+            Tagasiside alusel tegime vastavad muudatused stsenaariumides.
+                Testi lahendajale lisasime plaani enne testi alustamist väikese juhendi platvormi kasutamiseks - sama ka testi koostajale. 
+                Automaatse hindamissüsteemi puhul on vaja silmas pidama, et punkt ja koma ning suur ja väike algustäht oleksid samaväärsed - välja arvatud keemia ja füüsika testides, kus nende eristamine on oluline. 
+                Testi koostajale oli oluline ka spikerdamise ennetamine - ctrl + c, ctrl + v ja ctrl + f keelamine. 
+                Oleks hea, kui koostajal oleks võimalik kõiki lahendajate vastuseid korraga näha ning test/vastused alla laadida, et soovi korral need välja printida. 
+    Kolmapäev 12.03: 
+        Infosüsteemide loeng: IT infrastruktuur, infosüsteemi tarkvara, tarkvaralised eelistused ja valikud, projektijuhtimine IKT valdkonnas, konsultatsioon. 
+    Infosüsteemide iseseisev töö: kasutuslugude kirjelduste lõpetamine ja võimalusel kursuse Interaktsioonidisain iseseisva tööga ühtlustamine.
+    Neljapäev 13.03: 
+        GitHubi seminar - Seminar-praktikum versioonihaldusest.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 7 - 17.03-23.03
+    Esmaspäev 17.03: 
+        Interaktsioonidisaini praktikum: tagasiside persoonadele ja stsenaariumidele, informatsiooni arhitektuuri skeemi koostamine, kasutajalugude koostamine –iga rolli iga tegevuse kohta üks kasutajalugu. 
+        Koosolek: infosüsteemide kodutöö jaotamine.
+    Interaktsioonidisaini iseseisev töö: informatsiooni arhitektuuri skeemid.
+    Kolmapäev 19.03: 
+        Infosüsteemide praktikum: kordamine, näited, konsultatsioonid, vahearutelud – tehtud töö tulemuste esitlemine ja projektide vahearutelud, esitlused ja tagasiside.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 8 - 24.03-30.03
+    Vahenädal
+    Infosüsteemide iseseisev töö vahenädalaks: arutelu rühmades ja kliendiga, tulemuste ja täienduste integreerimine, praktikas andmemudeli alustamine ja kontseptuaalmudeli koostamine.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 9 - 31.03-06.04
+    Esmaspäev 31.03:
+        Interaktsioonidisaini loeng: kasutajaliidese prototüüpimine (vahendid ja tehnikad), madala detailsusega prototüüpimine, sõrestikmudelid.
+        Koosolek: kasutajalugude ülevaatus, veebiplatvormi lehtede planeerimine infoarhitektuuri skeemi tarvis – esines nii mõnigi vaidlus, sest kõigil liikmetel olid omad arvamused, kuid kõik sai siiski lahendatud, kompromissid tehtud ja koosolek lõppes sõbralikult. 
+    Kolmapäev 02.04:
+        Infosüsteemide loeng: andmed, informatsioon ja teadmus, andmehaldus ja kontseptuaalmudel, andmemudeli koostamine, kontseptuaalmudel. 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 10 - 07.04-13.04
+    Esmaspäev 07.04:
+        Interaktsioonidisaini praktikum: madala detailsusega prototüüpide koostamine ja testimine, prototüübi struktuuri arutelu, andmebaasimudeli tööjaotus. 
+            Vaatasime üle õppejõult saadud tagasiside varasemale kasutajalugude ülesandele ja tegime vajalikud täiendused. 
+            Jagasime ära, kes hakkavad tegelema prototüübi osaga ja kes alustavad andmebaasi mudeliga.
+    Interaktsioonidisaini iseseisev töö: Madala detailsusega prototüüpide koostamine, testimine ja tulemuste analüüs. 
+    Kogu nädala vältel tegeles digimeedikute meeskonna pool (Merili, Sophia, Age) madala detailsusega prototüübi loomise ja kujundamisega Figmas. 
+        Protsessis esines mõningaid tehnilisi takistusi, sest varasem kogemus Figmas puudus kuid lõpuks saavutati hea koostöö ja visuaalselt arusaadav prototüübi esmane versioon. 
+        Selle loomise käigus pöörasime tähelepanu sellele, et kõik kliendi soovitud funktsionaalsused – nagu erinevat tüüpi küsimused, edenemisriba ja ajapiirang – saaksid sobivalt markeeritud või visuaalselt esindatud. 
+        Kõik vaated ei saanud veel interaktiivseks tehtud. 
+    Kolmapäev 09.04:
+        Infosüsteemide loeng: andmemudeli koostamine, olem-suhte diagramm,  UML ja ERD, konsultatsioonid. 
+    Infosüsteemide iseseisev töö: andmemudeli koostamine, ERD, objektide ja seoste kirjeldamine.
+    Pühapäev 13.04:
+        Tähtaeg: testülesanded ja 5 slaidiga esitlus.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 11 - 14.04-20.04
+    Esmaspäev 14.04:
+        Interaktsioonidisaini loeng: detailsed kasutajaliidese prototüübid, kasutajaliidese raamistikud, disainimustrid ja kasutajaliidese juhised.
+        Koosolek: prototüübi ja testülesannete ülevaatus ja täiendamine, testkasutajate jagamine, viimased parandused slaididele, otsustasime, et kahe meeskonna liikme peale jääb LoFi prototüübi testimine vastavalt testülesannetele, samuti testkasutajate leidmine ja saadud andmete põhjal aruande kirjutamine. 
+    Teisipäev 15.04: 
+        Hommikul kl 8.45 tarkvaraarenduse projekti esitlused vahetulemuste näitamiseks
+    Kolmapäev 16.04:
+        Tähtaeg: interaktiivne prototüüp valmis.
+        Infosüsteemide loeng: andmemudeli normaliseerimine ja andmetabelite loomine, kasutajaliidese disain, ühtlustamine interaktsioonidisainiga. 
+    Infosüsteemide iseseisev töö: andmetabelid ja päringud, nõuete täpsustamine, CRUD maatriks.
+    Neljapäev 17.04 – reede 18.04:
+        LoFi testimine ja prototüübi lõplik vormistamine Figmas.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 12 - 21.04-27.04
+    Esmaspäev 21.04:
+        Interaktsioonidisaini praktikum: prototüüpimisvahendi valik, detailsete kasutajaliidese prototüüpide koostamine. 
+    Interaktsioonidisaini iseseisev töö: detailsete kasutajaliidese prototüüpide koostamine.
+    Teisipäev 22.04: 
+        Teine kliendikohtumine: LoFi prototüübi esitlus, värvid ja esmane disain paigas.
+    Eksami ettevalmistused algavad.
+    Kolmapäev 23.04: 
+        Infosüsteemide loeng: andmebaasid ja infosüsteemid avalikus halduses, infosüsteemi analüüsi dokumentatsioon.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 13 - 28.04-04.05
+    Esmaspäev 28.04:
+        Interaktsioonidisaini loeng: detailsete kasutajaliidese prototüüpide hindamine, summatiivne hindamine.
+    Kolmapäev 30.04: 
+        Infosüsteemide loeng: infosüsteemi arenduse tööprotsessid, konsultatsioonid ja integratsioonid. 
+    Iseseisev töö: projektide lõpetamine, dokumentatsioon Kliendiga, projekti töö kokkuvõte ja vastavuse kinnitamine.
+    Ettevalmistused infosüsteemi ja interaktsioonidisaini eksamiteks.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 14 - 05.05-11.05
+    Esmaspäev 05.05:
+        Interaktsioonidisaini praktikum: detailsete kasutajaliidese kasutatavuse ja kasutajakogemuse hindamine. 
+    Interaktsioonidisaini iseseisev töö: detailse kasutajaliidese testimine.
+    Kolmapäev 07.05
+        Koosolek infosüsteemide kaitsmiseks viimaseks ettevalmistamiseks.
+        Infosüsteemid: Infosüsteemi koostamise plaani kaitsmine, teiste projektide hindamine ja analüüs.
+    HiFi prototüübi valmimine ja testimine 20 inimesega, SUS-tulemus 77,5/100.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 15 - 12.05-18.05
+    Esmaspäev 12.05:
+        Koosolek interaktsioonidisaini kaitsmiseks viimaseks ettevalmistamiseks.
+        Interaktsioonidisaini kursusetöö kaitsmine. 
+    Kolmapäev 14.05:
+        Infosüsteemid: projektide esitlused ja kaitsmised – teiste projektide hindamine, analüüs.
+    Neljapäev 15.05:
+        Testplaani kaitsmine.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nädal 15 - 19.05-25.05
+    Kolmapäev 21.05:
+        Tiimikoosolek: andmebaasivalikud, keemia klaviatuur, tööde jaotus, edasiste tegevuste plaan
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

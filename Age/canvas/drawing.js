@@ -1,4 +1,3 @@
-"use strict";
 class Tool {
     constructor(ctx) {
         this.ctx = ctx;
@@ -19,8 +18,6 @@ class EraserTool extends Tool {
 class DrawingApp {
     constructor() {
         this.isDrawing = false;
-        this.colorChangeCounter = 0;
-        this.lastColor = "";
         this.doDraw = (e) => {
             if (!this.isDrawing)
                 return;
@@ -32,10 +29,6 @@ class DrawingApp {
         this.canvas = document.querySelector("#canvas");
         this.ctx = this.canvas.getContext("2d");
         this.tool = new PenTool(this.ctx);
-        const colorInput = document.querySelector("#colorInput");
-        colorInput.addEventListener("change", () => {
-            this.updateColor(colorInput.value);
-        });
         this.init();
     }
     init() {
@@ -56,24 +49,10 @@ class DrawingApp {
         const b = parseInt(hex.slice(5, 7), 16);
         return { r, g, b };
     }
-    updateColor(newColor) {
-        if (newColor !== this.lastColor) {
-            this.colorChangeCounter++;
-            this.lastColor = newColor;
-            this.updateColorChangeDisplay();
-        }
-        this.setStrokeStyle(newColor);
-    }
-    setStrokeStyle(color) {
-        const selectedColor = color !== null && color !== void 0 ? color : document.querySelector("#colorInput").value;
-        const { r, g, b } = this.hexToRgb(selectedColor);
+    setStrokeStyle() {
+        const color = document.querySelector("#colorInput").value;
+        const { r, g, b } = this.hexToRgb(color);
         this.ctx.strokeStyle = `rgb(${r},${g},${b})`;
-    }
-    updateColorChangeDisplay() {
-        const counterEl = document.querySelector("#colorChangeCounter");
-        if (counterEl) {
-            counterEl.textContent = `Värvi muudeti: ${this.colorChangeCounter}`;
-        }
     }
     setLineWidth(e) {
         const input = e.target;

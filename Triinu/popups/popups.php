@@ -1,6 +1,6 @@
 
 <?php
-$mysqli = new mysqli("localhost", "SINU_KASUTAJANIMI", "SINU_PAROOL", "SINU_ANDMEBAASINIMI");
+$mysqli = new mysqli("sql7.freesqldatabase.com", "sql7780418", "tIyjrs43zs", "sql7780418");
 if ($mysqli->connect_error) {
     die("Ühendus ebaõnnestus: " . $mysqli->connect_error);
 }

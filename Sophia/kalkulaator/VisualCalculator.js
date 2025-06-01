@@ -18,6 +18,7 @@ export class VisualCalculator {
     setupButtons() {
         var _a, _b, _c, _d, _e;
         document.querySelectorAll('.calc-button').forEach((el) => {
+            // Seob nupud vajutustega
             const button = el;
             button.addEventListener('click', () => {
                 const content = button.getAttribute('data-content');
@@ -26,6 +27,29 @@ export class VisualCalculator {
                 }
             });
         });
+        let shiftActive = false;
+        const shiftButton = document.getElementById('shift-toggle');
+        if (shiftButton) {
+            shiftButton.addEventListener('click', () => {
+                shiftActive = !shiftActive;
+                shiftButton.classList.toggle('active', shiftActive);
+                document.querySelectorAll('.calc-button.greek').forEach((el) => {
+                    const button = el;
+                    const upper = button.getAttribute('data-upper');
+                    const lower = button.getAttribute('data-lower');
+                    const upperChar = button.getAttribute('data-char-upper');
+                    const lowerChar = button.getAttribute('data-char-lower');
+                    if (shiftActive && upper && upperChar) {
+                        button.innerText = upperChar;
+                        button.setAttribute('data-content', upper);
+                    }
+                    else if (lower && lowerChar) {
+                        button.innerText = lowerChar;
+                        button.setAttribute('data-content', lower);
+                    }
+                });
+            });
+        }
         (_a = document.getElementById('calc-evaluate')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
             const result = this.logic.evaluate();
             this.resultElement.textContent = `= ${result}`;

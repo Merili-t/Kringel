@@ -1,7 +1,7 @@
 Enne suvepraktika algust
 
-1. joonistamine
-2. juhend sisselogitud
+1. joonistamine DONE
+2. juhend sisselogitud lisada js
 3. kontakt sisselogitud
 4. kõik testid vaade
 5. kasutajatingimused pop up

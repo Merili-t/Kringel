@@ -7,7 +7,6 @@
     <link href=
         "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
         rel="stylesheet">
-    <script src="guide.js"></script>
     <link rel="stylesheet" href="guide.css">
     <link rel="stylesheet" href="../../style/main.css">
   </head>
@@ -19,19 +18,19 @@
             <img src="../images/logo.png" alt="logo KRINGEL" class="logo">
           </div>
           <br>
-          <button id="create-test-btn" class="create-test-btn poppins-semibold">
+          <button class="create-test-btn poppins-semibold nav-btn" data-target="../../Merili/detailid/index.html">
             TESTI KOOSTAMINE
           </button>
           <br>
-          <button id="startpage-btn" class="startpage-btn poppins-semibold"> 
+          <button class="startpage-btn poppins-semibold nav-btn" data-target="../k6ik_testid/allTests.html"> 
             AVALEHELE
           </button>
           <br>
-          <button id="guide-btn" class="guide-btn poppins-semibold">
+          <button class="guide-btn poppins-semibold nav-btn" data-target="/Age/juhend_sisselogitud/guide.html">
             JUHEND
           </button>
           <br>
-          <button id="contact-btn" class="contact-btn poppins-semibold">
+          <button class="contact-btn poppins-semibold nav-btn" data-target="../kontaktandmed_sisselogitud/contacts.html">
             KONTAKTANDMED
           </button>
         </div>
@@ -40,7 +39,9 @@
       <div class="content-container">
         <div class="header-section">
           <h2 class="poppins-bold header-title">Juhend</h2>
-          <button id="logout-btn" class="logout-btn poppins-semibold">LOGI VÄLJA</button>
+          <button class="logout-btn poppins-semibold nav-btn" data-target="">
+            LOGI VÄLJA
+          </button>
         </div>
 
         <div class="intro-text poppins-medium">Siit leiad abi testi koostajale, lahendajale ja muud.</div>
@@ -79,5 +80,7 @@
 
       </div>
     </div>
+    <script src="buttons.js"></script>
+    <script src="guideDescription.js"></script>
   </body>
 </html>

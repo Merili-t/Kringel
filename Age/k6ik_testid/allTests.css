@@ -1,0 +1,87 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: auto;
+    background-color: #fff;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 19rem 1fr;
+    grid-column-gap: 1.8rem;
+    min-height: 100vh;
+}
+
+.nav-container{
+    background-color: #F6E6E6;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 100%;
+}
+
+.create-test-btn, .startpage-btn, .guide-btn, .contact-btn, .logout-btn{
+    font-size: 16px;
+    width: 13.375rem;
+    height: 3.125rem;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
+    border-radius: 50px;
+    text-align: center;
+}
+
+.create-test-btn, .startpage-btn, .guide-btn, .contact-btn{
+    margin-bottom: 1rem;
+    margin-left: 2.7rem;
+}
+
+.create-test-btn, .logout-btn{
+    background-color: #B81434;
+    color: #fff;
+}
+
+.startpage-btn, .guide-btn, .contact-btn{
+    background-color: #fff;
+    color: #710A14;
+}
+
+.logo{
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
+
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;      
+}
+
+h2{
+    font-size: 3rem;
+    margin: 0;
+}
+
+.content-container{
+    min-height: 100vh;
+    padding: 0 15rem 3rem 0;
+    background-color: #fff;
+}
+
+.header-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+}
+
+.header-title{
+    margin-top: 4rem;
+    font-size: 2rem;
+}
+
+.logout-btn{
+    margin-top: 4rem;
+    margin-right: -9rem;
+}

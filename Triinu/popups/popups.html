@@ -5,14 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Loo konto</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css" />
-  <script defer src="login.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="aegOtsas.js"></script>
+  <script defer src="detailiSalvestus.js"></script>
+  <script defer src="esitatud.js"></script>
+  <script defer src="jagamine.js"></script>
+  <script defer src="kustuta.js"></script>
+  <script defer src="pdf.js"></script>
+  <script defer src="pdfKinnitus.js"></script>
+  <script defer src="testiSalvestus.js"></script>
 </head>
 <body>
     <div class="forgot-password poppins-regular" style="margin-top: 8px;">
     <a href="#" id="forgot-password-link" class="button-link-light">aeg otsas</a>
     </div>
 </div>
+<div id="forgot-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    background:white; border:1px solid #ccc; padding:20px; z-index:1000; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3);">
+  <h3 class="poppins-medium">Sisesta oma meiliaadress</h3>
+  <input type="email" id="reset-email" placeholder="Email..." required style="margin-top:10px; width: 100%; padding: 5px;" />
+  <div style="margin-top: 15px;">
+    <button id="send-reset" class="popup-btn">Saada parooli uuendamise link</button>
+    <button id="cancel-reset" class="popup-btn cancel">Tühista</button>
 
+  </div>
+</div>
 </body>
 </html>

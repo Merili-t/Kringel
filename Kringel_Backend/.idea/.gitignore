@@ -6,3 +6,9 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+see on olemas btw DB_HOST=sql7.freesqldatabase.com	
+DB_USER=sql7780418	
+DB_PASS=tIyjrs43zs
+DB_NAME=sql7780418
+

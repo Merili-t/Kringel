@@ -63,6 +63,7 @@ math-field {
 /* Grid paigutus */
 .keypad,
 .calc-buttons,
+.shift-toggle,
 #symbol-panel {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -72,6 +73,7 @@ math-field {
 
 /* Üldine nuppude stiil */
 .calc-button,
+#shift-toggle,
 #calc-clear,
 #calc-backspace,
 #calc-evaluate,

@@ -3,16 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Loo konto</title>
+  <title>Popup Testimine</title>
+
+  <!-- Fonts and base styles -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css" />
-  <script defer src="login.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div class="forgot-password poppins-regular" style="margin-top: 8px;">
-    <a href="#" id="forgot-password-link" class="button-link-light">aeg otsas</a>
-    </div>
-</div>
+
+  <h1>Popup Testimine</h1>
+
+  <div>
+    <button class="popup-trigger" data-popup="aegOtsas">Aeg otsas</button>
+    <button class="popup-trigger" data-popup="esitatud">Test esitatud</button>
+    <button class="popup-trigger" data-popup="logout">Logi välja</button>
+    <button class="popup-trigger" data-popup="jagamine">Jaga testi</button>
+    <button class="popup-trigger" data-popup="link">Lingina jagamine</button>
+    <button class="popup-trigger" data-popup="pdf">PDF allalaadimine</button>
+    <button class="popup-trigger" data-popup="kustuta">Kustuta</button>
+    <button class="popup-trigger" data-popup="detailiSalvestus">Salvesta detail</button>
+    <button class="popup-trigger" data-popup="testiSalvestus">Testi salvestus</button>
+    <button class="popup-trigger" data-popup="pdfKinnitus">PDF kinnituse test</button>
+  </div>
+
+  <!-- Overlay and popup container -->
+  <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
+
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title" class="poppins-medium"></h3>
+    <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
+    <div id="popup-actions" style="margin-top: 20px;"></div>
+  </div>
+
+  <!-- JS helper + individual popup scripts -->
+  <script src="popupHelper.js" defer></script>
+  <script src="aegOtsas.js" defer></script>
+  <script src="esitatud.js" defer></script>
+  <script src="logout.js" defer></script>
+  <script src="jagamine.js" defer></script>
+  <script src="link.js" defer></script>
+  <script src="pdf.js" defer></script>
+  <script src="kustuta.js" defer></script>
+  <script src="detailiSalvestus.js" defer></script>
+  <script src="testiSalvestus.js" defer></script>
+  <script src="pdfKinnitus.js" defer></script>
+
 
 </body>
 </html>

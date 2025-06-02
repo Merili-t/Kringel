@@ -24,17 +24,43 @@ export class VisualCalculator {
         this.inputField.insert(content); //Mathlive
         this.inputField.focus(); //kasutaja saab kohe edasi sisestada
     }
-
     setupButtons() {
-        document.querySelectorAll('.calc-button').forEach((el) => { //seob nupud vajutustega 
-            const button = el as HTMLButtonElement;
-            button.addEventListener('click', () => {
-                const content = button.getAttribute('data-content');
-                if (content) {
-                    this.insertToInput(content);
+    document.querySelectorAll('.calc-button').forEach((el) => {
+        // Seob nupud vajutustega
+        const button = el as HTMLButtonElement;
+        button.addEventListener('click', () => {
+            const content = button.getAttribute('data-content');
+            if (content) {
+                this.insertToInput(content);
+            }
+        });
+    });
+
+    let shiftActive = false;
+    const shiftButton = document.getElementById('shift-toggle');
+
+    if (shiftButton) {
+        shiftButton.addEventListener('click', () => {
+            shiftActive = !shiftActive;
+            shiftButton.classList.toggle('active', shiftActive);
+
+            document.querySelectorAll('.calc-button.greek').forEach((el) => {
+                const button = el as HTMLButtonElement;
+                const upper = button.getAttribute('data-upper');
+                const lower = button.getAttribute('data-lower');
+                const upperChar = button.getAttribute('data-char-upper');
+                const lowerChar = button.getAttribute('data-char-lower');
+
+                if (shiftActive && upper && upperChar) {
+                    button.innerText = upperChar;
+                    button.setAttribute('data-content', upper);
+                } else if (lower && lowerChar) {
+                    button.innerText = lowerChar;
+                    button.setAttribute('data-content', lower);
                 }
             });
         });
+    }
 
         document.getElementById('calc-evaluate')?.addEventListener('click', () => {
             const result = this.logic.evaluate();

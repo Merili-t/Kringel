@@ -1,1 +1,31 @@
-<!--koostaja vaade-->
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8">
+  <title>Testi koostaja</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Koosta küsimus</h1>
+
+  <label for="question">Küsimus:</label><br>
+  <textarea id="question" rows="1" class="resizable" placeholder="Sisesta küsimus siin..."></textarea>
+  <br><br>
+
+  <label>Vastuse tüüp:</label><br>
+  <select id="answerType">
+    <option value="single">Üks õige vastus</option>
+    <option value="multiple">Mitu õiget vastust</option>
+  </select>
+  <br><br>
+
+  <div id="answers"></div>
+  <button onclick="addAnswer()">Lisa vastusevariant</button>
+  <br><br>
+
+  <button onclick="preview()">Eelvaade</button>
+  <button onclick="save()">Salvesta</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

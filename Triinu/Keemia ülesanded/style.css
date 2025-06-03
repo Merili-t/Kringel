@@ -73,7 +73,7 @@ h1, h2, h3 {
 
 .keyboard-wrapper {
   display: grid;
-  grid-template-columns: repeat(10, 1fr); /* Force 10 keys per row */
+  grid-template-columns: repeat(10, 1fr); 
   gap: 8px;
   max-width: 800px;
   margin: 0 auto 30px;
@@ -97,7 +97,6 @@ h1, h2, h3 {
   background-color: #821b25;
 }
 
-/* Center the drawing area */
 .drawing-container {
   width: 700px;
   margin: 20px auto;
@@ -116,7 +115,7 @@ canvas {
 
 .drawing-keyboard {
   margin-bottom: 10px;
-  text-align: center; /* <-- Center buttons inline */
+  text-align: center; 
 }
 
 .drawing-keyboard button {
@@ -134,7 +133,6 @@ canvas {
   background-color: #821b25;
 }
 
-/* Tutorial styling */
 .tutorial {
   background: #fff3e6;
   border: 1px solid #ffd1a9;

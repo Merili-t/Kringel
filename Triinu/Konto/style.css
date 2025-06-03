@@ -129,9 +129,8 @@ button:hover {
   background-color: #821b25;
 }
 
-/* New popup button style */
 .popup-btn {
-  width: auto;               /* Fit content */
+  width: auto;              
   padding: 8px 16px;
   font-size: 16px;
   font-weight: 600;
@@ -151,7 +150,6 @@ button:hover {
   background-color: #821b25;
 }
 
-/* Optional: cancel button variant */
 .popup-btn.cancel {
   background-color: transparent;
   color: #b52634;

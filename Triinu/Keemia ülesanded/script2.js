@@ -51,25 +51,35 @@ class DrawingTool {
   // Kujundi lisamine
   addShape(type) {
     let s = null;
+    const randOffset = () => Math.floor(Math.random() * 10 - 5);
+
     switch (type) {
       case 'line':
-        s = { type: 'line', x: 50, y: 50, length: 30, angle: 0 };
+        s = { type: 'line', x: 50 + randOffset(), y: 50 + randOffset(), length: 30, angle: 0 };
         break;
       case 'doubleLine':
-        s = { type: 'doubleLine', x: 50, y: 100, length: 30, angle: 0 };
+        s = { type: 'doubleLine', x: 50 + randOffset(), y: 50 + randOffset(), length: 30, angle: 0 };
         break;
       case 'tripleLine':
-        s = { type: 'tripleLine', x: 50, y: 150, length: 30, angle: 0 };
+        s = { type: 'tripleLine', x: 50 + randOffset(), y: 50 + randOffset(), length: 30, angle: 0 };
+        break;
+      case 'hexagon':
+        s = { type: 'hexagon', x: 50 + randOffset(), y: 50 + randOffset(), size: 30, angle: 0 };
         break;
 
-      case 'hexagon':
-        s = { type: 'hexagon', x: 200, y: 200, size: 30, angle: 0 };
+      case 'labeledHexagon':
+        const labels = [];
+        for (let i = 0; i < 6; i++) {
+          const label = prompt(`Sisesta nurga ${i + 1} tekst (võib ka tühjaks jätta):`);
+          labels.push(label || '');
+        }
+        s = { type: 'labeledHexagon', x: 300, y: 300, size: 30, angle: 0, labels };
         break;
 
       case 'text':
         const txt = prompt('Sisesta tekst (max 10 sümbolit, kleepimine pole lubatud):');
         // Kontrolli pastetud teksti: liiga pikk, reavahetus, erimärgid
-        const pastedPattern = /[\n\r]|[^ -~]/; // detects newlines or non-printable ASCII
+        const pastedPattern = /[\n\r]|[^ -~]/;
 
         if (!txt || txt.length > 10 || pastedPattern.test(txt)) {
           alert('Kleebitud või üle 10 sümboli pikkune tekst pole lubatud!');
@@ -78,6 +88,8 @@ class DrawingTool {
 
         const qtyInput = prompt('Mitu korda soovid teksti lisada (kogus)?');
         let qty = qtyInput === '' ? 1 : +qtyInput;
+        if (qty > 10) return alert('Maksimaalne kogus on 10!');
+
 
         if (isNaN(qty) || qty < 1) return alert('Palun sisesta kehtiv number!');
 
@@ -180,6 +192,59 @@ class DrawingTool {
         this.ctx.closePath();
         this.ctx.stroke();
         break;
+      
+      case 'labeledHexagon':
+        const { x, y, size, labels } = s;
+
+        if (typeof x !== 'number' || typeof y !== 'number' || typeof size !== 'number') {
+            console.error('Invalid coordinates or size for hexagon:', {x, y, size});
+            break;
+        }
+        if (!Array.isArray(labels) || labels.length < 6) {
+            console.error('Labels must be an array with at least 6 items:', labels);
+            break;
+        }
+
+        this.ctx.strokeStyle = isActive ? activeColor : defaultStroke;
+        this.ctx.lineWidth = 2;
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = isActive ? activeColor : defaultStroke;
+
+        const points = [];
+        this.ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+            const angle = i * Math.PI / 3;
+            const px = size * Math.cos(angle);
+            const py = size * Math.sin(angle);
+            points.push({ x: px, y: py });
+
+            if (i === 0) {
+                this.ctx.moveTo(px, py);
+            } else {
+                this.ctx.lineTo(px, py);
+            }
+        }
+        this.ctx.closePath();
+        this.ctx.stroke();
+
+        const inset = 8;
+        for (let i = 0; i < 6; i++) {
+            const angle = i * Math.PI / 3;
+            const px = points[i].x;
+            const py = points[i].y;
+
+            const label = labels[i] || '';
+
+            const labelX = px + inset * Math.cos(angle + Math.PI);
+            const labelY = py + inset * Math.sin(angle + Math.PI);
+
+            this.ctx.fillText(label, labelX - 5, labelY + 4);
+        }
+        break;
+
+
+
+
 
       case 'text':
         this.ctx.fillStyle = isActive ? activeColor : defaultStroke;
@@ -209,6 +274,8 @@ class DrawingTool {
       case 'hexagon':
         // Kuusnurga hit-test: kontrollib, kas kaugus on väiksem kui kuusnurga suurus + 5px
         return Math.hypot(lx, ly) <= (s.size || 30) + 5;
+      case 'labeledHexagon':
+        return Math.hypot(lx, ly) <= (s.size || 30) + 5;
 
       case 'text':
         return Math.hypot(lx, ly) < 20;
@@ -232,7 +299,7 @@ class DrawingTool {
         this.dragged = i;
         this.offset.x = mx - this.shapes[i].x;
         this.offset.y = my - this.shapes[i].y;
-        this.isDragging = false; // Reset dragging flag
+        this.isDragging = false; 
         this.redraw();
         return;
       }
@@ -247,10 +314,9 @@ class DrawingTool {
     const rect = this.canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left, my = e.clientY - rect.top;
 
-    // If mouse moves more than a small threshold, start dragging
     if (!this.isDragging) {
       this.isDragging = true;
-      this.saveHistory(); // Save history only when actual dragging starts
+      this.saveHistory();
     }
 
     if (this.isDragging) {
@@ -263,8 +329,6 @@ class DrawingTool {
 
   onMouseUp(e) {
     if (!this.isDragging) {
-      // No drag happened, so this was a click: just select shape (already done in mousedown)
-      // You can put any click-only logic here if needed
     }
     this.dragged = null;
     this.isDragging = false;
@@ -353,7 +417,6 @@ openBtn.onclick = function() {
 
 closeBtn.onclick = function() {
   modal.style.display = "none";
-  // Pause video when modal closes:
   const video = modal.querySelector("video");
   video.pause();
   video.currentTime = 0;

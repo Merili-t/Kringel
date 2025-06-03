@@ -1,6 +1,5 @@
 vaja teha need vahelehed: 
-- sooritaja juhend 
-- kontaktandme video
+- sooritaja juhend + kontaktandmed - andmete salvestamise osa.
 - testi lahendamine
 - maatriks üks ja mitu õiget
 

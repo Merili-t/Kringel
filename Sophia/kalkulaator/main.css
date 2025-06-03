@@ -185,3 +185,34 @@ math-field::part(menu-toggle) {
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
+
+/* Juhendi stiil */
+#juhend {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Juhendi loetelu vahed */
+#juhend ul {
+  padding-left: 1.25rem;
+}
+
+#juhend li {
+  margin-bottom: 0.8rem;
+}
+
+/* Code-element selgemalt esile */
+#juhend code {
+  background-color: #eee;
+  color: #111;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: inline-block;
+  margin: 0.1rem 0;
+}

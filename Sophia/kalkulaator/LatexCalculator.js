@@ -4,6 +4,9 @@ export class LatexCalculator extends BaseCalculator {
     evaluate() {
         let expr = this.getContents(); //Latexi kujul string
         expr = expr
+            .replace(/\\cdot/g, '*') //cdot → *
+            // Astendamise fix kui kümnend murrud jms
+            .replace(/(\d+)\^(\d+)\s*\*\s*\1\^(\d+)/g, '($1**$2)*($1**$3)')
             // Keerukam astendamine  ^ → ** (nt x^2 või x^{2+1} või 2^1.5)               //täielik vaste, astendatav, astendaja sulgudega, tavaline astendaja
             .replace(/([a-zA-Z0-9.\)\]]+)\s*\^\s*(?:{([^}]+)}|([0-9.\-+*/a-zA-Z()]+))/g, (_, base, exp1, exp2) => {
             const exponent = exp1 || exp2; //võtab selle mis leidub
@@ -57,7 +60,9 @@ export class LatexCalculator extends BaseCalculator {
             const result = fn(Math);
             //Turvakontroll:
             if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
-                return result; //hetkel result numbrina kuid saaks salvestada nt latex kujul inputis: return `\\[ ${latexInput} = ${result} \\]`;
+                // Vorminda tuhandete kaupa tühikutega, nt "1 000 000"
+                const formatted = result.toLocaleString('fr-FR');
+                return formatted; //hetkel result numbrina kuid saaks salvestada nt latex kujul inputis: return `\\[ ${latexInput} = ${result} \\]`;
             }
             return 'Error';
         }

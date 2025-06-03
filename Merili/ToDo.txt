@@ -3,4 +3,4 @@
 3. kontakt sisselogimata ✅
 5. detailid ✅
 6. küsimuste koostamine ✅
-7. interaktiivne pilt
+7. interaktiivne pilt ✅

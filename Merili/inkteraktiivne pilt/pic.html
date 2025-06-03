@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interaktiivne kaart</title>
-  <link rel="stylesheet" href="pic.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interaktiivne kaart</title>
+    <link rel="stylesheet" href="pic.css" />
 </head>
 <body>
     <div class="instructions">
         <h2>Juhend</h2>
-        <li> Klõpsa kaardile, et lisada punane täpp.</li>
+        <li>Vali pilt oma arvutist.</li>
+        <li>Klõpsa kaardile, et lisada punane täpp.</li>
         <li>Täpi kustutamiseks klõpsa sellele uuesti.</li>
     </div>
-
-    <div class="map-frame">
-        <div class="map-container" id="map">
-            <img src="map.png" alt="Kaart" />
+    
+    <div class="upload-section">
+        <div class="upload-box">
+            <h3>Vali pilt</h3>
+            <input type="file" id="imageInput" accept="image/*">
         </div>
     </div>
-
-  <script src="pic.js"></script>
+    
+    <div class="map-frame">
+        <div class="map-container" id="map">
+            <div class="placeholder">Pildi eelvaade ilmub siia</div>
+        </div>
+    </div>
+    
+    <script src="pic.js"></script>
 </body>
 </html>

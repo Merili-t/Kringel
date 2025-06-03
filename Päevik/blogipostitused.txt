@@ -1,0 +1,41 @@
+POSTITUS 1
+
+KRINGEL
+Meie projektiks on e-testi platvormi loomine Tallinna Ülikooli teadusköögi õpilasvõistluse KRINGEL eelvooru läbiviimiseks. 
+Tegu ei ole lihtsalt järjekordse testikeskkonnaga, vaid lahendusega, mis vastab väga spetsiifilistele vajadustele, mida hetkel ükski teine olemasolev testiplatvorm ei tee. 
+Eesmärk on luua kasutajasõbralik, intuitiivne ja funktsionaalne keskkond, mis toetab mitmekesiste ülesannetega testide läbiviimist.
+Platvorm peab võimaldama:
+testi sooritamist ilma sisselogimiseta,
+mitmekesiseid küsimusetüüpe (valikvastused, ühendused, joonistused, piltide ja videote üleslaadimine jms),
+keemia ja füüsika sümbolite kasutust (sh valemite kirjutamine ja molekularrskeemide joonistamine),
+automaatset hindamist, kuid ka võimalust käsitsi vastuseid hinnata,
+spikerdamisvastaseid kaitsemehhanisme (nt Ctrl+C ja Ctrl+F keelamine),
+tulemuste eksportimist, hindamist ja haldamist.
+Meie eesmärk on varasemate süsteemide kitsaskohad uuel platvormil ära katta ning tagada, et testikeskkond oleks valmis kasutamiseks juba 2025. aasta sügisel toimuva võistluse eelvooru läbiviimisel.
+Meeskond ja rollid (esialgsed tööjaotused):
+Merili – meeskonnajuht, sujuv suhtleja ja organiseerija, aktiivne front-end disaini panustaja
+Age – tugev dokumenteerimises, prototüüpimises ja kujunduses (front-end)
+Sophia – kasutajaliidese planeerimine ja disainitöö (front-end)
+Triinu – back-end arendus, testimine ja tehnilised lahendused
+Lisette – andmebaaside, süsteemiarhitektuuri ja testimise eestvedaja (back-end)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+POSTITUS 2
+
+MEESKONNA JA PROJEKTI VALIK
+Meeskond sai kokku üsna loomulikult – neli meist (Merili, Age, Sophia ja Triinu) olime juba eelmisel semestril tuttavaks saanud ning otsustasime koos projekti teha. 
+Kuna neli liiget oli grupi kohta liiga vähe, siis asusime viiendat otsima, kuigi “otsima” on ehk suur sõna – vaatasime üksteisele otsa, 
+et kas keegi teab veel kedagi, eelistatult tarkvaraarenduse suunalt ja Triinul tuligi kohe pähe, et ta tundis oma suunalt Lisettet. 
+Niisiis saigi ta kampa kutsutud – nii tuligi meie grupp kokku.
+Ka grupijuhi valimine ei tekitanud probleeme ja oli vaat et loomulik – Merili oli ainus, kes kohe vabatahtlikult oli valmis selle vastutuse enda peale võtma ning see sobis kõigile. 
+Ta on hea koordineerija ning suudab hästi tiimi tööd suunata ja korraldada, sobib sellesse rolli ideaalselt.
+Projekti valik samuti ei toonud kaasa väga pikka mõtlemist, sest projektid kadusid nimekirjast kiiresti ning pidime kärmelt tegutsema. 
+Lugesime üle allesolevate variantide kirjeldused – nii palju, kui neid oli –  ja KRINGEL tundus kõige huvitavam.Idee luua testikeskkond, 
+mis ühendab tehnilist keerukust (valemid, üleslaadimised, kaitsemehhanismid) ja kasutajakogemuse kujundust, tundus põnev ja väljakutset pakkuv ning ka klient ise tundus olevat tore.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+POSTITUS 3
+

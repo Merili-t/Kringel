@@ -123,6 +123,6 @@ window.onload = function () {
 const input = document.getElementById("inputField");
 
 input.addEventListener("input", () => {
-  input.style.height = "auto";
-  input.style.height = input.scrollHeight + "px";
+  input.style.height = "auto"; // lähtesta kõrgus
+  input.style.height = input.scrollHeight + "px"; // aseta vastavalt sisule
 });

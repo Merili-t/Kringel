@@ -16,6 +16,27 @@ Typescript faili kompileerimine
  mille tulemusena tuleb commonjs kujul compile.
  commonjs kujul ei pruugi veebilehel kõik alati töötada ja on üldiselt vanem.
 
+## How to Run the Project
+
+1. Install Docker (The installation process varies by operating system — see https://docs.docker.com/get-docker/)
+
+2. Clone `.env.example` and rename it to `.env`, then change the values if needed (the default values are set for local database use).
+
+3. Navigate to the project folder in the terminal and run:
+  3.1 If you want to use a local database: `docker compose --profile app_dev up -w`  
+  3.2 If you want to use an external database: `docker compose --profile app up -w`
+
+4. To stop Docker:
+  4.1 Use `Ctrl+C`  
+  4.2 Then run: `docker compose --profile (app_dev or app) down`
+
+## For Development
+
+Use Docker for development, as it is set up to automatically update the code (refer to the previous section).  
+It is recommended to also install dependencies locally for better autocompletion.  
+To do this, run `npm install` in both the frontend and backend folders.
+
+## Outdated
 
 NODE versioon
 - Vaadake üle mis teie node versioon ja vajadusel updatei

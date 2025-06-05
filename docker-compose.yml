@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql
+    container_name: kringel-db
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - '3306:3306' # {local_port}:{container_port}
+    profiles:
+      - app_dev
+
+  backend:
+    build: 
+      context: ./backend/
+      dockerfile: backend.Dockerfile
+    container_name: kringel-backend
+    restart: always
+    env_file:
+      - ./.env
+    working_dir: "/backend"
+    ports:
+      - '3006:3006' # {local_port}:{container_port}
+    command: npm run dev
+    develop: 
+      watch:
+        - action: sync
+          path: ./backend
+          target: /backend
+          ignore: 
+            - node_modules/
+    profiles:
+      - app
+      - app_dev
+  
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: frontend.Dockerfile
+    container_name: kringel-frontend
+    restart: always
+    env_file:
+      - ./.env
+    working_dir: "/frontend"
+    depends_on:
+      - backend
+    ports:
+      - '3000:3000' # {local_port}:{container_port}
+    command: npm run dev
+    develop: 
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /frontend
+          ignore: 
+            - node_modules/
+    profiles:
+      - app
+      - app_dev
+
+volumes:
+  db-data:

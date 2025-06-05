@@ -46,6 +46,14 @@ html, body{
     color: #710A14;
 }
 
+.startpage-btn:hover, .guide-btn:hover, .contact-btn:hover{
+    background-color: #F6E6E6;
+}
+
+.create-test-btn:hover, .logout-btn:hover{
+    background-color: #97102a;
+}
+
 .logo{
     max-width: 150px;
     width: 100%;

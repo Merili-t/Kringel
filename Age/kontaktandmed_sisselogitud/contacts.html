@@ -39,7 +39,10 @@
       <div class="content-container">
         <div class="header-section">
           <h2 class="poppins-bold header-title">Kontaktandmed</h2>
-          <button id="logout-btn" class="logout-btn poppins-semibold nav-btn" data-target="">LOGI VÄLJA</button>
+          <button id="logout-btn" class="logout-btn poppins-semibold nav-btn" data-target=""> <!-- VAJA LISADA POPUP -->
+            LOGI VÄLJA
+          </button>
+          
         </div>
         
         <div class="contacts-section">
@@ -52,8 +55,31 @@
           <div class="contacts-header">
             <h3 class="poppins-bold">Koostöösoovide ja äripäringute korral:</h3>
           </div>
-          <div class="contacts-content poppins-regular">KONTAKT: korraldaja@gmail.com</div>
+          <div class="contacts-content poppins-regular">KONTAKT: teaduskook@tlu.ee</div>
           <div class="contacts-content poppins-regular">TELEFON: +372 XXXX XXXX</div>
+        </div>
+        <div class="contacts-section">
+          <div class="contacts-header">
+            <h3 class="poppins-bold">Kirjuta meile!</h3>
+          </div>
+            <form action="helpForm.php" method="POST"> 
+              <label class="form-title poppins-semibold">
+                Pealkiri:
+                <input type="text" name="title" required>
+              </label><br><br>
+
+              <label class="form-content poppins-semibold">
+                Sõnum:
+                <textarea name="content" required></textarea>
+              </label><br><br>
+
+              <label class="form-user-email poppins-semibold">
+                Sinu e-mail:
+                <input type="email" name="email" required>
+              </label><br><br>
+                <!-- lisada CAPTCHA? -->
+              <button class="form-btn poppins-semibold" type="submit">SAADA</button>
+            </form>
         </div>
       </div>
     </div>

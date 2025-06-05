@@ -1,8 +1,8 @@
 Enne suvepraktika algust
 
 1. joonistamine DONE
-2. juhend sisselogitud lisada js
-3. kontakt sisselogitud
+2. juhend sisselogitud lisada DONE?
+3. kontakt sisselogitud lisada vorm DONE
 4. kõik testid vaade
 5. kasutajatingimused pop up
 6. privaatsuspoliitika popup

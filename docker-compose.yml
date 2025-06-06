@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql
-    container_name: kringel-db
+    container_name: kringel-database
     restart: always
     env_file:
       - ./.env
@@ -11,6 +11,7 @@ services:
       - '3306:3306' # {local_port}:{container_port}
     profiles:
       - app_dev
+      - app_db
 
   backend:
     build: 
@@ -23,7 +24,7 @@ services:
     working_dir: "/backend"
     ports:
       - '3006:3006' # {local_port}:{container_port}
-    command: npm run dev
+    command: sh -c "npm run migrate && npm run dev"
     develop: 
       watch:
         - action: sync

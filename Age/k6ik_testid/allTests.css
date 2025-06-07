@@ -93,3 +93,57 @@ h2{
     margin-top: 4rem;
     margin-right: -9rem;
 }
+
+.date {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.test-section {
+    background-color: #FFF5F5;
+    border-radius: 15px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: none;
+}
+
+.test-header {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.test-section h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+.test-description {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.test-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.text-icon-container{
+    display: flex;
+    gap: 1rem; 
+}
+
+.test-icon{
+    width: 26px;
+    height: 26px;
+}
+
+.questions, .answers, .delete-test{
+    font-size: 1rem;
+}

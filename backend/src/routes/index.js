@@ -1,8 +1,9 @@
-import express from 'express';
+import e from 'express';
 
-var router = express.Router();
+const router = e.Router();
 
-/* GET home page. */
-export default router.get('/', function (req, res, next) {
-  res.send('index');
+router.get('/', (req, res, next) => {
+  res.send('Welcome to Kringel API');
 });
+
+export default router;

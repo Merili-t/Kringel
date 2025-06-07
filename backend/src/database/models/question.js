@@ -1,11 +1,11 @@
 import { mysqlTable as table } from 'drizzle-orm/mysql-core';
 import * as t from 'drizzle-orm/mysql-core';
-import timestamps from '../timestamps';
+import timestamps from '../timestamps.js';
 
 import block from './block';
 import questionType from './questionType';
 
-export default question = table('question', {
+export default table('question', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   blockId: t
     .char('block_id', { length: 36 })

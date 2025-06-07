@@ -6,11 +6,12 @@
   ```bash
   npm run token
   ```
-> This gives you a randomly generated token in **Base64** format.
+  > This gives you a randomly generated token in **Base64** format.
 
 ## Database Operations
 
 - To generate migrations, run:
+
   ```bash
   npm run generate
   ```
@@ -23,6 +24,7 @@
 ## Pre-commit Checklist
 
 Before creating a commit, run the following to ensure consistent code formatting:
+
 ```bash
 npm run format
 ```

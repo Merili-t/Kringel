@@ -1,6 +1,11 @@
 import e from 'express';
 
-import {getUser, getUsers, login, register} from '../controllers/userController.js';
+import {
+  getUser,
+  getUsers,
+  login,
+  register,
+} from '../controllers/userController.js';
 import checkToken from '../middleware/authMiddleware.js';
 
 const router = e.Router();

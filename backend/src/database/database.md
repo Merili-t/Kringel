@@ -22,7 +22,7 @@
 | ---------- | ------------ | ----- | --------------------- |
 | id         | CHAR(36)     | PK, N | UUID                  |
 | email      | VARCHAR(255) | N     | Should be UNIQUE      |
-| password   | VARCHAR(255) | N     | Hashed                |
+| password   | VARCHAR(255) | N     | Hashed (argon2)       |
 | created_at | TIMESTAMP    |       | Set automatically     |
 | updated_at | TIMESTAMP    |       | Updated automatically |
 

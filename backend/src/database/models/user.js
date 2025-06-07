@@ -1,8 +1,8 @@
 import { mysqlTable as table } from 'drizzle-orm/mysql-core';
 import * as t from 'drizzle-orm/mysql-core';
-import timestamps from '../timestamps';
+import timestamps from '../timestamps.js';
 
-export default user = table('user', {
+export default table('user', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   email: t.varchar('email', { length: 255 }).notNull(),
   username: t.varchar('username', { length: 255 }).notNull(),

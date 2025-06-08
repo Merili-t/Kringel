@@ -8,13 +8,14 @@ import user from '../database/models/user.js';
 
 const createSession = (res, id, userType, message) => {
   const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'Strict',
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 3600000, // 1h
-  })
-  .json({ message });
+  res
+    .cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000, // 1h
+    })
+    .json({ message });
 };
 
 export const getUser = async (req, res) => {

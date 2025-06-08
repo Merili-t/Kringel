@@ -9,13 +9,4 @@ import questionType from './models/questionType.js';
 import block from './models/block.js';
 import answerVariant from './models/answerVariant.js';
 
-export {
-  user,
-  userAnswer,
-  test,
-  testAttempt,
-  question,
-  questionType,
-  block,
-  answerVariant,
-};
+export { user, userAnswer, test, testAttempt, question, questionType, block, answerVariant };

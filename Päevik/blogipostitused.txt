@@ -39,3 +39,23 @@ mis ühendab tehnilist keerukust (valemid, üleslaadimised, kaitsemehhanismid) j
 
 POSTITUS 3
 
+KLIENDIGA SUHTLEMISE ALGUS 
+Meie esmane kontakt kliendiga leidis aset meili teel, mille tarvis leidsime vajalikud kontaktandmed TLU veebilehelt. 
+Grupijuht saatis lühikese sõnumi, milles tutvustasime end informaatika esimese aasta tudengitena, kes valisid suvepraktika raames projekti KRINGEL. 
+Lühikeses e-kirjas esitasime oma esialgse arusaama ülesande sisust, kus klient soovib saada elektroonilist keskkonda võistluse eelvooru läbiviimiseks. 
+Varasem lahendus – Google Vormidele tuginev süsteem – ei võimaldanud keerukamate matemaatiliste ülesannete lahendamist ning paljude lahenduste esitamine piltidena seadis piiranguid jms, 
+mis seadis tingimused ja vajadused ka uuele loodavale süsteemile.
+Esimene kohtumine toimus Mare majas 14. veebruaril kell 14.00, kus enne kohtumist arutasime meeskonnaga, millised küsimused ja teemad oleks kõige olulisemad, et saada põhjalik ülevaade kliendi vajadustest ja ootustest. 
+Klient andis üksikasjaliku ülevaate varasemast lahendusest, mis 2024. aasta sügisel toimunud KRINGEL eelvoorul kasutuses oli. Eelvoorus osales ligi 70 võistkonda ning see põhines täielikult Google Vormidel. 
+Selgus, et lahenduse piirangud olid seotud näiteks ajapiirangute puudumisega, keeruliste matemaatiliste valemite kasutusvõimaluste ja interaktiivsete ülesannete puudumisega. Samuti tõi klient välja vajaduse säilitada avalik 
+juurdepääs testi jaoks, ilma sisselogimiseta, ja rõhutas, et uus keskkond peab olema õpilastele tasuta ning hiljem hõlpsasti kohandatav erinevateks sündmusteks.
+Kohtumisel jagatud detailid ulatusid kaugemale pelgalt tehnilistest lahendustest. Klient andis ülevaate vajadustest, mis hõlmasid funktsioone nagu ajapiirangu lisamine, mille puhul testi lahendamise aeg algab alles pärast vajalike taustandmete ja video esitlust; 
+funktsioon, mis välistab eelnevale küsimusele naasmise; ja eraldi tööriistu matemaatiliste, füüsika- ning keemiatega seotud sümbolite kasutamiseks. Lisaks tuli esile vajadus toetada mitmesuguseid küsimuste vorme – 
+alates valikvastustest ja järjestamisülesannetest kuni piltide ja videote üleslaadimiseni – ning luua süsteem, mis võimaldab testide lihtsat uuendamist ja kohandamist erinevate võistluste vms jaoks, säilitades samal ajal 
+KRINGLI visuaalse identiteedi ja ülikooli veinipunase värviga disaini.
+Kohtumise käigus kinnitas klient oma ootusi ja andis väärtuslikku tagasisidet, mille põhjal said meie varasemad analüüsid ja otsused kinnitust. Samas tõusid esile ka edasised küsimused, nagu serveri infrastruktuuri valik, 
+andmete salvestamise mahud ja andmehalduse detailid, mida oli vaja järgmisel kohtumisel sügavamalt arutada. Seadsime omale eesmärgiks enne järgmist kohtumist veelgi täpsemalt mõelda nendele tehnilistele aspektidele, 
+et pakkuda lahendusi, mis mitte ainult ei vasta kõigile ootustele, vaid ehk isegi ületavad need.
+See kogemus kinnitas, et põhjalikult ette valmistatud ja selgelt suunatud suhtlus kliendiga loob tugeva aluse edasiseks koostööks. Esmane kontakt ja detailne kohtumine aitasid meil mõista nii tehnilisi kui ka disainilisi nõudmisi, 
+pakkudes selget pilti projekti tulevikust. Kogu see algusprotsess oli suurepärane näide sellest, kuidas selge kommunikatsiooni ja avatud arutelu kaudu on võimalik luua lahendusi, mis vastavad kliendi vajadustele 
+ja loovad tugeva aluse edasiseks arenduseks.

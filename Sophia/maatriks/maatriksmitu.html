@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <a href="maatriks.html" class="button">Maatriks 1</a>
+  <title>Maatriks stiilis küsimus</title>
+  <link rel="stylesheet" href="maatriksmitu.css" />
+  <script defer src="maatriksmitu.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h3>Maatriks: Mitu vastust</h3>
+
+  <div class="matrix" id="radio-matrix">
+    <div id="matrix-grid" class="matrix-grid" style="display:none;"></div>
+
+    <div class="matrix-edits">
+      <div class="matrix-row-edit"></div>
+      <div class="matrix-column-edit"></div>
+    </div>
+
+    <div class="matrix-controls">
+      <button class="add-btn" onclick="addCheckBoxRow()">+ Lisa rida</button>
+      <button class="add-btn" onclick="addCheckBoxColumn()">+ Lisa veerg</button>
+      <button class="preview-btn" onclick="toggleMatrixPreview()">Eelvaade</button>
+    </div>
+  </div>
+
+  <div id="matrix-preview" class="hidden;"></div>
+</body>
+</html>
+

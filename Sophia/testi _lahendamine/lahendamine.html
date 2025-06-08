@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testi lahendamine</title>
+  <link rel="stylesheet" href="lahendamine.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>Testi pealkiri</h1>
+  <div class="header">
+    <div class="progress-wrapper">
+      <div class="progress-text" id="progress-text">0%</div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+
+    <div class="timer-wrapper">
+      <img src="../images/clock.png" alt="clock icon" class="icon">
+      <div class="timer" id="timer">00:00</div>
+    </div>
+  </div>
+  
+  <div id="blocks-container">
+    <!-- Plokid tulevad siia JS kaudu -->
+  </div>
+
+  <div class="navigation">
+    <button id="next-button">Järgmine plokk</button>
+    <button id="end-button">Lõpeta</button>
+  </div>
+
+  <script src="lahendamine.js"></script>
+</body>
+</html>

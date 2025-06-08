@@ -15,9 +15,9 @@ Typescript faili kompileerimine
  !! Ühe faili (npx tsc filename.ts) ei soovita kasutada, sest see ignoreerib tsconfig faili olulisi seadeid,
  mille tulemusena tuleb commonjs kujul compile.
  commonjs kujul ei pruugi veebilehel kõik alati töötada ja on üldiselt vanem.
-
+  
 
 NODE versioon
 - Vaadake üle mis teie node versioon ja vajadusel updatei
 nvm install     # Paigaldab automaatselt versiooni .nvmrc alusel (kui ei siis vaata versiooni sealt failist)
-nvm use         # Kasutab seda versioonig
+nvm use         # Kasutab seda versiooni

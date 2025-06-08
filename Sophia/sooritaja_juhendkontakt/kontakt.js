@@ -15,3 +15,5 @@ fileInput.addEventListener("change", function () {
 });
 });
 
+//Puudu andmebaasi salvestamise osa
+

@@ -92,3 +92,9 @@ document.getElementById("send-reset").addEventListener("click", async function (
     alert("Midagi läks valesti.");
   }
 });
+
+function toggleVisibility(icon) {
+  const input = icon.previousElementSibling;
+  input.type = input.type === "password" ? "text" : "password";
+  icon.textContent = icon.textContent === "👁" ? "🙈" : "👁";
+}

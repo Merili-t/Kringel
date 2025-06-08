@@ -104,12 +104,14 @@ window.onload = function () {
 
   // Tavalise klaviatuuri sisestuse kuulamine
   document.addEventListener('keydown', function (event) {
-    const validKeys = /^[a-zA-Z0-9+\-/*=() ]$/; // Lubatud märgid
+    if (event.target.id === 'inputField') return;
+    const validKeys = /^[a-zA-Z0-9+\-/*=() ]$/;
     if (validKeys.test(event.key)) {
       event.preventDefault();
-      inputField.append(event.key); // Lisab vajutatud märgi
+      inputField.append(event.key);
     }
   });
+
 
   // Üldine paste blokeerimine kogu lehel (valikuline, võib eemaldada)
   document.addEventListener('paste', (e) => {
@@ -117,3 +119,10 @@ window.onload = function () {
     alert('Paste is disabled.');
   });
 };
+
+const input = document.getElementById("inputField");
+
+input.addEventListener("input", () => {
+  input.style.height = "auto"; // lähtesta kõrgus
+  input.style.height = input.scrollHeight + "px"; // aseta vastavalt sisule
+});

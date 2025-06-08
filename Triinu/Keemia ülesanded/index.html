@@ -25,7 +25,7 @@
   </div>
 
   <!-- Sisestusväli -->
-  <textarea id="inputField" rows="2" placeholder="Alusta kirjutamist..." maxlength="10"></textarea>
+  <textarea id="inputField" rows="1" placeholder="Alusta kirjutamist..." style="resize: none; overflow: hidden;" ></textarea>
   <!-- Keemia klaviatuuri konteiner -->
   <div class="keyboard-wrapper" id="chemistryKeyboard"></div>
 
@@ -58,11 +58,12 @@
       <button onclick="addShape('line')" class="poppins-medium">Üksikside</button>
       <button onclick="addShape('doubleLine')" class="poppins-medium">Kaksikside</button>
       <button onclick="addShape('tripleLine')" class="poppins-medium">Kolmikside</button>
-      <button onclick="addShape('hexagon')" class="poppins-medium">Heksagon</button>
-      <button onclick="addShape('text')" class="poppins-medium">Tekst</button>
+      <button onclick="addShape('hexagon')" class="poppins-medium">⬡ Heksagon</button>
+      <button onclick="addShape('labeledHexagon')" class="poppins-medium">⬡ Tekstiga Heksagon</button>
     </div>
     <!-- Teine nupurida -->
     <div class="drawing-keyboard">
+       <button onclick="addShape('text')" class="poppins-medium">Tekst</button>
        <button onclick="tool.undo()" class="poppins-medium">Undo (Z)</button>
        <button onclick="tool.redo()" class="poppins-medium">Redo (Y)</button>
        <button onclick="tool.deleteSelected()" class="poppins-medium">Kustuta</button>

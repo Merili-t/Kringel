@@ -12,10 +12,13 @@ function showPopup(title, message, buttons) {
     const el = document.createElement("button");
     el.textContent = btn.text;
     el.className = "popup-btn" + (btn.cancel ? " cancel" : "");
-    el.onclick = () => {
-      closePopup();
-      if (typeof btn.action === "function") btn.action();
+    el.onclick = () => { 
+      closePopup(); 
+      if (typeof btn.action === "function") { 
+        btn.action(); 
+      } 
     };
+
     actions.appendChild(el);
   });
 

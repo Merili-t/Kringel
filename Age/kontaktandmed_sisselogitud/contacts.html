@@ -39,7 +39,8 @@
       <div class="content-container">
         <div class="header-section">
           <h2 class="poppins-bold header-title">Kontaktandmed</h2>
-          <button id="logout-btn" class="logout-btn poppins-semibold nav-btn" data-target="">LOGI VÄLJA</button>
+          <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
+          
         </div>
         
         <div class="contacts-section">
@@ -52,11 +53,45 @@
           <div class="contacts-header">
             <h3 class="poppins-bold">Koostöösoovide ja äripäringute korral:</h3>
           </div>
-          <div class="contacts-content poppins-regular">KONTAKT: korraldaja@gmail.com</div>
+          <div class="contacts-content poppins-regular">KONTAKT: teaduskook@tlu.ee</div>
           <div class="contacts-content poppins-regular">TELEFON: +372 XXXX XXXX</div>
+        </div>
+        <div class="contacts-section">
+          <div class="contacts-header">
+            <h3 class="poppins-bold">Kirjuta meile!</h3>
+          </div>
+            <form action="helpForm.php" method="POST"> 
+              <label class="form-title poppins-semibold">
+                Pealkiri:
+                <input type="text" name="title" required>
+              </label><br><br>
+
+              <label class="form-content poppins-semibold">
+                Sõnum:
+                <textarea name="content" required></textarea>
+              </label><br><br>
+
+              <label class="form-user-email poppins-semibold">
+                Sinu e-mail:
+                <input type="email" name="email" required>
+              </label><br><br>
+                <!-- lisada CAPTCHA? -->
+              <button class="form-btn poppins-semibold" type="submit">SAADA</button>
+            </form>
         </div>
       </div>
     </div>
     <script src="../juhend_sisselogitud/buttons.js"></script>
+    <script src="../../Triinu/popups/popupHelper.js" defer></script>
+    <script src="../../Triinu/popups/logout.js" defer></script>
+
+
+  <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title" class="poppins-medium"></h3>
+    <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
+    <div id="popup-actions" style="margin-top: 20px;"></div>
+  </div>
+
   </body>
 </html>

@@ -1,7 +1,6 @@
 <?php
 header("Content-Type: application/json");
 
-// Database connection
 $servername = "sql7.freesqldatabase.com";
 $username = "sql7780418";
 $password = "tIyjrs43zs";
@@ -13,7 +12,6 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Get POST data
 $email = $_POST['email'] ?? '';
 $inputPassword = $_POST['password'] ?? '';
 
@@ -22,7 +20,6 @@ if (empty($email) || empty($inputPassword)) {
     exit;
 }
 
-// Fetch hashed password from DB
 $stmt = $conn->prepare("SELECT parool FROM koostaja WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();

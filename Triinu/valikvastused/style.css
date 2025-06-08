@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f2ecdc;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  color: #821b25;
+  margin: 0 0 10px;
+}
+
+select, input[type="text"] {
+  width: 30%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #b52634;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #b52634;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  padding: 8px 16px;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #821b25;
+}
+
+#optionsContainer label {
+  display: block;
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.resizable {
+  width: 40%;
+  min-width: 30%;
+  max-width: 50%;
+  
+  resize: none;
+  transition: width 0.3s ease;
+  
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 8px 10px;
+  
+  overflow-y: hidden;
+}
+
+.resizable {
+  width: 100%;
+  max-width: none; 
+  resize: none;
+  transition: width 0.3s ease;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 8px 10px;
+  overflow-y: hidden;
+}

@@ -46,6 +46,14 @@ html, body{
     color: #710A14;
 }
 
+.startpage-btn:hover, .guide-btn:hover, .contact-btn:hover{
+    background-color: #F6E6E6;
+}
+
+.create-test-btn:hover, .logout-btn:hover{
+    background-color: #97102a;
+}
+
 .logo{
     max-width: 150px;
     width: 100%;
@@ -84,4 +92,118 @@ h2{
 .logout-btn{
     margin-top: 4rem;
     margin-right: -9rem;
+}
+
+.date {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.test-section {
+    background-color: #FFF5F5;
+    border-radius: 15px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: none;
+}
+
+.test-header {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.test-section h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+.test-description {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.test-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.text-icon-container{
+    display: flex;
+    gap: 1rem; 
+}
+
+.test-icon{
+    width: 26px;
+    height: 26px;
+}
+
+.questions, .answers, .delete-test{
+    font-size: 1rem;
+}
+
+
+
+.popup-btn {
+  width: auto;              
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #b52634;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0;
+  margin-right: 10px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.popup-btn:hover {
+  background-color: #821b25;
+}
+
+.popup-btn.cancel {
+  background-color: transparent;
+  color: #b52634;
+  border: 1px solid #b52634;
+  margin-right: 0;
+}
+
+.popup-btn.cancel:hover {
+  background-color: #b52634;
+  color: white;
+}
+
+.popup-overlay {
+  position: fixed;
+  display: none;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  max-width: 400px;
+  text-align: center;
 }

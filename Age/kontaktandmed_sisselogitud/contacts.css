@@ -31,12 +31,24 @@ html, body{
     text-align: center;
 }
 
+.form-btn{
+    font-size: 16px;
+    width: 8rem;
+    height: fit-content;
+    padding: .75rem;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
+    border-radius: 50px;
+    text-align: center;
+}
+
 .create-test-btn, .startpage-btn, .guide-btn, .contact-btn{
     margin-bottom: 1rem;
     margin-left: 2.7rem;
 }
 
-.create-test-btn, .logout-btn{
+.create-test-btn, .logout-btn, .form-btn{
     background-color: #B81434;
     color: #fff;
 }
@@ -44,6 +56,14 @@ html, body{
 .startpage-btn, .guide-btn, .contact-btn{
     background-color: #fff;
     color: #710A14;
+}
+
+.startpage-btn:hover, .guide-btn:hover, .contact-btn:hover{
+    background-color: #F6E6E6;
+}
+
+.create-test-btn:hover, .logout-btn:hover, .form-btn:hover{
+    background-color: #97102a;
 }
 
 .logo{
@@ -89,10 +109,11 @@ h2{
     border: none;
 }
 
-.contacts-header {
+.contacts-header{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .header-title{
@@ -100,13 +121,93 @@ h2{
     font-size: 2rem;
 }
 
-.contacts-section h3 {
+.contacts-section h3{
     font-size: 1.8rem;
     margin-bottom: 0.5rem; 
 }
 
-.contacts-content {
+.contacts-content{
     color: #666;
     font-size: 1rem;
     line-height: 1.6;
+}
+
+form label{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .25rem;
+    font-size: 1rem;
+}
+
+form input,
+form textarea{
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    width: 20rem; 
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+
+
+.popup-btn {
+  width: auto;              
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #b52634;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0;
+  margin-right: 10px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.popup-btn:hover {
+  background-color: #821b25;
+}
+
+.popup-btn.cancel {
+  background-color: transparent;
+  color: #b52634;
+  border: 1px solid #b52634;
+  margin-right: 0;
+}
+
+.popup-btn.cancel:hover {
+  background-color: #b52634;
+  color: white;
+}
+
+.popup-overlay {
+  position: fixed;
+  display: none;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  max-width: 400px;
+  text-align: center;
 }

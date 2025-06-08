@@ -65,3 +65,17 @@ button:hover {
   
   overflow-y: hidden;
 }
+
+.resizable {
+  width: 100%;
+  max-width: none; 
+  resize: none;
+  transition: width 0.3s ease;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 8px 10px;
+  overflow-y: hidden;
+}

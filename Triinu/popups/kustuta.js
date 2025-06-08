@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
               .then(res => res.text())
               .then(msg => {
                 alert(msg);
+                clearQuestionForm();
                 closePopup();
               });
           }

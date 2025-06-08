@@ -8,23 +8,15 @@
 
 ## user
 
-| Name       | Type         | Key   | Notes                 |
-| ---------- | ------------ | ----- | --------------------- |
-| id         | CHAR(36)     | PK, N | UUID                  |
-| email      | VARCHAR(255) | N     | Should be UNIQUE      |
-| username   | VARCHAR(255) | N     | Should be UNIQUE      |
-| created_at | TIMESTAMP    |       | Set automatically     |
-| updated_at | TIMESTAMP    |       | Updated automatically |
-
-## user_admin
-
-| Name       | Type         | Key   | Notes                 |
-| ---------- | ------------ | ----- | --------------------- |
-| id         | CHAR(36)     | PK, N | UUID                  |
-| email      | VARCHAR(255) | N     | Should be UNIQUE      |
-| password   | VARCHAR(255) | N     | Hashed (argon2)       |
-| created_at | TIMESTAMP    |       | Set automatically     |
-| updated_at | TIMESTAMP    |       | Updated automatically |
+| Name       | Type         | Key   | Notes                                          |
+| ---------- | ------------ | ----- | ---------------------------------------------- |
+| id         | CHAR(36)     | PK, N | UUID                                           |
+| email      | VARCHAR(255) | U     | Optional, must be UNIQUE if present            |
+| username   | VARCHAR(255) | N     | Required                                       |
+| password   | VARCHAR(255) |       | Optional (null for guests)                     |
+| userType   | ENUM         | N     | One of: `admin`, `teacher`, `student`, `guest` |
+| created_at | TIMESTAMP    |       | Set automatically                              |
+| updated_at | TIMESTAMP    |       | Updated automatically                          |
 
 ## user_answer
 
@@ -40,17 +32,17 @@
 
 ## test
 
-| Name        | Type         | Key   | Notes                       |
-| ----------- | ------------ | ----- | --------------------------- |
-| id          | CHAR(36)     | PK, N | UUID                        |
-| admin_id    | CHAR(36)     | FK, N | Referances `user_admin(id)` |
-| name        | VARCHAR(255) | N     |                             |
-| description | TEXT         | N     |                             |
-| start       | DATETIME     | N     |                             |
-| end         | DATETIME     | N     |                             |
-| time_limit  | INTEGER      | N     | In minutes                  |
-| created_at  | TIMESTAMP    |       | Set automatically           |
-| updated_at  | TIMESTAMP    |       | Updated automatically       |
+| Name        | Type         | Key   | Notes                 |
+| ----------- | ------------ | ----- | --------------------- |
+| id          | CHAR(36)     | PK, N | UUID                  |
+| user_id     | CHAR(36)     | FK, N | Referances `user(id)` |
+| name        | VARCHAR(255) | N     |                       |
+| description | TEXT         | N     |                       |
+| start       | DATETIME     | N     |                       |
+| end         | DATETIME     | N     |                       |
+| time_limit  | INTEGER      | N     | In minutes            |
+| created_at  | TIMESTAMP    |       | Set automatically     |
+| updated_at  | TIMESTAMP    |       | Updated automatically |
 
 ## test_attempt
 

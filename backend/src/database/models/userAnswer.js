@@ -2,8 +2,8 @@ import { mysqlTable as table } from 'drizzle-orm/mysql-core';
 import * as t from 'drizzle-orm/mysql-core';
 import timestamps from '../timestamps.js';
 
-import user from './user';
-import question from './question';
+import user from './user.js';
+import question from './question.js';
 
 export default table('user_answer', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid

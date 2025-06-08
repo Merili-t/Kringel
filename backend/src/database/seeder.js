@@ -22,7 +22,9 @@ async function runSeeders() {
           console.warn(`No default function export found in ${file}`);
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   console.log('✅ Seeding complete. Connection closed.');

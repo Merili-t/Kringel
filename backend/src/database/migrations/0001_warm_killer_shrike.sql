@@ -1,1 +1,0 @@
-ALTER TABLE `user_admin` ADD CONSTRAINT `user_admin_email_unique` UNIQUE(`email`);

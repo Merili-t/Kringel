@@ -7,6 +7,6 @@ export default table('user', {
   email: t.varchar('email', { length: 255 }).unique(),
   username: t.varchar('username', { length: 255 }).notNull(),
   password: t.varchar('password', { length: 255 }),
-  userType: t.mysqlEnum(['admin', 'teacher', 'student', 'guest']).notNull(),
+  userType: t.mysqlEnum('user_type', ['admin', 'teacher', 'student', 'guest']).notNull(),
   ...timestamps,
 });

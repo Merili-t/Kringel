@@ -1,0 +1,83 @@
+.create-test-btn, 
+.startpage-btn, 
+.guide-btn, 
+.contact-btn, 
+.login-btn, 
+.logout-btn, 
+.create-account-btn,
+.save-new-pwd-btn{
+    font-size: 16px;
+    width: 13.375rem;
+    height: 3.125rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.create-test-btn, 
+.startpage-btn, 
+.guide-btn, 
+.contact-btn, 
+.login-btn, 
+.logout-btn, 
+.create-account-btn{
+    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
+}
+
+.create-account-btn{
+    margin-top: 2rem;
+}
+
+.nav-container{
+    height: 100%;
+    width: 18.775rem;
+    position: fixed;
+    background-color: #F6E6E6;
+    z-index: 1;
+    top: 0;
+}
+
+.create-test-btn, 
+.startpage-btn, 
+.guide-btn, 
+.contact-btn{
+    margin-bottom: 1rem;
+    margin-left: 2.7rem;
+}
+
+.create-test-btn, 
+.logout-btn, 
+.login-btn, 
+.create-account-btn,
+.save-new-pwd-btn{
+    background-color: #B81434;
+    color: #fff;
+}
+
+.startpage-btn, 
+.guide-btn, 
+.contact-btn{
+    background-color: #fff;
+    color: #710A14;
+}
+
+.startpage-btn:hover, 
+.guide-btn:hover, 
+.contact-btn:hover{
+    background-color: #F6E6E6;
+}
+
+.create-test-btn:hover, 
+.login-btn:hover, 
+.logout-btn:hover, 
+.create-account-btn:hover,
+.save-new-pwd-btn:hover{
+    background-color: #97102a;
+}
+
+.logout-btn{
+    margin-top: 4rem;
+    margin-right: 0;
+}

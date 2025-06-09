@@ -22,9 +22,11 @@ services:
     env_file:
       - ./.env
     working_dir: "/backend"
+    depends_on:
+      - db
     ports:
       - '3006:3006' # {local_port}:{container_port}
-    command: sh -c "npm run migrate && npm run dev"
+    command: sh -c "npm run migrate && npm run seed && npm run dev"
     develop: 
       watch:
         - action: sync

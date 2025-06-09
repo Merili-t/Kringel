@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "48a3fd43-af9b-4dfa-98c1-cb2f411b3334",
+  "id": "b0498257-0555-43e7-a2c7-610443a7918d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "answer_variant": {
@@ -291,8 +291,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "admin_id": {
-          "name": "admin_id",
+        "user_id": {
+          "name": "user_id",
           "type": "char(36)",
           "primaryKey": false,
           "notNull": true,
@@ -353,12 +353,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "test_admin_id_user_admin_id_fk": {
-          "name": "test_admin_id_user_admin_id_fk",
+        "test_user_id_user_id_fk": {
+          "name": "test_user_id_user_id_fk",
           "tableFrom": "test",
-          "tableTo": "user_admin",
+          "tableTo": "user",
           "columnsFrom": [
-            "admin_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -496,12 +496,26 @@
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "username": {
           "name": "username",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_type": {
+          "name": "user_type",
+          "type": "enum('admin','teacher','student','guest')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -534,62 +548,14 @@
           ]
         }
       },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "user_admin": {
-      "name": "user_admin",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "password": {
-          "name": "password",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "user_admin_id": {
-          "name": "user_admin_id",
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
           "columns": [
-            "id"
+            "email"
           ]
         }
       },
-      "uniqueConstraints": {},
       "checkConstraint": {}
     },
     "user_answer": {

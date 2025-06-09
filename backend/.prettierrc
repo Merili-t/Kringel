@@ -6,3 +6,4 @@ quoteProps: 'consistent'
 bracketSpacing: true
 objectWrap: 'collapse'
 arrowParens: 'avoid'
+printWidth: 100

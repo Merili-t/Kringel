@@ -1,14 +1,14 @@
 import { mysqlTable as table } from 'drizzle-orm/mysql-core';
 import * as t from 'drizzle-orm/mysql-core';
-import timestamps from '../timestamps';
+import timestamps from '../timestamps.js';
 
-import userAdmin from './userAdmin';
+import user from './user.js';
 
-export default test = table('test', {
+export default table('test', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   adminId: t
-    .char('admin_id', { length: 36 })
-    .references(() => userAdmin.id)
+    .char('user_id', { length: 36 })
+    .references(() => user.id)
     .notNull(),
   name: t.varchar('name', { length: 255 }).notNull(),
   description: t.text(),

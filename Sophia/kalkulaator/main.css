@@ -5,12 +5,10 @@
   --white: #ffffff;
   --dark-gray: #333;
   --border-radius: 12px;
-  --button-font: "Segoe UI", sans-serif;
+  --button-font: "Poppins", sans-serif;
   --button-size: 1.1rem;
 }
 
-
-/* Üldstiil */
 body {
   font-family: var(--button-font);
   background-color: var(--white);
@@ -19,7 +17,6 @@ body {
   margin: 2rem auto;
 }
 
-/* Lisa grid main-wrapperile */
 #main-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -27,20 +24,18 @@ body {
   align-items: flex-start;
 }
 
-/* Juhendi paigutus */
+
 #juhend {
   grid-column: 1/2;
   grid-row: 1/2;
 }
 
-/* Kalkulaatori paigutus */
 #calculator-area {
   grid-column: 2/3;
   grid-row: 1/2;
   max-width: 650px;
 }
 
-/* Sisestusväli */
 math-field {
   width: 100%;
   font-size: 1.4rem;
@@ -51,7 +46,6 @@ math-field {
   box-sizing: border-box;
 }
 
-/* Tulemus */
 #resultArea {
   margin-top: 1rem;
   font-size: 1.5rem;
@@ -60,7 +54,6 @@ math-field {
   color: var(--dark-gray);
 }
 
-/* Grid paigutus */
 .keypad,
 .calc-buttons,
 .shift-toggle,
@@ -90,7 +83,6 @@ math-field {
   border: none;
 }
 
-/* Numbrid: valge taust, tume tekst */
 .calc-button[data-content="0"],
 .calc-button[data-content="1"],
 .calc-button[data-content="2"],
@@ -106,7 +98,6 @@ math-field {
   border: 1px solid #ccc;
 }
 
-/* Sümbolid: punane taust, valge tekst */
 .calc-button:not([data-content="0"]):not([data-content="1"]):not([data-content="2"])
 :not([data-content="3"]):not([data-content="4"]):not([data-content="5"])
 :not([data-content="6"]):not([data-content="7"]):not([data-content="8"])
@@ -115,7 +106,6 @@ math-field {
   color: white;
 }
 
-/* Erilised funktsiooninupud */
 #calc-clear,
 #calc-backspace,
 #calc-evaluate,
@@ -136,7 +126,6 @@ math-field {
   margin-top: 0.5rem;
 }
 
-/* Hover + active efektid */
 button:hover {
   filter: brightness(0.95);
 }
@@ -151,7 +140,6 @@ math-field::part(menu-toggle) {
   display: none;
 }
 
-/* Väiksema ekraani tugi */
 @media (max-width: 480px) {
   .keypad {
     grid-template-columns: repeat(4, 1fr);
@@ -172,21 +160,18 @@ math-field::part(menu-toggle) {
   }
 }
 
-/* Tee = nupp laiemaks */
 #calc-evaluate {
   background-color: var(--primary-red);
   color: white;
-  grid-column: span 1; /* Või span 2 kui soovid, et oleks laiem */
+  grid-column: span 1; 
 }
 
-/* Klaviatuuril uus grid paigutus */
 .calc-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-/* Juhendi stiil */
 #juhend {
   background-color: #f9f9f9;
   padding: 1.5rem;
@@ -196,7 +181,6 @@ math-field::part(menu-toggle) {
   line-height: 1.6;
 }
 
-/* Juhendi loetelu vahed */
 #juhend ul {
   padding-left: 1.25rem;
 }
@@ -205,7 +189,6 @@ math-field::part(menu-toggle) {
   margin-bottom: 0.8rem;
 }
 
-/* Code-element selgemalt esile */
 #juhend code {
   background-color: #eee;
   color: #111;

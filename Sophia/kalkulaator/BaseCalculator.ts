@@ -1,6 +1,6 @@
-export abstract class BaseCalculator{ //Hoiab meeles sisestatud sisu, baas teistele
+export abstract class BaseCalculator{ 
     protected panelContents: string = ''; //kalkulaatori mälu
-    abstract evaluate(): string | number; //Tagastab kalkulaatori väljundi
+    abstract evaluate(): string | number; 
 
     insert(content: string): void {
         this.panelContents += content; 

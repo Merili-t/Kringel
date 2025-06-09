@@ -2,30 +2,68 @@
 <html lang="et">
 <head>
   <meta charset="UTF-8">
-  <title>Testi koostaja</title>
+  <title>Uus küsimus – Plokk 2</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Koosta küsimus</h1>
-
-  <label for="question">Küsimus:</label><br>
-  <textarea id="question" rows="1" class="resizable" placeholder="Sisesta küsimus siin..."></textarea>
-  <br><br>
-
-  <label>Vastuse tüüp:</label><br>
-  <select id="answerType">
-    <option value="single">Üks õige vastus</option>
-    <option value="multiple">Mitu õiget vastust</option>
-  </select>
-  <br><br>
-
-  <div id="answers"></div>
-  <button onclick="addAnswer()">Lisa vastusevariant</button>
-  <br><br>
-
-  <button onclick="preview()">Eelvaade</button>
-  <button onclick="save()">Salvesta</button>
-
+  <header>
+    <div class="header-left">Uus küsimus – Plokk 2</div>
+    <div class="header-right">
+      <a href="#">Järgmine küsimus &rarr;</a>
+    </div>
+  </header>
+  <div class="main-container">
+    <div class="left-column">
+      <section class="question-block">
+        <label for="question" class="section-label">Küsimus</label>
+        <textarea id="question" placeholder="Sisesta küsimus siin..."></textarea>
+      </section>
+      <section class="add-option-block">
+        <button id="addOptionLeftBtn" class="red-btn">Lisa vastusevariant</button>
+      </section>
+      <section class="image-upload-block">
+        <label for="questionImage" class="section-label">Soovi korral lisa pilt</label>
+        <div id="imageUploadBox">
+          <span class="upload-icon">&#128247;</span>
+        </div>
+        <p class="upload-caption">Vajuta kastikesele, et laadida pilt üles</p>
+        <input type="file" id="questionImage" accept="image/*">
+      </section>
+      <section class="points-toggle-block">
+        <label for="points" class="section-label">Sisesta punktisumma</label>
+        <input type="number" id="points" min="0" value="20">
+      </section>
+      <section class="auto-check-block">
+        <label class="section-label">Automaatkontroll?</label>
+        <input type="checkbox" id="autoCheck">
+      </section>
+    </div>
+    <div class="right-column">
+      <section class="answer-type-block">
+        <label for="answerType" class="section-label">Vali vastusetüüp</label>
+        <select id="answerType">
+          <option value="single">Üks õige vastus</option>
+          <option value="multiple">Mitu õiget vastust</option>
+        </select>
+      </section>
+      <section class="preview-block">
+        <label class="section-label">Eelvaade</label>
+        <div id="preview" class="preview-box"></div>
+      </section>
+    </div>
+  </div>
+  <div class="action-buttons">
+    <button id="deleteQuestionBtn" data-popup="kustuta" class="red-btn">Kustuta küsimus</button>
+    <button id="saveQuestionBtn" class="save-btn">Lisa küsimus</button>
+  </div>
+  <div id="overlay" class="popup-overlay"></div>
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title"></h3>
+    <p id="popup-message"></p>
+    <div id="popup-actions"></div>
+  </div>
+  <script src="../popups/popupHelper.js"></script>
+  <script src="../popups/kustuta.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -37,3 +37,11 @@ function toggleVisibility(icon) {
   input.type = input.type === "password" ? "text" : "password";
   icon.textContent = icon.textContent === "👁" ? "🙈" : "👁";
 }
+
+function openPdfPopup() {
+  document.getElementById("pdfPopup").style.display = "flex";
+}
+
+function closePdfPopup() {
+  document.getElementById("pdfPopup").style.display = "none";
+}

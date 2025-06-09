@@ -1,19 +1,19 @@
-import { BaseCalculator } from './BaseCalculator.js'; //RUN "npx tsc" not separately filenameiga muidu vale compile tuleb
+import { BaseCalculator } from './BaseCalculator.js'; 
 //Latex into javascript
-export class LatexCalculator extends BaseCalculator { //Tegelik arvutamise loogika siin 
-    evaluate(): string | number { //isendimeetod
-        let expr = this.getContents(); //Latexi kujul string
+export class LatexCalculator extends BaseCalculator {
+    evaluate(): string | number { 
+        let expr = this.getContents();
         expr = expr
-            .replace(/\\cdot/g, '*') //cdot → *
+            .replace(/\\cdot/g, '*') 
             // Astendamise fix kui kümnend murrud jms
             .replace(/(\d+)\^(\d+)\s*\*\s*\1\^(\d+)/g, '($1**$2)*($1**$3)')
-            // Keerukam astendamine  ^ → ** (nt x^2 või x^{2+1} või 2^1.5)               //täielik vaste, astendatav, astendaja sulgudega, tavaline astendaja
+            // Keerukam astendamine  ^ → ** (nt x^2 või x^{2+1} või 2^1.5)
             .replace(/([a-zA-Z0-9.\)\]]+)\s*\^\s*(?:{([^}]+)}|([0-9.\-+*/a-zA-Z()]+))/g, (_, base, exp1, exp2) => {
-                const exponent = exp1 || exp2; //võtab selle mis leidub
+                const exponent = exp1 || exp2;
                 return `(${base})**(${exponent})`;
             })
             // Lihtne ^ → ** (nt 2^3 või (1+2)^4.5)
-            .replace(/(\d+(\.\d+)?|\([^()]+\))\s*\^\s*([-\d.]+)/g, '($1)**($3)') // $ tähistab gruppi eraldatakse sugludega
+            .replace(/(\d+(\.\d+)?|\([^()]+\))\s*\^\s*([-\d.]+)/g, '($1)**($3)')
 
             // 9\cos(9) -> 9*Math.cos(9) sin cos tan 
             .replace(/([\d.]+)\s*\\(sin|cos|tan)\s*\(([^)]*)\)/g, '($1)*Math.$2($3)')
@@ -52,21 +52,21 @@ export class LatexCalculator extends BaseCalculator { //Tegelik arvutamise loogi
             .replace(/\\frac\s*(\d+)\s*(\d+)/g, '($1)/($2)')
             // korralik \frac{a}{b}
             .replace(/\\frac\s*{([^}]*)}{([^}]*)}/g, (match, a, b) => {
-            if (!a || !b || a.trim() === '' || b.trim() === '') return '(0)/(1)'; //kontroll kas a ja b olemas, g asendab kõik mitte esimese leitud
+            if (!a || !b || a.trim() === '' || b.trim() === '') return '(0)/(1)';
             return `(${a})/(${b})`;
             })
 
             // eemalda \left ja \right tühikud
             .replace(/\\left|\\right/g, '')
             .replace(/\\(sin|cos|tan)\s+([a-zA-Z0-9]+)/g, 'Math.$1($2)') // \cos x ilma sulgudeta
-            .replace(/[^\x20-\x7E]/g, ''); // eemalda mittestandardsed märgid MathLive vahest lisab unicode märke
+            .replace(/[^\x20-\x7E]/g, ''); //eemalda mittestandardsed märgid MathLive vahest lisab unicode märke
 
         try {
             console.log('Evaluated expression:', expr);
 
             const fn = new Function('Math', `return ${expr}`); // turvaline eval() arvutus, piirab ligipääsu math objektile
             const result = fn(Math);
-            //Turvakontroll:
+    
             if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
             // Vorminda tuhandete kaupa tühikutega, nt "1 000 000"
                 const formatted = result.toLocaleString('fr-FR'); 

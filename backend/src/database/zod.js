@@ -20,9 +20,9 @@ export const loginSchema = z.object({ email: z.string().email(), password: z.str
 
 export const registerSchema = z.object({
   email: z.string().email(),
-  username: z.string(),
+  name: z.string(),
   password: z.string().min(1),
-  userType: z.enum(['admin', 'teacher', 'student', 'guest']),
+  userType: z.enum(['teacher', 'guest']),
 });
 
 export const zodSchemas = { ...insertSchemas, ...selectSchemas };

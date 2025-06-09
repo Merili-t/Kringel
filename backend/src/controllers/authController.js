@@ -6,28 +6,18 @@ import jwt from 'jsonwebtoken';
 import * as zod from '../database/zod.js';
 import db from '../database/drizzle.js';
 import user from '../database/models/user.js';
+import team from '../database/models/team.js';
 
 const createSession = (res, id, userType, message) => {
-  const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '7d' });
   res
     .cookie('token', token, {
       httpOnly: true,
       sameSite: 'Strict',
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600000, // 1h
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     })
     .json({ message });
-};
-
-export const getUser = async (req, res) => {
-  const userId = req.params.id;
-
-  const result = await db
-    .select({ id: user.id, email: user.email, username: user.username, userType: user.userType })
-    .from(user)
-    .where(eq(user.id, userId));
-
-  res.json(result[0]);
 };
 
 export const login = async (req, res) => {
@@ -46,11 +36,11 @@ export const login = async (req, res) => {
     const foundUser = await db.select().from(user).where(eq(user.email, email));
 
     if (foundUser && (await argon2.verify(foundUser[0].password, password))) {
-      createSession(res, foundUser[0].userId, foundUser[0].userType, 'Logged in');
+      createSession(res, foundUser[0].userId, 'teacher', 'Logged in');
     } else {
       res.status(401).json({ error: 'Wrong email or password given' });
     }
-  } else if (serverUserData.isLoggedIn) {
+  } else if (serverUserData.isLoggedIn && serverUserData.userType === 'teacher') {
     res.json({ message: 'Logged in' });
   } else {
     res.status(400).json({ error: 'Email and password are required' });
@@ -67,7 +57,7 @@ export const register = async (req, res) => {
     return res.status(400).json({ error: 'Bad data given' });
   }
 
-  const { email, username, password, userType } = result.data;
+  const { email, name, password, userType } = result.data;
 
   if (serverUserData.isLoggedIn) {
     return res.status(400).json({ error: 'Already logged in' });
@@ -75,10 +65,10 @@ export const register = async (req, res) => {
 
   const id = uuidv7();
 
-  if (userType === 'guest' && username) {
+  if (userType === 'guest' && email && name) {
     // Guest registration
     try {
-      await db.insert(user).values({ id, username, userType });
+      await db.insert(team).values({ id, email, name });
       return createSession(res, id, userType, 'Guest account created and logged in');
     } catch (err) {
       console.error(err);
@@ -86,18 +76,13 @@ export const register = async (req, res) => {
     }
   }
 
-  if (email && username && password && userType) {
-    if (!(await db.query.user.findFirst({ where: eq(user.email, email) }))) {
+  if (userType === 'teacher' && email && password) {
+    // Teacher registration
+    if (!(await db.query.user.findFirst({ where: eq(user.email.toLowerCase(), email) }))) {
       try {
         await db
           .insert(user)
-          .values({
-            id,
-            email: email.toLowerCase(),
-            username,
-            password: await argon2.hash(password),
-            userType,
-          });
+          .values({ id, email: email.toLowerCase(), password: await argon2.hash(password) });
         return createSession(res, id, userType, 'Account created and logged in');
       } catch (err) {
         console.error(err);

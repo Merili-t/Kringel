@@ -4,26 +4,23 @@ import db from '../database/drizzle.js';
 import test from '../database/models/test.js';
 
 const getTests = async res => {
-    try {
-        const testId = req.params.id;
-        const result = await db.select().from(test).where(eq(test.id, testId));
-        return res.json(result);
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
+  try {
+    const testId = req.params.id;
+    const result = await db.select().from(test).where(eq(test.id, testId));
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 };
 const postTests = async (req, res) => {
-    try {
-        const { name, description, timelimit, start, end, blockId } = req.body;
-        const id = uuidv7();
-        await db.insert(test).values({ id, name, description, timelimit, start, end, blockId });
-        return res.status(201).json({ message: 'Test created', id });
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
+  try {
+    const { name, description, timelimit, start, end, blockId } = req.body;
+    const id = uuidv7();
+    await db.insert(test).values({ id, name, description, timelimit, start, end, blockId });
+    return res.status(201).json({ message: 'Test created', id });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 };
 
-const testController = {
-    getTests,
-    postTests
-};
+const testController = { getTests, postTests };

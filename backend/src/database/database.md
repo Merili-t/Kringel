@@ -8,22 +8,31 @@
 
 ## user
 
-| Name       | Type         | Key   | Notes                                          |
-| ---------- | ------------ | ----- | ---------------------------------------------- |
-| id         | CHAR(36)     | PK, N | UUID                                           |
-| email      | VARCHAR(255) | U     | Optional, must be UNIQUE if present            |
-| username   | VARCHAR(255) | N     | Required                                       |
-| password   | VARCHAR(255) |       | Optional (null for guests)                     |
-| userType   | ENUM         | N     | One of: `admin`, `teacher`, `student`, `guest` |
-| created_at | TIMESTAMP    |       | Set automatically                              |
-| updated_at | TIMESTAMP    |       | Updated automatically                          |
+| Name       | Type         | Key   | Notes                 |
+| ---------- | ------------ | ----- | --------------------- |
+| id         | CHAR(36)     | PK, N | UUID                  |
+| email      | VARCHAR(255) | N, U  | Must be UNIQUE        |
+| password   | VARCHAR(255) | N     | Required              |
+| created_at | TIMESTAMP    |       | Set automatically     |
+| updated_at | TIMESTAMP    |       | Updated automatically |
 
-## user_answer
+## team
+
+| Name       | Type         | Key   | Notes                         |
+| ---------- | ------------ | ----- | ----------------------------- |
+| id         | CHAR(36)     | PK, N | UUID                          |
+| attempt_id | CHAR(36)     | FK    | References `test_attempt(id)` |
+| email      | VARCHAR(255) | N     | Required                      |
+| name       | text         | N     | Required                      |
+| created_at | TIMESTAMP    |       | Set automatically             |
+| updated_at | TIMESTAMP    |       | Updated automatically         |
+
+## team_answer
 
 | Name        | Type      | Key   | Notes                     |
 | ----------- | --------- | ----- | ------------------------- |
 | id          | CHAR(36)  | PK, N | UUID                      |
-| user_id     | CHAR(36)  | FK, N | References `user(id)`     |
+| team_id     | CHAR(36)  | FK, N | References `team(id)`     |
 | question_id | CHAR(36)  | FK, N | References `question(id)` |
 | answer      | TEXT      |       |                           |
 | points      | INTEGER   | N     | DEFAULT 0                 |
@@ -36,10 +45,10 @@
 | ----------- | ------------ | ----- | --------------------- |
 | id          | CHAR(36)     | PK, N | UUID                  |
 | user_id     | CHAR(36)     | FK, N | Referances `user(id)` |
-| name        | VARCHAR(255) | N     |                       |
-| description | TEXT         | N     |                       |
-| start       | DATETIME     | N     |                       |
-| end         | DATETIME     | N     |                       |
+| name        | VARCHAR(255) | N     | Required              |
+| description | TEXT         | N     | Required              |
+| start       | DATETIME     | N     | Required              |
+| end         | DATETIME     | N     | Required              |
 | time_limit  | INTEGER      | N     | In minutes            |
 | created_at  | TIMESTAMP    |       | Set automatically     |
 | updated_at  | TIMESTAMP    |       | Updated automatically |
@@ -50,34 +59,39 @@
 | ---------- | --------- | ----- | --------------------- |
 | id         | CHAR(36)  | PK, N | UUID                  |
 | test_id    | CHAR(36)  | FK, N | Referances `test(id)` |
-| user_id    | CHAR(36)  | FK, N | Referance `user(id)`  |
-| start      | DATETIME  | N     |                       |
-| end        | DATETIME  | N     |                       |
+| team_id    | CHAR(36)  | FK, N | Referance `team(id)`  |
+| start      | DATETIME  | N     | Required              |
+| end        | DATETIME  | N     | Required              |
 | score      | INTEGER   | N     | DEFAULT 0             |
 | created_at | TIMESTAMP |       | Set automatically     |
 | updated_at | TIMESTAMP |       | Updated automatically |
 
 ## question
 
-| Name         | Type      | Key   | Notes                          |
-| ------------ | --------- | ----- | ------------------------------ |
-| id           | CHAR(36)  | PK, N | UUID                           |
-| block_id     | CHAR(36)  | FK, N | Referances `block(id)`         |
-| type_id      | CHAR(36)  | FK, N | Referances `question_type(id)` |
-| order_number | INTEGER   | N     |                                |
-| description  | TEXT      | N     |                                |
-| points       | INTEGER   | N     | DEFAULT 0                      |
-| created_at   | TIMESTAMP |       | Set automatically              |
-| updated_at   | TIMESTAMP |       | Updated automatically          |
+| Name         | Type      | Key   | Notes                   |
+| ------------ | --------- | ----- | ----------------------- |
+| id           | CHAR(36)  | PK, N | UUID                    |
+| block_id     | CHAR(36)  | FK, N | Referances `block(id)`  |
+| matrix_id    | CHAR(36)  | FK    | Referances `matrix(id)` |
+| type:        | INTEGER   | N     | Required                |
+| order_number | INTEGER   | N     | Required                |
+| description  | TEXT      | N     | Required                |
+| points       | INTEGER   | N     | DEFAULT 0               |
+| created_at   | TIMESTAMP |       | Set automatically       |
+| updated_at   | TIMESTAMP |       | Updated automatically   |
 
-## question_type
+## question_matrix
 
-| Name       | Type         | Key   | Notes                 |
-| ---------- | ------------ | ----- | --------------------- |
-| id         | CHAR(36)     | PK, N | UUID                  |
-| name       | VARCHAR(255) | N     |                       |
-| created_at | TIMESTAMP    |       | Set automatically     |
-| updated_at | TIMESTAMP    |       | Updated automatically |
+| Name         | Type         | Key   | Notes                  |
+| ------------ | ------------ | ----- | ---------------------- |
+| id           | CHAR(36)     | PK, N | UUID                   |
+| block_id     | CHAR(36)     | FK, N | Referances `block(id)` |
+| name         | VARCHAR(255) |       |                        |
+| description  | TEXT         |       |                        |
+| order_number | INTEGER      | N     | Required               |
+| points       | INTEGER      | N     | DEFAULT 0              |
+| created_at   | TIMESTAMP    |       | Set automatically      |
+| updated_at   | TIMESTAMP    |       | Updated automatically  |
 
 ## block
 
@@ -85,7 +99,7 @@
 | ------------ | --------- | ----- | --------------------- |
 | id           | CHAR(36)  | PK, N | UUID                  |
 | test_id      | CHAR(36)  | FK, N | Referances `test(id)` |
-| order_number | INTEGER   | N     |                       |
+| block_number | INTEGER   | N     | Required              |
 | created_at   | TIMESTAMP |       | Set automatically     |
 | updated_at   | TIMESTAMP |       | Updated automatically |
 
@@ -95,6 +109,6 @@
 | ---------- | --------- | ----- | --------------------- |
 | id         | CHAR(36)  | PK, N | UUID                  |
 | correct    | BOOLEAN   | N     | DEFAULT FALSE         |
-| answer     | TEXT      | N     |                       |
+| answer     | TEXT      | N     | Required              |
 | created_at | TIMESTAMP |       | Set automatically     |
 | updated_at | TIMESTAMP |       | Updated automatically |

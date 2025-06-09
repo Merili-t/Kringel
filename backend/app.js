@@ -8,8 +8,7 @@ import path from 'path';
 import cors from 'cors';
 
 // import routes
-import indexRouter from './src/routes/index.js';
-import userRouter from './src/routes/user.js';
+import router from './src/router.js';
 
 // set path to .env file
 const __filename = fileURLToPath(import.meta.url);
@@ -27,8 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/', router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

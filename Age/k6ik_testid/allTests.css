@@ -13,14 +13,15 @@ html, body{
 }
 
 .nav-container{
+    height: 100%;
+    width: 18.775rem;
+    position: fixed;
     background-color: #F6E6E6;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    min-height: 100%;
+    z-index: 1;
+    top: 0;
 }
 
-.create-test-btn, .startpage-btn, .guide-btn, .contact-btn, .logout-btn{
+.create-test-btn, .startpage-btn, .guide-btn, .contact-btn, .login-btn, .logout-btn{
     font-size: 16px;
     width: 13.375rem;
     height: 3.125rem;
@@ -36,7 +37,7 @@ html, body{
     margin-left: 2.7rem;
 }
 
-.create-test-btn, .logout-btn{
+.create-test-btn, .logout-btn, .login-btn{
     background-color: #B81434;
     color: #fff;
 }
@@ -50,7 +51,7 @@ html, body{
     background-color: #F6E6E6;
 }
 
-.create-test-btn:hover, .logout-btn:hover{
+.create-test-btn:hover, .login-btn, .logout-btn:hover{
     background-color: #97102a;
 }
 

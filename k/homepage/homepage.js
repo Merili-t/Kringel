@@ -31,25 +31,21 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             // Get the link text to determine action
-            const linkText = this.textContent;
-            
+            const linkText = this.textContent.trim();
+
             switch(linkText) {
                 case 'Juhend':
-                    alert('Juhend lehele suunamine...');
-                    // window.location.href = 'juhend.html';
-                    break;
-                case 'Tulemused':
-                    alert('Tulemused lehele suunamine...');
-                    // window.location.href = 'tulemused.html';
+                    window.location.href = '../tutorial/juhend.html';
                     break;
                 case 'Kontakt':
-                    alert('Kontakt lehele suunamine...');
-                    // window.location.href = 'kontakt.html';
+                    window.location.href = '../contacts/kontakt.html';
                     break;
+                default:
+                    console.warn('Tundmatu link:', linkText);
             }
         });
     });
-    
+
     // Add hover effects to interactive elements
     const interactiveElements = document.querySelectorAll('.nav-link, .start-button');
     
@@ -58,10 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transition = 'all 0.3s ease';
         });
     });
-    
+
     // Check if test is currently available
     checkTestAvailability();
 });
+
 
 // Function to check if the test is currently available
 function checkTestAvailability() {

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import dotenv from 'dotenv';
 import path from 'path';
+import cors from 'cors';
 
 // import routes
 import indexRouter from './src/routes/index.js';
@@ -21,6 +22,7 @@ let app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

@@ -25,9 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const formData = new FormData(form);
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     try {
-      const response = await fetch("login.php", {
+      const response = await fetch(`${apiUrl}/login.php`, {
         method: "POST",
         body: formData,
       });

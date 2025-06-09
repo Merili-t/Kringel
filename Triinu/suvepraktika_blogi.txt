@@ -19,3 +19,5 @@ Esmaspäev 09.06.2025
 
 - sissejuhatus
 - otsi õppejõudusid vajadusel a431-st 
+- mitte midagi ei saa aru, reactiga andsime alla
+- tahaks nutta

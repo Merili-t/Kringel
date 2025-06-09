@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const idInput = document.createElement("input");
       idInput.type = "hidden";
       idInput.name = "test_id";
-      idInput.value = "123"; // Replace with dynamic value if needed
+      idInput.value = "123"; 
 
       form.appendChild(typeInput);
       form.appendChild(idInput);

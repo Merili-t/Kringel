@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
           text: "PDF",
-          action: () => triggerPopup("pdfKinnitus")  // ⬅️ UPDATED HERE
+          action: () => triggerPopup("pdfKinnitus")  
         },
         {
           text: "Tühista",

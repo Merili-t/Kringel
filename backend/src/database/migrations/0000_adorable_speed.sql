@@ -38,7 +38,7 @@ CREATE TABLE `question_type` (
 --> statement-breakpoint
 CREATE TABLE `test` (
 	`id` char(36) NOT NULL,
-	`admin_id` char(36) NOT NULL,
+	`user_id` char(36) NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`description` text,
 	`start` datetime NOT NULL,
@@ -63,20 +63,14 @@ CREATE TABLE `test_attempt` (
 --> statement-breakpoint
 CREATE TABLE `user` (
 	`id` char(36) NOT NULL,
-	`email` varchar(255) NOT NULL,
+	`email` varchar(255),
 	`username` varchar(255) NOT NULL,
+	`password` varchar(255),
+	`user_type` enum('admin','teacher','student','guest') NOT NULL,
 	`created_at` timestamp DEFAULT (now()),
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
-	CONSTRAINT `user_id` PRIMARY KEY(`id`)
-);
---> statement-breakpoint
-CREATE TABLE `user_admin` (
-	`id` char(36) NOT NULL,
-	`email` varchar(255) NOT NULL,
-	`password` varchar(255) NOT NULL,
-	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
-	CONSTRAINT `user_admin_id` PRIMARY KEY(`id`)
+	CONSTRAINT `user_id` PRIMARY KEY(`id`),
+	CONSTRAINT `user_email_unique` UNIQUE(`email`)
 );
 --> statement-breakpoint
 CREATE TABLE `user_answer` (
@@ -93,7 +87,7 @@ CREATE TABLE `user_answer` (
 ALTER TABLE `block` ADD CONSTRAINT `block_test_id_test_id_fk` FOREIGN KEY (`test_id`) REFERENCES `test`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `question` ADD CONSTRAINT `question_block_id_block_id_fk` FOREIGN KEY (`block_id`) REFERENCES `block`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `question` ADD CONSTRAINT `question_type_id_question_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `question_type`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `test` ADD CONSTRAINT `test_admin_id_user_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user_admin`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `test` ADD CONSTRAINT `test_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `test_attempt` ADD CONSTRAINT `test_attempt_test_id_test_id_fk` FOREIGN KEY (`test_id`) REFERENCES `test`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `test_attempt` ADD CONSTRAINT `test_attempt_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `user_answer` ADD CONSTRAINT `user_answer_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint

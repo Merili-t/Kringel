@@ -93,11 +93,10 @@ function startTimer(duration) {
 
     if (--time < 0) {
       clearInterval(interval);
-      alert("Aeg sai läbi!");
-      document.getElementById("next-button").disabled = true;
-      //showPopUP (edaspidi)
-    }
-  }, 1000);
+      triggerTimeUpPopup();  // Call the popup function from aegOtsas.js
+            document.getElementById("next-button").disabled = true;
+        }
+    }, 1000);
 }
 
 

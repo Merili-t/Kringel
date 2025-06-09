@@ -8,10 +8,11 @@
 
 3. Navigate to the project folder in the terminal and run:
 
-    3.1 If you want to use a local database: `docker compose --profile app_dev up -w`
-    3.2 If you want to use an external database: `docker compose --profile app up -w`
+    3.1 If you want to use a local database: `docker compose --profile app_dev up -w --build`
+   
+    3.2 If you want to use an external database: `docker compose --profile app up -w --build`
 
-4. To stop Docker:
+5. To stop Docker:
 
     - Use `Ctrl+C`
     - Then run: `docker compose --profile (app_dev or app) down`

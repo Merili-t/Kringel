@@ -8,17 +8,24 @@
     "dev": "nodemon ./app.js localhost 3006",
     "generate": "npx drizzle-kit generate",
     "migrate": "npx drizzle-kit migrate",
-    "format": "npx prettier --write ."
+    "seed": "node ./src/database/seeder.js",
+    "format": "npx prettier --write .",
+    "token": "node -e \"console.log(require('crypto').randomBytes(64).toString('base64'))\""
   },
   "dependencies": {
+    "argon2": "^0.43.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
+    "drizzle-zod": "^0.8.2",
     "express": "^4.21.2",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
-    "mysql2": "^3.14.1"
+    "mysql2": "^3.14.1",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.56"
   },
   "main": "app.js",
   "keywords": [],

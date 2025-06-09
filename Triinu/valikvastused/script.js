@@ -1,127 +1,148 @@
-// muutja vaade
-
-let answerCount = 0;
-
-document.addEventListener("DOMContentLoaded", () => {
-  const stored = localStorage.getItem("previewData");
-  if (stored) {
-    const data = JSON.parse(stored);
-    const questionField = document.getElementById("question");
-    questionField.value = data.question;
-    adjustTextarea(questionField);
-    document.getElementById("answerType").value = data.answerType;
-    const answersDiv = document.getElementById("answers");
-    answersDiv.innerHTML = "";
-    answerCount = 0;
-    data.options.forEach(option => {
-      addAnswer();
-      const lastOption = answersDiv.lastChild;
-      if (lastOption) {
-        const textarea = lastOption.querySelector('textarea[name="answerText"]');
-        if (textarea) {
-          textarea.value = option.text;
-          adjustTextarea(textarea);
-        }
-        const input = lastOption.querySelector('input[type="radio"], input[type="checkbox"]');
-        if (input && option.isCorrect) {
-          input.checked = true;
-        }
+let answerOptions = [];
+function updatePreview() {
+  const previewContainer = document.getElementById("preview");
+  previewContainer.innerHTML = "";
+  const imageElement = document.getElementById("imageUploadBox").querySelector("img");
+  if (imageElement) {
+    let clonedImg = imageElement.cloneNode(true);
+    previewContainer.appendChild(clonedImg);
+  }
+  const questionPreview = document.createElement("div");
+  questionPreview.className = "question-preview";
+  questionPreview.textContent = document.getElementById("question").value;
+  previewContainer.appendChild(questionPreview);
+  const optionsContainer = document.createElement("div");
+  optionsContainer.id = "optionsPreviewContainer";
+  previewContainer.appendChild(optionsContainer);
+  renderAnswerOptions();
+}
+function renderAnswerOptions() {
+  const optionsContainer = document.getElementById("optionsPreviewContainer");
+  optionsContainer.innerHTML = "";
+  const type = document.getElementById("answerType").value;
+  answerOptions.forEach((option, index) => {
+    const row = document.createElement("div");
+    row.className = "preview-option";
+    const input = document.createElement("input");
+    input.type = type === "single" ? "radio" : "checkbox";
+    input.name = "previewAnswer";
+    input.checked = option.isCorrect;
+    input.addEventListener("change", () => {
+      if (type === "single") {
+        answerOptions.forEach(op => op.isCorrect = false);
+        option.isCorrect = true;
+      } else {
+        option.isCorrect = input.checked;
+      }
+      renderAnswerOptions();
+    });
+    const textInput = document.createElement("input");
+    textInput.type = "text";
+    textInput.value = option.text;
+    textInput.style.flexGrow = "1";
+    textInput.addEventListener("input", (e) => {
+      option.text = e.target.value;
+    });
+    const upBtn = document.createElement("button");
+    upBtn.textContent = "▲";
+    upBtn.addEventListener("click", () => {
+      if (index > 0) {
+        [answerOptions[index - 1], answerOptions[index]] = [answerOptions[index], answerOptions[index - 1]];
+        renderAnswerOptions();
       }
     });
+    const downBtn = document.createElement("button");
+    downBtn.textContent = "▼";
+    downBtn.addEventListener("click", () => {
+      if (index < answerOptions.length - 1) {
+        [answerOptions[index + 1], answerOptions[index]] = [answerOptions[index], answerOptions[index + 1]];
+        renderAnswerOptions();
+      }
+    });
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "X";
+    delBtn.className = "delete-btn";
+    delBtn.addEventListener("click", () => {
+      answerOptions.splice(index, 1);
+      renderAnswerOptions();
+    });
+    row.appendChild(input);
+    row.appendChild(textInput);
+    row.appendChild(upBtn);
+    row.appendChild(downBtn);
+    row.appendChild(delBtn);
+    optionsContainer.appendChild(row);
+  });
+}
+document.getElementById("addOptionLeftBtn").addEventListener("click", () => {
+  const text = prompt("Sisesta vastusevariant:");
+  if (text && text.trim()) {
+    let isCorrectDefault = false;
+    if (document.getElementById("answerType").value === "single" && answerOptions.length === 0) {
+      isCorrectDefault = true;
+    }
+    answerOptions.push({ text: text.trim(), isCorrect: isCorrectDefault });
+    updatePreview();
   }
 });
-
-document.getElementById("answerType").addEventListener("change", () => {
-  const newType = document.getElementById("answerType").value;
-  const answerOptions = document.querySelectorAll(".answer-option");
-  answerOptions.forEach(option => {
-    const input = option.querySelector('input[type="radio"], input[type="checkbox"]');
-    if (input) {
-      input.type = newType === "single" ? "radio" : "checkbox";
-      input.style.transform = "scale(1.3)";
-      input.style.marginRight = "10px";
-    }
-  });
-  if (newType === "single") {
-    const radios = document.querySelectorAll(".answer-option input[type='radio']");
-    let anyChecked = false;
-    radios.forEach(radio => { if (radio.checked) anyChecked = true; });
-    if (!anyChecked && radios.length > 0) {
-      radios[0].checked = true;
-    }
+document.getElementById("answerType").addEventListener("change", updatePreview);
+document.getElementById("question").addEventListener("input", updatePreview);
+const imageUploadBox = document.getElementById("imageUploadBox");
+const questionImageInput = document.getElementById("questionImage");
+imageUploadBox.addEventListener("click", () => {
+  questionImageInput.click();
+});
+questionImageInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      imageUploadBox.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = evt.target.result;
+      img.style.maxWidth = "100%";
+      img.style.maxHeight = "100%";
+      imageUploadBox.appendChild(img);
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Eemalda pilt";
+      removeBtn.className = "red-btn";
+      removeBtn.addEventListener("click", () => {
+        questionImageInput.value = "";
+        imageUploadBox.innerHTML = '<span class="upload-icon">&#128247;</span>';
+        updatePreview();
+      });
+      imageUploadBox.appendChild(removeBtn);
+      updatePreview();
+    };
+    reader.readAsDataURL(file);
   }
 });
-
-document.getElementById("question").addEventListener("input", e => adjustTextarea(e.target));
-adjustTextarea(document.getElementById("question"));
-
-function addAnswer() {
-  const type = document.getElementById("answerType").value;
-  const container = document.getElementById("answers");
-  const div = document.createElement("div");
-  div.className = "answer-option";
-  div.style.display = "flex";
-  div.style.alignItems = "center";
-  div.style.width = "40%";
-  div.style.margin = "0 auto 10px";
-  div.innerHTML = `
-    <input type="${type === "single" ? "radio" : "checkbox"}" name="correct" value="${answerCount}">
-    <textarea rows="1" placeholder="Vastusevariant" name="answerText" class="resizable"></textarea>
-  `;
-  container.appendChild(div);
-  const input = div.querySelector("input");
-  input.style.transform = "scale(1.3)";
-  input.style.marginRight = "10px";
-  const textarea = div.querySelector('textarea[name="answerText"]');
-  textarea.addEventListener("input", e => adjustTextarea(e.target));
-  adjustTextarea(textarea);
-  if (type === "single") {
-    const radios = document.querySelectorAll(".answer-option input[type='radio']");
-    let anyChecked = false;
-    radios.forEach(radio => { if (radio.checked) anyChecked = true; });
-    if (!anyChecked) {
-      input.checked = true;
-    }
+function clearQuestionForm() {
+  document.getElementById("question").value = "";
+  answerOptions = [];
+  updatePreview();
+  document.getElementById("questionImage").value = "";
+  document.getElementById("imageUploadBox").innerHTML = '<span class="upload-icon">&#128247;</span>';
+  document.getElementById("points").value = 20;
+  document.getElementById("autoCheck").checked = false;
+}
+document.getElementById("saveQuestionBtn").addEventListener("click", () => {
+  const data = {
+    question: document.getElementById("question").value.trim(),
+    answerType: document.getElementById("answerType").value,
+    points: document.getElementById("points").value,
+    autoCheck: document.getElementById("autoCheck").checked,
+    answerOptions: answerOptions
+  };
+  if (!data.question) {
+    alert("Palun sisesta küsimus.");
+    return;
   }
-  answerCount++;
-}
-
-function getFormData() {
-  const question = document.getElementById("question").value;
-  const answerType = document.getElementById("answerType").value;
-  const options = Array.from(document.querySelectorAll(".answer-option")).map(el => {
-    const isCorrect = el.querySelector('input[type="radio"], input[type="checkbox"]').checked;
-    const text = el.querySelector('textarea[name="answerText"]').value;
-    return { text, isCorrect };
-  });
-  return { question, answerType, options };
-}
-
-function preview() {
-  const data = getFormData();
-  localStorage.setItem("previewData", JSON.stringify(data));
-  window.location.href = "index2.html";
-}
-
-function save() {
-  const data = getFormData();
-  fetch("/save-question", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  }).then(res => {
-    if (res.ok) alert("Salvestatud!");
-    else alert("Viga salvestamisel!");
-  });
-}
-
-function adjustTextarea(el) {
-  if (el.id === "question") {
-    el.style.width = "40%";
-  } else {
-    el.style.width = "100%";
+  if (answerOptions.length < 2) {
+    alert("Palun lisa vähemalt kaks vastusevariant.");
+    return;
   }
-  el.style.height = "auto";
-  el.style.overflow = "hidden";
-  el.style.height = el.scrollHeight + "px";
-}
+  console.log("Saving data:", data);
+  alert("Küsimus on salvestatud!");
+});
+updatePreview();

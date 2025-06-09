@@ -1,35 +1,30 @@
-// Joonistusvahendi klass
 class DrawingTool {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.ctx.font = '16px Arial';
-    this.shapes = []; // Kõik kujundid 
-    this.history = []; // Undo jaoks (undo history stack)
-    this.redoStack = []; // Redo jaoks (redo stack)
+    this.shapes = []; 
+    this.history = []; 
+    this.redoStack = []; 
 
-    this.dragged = null; // Lohistatav kujund
-    this.offset = { x: 0, y: 0 }; // Hiire nihked lohistamisel
-    this.selectedIndex = null; // Valitud kujundi indeks
+    this.dragged = null; 
+    this.offset = { x: 0, y: 0 }; 
+    this.selectedIndex = null; 
     
-    // Hiire ja klaviatuuri sündmuste kuulajad 
     canvas.addEventListener('mousedown', e => this.onMouseDown(e));
     canvas.addEventListener('mouseup', e => this.onMouseUp(e));
     canvas.addEventListener('mousemove', e => this.onMouseMove(e));
     window.addEventListener('keydown', e => this.onKeyDown(e));
 
-    // Topeltklõps teksti muutmiseks 
     canvas.addEventListener('dblclick', e => this.onDoubleClick(e));
   }
 
-  // Salvestab kujundite seisu Undo jaoks
   saveHistory() {
     this.history.push(JSON.stringify(this.shapes));
-    if (this.history.length > 50) this.history.shift(); // Hoiab ajalugu max 50 salvestust
-    this.redoStack = []; // Puhastab redo virna
+    if (this.history.length > 50) this.history.shift(); 
+    this.redoStack = []; 
   }
 
-  // Undo funktsioon
   undo() {
     if (!this.history.length) return;
     this.redoStack.push(JSON.stringify(this.shapes));
@@ -38,7 +33,6 @@ class DrawingTool {
     this.redraw();
   }
 
-  // Redo funktsioon
   redo() {
     if (!this.redoStack.length) return;
     this.history.push(JSON.stringify(this.shapes));
@@ -48,7 +42,6 @@ class DrawingTool {
 
   }
 
-  // Kujundi lisamine
   addShape(type) {
     let s = null;
     const randOffset = () => Math.floor(Math.random() * 10 - 5);
@@ -78,7 +71,6 @@ class DrawingTool {
 
       case 'text':
         const txt = prompt('Sisesta tekst (max 10 sümbolit, kleepimine pole lubatud):');
-        // Kontrolli pastetud teksti: liiga pikk, reavahetus, erimärgid
         const pastedPattern = /[\n\r]|[^ -~]/;
 
         if (!txt || txt.length > 10 || pastedPattern.test(txt)) {
@@ -111,7 +103,6 @@ class DrawingTool {
     }
   }
 
-  // Valitud kujundi kustutamine
   deleteSelected() {
     if (this.selectedIndex == null) return;
     this.saveHistory();
@@ -120,7 +111,6 @@ class DrawingTool {
     this.redraw();
   }
 
-  // Kõigi kujundite kustutamine
   deleteAll() {
     this.saveHistory();
     this.shapes = [];
@@ -128,7 +118,6 @@ class DrawingTool {
     this.redraw();
   }
 
-  // Joonistab kõik kujundid uuesti
   redraw() {
     const { width, height } = this.canvas;
     this.ctx.clearRect(0, 0, width, height);
@@ -136,7 +125,6 @@ class DrawingTool {
   }
 
 
-  // Ühe kujundi joonistamine
   drawShape(s, isActive = false) {
     this.ctx.save();
     this.ctx.translate(s.x, s.y);
@@ -257,11 +245,9 @@ class DrawingTool {
 
 
 
-  // Kontrollib, kas hiireklõps tabas kujundit
   hitTest(s, mx, my) {
     const dx = mx - s.x, dy = my - s.y;
     const ang = -(s.angle || 0);
-    // Pöörab koordinaadid tagasi vastavalt kujundi nurga pööramisele
     const lx = dx * Math.cos(ang) - dy * Math.sin(ang);
     const ly = dx * Math.sin(ang) + dy * Math.cos(ang);
 
@@ -272,7 +258,6 @@ class DrawingTool {
         return ly > -5 && ly < 5 && lx > -5 && lx < s.length + 5;
 
       case 'hexagon':
-        // Kuusnurga hit-test: kontrollib, kas kaugus on väiksem kui kuusnurga suurus + 5px
         return Math.hypot(lx, ly) <= (s.size || 30) + 5;
       case 'labeledHexagon':
         return Math.hypot(lx, ly) <= (s.size || 30) + 5;
@@ -288,7 +273,6 @@ class DrawingTool {
     }
   }
 
-  // Hiireklõps: kontrollib kas kujundit valiti ja salvestab lohistamise jaoks
   onMouseDown(e) {
     const rect = this.canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left, my = e.clientY - rect.top;
@@ -335,7 +319,6 @@ class DrawingTool {
   }
 
 
-  // Klaviatuurikäsud: kustutus, pööramine, undo/redo
   onKeyDown(e) {
     if (e.key === 'z' || e.key === 'Z') return this.undo();
     if (e.key === 'y' || e.key === 'Y') return this.redo();
@@ -350,7 +333,6 @@ class DrawingTool {
     }
   }
 
-  // Teksti muutmine topeltklõpsuga
   onDoubleClick(e) {
     const rect = this.canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left, my = e.clientY - rect.top;
@@ -368,15 +350,12 @@ class DrawingTool {
   }
 }
 
-// Globaalne joonistusobjekt
 let tool;
 
-// Kujundi lisamise abifunktsioon
 function addShape(type) {
   tool && tool.addShape(type);
 }
 
-// Initsialiseerimine lehe laadimisel
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('drawingCanvas');
   tool = new DrawingTool(canvas);

@@ -43,10 +43,8 @@ switch ($type) {
     case 'pdf':
         $test_id = $_POST['test_id'];
         
-        // Optional: load and format content from DB (this is a placeholder)
         $html = "<h1>Test PDF</h1><p>See on test ID: " . htmlspecialchars($test_id) . "</p>";
 
-        // Generate PDF using MPDF
         require_once __DIR__ . '/vendor/autoload.php';
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->WriteHTML($html);

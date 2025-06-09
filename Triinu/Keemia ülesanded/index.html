@@ -4,16 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keemia Kalkulaator ja Joonistamine</title>
-  <!-- Poppins fontide import -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Stiililehe lisamine -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Kalkulaatori pealkiri -->
   <h1 class="poppins-bold">Kalkulaator</h1>
 
-  <!-- Kalkulaatori juhend -->
   <div class="tutorial poppins-regular">
     <h3 class="poppins-medium" style="text-align: center;">Juhend</h3>
     <ul>
@@ -24,15 +20,11 @@
     </ul>
   </div>
 
-  <!-- Sisestusväli -->
   <textarea id="inputField" rows="1" placeholder="Alusta kirjutamist..." style="resize: none; overflow: hidden;" ></textarea>
-  <!-- Keemia klaviatuuri konteiner -->
   <div class="keyboard-wrapper" id="chemistryKeyboard"></div>
 
-  <!-- Joonistamise pealkiri -->
   <h1 class="poppins-bold">Joonised</h1>
 
-  <!-- Joonistamise juhend -->
   <div class="tutorial poppins-regular">
     <h3 class="poppins-medium" style="text-align: center;">Juhend</h3>
     <ul>
@@ -49,11 +41,8 @@
     </ul>
   </div>
 
-  <!-- Joonistamise konteiner -->
   <div class="drawing-container">
-    <!-- Joonistamise lõuend -->
     <canvas id="drawingCanvas" width="600" height="400"></canvas>
-    <!-- Esimene nupurida -->
     <div class="drawing-keyboard">
       <button onclick="addShape('line')" class="poppins-medium">Üksikside</button>
       <button onclick="addShape('doubleLine')" class="poppins-medium">Kaksikside</button>
@@ -61,7 +50,6 @@
       <button onclick="addShape('hexagon')" class="poppins-medium">⬡ Heksagon</button>
       <button onclick="addShape('labeledHexagon')" class="poppins-medium">⬡ Tekstiga Heksagon</button>
     </div>
-    <!-- Teine nupurida -->
     <div class="drawing-keyboard">
        <button onclick="addShape('text')" class="poppins-medium">Tekst</button>
        <button onclick="tool.undo()" class="poppins-medium">Undo (Z)</button>
@@ -71,7 +59,6 @@
     </div>
   </div>
 
-  <!-- Video Modal -->
   <div id="videoModal" class="modal">
     <div class="modal-content">
       <span id="closeVideoBtn" class="close">&times;</span>
@@ -82,7 +69,6 @@
     </div>
   </div>
 
-  <!-- JavaScripti failide lisamine -->
   <script src="script.js"></script>
   <script src="script2.js"></script>
 </body>

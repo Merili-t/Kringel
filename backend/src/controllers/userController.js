@@ -93,3 +93,17 @@ export const register = async (req, res) => {
 
   return res.status(400).json({ error: 'Missing required fields' });
 };
+
+export const logout = (req, res) => {
+  if (req.serverUserData.isLoggedIn) {
+    res.cookie('token', '', {
+      httpOnly: true,
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 0,
+    });
+    return res.json({ message: 'User is logged out' });
+  } else {
+    return res.status(400).json({ error: 'User is not logged in' });
+  }
+};

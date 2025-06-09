@@ -65,7 +65,7 @@ body {
 
 .button {
   display: inline-block;
-  text-decoration: none; /* eemaldab alljoone lingilt */
+  text-decoration: none; 
   background-color: #b31b34;
   color: #fff;
   font-weight: 600;

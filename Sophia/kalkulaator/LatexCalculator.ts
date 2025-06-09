@@ -1,4 +1,6 @@
 import { BaseCalculator } from './BaseCalculator.js'; 
+//import { ComputeEngine } from './ComputeEngine.js';
+const ce = new ComputeEngine();
 //Latex into javascript
 export class LatexCalculator extends BaseCalculator {
     evaluate(): string | number { 

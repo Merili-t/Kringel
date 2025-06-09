@@ -5,14 +5,20 @@ body {
     padding: 0;
 }
 
-.kringel {
+.banner {
     position: absolute;
     top: 0;
     right: 0;
-    height: 100px;
-    margin: 0;
     z-index: 1000;
 }
+
+.banner-img {
+    height: 100px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
 
 .header {
     display: flex;
@@ -94,4 +100,74 @@ h2 {
 
 .toggle {
     font-size: 1rem;
+}
+
+
+.contacts-section {
+    background-color: #FFF5F5;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    border: none;
+    box-shadow: 0px 4px 12px rgba(184, 20, 52, 0.15); /* UUS */
+}
+
+
+.contacts-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.header-title{
+    margin-top: 4rem;
+    font-size: 2rem;
+}
+
+.contacts-section h3{
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem; 
+}
+
+.contacts-content{
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+form label{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .25rem;
+    font-size: 1rem;
+}
+
+form input,
+form textarea{
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    width: 20rem; 
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-btn {
+    background-color: #8a1929;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-btn:hover {
+    background-color: #8a1929;
 }

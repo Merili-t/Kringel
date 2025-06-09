@@ -68,6 +68,119 @@ Returns public information for a user.
 
 ---
 
+## POST /test/upload
+
+#### Request Body (JSON)
+```json
+{ 
+  "name": "test",
+  "descripion": "Fun test",
+  "start": "2025-06-08 13:24:19",
+  "end": "2025-06-08 13:24:19",
+  "timelimit": 60, // in minutes
+  "block": [
+    {
+      "blockNumber": 1,
+      "blockQuestions": [
+        {
+          "question": "This is a hard question",
+          "points": 10,
+          "answerType": 0,
+          "answerVariables": [
+            {
+              "correct": true,
+              "answer": "This is the first option"
+            },
+            {
+              "correct": false,
+              "answer": "This is the second option"
+            }
+          ]
+        },
+        {
+          "question": "This is a easy question",
+          "points": 5,
+          "answerType": 1,
+          "answerVariables": [
+            {
+              "correct": true,
+              "answer": "This is the first option"
+            },
+            {
+              "correct": true,
+              "answer": "This is the second option"
+            },
+            {
+              "correct": false,
+              "answer": "This is the third option"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "blockNumber": 2,
+      "blockQuestions": [
+        {
+          "question": "This is a matrix question",
+          "points": 10,
+          "answerType": 4,
+          "answerVariables": [
+            {
+              "question": "This is a matrix question question",
+              "points": 10,
+              "answerType": 0,
+              "answerVariables": [
+                {
+                  "correct": true,
+                  "answer": "This is the first option"
+                },
+                {
+                  "correct": false,
+                  "answer": "This is the second option"
+                }
+              ]
+            },
+            {
+              "question": "This is a matrix question question",
+              "points": 10,
+              "answerType": 1,
+              "answerVariables": [
+                {
+                  "correct": true,
+                  "answer": "This is the first option"
+                },
+                {
+                  "correct": true,
+                  "answer": "This is the second option"
+                },
+                {
+                  "correct": false,
+                  "answer": "This is the false option"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+##### Answer types:
+
+```json
+{
+  "one_correct" : 0,
+  "many_correct": 1,
+  "text": 2,
+  "matrix": 3,
+  "picture": 4,
+  "chemistry": 5,
+  "drawing": 6,
+}
+```
+
 ## Cookies
 
 - A secure, HTTP-only `token` cookie is set on successful login/register.

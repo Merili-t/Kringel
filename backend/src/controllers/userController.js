@@ -3,6 +3,7 @@ import { v7 as uuidv7 } from 'uuid';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 
+import * as zod from '../database/zod.js';
 import db from '../database/drizzle.js';
 import user from '../database/models/user.js';
 
@@ -31,7 +32,15 @@ export const getUser = async (req, res) => {
 
 export const login = async (req, res) => {
   const serverUserData = req.serverUserData;
-  const { email, password } = req.body;
+
+  const result = zod.loginSchema.safeParse(req.body);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const { email, password } = result.data;
 
   if (!serverUserData.isLoggedIn && email && password) {
     const foundUser = await db.select().from(user).where(eq(user.email, email));
@@ -50,7 +59,15 @@ export const login = async (req, res) => {
 
 export const register = async (req, res) => {
   const serverUserData = req.serverUserData;
-  const { email, username, password, userType } = req.body;
+
+  const result = zod.registerSchema.safeParse(req.body);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const { email, username, password, userType } = result.data;
 
   if (serverUserData.isLoggedIn) {
     return res.status(400).json({ error: 'Already logged in' });

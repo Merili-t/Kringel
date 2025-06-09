@@ -25,10 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const formData = new FormData(form);
-    const apiUrl = import.meta.env.VITE_API_URL;
-
+    // Keeping the fetch call as it was:
     try {
-      const response = await fetch(`${apiUrl}/login.php`, {
+      const response = await fetch("http://localhost:3006/user/login", {
         method: "POST",
         body: formData,
       });
@@ -48,5 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function toggleVisibility(icon) {
   const input = icon.previousElementSibling;
-  input.type = input.type === "password" ? "text" : "password";
+  if (input.type === "password") {
+    input.type = "text";   
+    icon.textContent = "🙈";  
+  } else {
+    input.type = "password"; 
+    icon.textContent = "👁"; 
+  }
 }

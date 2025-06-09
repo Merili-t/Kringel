@@ -31,5 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function toggleVisibility(icon) {
   const input = icon.previousElementSibling;
-  input.type = input.type === "password" ? "text" : "password";
+  if (input.type === "password") {
+    input.type = "text";   
+    icon.textContent = "🙈";  
+  } else {
+    input.type = "password"; 
+    icon.textContent = "👁"; 
+  }
 }

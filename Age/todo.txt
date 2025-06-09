@@ -1,11 +1,11 @@
 Enne suvepraktika algust
 
-1. joonistamine DONE
-2. juhend sisselogitud lisada DONE? (sisu lisada)
-3. kontakt sisselogitud lisada vorm DONE
-4. kõik testid vaade DONE (ilma andmebaasi ühenduseta)
-5. kasutajatingimused pop up
-6. privaatsuspoliitika popup
+1. joonistamine OLEMAS
+2. juhend sisselogitud lisada OLEMAS? (sisu lisada)
+3. kontakt sisselogitud lisada vorm OLEMAS
+4. kõik testid vaade oLEMAS (ilma andmebaasi ühenduseta)
+5. kasutajatingimused pop up OLEMAS
+6. privaatsuspoliitika popup OLEMAS
 
 -------------------------------------------------------------
 

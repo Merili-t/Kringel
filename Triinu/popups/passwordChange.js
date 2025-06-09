@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const formData = new FormData();
         formData.append("email", email);
-        const response = await fetch("forgotPassword.php", {
+        const response = await fetch("http://localhost:3006/user/password???", { 
           method: "POST",
           body: formData,
         });

@@ -12,60 +12,6 @@ html, body{
     min-height: 100vh;
 }
 
-.nav-container{
-    background-color: #F6E6E6;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    min-height: 100%;
-}
-
-.create-test-btn, .startpage-btn, .guide-btn, .contact-btn, .logout-btn{
-    font-size: 16px;
-    width: 13.375rem;
-    height: 3.125rem;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
-    border-radius: 50px;
-    text-align: center;
-}
-
-.form-btn{
-    font-size: 16px;
-    width: 8rem;
-    height: fit-content;
-    padding: .75rem;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
-    border-radius: 50px;
-    text-align: center;
-}
-
-.create-test-btn, .startpage-btn, .guide-btn, .contact-btn{
-    margin-bottom: 1rem;
-    margin-left: 2.7rem;
-}
-
-.create-test-btn, .logout-btn, .form-btn{
-    background-color: #B81434;
-    color: #fff;
-}
-
-.startpage-btn, .guide-btn, .contact-btn{
-    background-color: #fff;
-    color: #710A14;
-}
-
-.startpage-btn:hover, .guide-btn:hover, .contact-btn:hover{
-    background-color: #F6E6E6;
-}
-
-.create-test-btn:hover, .logout-btn:hover, .form-btn:hover{
-    background-color: #97102a;
-}
-
 .logo{
     max-width: 150px;
     width: 100%;

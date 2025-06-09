@@ -105,3 +105,12 @@
     font-weight: 900;
     font-style: italic;
 }
+
+.nav-container{
+    height: 100%;
+    width: 18.775rem;
+    position: fixed;
+    background-color: #F6E6E6;
+    z-index: 1;
+    top: 0;
+}

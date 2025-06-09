@@ -8,29 +8,31 @@
         "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
         rel="stylesheet">
     <link rel="stylesheet" href="contacts.css">
-    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../style/popups.css">
+    <link rel="stylesheet" href="../style/buttons.css">
+    <link rel="stylesheet" href="../style/main.css">
   </head>
   <body>
     <div class="grid">
       <section class="navigation-buttons">
         <div class="nav-container">
           <div class="logo-wrapper">
-            <img src="../images/logo.png" alt="logo KRINGEL" class="logo">
+            <img src="../images/logoTransparent.png" alt="logo KRINGEL" class="logo">
           </div>
           <br>
-          <button id="create-test-btn" class="create-test-btn poppins-semibold nav-btn" data-target="../../Merili/detailid/index.html">
+          <button class="create-test-btn poppins-semibold nav-btn" data-target="../detailsTest/details.html">
             TESTI KOOSTAMINE
           </button>
           <br>
-          <button id="startpage-btn" class="startpage-btn poppins-semibold nav-btn" data-target="../k6ik_testid/allTests.html"> 
+          <button class="startpage-btn poppins-semibold nav-btn" data-target="../allTests/allTests.html"> 
             AVALEHELE
           </button>
           <br>
-          <button id="guide-btn" class="guide-btn poppins-semibold nav-btn" data-target="/Age/juhend_sisselogitud/guide.html">
+          <button class="guide-btn poppins-semibold nav-btn" data-target="../teacherGuide/guide.html">
             JUHEND
           </button>
           <br>
-          <button id="contact-btn" class="contact-btn poppins-semibold nav-btn" data-target="../kontaktandmed_sisselogitud/contacts.html">
+          <button class="contact-btn poppins-semibold nav-btn" data-target="../teacherContacts/contacts.html">
             KONTAKTANDMED
           </button>
         </div>
@@ -81,9 +83,9 @@
         </div>
       </div>
     </div>
-    <script src="../juhend_sisselogitud/buttons.js"></script>
-    <script src="../../Triinu/popups/popupHelper.js" defer></script>
-    <script src="../../Triinu/popups/logout.js" defer></script>
+    <script src="../buttons.js"></script>
+    <script src="../popups/popupHelper.js" defer></script>
+    <script src="../popups/logout.js" defer></script>
 
 
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>

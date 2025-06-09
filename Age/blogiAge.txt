@@ -1,0 +1,3 @@
+Esmaspäev 9.06.2025
+    - sissejuhatus praktikasse
+    - tarkvaraarendus SCRUMi näitel

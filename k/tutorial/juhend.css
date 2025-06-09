@@ -25,15 +25,20 @@ body {
     color: #555;
   }
   
-  .logo {
-    font-weight: bold;
-    margin-left: auto;
-  }
-  
-  .kringel {
-    height: 50px;
-    margin-left: 1rem;
-  }
+  .banner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.banner-img {
+    height: 100px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
   
   main {
     padding: 2rem;

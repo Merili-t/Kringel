@@ -14,10 +14,7 @@ function startTest() {
     const userConfirmed = confirm('Kas oled kindel, et soovid testi alustada?');
     
     if (userConfirmed) {
-        // Here you would typically redirect to the test page
-        // For now, we'll show an alert
-        alert('Test alustatakse...');
-        // window.location.href = 'test.html'; // Uncomment when test page is ready
+        window.location.href = '../instructions/sooritaja.html';
     }
 }
 

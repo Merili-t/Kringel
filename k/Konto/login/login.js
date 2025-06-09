@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const result = await response.json();
       if (result.success) {
         alert("Sisselogimine õnnestus!");
-        window.location.href = "../dashboard.html";
+        window.location.href = "../allTests/allTests.html";
       } else {
         alert(result.error || "Sisselogimine ebaõnnestus.");
       }

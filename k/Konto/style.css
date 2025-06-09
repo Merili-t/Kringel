@@ -87,7 +87,7 @@ input[type="email"],
   font-family: 'Poppins', sans-serif;
   text-align: left;
   border: 1px solid #b52634;
-  border-radius: 5px;
+  border-radius: 10px;
   line-height: 1.5;
   height: 42px;
   box-sizing: border-box;
@@ -162,7 +162,7 @@ button:not(.popup-btn):not(.pdf-popup-btn):hover {
   background-color: #b52634;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 10px 10px 0 0;

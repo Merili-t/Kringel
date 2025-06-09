@@ -110,7 +110,7 @@ input[type="email"],
   color: #821b25;
 }
 
-button:not(.popup-btn):not(.pdf-popup-btn) {
+/* button:not(.popup-btn):not(.pdf-popup-btn) {
   width: 20%;
   padding: 12px 0;
   font-size: 26px;
@@ -126,7 +126,7 @@ button:not(.popup-btn):not(.pdf-popup-btn) {
 
 button:not(.popup-btn):not(.pdf-popup-btn):hover {
   background-color: #821b25;
-}
+} */
 
 .popup-overlay {
   position: fixed;

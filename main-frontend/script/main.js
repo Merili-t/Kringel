@@ -1,13 +1,13 @@
 // Main application functionality
 
-// Logout function
-function logout() {
-    if (confirm('Kas olete kindel, et soovite välja logida?')) {
-        alert('Välja logitud');
-        // Here you would typically redirect to login page
-        // window.location.href = '/login';
-    }
-}
+//  Logout function
+// function logout() {
+//     if (confirm('Kas olete kindel, et soovite välja logida?')) {
+//         alert('Välja logitud');
+//         // Here you would typically redirect to login page
+//         // window.location.href = '/login';
+//     }
+// }
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {

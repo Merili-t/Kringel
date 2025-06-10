@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loo konto</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/popups.css" />
+    <link rel="stylesheet" href="../style/buttons.css" />
+    <link rel="stylesheet" href="../style/account.css" />
+    <script defer src="../script/createAccount.js"></script>
+    <script defer src="../popups/termsConditions.js"></script>
+    <script defer src="../popups/popupHelper.js"></script>
+  </head>
+  <body>
+    <div class="logo-container">
+      <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
+    </div>
+    <h1 class="poppins-bold">Loo konto</h1>
+    <h3 class="poppins-medium">
+      Konto olemas? <a href="login.html" class="button-link">Logi sisse.</a>
+    </h3>
+    <form action="../php/createAccount.php" method="POST" id="createForm">
+      <div class="tutorial poppins-regular">
+        <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
+        <input
+          type="email"
+          name="email"
+          placeholder="Sisesta email..."
+          required
+        />
+        <h3 class="poppins-medium">Sisesta parool<sup>*</sup></h3>
+        <div class="password-field">
+          <input
+            type="password"
+            name="password"
+            placeholder="Sisesta parool..."
+            required
+          />
+          <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
+        </div>
+        <h5 class="poppins-regular">
+          Kasuta vähemalt 8 tahemarki, mis sisaldavad tähti, numbreid ja sümboleid.
+        </h5>
+        <h3 class="poppins-medium">Korda parooli<sup>*</sup></h3>
+        <div class="password-field">
+          <input
+            type="password"
+            name="confirm_password"
+            placeholder="Sisesta parool uuesti..."
+            required
+          />
+          <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
+        </div>
+      </div>
+      <label>
+        <input type="checkbox" required class="big-checkbox" />
+        Konto loomisel nõustun
+        <a href="#" id="termsLink" class="button-link"
+          >kasutustingimuste ja privaatsuspoliitikaga</a
+        >.
+      </label>
+      <div>
+        <button class="create-account-btn poppins-bold nav-btn" type="submit" data-target="login.html">Loo konto</button>
+      </div>
+    </form>
+    
+    <div id="overlay" class="popup-overlay"></div>
+
+    <div id="terms-popup" class="popup pdf-popup">
+      <div class="pdf-popup-content">
+        <span class="pdf-close">&times;</span>
+        <embed id="pdfViewer" src="privacyPolicy-termsOfUse.pdf#zoom=FitH" class="pdf-iframe" />
+        <button class="pdf-popup-btn">Sulge</button>
+      </div>
+    </div>
+  </body>
+</html>

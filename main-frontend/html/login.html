@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logi sisse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/popups.css" />
+    <link rel="stylesheet" href="../style/buttons.css" />
+    <link rel="stylesheet" href="../style/account.css" />
+    <script defer src="../script/login.js"></script>
+    <script defer src="../popups/passwordChange.js"></script>
+    <script defer src="../popups/popupHelper.js"></script>
+  </head>
+  <body>
+    <div class="logo-container">
+      <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
+    </div>
+    <h1 class="poppins-bold">Logi sisse</h1>
+    <h3 class="poppins-regular">
+      <a href="createAccount.html" class="button-link-light"
+        >Registreeru</a
+      >
+    </h3>
+    <form action="../php/login.php" method="POST" id="createForm">
+      <div class="tutorial poppins-regular">
+        <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
+        <input
+          type="email"
+          name="email"
+          placeholder="Sisesta email..."
+          required
+        />
+        <h3 class="poppins-medium">Sisesta parool<sup>*</sup></h3>
+        <div class="password-field">
+          <input
+            type="password"
+            name="password"
+            placeholder="Sisesta parool..."
+            required
+          />
+          <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
+
+        </div>
+        <div class="forgot-password poppins-regular">
+          <a href="#" id="forgot-password-link" class="button-link-light"
+            >Unustasid parooli?</a
+          >
+        </div>
+      </div>
+      <div>
+        <button class="login-btn poppins-bold" type="submit">Logi sisse</button>
+      </div>
+    </form>
+    
+    <div id="overlay" class="popup-overlay" style="display: none;"></div>
+    
+    <div id="forgot-popup" class="popup" style="display: none;">
+      <h3 class="poppins-medium">Sisesta oma meiliaadress</h3>
+      <input
+        type="email"
+        id="reset-email"
+        placeholder="Email..."
+        required
+        style="margin-top: 10px; width: 100%; padding: 5px;"
+      />
+      <div style="margin-top: 15px;">
+        <button id="send-reset" class="popup-btn">Saada parooli uuendamise link</button>
+        <button id="cancel-reset" class="popup-btn cancel">Tühista</button>
+      </div>
+    </div>
+  </body>
+</html>

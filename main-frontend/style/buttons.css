@@ -67,13 +67,9 @@
 .logout-btn:hover, 
 .create-account-btn:hover,
 .save-new-pwd-btn:hover,
-.form-btn:hover{
+.form-btn:hover,
+.save-btn:hover{
     background-color: #97102a;
-}
-
-.logout-btn{
-    margin-top: 4rem;
-    margin-right: 0;
 }
 
 .form-btn{
@@ -86,4 +82,35 @@
     box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
     border-radius: 50px;
     text-align: center;
+}
+
+.red-btn {
+  background: #b52634;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.red-btn:hover {
+  background: #821b25;
+}
+
+.save-btn {
+  background: #b52634;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }

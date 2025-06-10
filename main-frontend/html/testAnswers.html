@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Management System</title>
+  <title>Testi vastused</title> <!-- lisada testi nimi andmebaasist -->
   <link rel="stylesheet" href="../style/testAnswers.css">
+  <link rel="stylesheet" href="../style/buttons.css">
+  <link rel="stylesheet" href="../style/main.css">
+  <link rel="stylesheet" href="../style/popups.css">
 </head>
 <body>
   <!-- Menu Component -->
@@ -12,25 +15,29 @@
     <div class="logo-container">
       <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
     </div>
-    <a href="#" onclick="navigate('testanswers')">
-      <button class="red-btn">TESTI KOOSTAMINE</button>
-    </a>
-    <a href="#" onclick="navigate('home')">
-      <button class="btn">AVALEHELE</button>
-    </a>
-    <a href="#" onclick="navigate('guide')">
-      <button class="btn">JUHEND</button>
-    </a>
-    <a href="#" onclick="navigate('contact')">
-      <button class="btn">KONTAKTANDMED</button>
-    </a>
+    <br>
+    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
+      TESTI KOOSTAMINE
+    </button>
+    <br>
+    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html"> 
+      AVALEHELE
+    </button>
+    <br>
+    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
+      JUHEND
+    </button>
+    <br>
+    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">
+      KONTAKTANDMED
+    </button>
   </div>
 
   <!-- Test Answers Page -->
   <div id="testanswers" class="page active">
     <div class="main">
       <div class="logout-btn-container">
-        <button class="logout-btn" onclick="logout()">LOGI VÄLJA</button>
+        <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
       </div>
       <h1>Vastused</h1>
       <div id="tests-container">
@@ -51,7 +58,7 @@
             <td>Nimi</td>
             <td>5/5</td>
             <td>
-              <button class="delete-btn" onclick="deleteTeam(this)">
+              <button style="all: unset; cursor: pointer;" class="delete-btn" data-popup="delete">
                 <img src="../images/del.png" alt="Delete" class="del-icon">
               </button>
             </td>
@@ -68,7 +75,7 @@
   <div id="leaderboard" class="page">
     <div class="main">
       <div class="logout-btn-container">
-        <button class="logout-btn" onclick="logout()">LOGI VÄLJA</button>
+        <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
       </div>
       <h1>Tulemuste edetabel</h1>
       <div class="infoContainer">
@@ -138,7 +145,7 @@
         </tbody>
       </table>
       <div class="pdf-download">
-        <a href="#" class="pdf-link">Laadi alla PDF</a>
+        <a href="#" class="pdf-link">Laadi alla PDF</a> <!-- pdf?? -->
       </div>
       <!-- New Button Container for navigating back to "Vastused" -->
       <div class="res-btn-container">
@@ -151,7 +158,7 @@
   <div id="teamanswer" class="page">
     <div class="main">
       <div class="logout-btn-container">
-        <button class="logout-btn" onclick="logout()">LOGI VÄLJA</button>
+        <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
       </div>
       <div class="infoContainer">
         <h2>Tiimi nimi</h2>
@@ -187,8 +194,20 @@
     </div>
   </div>
 
-  <script src="js/router.js"></script>
-  <script src="js/tests.js"></script>
-  <script src="js/main.js"></script>
+  <script src="../script/router.js"></script>
+  <script src="../script/tests.js"></script>
+  <script src="../script/main.js"></script>
+  <script src="../script/buttons.js"></script>
+  <script src="../popups/popupHelper.js" defer></script>
+  <script src="../popups/logout.js" defer></script>
+  <script src="../popups/delete.js" defer></script>
+
+
+  <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title" class="poppins-medium"></h3>
+    <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
+    <div id="popup-actions" style="margin-top: 20px;"></div>
+  </div>
 </body>
 </html>

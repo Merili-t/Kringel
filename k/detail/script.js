@@ -52,7 +52,7 @@ var TaskDetail = /** @class */ (function () {
         console.log('Saadame API-le:', formData);
 
         try {
-            const response = await fetch('http://localhost:3006/test/create', {
+            const response = await fetch('http://localhost:3006/test/upload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

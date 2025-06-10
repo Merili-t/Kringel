@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "b0498257-0555-43e7-a2c7-610443a7918d",
+  "id": "911c5678-5a12-4566-afe8-8964e5a2c815",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "answer_variant": {
@@ -146,9 +146,16 @@
           "notNull": true,
           "autoincrement": false
         },
-        "type_id": {
-          "name": "type_id",
+        "matrix_id": {
+          "name": "matrix_id",
           "type": "char(36)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -208,12 +215,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "question_type_id_question_type_id_fk": {
-          "name": "question_type_id_question_type_id_fk",
+        "question_matrix_id_question_matrix_id_fk": {
+          "name": "question_matrix_id_question_matrix_id_fk",
           "tableFrom": "question",
-          "tableTo": "question_type",
+          "tableTo": "question_matrix",
           "columnsFrom": [
-            "type_id"
+            "matrix_id"
           ],
           "columnsTo": [
             "id"
@@ -233,8 +240,8 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "question_type": {
-      "name": "question_type",
+    "question_matrix": {
+      "name": "question_matrix",
       "columns": {
         "id": {
           "name": "id",
@@ -243,9 +250,114 @@
           "notNull": true,
           "autoincrement": false
         },
+        "block_id": {
+          "name": "block_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "order_number": {
+          "name": "order_number",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "points": {
+          "name": "points",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "question_matrix_block_id_block_id_fk": {
+          "name": "question_matrix_block_id_block_id_fk",
+          "tableFrom": "question_matrix",
+          "tableTo": "block",
+          "columnsFrom": [
+            "block_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "question_matrix_id": {
+          "name": "question_matrix_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "team": {
+      "name": "team",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "attempt_id": {
+          "name": "attempt_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -269,10 +381,121 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "team_attempt_id_test_attempt_id_fk": {
+          "name": "team_attempt_id_test_attempt_id_fk",
+          "tableFrom": "team",
+          "tableTo": "test_attempt",
+          "columnsFrom": [
+            "attempt_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
-        "question_type_id": {
-          "name": "question_type_id",
+        "team_id": {
+          "name": "team_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "team_answer": {
+      "name": "team_answer",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "question_id": {
+          "name": "question_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "answer": {
+          "name": "answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "points": {
+          "name": "points",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_answer_team_id_team_id_fk": {
+          "name": "team_answer_team_id_team_id_fk",
+          "tableFrom": "team_answer",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "team_answer_question_id_question_id_fk": {
+          "name": "team_answer_question_id_question_id_fk",
+          "tableFrom": "team_answer",
+          "tableTo": "question",
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "team_answer_id": {
+          "name": "team_answer_id",
           "columns": [
             "id"
           ]
@@ -395,8 +618,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "user_id": {
-          "name": "user_id",
+        "team_id": {
+          "name": "team_id",
           "type": "char(36)",
           "primaryKey": false,
           "notNull": true,
@@ -457,12 +680,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "test_attempt_user_id_user_id_fk": {
-          "name": "test_attempt_user_id_user_id_fk",
+        "test_attempt_team_id_team_id_fk": {
+          "name": "test_attempt_team_id_team_id_fk",
           "tableFrom": "test_attempt",
-          "tableTo": "user",
+          "tableTo": "team",
           "columnsFrom": [
-            "user_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -496,26 +719,12 @@
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "username": {
-          "name": "username",
-          "type": "varchar(255)",
-          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "password": {
           "name": "password",
           "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "user_type": {
-          "name": "user_type",
-          "type": "enum('admin','teacher','student','guest')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -556,103 +765,6 @@
           ]
         }
       },
-      "checkConstraint": {}
-    },
-    "user_answer": {
-      "name": "user_answer",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "question_id": {
-          "name": "question_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "answer": {
-          "name": "answer",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "points": {
-          "name": "points",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_answer_user_id_user_id_fk": {
-          "name": "user_answer_user_id_user_id_fk",
-          "tableFrom": "user_answer",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_answer_question_id_question_id_fk": {
-          "name": "user_answer_question_id_question_id_fk",
-          "tableFrom": "user_answer",
-          "tableTo": "question",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "user_answer_id": {
-          "name": "user_answer_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
       "checkConstraint": {}
     }
   },

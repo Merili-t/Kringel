@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loo konto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style/main.css" />
+  <link rel="stylesheet" href="../../style/buttons.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <script defer src="uusParool.js"></script>
+</head>
+<body>
+  <div class="logo-container" style="text-align:center; margin-bottom: 15px;">  
+    <img src="../../images/logo.png" alt="Logo" style="height: 200px;"> 
+  </div>
+
+  <h1 class="poppins-bold">Parooli uuendamine</h1>
+
+  <form action="uusParool.php" method="POST" id="createForm">
+    <div class="tutorial poppins-regular">
+
+      <h3 class="poppins-medium">Sisesta uus parool<sup>*</sup></h3>
+      <div class="password-field">
+        <input type="password" name="password" placeholder="Sisesta parool..." required>
+        <span class="toggle-password" onclick="toggleVisibility(this)">👁</span>
+      </div>
+
+      <h5 class="poppins-regular">Kasuta vähemalt 8 tähemärki, mis sisaldavad tähti, numbreid ja sümboleid.</h5>
+
+      <h3 class="poppins-medium">Korda parooli<sup>*</sup></h3>
+      <div class="password-field">
+        <input type="password" name="confirm_password" placeholder="Sisesta parool uuesti..." required>
+        <span class="toggle-password" onclick="toggleVisibility(this)">👁</span>
+      </div>
+    </div>
+
+    <div>
+      <button class="save-new-pwd-btn poppins-bold" type="submit">Salvesta</button>
+    </div>
+  </form>
+</body>
+</html>

@@ -71,13 +71,14 @@ Returns public information for a user.
 ## POST /test/upload
 
 #### Request Body (JSON)
+
 ```json
-{ 
+{
   "name": "test",
   "descripion": "Fun test",
   "start": "2025-06-08 13:24:19",
   "end": "2025-06-08 13:24:19",
-  "timelimit": 60, // in minutes
+  "timelimit": 60,
   "block": [
     {
       "blockNumber": 1,
@@ -87,14 +88,8 @@ Returns public information for a user.
           "points": 10,
           "answerType": 0,
           "answerVariables": [
-            {
-              "correct": true,
-              "answer": "This is the first option"
-            },
-            {
-              "correct": false,
-              "answer": "This is the second option"
-            }
+            { "correct": true, "answer": "This is the first option" },
+            { "correct": false, "answer": "This is the second option" }
           ]
         },
         {
@@ -102,18 +97,9 @@ Returns public information for a user.
           "points": 5,
           "answerType": 1,
           "answerVariables": [
-            {
-              "correct": true,
-              "answer": "This is the first option"
-            },
-            {
-              "correct": true,
-              "answer": "This is the second option"
-            },
-            {
-              "correct": false,
-              "answer": "This is the third option"
-            }
+            { "correct": true, "answer": "This is the first option" },
+            { "correct": true, "answer": "This is the second option" },
+            { "correct": false, "answer": "This is the third option" }
           ]
         }
       ]
@@ -131,14 +117,8 @@ Returns public information for a user.
               "points": 10,
               "answerType": 0,
               "answerVariables": [
-                {
-                  "correct": true,
-                  "answer": "This is the first option"
-                },
-                {
-                  "correct": false,
-                  "answer": "This is the second option"
-                }
+                { "correct": true, "answer": "This is the first option" },
+                { "correct": false, "answer": "This is the second option" }
               ]
             },
             {
@@ -146,18 +126,9 @@ Returns public information for a user.
               "points": 10,
               "answerType": 1,
               "answerVariables": [
-                {
-                  "correct": true,
-                  "answer": "This is the first option"
-                },
-                {
-                  "correct": true,
-                  "answer": "This is the second option"
-                },
-                {
-                  "correct": false,
-                  "answer": "This is the false option"
-                }
+                { "correct": true, "answer": "This is the first option" },
+                { "correct": true, "answer": "This is the second option" },
+                { "correct": false, "answer": "This is the false option" }
               ]
             }
           ]
@@ -167,17 +138,18 @@ Returns public information for a user.
   ]
 }
 ```
+
 ##### Answer types:
 
 ```json
 {
-  "one_correct" : 0,
+  "one_correct": 0,
   "many_correct": 1,
   "text": 2,
   "matrix": 3,
   "picture": 4,
   "chemistry": 5,
-  "drawing": 6,
+  "drawing": 6
 }
 ```
 

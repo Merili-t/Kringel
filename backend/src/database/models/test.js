@@ -6,7 +6,7 @@ import user from './user.js';
 
 export default table('test', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
-  adminId: t
+  userId: t
     .char('user_id', { length: 36 })
     .references(() => user.id)
     .notNull(),

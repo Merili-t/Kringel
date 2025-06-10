@@ -1,0 +1,99 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: auto;
+    background-color: #fff;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 19rem 1fr;
+    grid-column-gap: 1.8rem;
+    min-height: 100vh;
+}
+
+.logo{
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
+
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;      
+}
+
+h2{
+    font-size: 3rem;
+    margin: 0;
+}
+
+.content-container{
+    min-height: 100vh;
+    padding: 0 15rem 3rem 0;
+    background-color: #fff;
+}
+
+.header-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+}
+
+.logout-btn{
+    margin-top: 4rem;
+    margin-right: -9rem;
+}
+
+.contacts-section {
+    background-color: #FFF5F5;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    border: none;
+}
+
+.contacts-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.header-title{
+    margin-top: 4rem;
+    font-size: 2rem;
+}
+
+.contacts-section h3{
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem; 
+}
+
+.contacts-content{
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+form label{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .25rem;
+    font-size: 1rem;
+}
+
+form input,
+form textarea{
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    width: 20rem; 
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}

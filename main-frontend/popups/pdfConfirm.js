@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-popup="pdfKinnitus"]').forEach(button => {
+  document.querySelectorAll('[data-popup="pdfConfirm"]').forEach(button => {
     button.addEventListener("click", () => {
       showPopup("PDF allalaadimine", "Kas soovid PDF-i alla laadida?", [
         {

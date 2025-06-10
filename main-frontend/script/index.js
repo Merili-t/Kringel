@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             switch(linkText) {
                 case 'Juhend':
-                    window.location.href = '../tutorial/juhend.html';
+                    window.location.href = 'html/tutorialHome.html';
                     break;
                 case 'Kontakt':
-                    window.location.href = '../contacts/kontakt.html';
+                    window.location.href = 'html/contactsHomepage.html';
                     break;
                 default:
                     console.warn('Tundmatu link:', linkText);

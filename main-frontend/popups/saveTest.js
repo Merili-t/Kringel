@@ -1,23 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-popup="detailiSalvestus"]').forEach(button => {
+  document.querySelectorAll('[data-popup="saveTest"]').forEach(button => {
     button.addEventListener("click", () => {
-      showPopup("Salvesta", "Kas soovid muudatused salvestada?", [
+      showPopup("Test salvestatud", "Test on edukalt salvestatud.", [
         {
-          text: "Salvesta",
+          text: "OK",
           action: () => {
-            fetch("popups.php", {
+            fetch("../php/popups.php", {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: "type=detailiSalvestus&some_field=muudetudV22rtus&test_id=123"
+              body: "type=testiSalvestus&testisooritus_id=123&lahendaja_id=456"
             })
               .then(res => res.text())
               .then(msg => {
                 alert(msg);
                 closePopup();
+                window.location.href = "../index.html";
               });
           }
-        },
-        { text: "Tühista", cancel: true }
+        }
       ]);
     });
   });

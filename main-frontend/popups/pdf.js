@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       const form = document.createElement("form");
       form.method = "POST";
-      form.action = "popups.php";
+      form.action = "../php/popups.php";
       form.target = "_blank";
 
       const typeInput = document.createElement("input");

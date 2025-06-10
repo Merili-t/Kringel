@@ -1,19 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-popup="kustuta"]').forEach(button => {
+  document.querySelectorAll('[data-popup="detailSave"]').forEach(button => {
     button.addEventListener("click", () => {
-      showPopup("Kustuta", "Kas oled kindel, et soovid selle kustutada?", [
+      showPopup("Salvesta", "Kas soovid muudatused salvestada?", [
         {
-          text: "Kustuta",
+          text: "Salvesta",
           action: () => {
-            fetch("popups.php", {
+            fetch("../php/popups.php", {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: "type=kustuta&test_id=123"
+              body: "type=detailiSalvestus&some_field=muudetudV22rtus&test_id=123"
             })
               .then(res => res.text())
               .then(msg => {
                 alert(msg);
-                clearQuestionForm();
                 closePopup();
               });
           }

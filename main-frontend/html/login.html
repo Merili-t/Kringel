@@ -8,25 +8,25 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../../style/main.css" />
-    <link rel="stylesheet" href="../../style/popups.css" />
-    <link rel="stylesheet" href="../../style/buttons.css" />
-    <link rel="stylesheet" href="../style.css" />
-    <script defer src="login.js"></script>
-    <script defer src="../../popups/passwordChange.js"></script>
-    <script defer src="../../popups/popupHelper.js"></script>
+    <link rel="stylesheet" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/popups.css" />
+    <link rel="stylesheet" href="../style/buttons.css" />
+    <link rel="stylesheet" href="../style/account.css" />
+    <script defer src="../script/login.js"></script>
+    <script defer src="../popups/passwordChange.js"></script>
+    <script defer src="../popups/popupHelper.js"></script>
   </head>
   <body>
     <div class="logo-container">
-      <img src="../../images/logo.png" alt="Logo" style="height: 200px;" />
+      <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
     </div>
     <h1 class="poppins-bold">Logi sisse</h1>
     <h3 class="poppins-regular">
-      <a href="../createAccount/createAccount.html" class="button-link-light"
+      <a href="createAccount.html" class="button-link-light"
         >Registreeru</a
       >
     </h3>
-    <form action="login.php" method="POST" id="createForm">
+    <form action="../php/login.php" method="POST" id="createForm">
       <div class="tutorial poppins-regular">
         <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
         <input

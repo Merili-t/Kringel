@@ -47,7 +47,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $email, $hashedPassword, $today);
 
 if ($stmt->execute()) {
-    header("Location: logIn.html");
+    header("Location: login.html");
     exit();
 } else {
     echo "Konto loomine ebaõnnestus: " . $stmt->error;

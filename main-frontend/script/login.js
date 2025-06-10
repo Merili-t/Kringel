@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const result = await response.json();
       if (result.success) {
         alert("Sisselogimine õnnestus!");
-        window.location.href = "../allTests/allTests.html";
+        window.location.href = "allTests.html";
       } else {
         alert(result.error || "Sisselogimine ebaõnnestus.");
       }

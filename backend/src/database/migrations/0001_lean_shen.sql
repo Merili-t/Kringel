@@ -1,0 +1,1 @@
+ALTER TABLE `team` MODIFY COLUMN `attempt_id` char(36) DEFAULT 'null';

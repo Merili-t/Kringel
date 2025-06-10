@@ -78,11 +78,12 @@ export const register = async (req, res) => {
 
   if (userType === 'teacher' && email && password) {
     // Teacher registration
-    if (!(await db.query.user.findFirst({ where: eq(user.email.toLowerCase(), email) }))) {
+    const lowEmail = email.toLowerCase();
+    if (!(await db.query.user.findFirst({ where: eq(user.email, lowEmail) }))) {
       try {
         await db
           .insert(user)
-          .values({ id, email: email.toLowerCase(), password: await argon2.hash(password) });
+          .values({ id, email: lowEmail, password: await argon2.hash(password) });
         return createSession(res, id, userType, 'Account created and logged in');
       } catch (err) {
         console.error(err);

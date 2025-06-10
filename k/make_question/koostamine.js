@@ -103,6 +103,110 @@ class QuizBuilder {
     constructor() {
         this.init();
     }
+    saveQuiz(quizData) {
+        return fetch('http://localhost:3006/quiz/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(quizData),
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("Quiz salvestatud!");
+                return result.quizId;
+            } else {
+                alert(result.error || "Salvestamine ebaõnnestus.");
+                throw new Error(result.error);
+            }
+        })
+        .catch(error => {
+            console.error("Save error:", error);
+            alert("Midagi läks valesti salvestamisel.");
+        });
+    }
+
+    loadQuiz(quizId) {
+        return fetch(`http://localhost:3006/quiz/load/${quizId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                return result.quizData;
+            } else {
+                alert(result.error || "Laadimine ebaõnnestus.");
+                throw new Error(result.error);
+            }
+        })
+        .catch(error => {
+            console.error("Load error:", error);
+            alert("Midagi läks valesti laadimisel.");
+        });
+    }
+
+    collectQuizData() {
+        const quizData = {
+            type: this.getCurrentQuizType(),
+            content: {},
+            timestamp: new Date().toISOString()
+        };
+
+        const previewContent = document.getElementById('preview-content');
+        if (!previewContent) return quizData;
+
+        // Collect data based on quiz type
+        switch (quizData.type) {
+            case 'luhike-tekst':
+                quizData.content.answer = previewContent.querySelector('input')?.value || '';
+                break;
+            case 'pikk-tekst':
+                quizData.content.answer = previewContent.querySelector('textarea')?.value || '';
+                break;
+            case 'uks-oige':
+                quizData.content.options = this.collectSingleChoiceData();
+                break;
+            case 'mitu-oiget':
+                quizData.content.options = this.collectMultipleChoiceData();
+                break;
+            case 'keemia_tasakaalustamine':
+                quizData.content.equation = document.getElementById('chemistry-input-field')?.value || '';
+                break;
+        }
+
+        return quizData;
+    }
+
+    getCurrentQuizType() {
+        const dropdown = document.getElementById('dropdown-selected');
+        return dropdown?.querySelector('span')?.dataset?.value || 'luhike-tekst';
+    }
+
+    collectSingleChoiceData() {
+        const options = [];
+        const optionRows = document.querySelectorAll('#single-options .option-row');
+        optionRows.forEach((row, index) => {
+            const text = row.querySelector('.option-input')?.value || '';
+            const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
+            options.push({ text, isCorrect, index });
+        });
+        return options;
+    }
+
+    collectMultipleChoiceData() {
+        const options = [];
+        const optionRows = document.querySelectorAll('#multiple-options .option-row');
+        optionRows.forEach((row, index) => {
+            const text = row.querySelector('.option-input')?.value || '';
+            const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
+            options.push({ text, isCorrect, index });
+        });
+        return options;
+    }
 
     init() {
         document.addEventListener('DOMContentLoaded', () => {
@@ -183,6 +287,17 @@ class QuizBuilder {
         const renderer = renderers[value];
         if (renderer) {
             renderer();
+            
+            // Add save button after rendering
+            setTimeout(() => {
+                const saveButton = this.createAddButton('Salvesta Quiz');
+                saveButton.style.background = '#2196F3';
+                saveButton.addEventListener('click', () => {
+                    const quizData = this.collectQuizData();
+                    this.saveQuiz(quizData);
+                });
+                previewContent.appendChild(saveButton);
+            }, 100);
         } else {
             previewContent.innerHTML = '<p>Vali vastuse tüüp, et näha eelvaadet.</p>';
         }

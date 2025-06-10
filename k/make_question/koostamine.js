@@ -1,4 +1,103 @@
 // Quiz Builder JavaScript - Cleaned and Fixed Version
+class Keyboard {
+    constructor(targetElement) {
+        this.targetElement = targetElement;
+        this.buttons = [];
+    }
+    
+    addButton(symbol, callback) {
+        const button = new KeyboardButton(symbol, callback);
+        this.buttons.push(button);
+        this.targetElement.appendChild(button.render());
+    }
+}
+
+class KeyboardButton {
+    constructor(symbol, callback) {
+        this.symbol = symbol;
+        this.callback = callback;
+        this.buttonElement = null;
+    }
+    
+    render() {
+        this.buttonElement = document.createElement('div');
+        this.buttonElement.classList.add('key');
+        this.buttonElement.textContent = this.symbol;
+        this.buttonElement.style.cssText = `
+            padding: 8px 12px;
+            margin: 2px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            min-width: 30px;
+            text-align: center;
+            font-family: monospace;
+        `;
+        this.buttonElement.onclick = () => this.callback(this.symbol);
+        
+        // Add hover effect
+        this.buttonElement.addEventListener('mouseover', () => {
+            this.buttonElement.style.background = '#e0e0e0';
+        });
+        this.buttonElement.addEventListener('mouseout', () => {
+            this.buttonElement.style.background = '#f0f0f0';
+        });
+        
+        return this.buttonElement;
+    }
+}
+
+class ChemistryKeyboard extends Keyboard {
+    constructor(targetElement, inputField) {
+        super(targetElement);
+        this.inputField = inputField;
+        this.initializeKeys();
+    }
+    
+    initializeKeys() {
+        const symbols = ['₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉', '₀', '→', '⇌', '↑', '↓', '+', '(', ')', 'Δ', '⁺', '⁻', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹', '⁰'];
+        symbols.forEach(symbol => {
+            this.addButton(symbol, this.addToInputField.bind(this));
+        });
+    }
+    
+    addToInputField(symbol) {
+        const input = this.inputField.inputElement;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const text = input.value;
+        input.value = text.slice(0, start) + symbol + text.slice(end);
+        input.selectionStart = input.selectionEnd = start + symbol.length;
+        input.focus();
+    }
+}
+
+class InputField {
+    constructor(inputElement) {
+        this.inputElement = inputElement;
+        this.inputElement.addEventListener('paste', (e) => {
+            e.preventDefault();
+            alert('Kleepimine on selles sisestusväljal keelatud.');
+        });
+    }
+    
+    clear() {
+        this.inputElement.value = '';
+    }
+    
+    append(value) {
+        const input = this.inputElement;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const text = input.value;
+        input.value = text.slice(0, start) + value + text.slice(end);
+        input.selectionStart = input.selectionEnd = start + value.length;
+        input.focus();
+    }
+}
 
 class QuizBuilder {
     constructor() {
@@ -256,27 +355,72 @@ class QuizBuilder {
         const equationContainer = this.createElement('div', 'chemistry-equation');
         equationContainer.style.cssText = 'background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;';
         
-        const equationInput = this.createElement('div', 'equation-input');
-        equationInput.style.cssText = 'display: flex; align-items: center; gap: 10px; margin-bottom: 10px;';
-        equationInput.innerHTML = `
-            <input type="text" placeholder="Reaktandid (nt: H2 + O2)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-            <span style="font-size: 18px;">→</span>
-            <input type="text" placeholder="Saadused (nt: H2O)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+        // Input field for chemistry equation
+        const inputField = this.createElement('textarea');
+        inputField.id = 'chemistry-input-field';
+        inputField.placeholder = 'Sisesta keemiline võrrand...';
+        inputField.style.cssText = `
+            width: 100%; 
+            padding: 12px; 
+            font-size: 16px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            resize: none; 
+            min-height: 60px; 
+            font-family: 'Courier New', monospace;
+            margin-bottom: 15px;
+            overflow: hidden;
+            text-transform: uppercase;
         `;
         
-        const balanceButton = this.createAddButton('Tasakaalusta võrrand');
-        balanceButton.style.background = '#2196F3';
+        // Chemistry keyboard container
+        const keyboardContainer = this.createElement('div', '', 'chemistry-keyboard');
+        keyboardContainer.style.cssText = `
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        `;
         
-        const resultArea = this.createElement('div', 'balance-result');
-        resultArea.style.cssText = 'margin-top: 15px; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 4px; min-height: 50px;';
-        resultArea.innerHTML = '<p style="color: #666; margin: 0;">Tasakaalustatud võrrand ilmub siia...</p>';
-        
-        equationContainer.appendChild(equationInput);
-        equationContainer.appendChild(balanceButton);
-        equationContainer.appendChild(resultArea);
+        equationContainer.appendChild(inputField);
+        equationContainer.appendChild(keyboardContainer);
+
         
         container.appendChild(equationContainer);
         document.getElementById('preview-content').appendChild(container);
+        
+        // Initialize chemistry keyboard after DOM is ready
+        setTimeout(() => {
+            const inputFieldObj = new InputField(inputField);
+            const chemistryKeyboard = new ChemistryKeyboard(keyboardContainer, inputFieldObj);
+            
+            // Auto-resize textarea
+            inputField.addEventListener("input", () => {
+                inputField.style.height = "auto";
+                inputField.style.height = inputField.scrollHeight + "px";
+            });
+            
+            // Prevent regular keyboard input and paste
+            document.addEventListener('keydown', (event) => {
+                if (event.target.id === 'chemistry-input-field') return;
+                const validKeys = /^[a-zA-Z0-9+\-/*=() ]$/;
+                if (validKeys.test(event.key)) {
+                    event.preventDefault();
+                    inputFieldObj.append(event.key);
+                }
+            });
+            
+            document.addEventListener('paste', (e) => {
+                if (e.target.id === 'chemistry-input-field') {
+                    e.preventDefault();
+                    alert('Kleepimine on keelatud.');
+                }
+            });
+        }, 100);
     }
 
     renderChemistryChains() {

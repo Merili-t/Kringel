@@ -28,36 +28,39 @@ function loadAccounts() {
   });
 }
 
-// Function to reset a teacher's password
+// Function to change a teacher's password (simulate with prompt)
 function resetPassword(email) {
-  if (confirm(`Reset password for ${email}?`)) {
-    // Example: trigger an API call to reset password 
-    alert(`Parooli lähtestamise protsess algas ${email} jaoks.`);
-    // Your backend logic would generate a new password or let the teacher set one.
+  let newPass = prompt(`Sisesta uus parool ${email} jaoks:`);
+  if (newPass !== null && newPass.trim() !== "") {
+    // Simulate API call to change password here.
+    alert(`Parool muudetud ${email} jaoks!`);
+    // Optionally update local data if needed.
+  } else {
+    alert("Uus parool ei olnud sisestatud. Parooli ei muudetud.");
   }
 }
 
 // Function to delete a teacher's account
 function deleteAccount(email) {
   if (confirm(`Oled kindel, et soovid kustutada kontot ${email}?`)) {
-    // Example: trigger an API call to delete the account.
-    alert(`Kontot kustutati: ${email}`);
-    // After deletion, reload the accounts
+    // Simulate API call to delete the account.
+    alert(`Konto kustutatud: ${email}`);
+    // After deletion, reload the accounts; in a real app, re-fetch the list from the server.
     loadAccounts();
   }
 }
 
-// Optional: You can add global navigation functions if needed.
+// Optional: Global navigation function
 function navigateTo(page) {
   // For this example, simply alert navigation.
-  // In your integration, you might set window.location.href or use a router.
+  // In a real integration, change window.location.href or use a router.
   alert(`Navigeeri lehele: ${page}`);
 }
 
-// Optional: logout function for the admin panel
+// Optional: Logout function
 function logout() {
   if (confirm('Oled kindel, et soovid välja logida?')) {
     alert('Välja logitud!');
-    // Add your logout logic, e.g. window.location = 'login.html';
+    // Add your logout logic, e.g. window.location.href = 'login.html';
   }
 }

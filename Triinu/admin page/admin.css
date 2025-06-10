@@ -61,7 +61,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.red-btn {
+.red-btn, .logout-btn {
   background-color: #B81434;
   color: #fff;
 }
@@ -106,7 +106,7 @@ h1 {
 table {
   margin: 2rem 3rem;
   width: calc(100% - 6rem);
-  background-color: #fff;  /* White background */
+  background-color: #fff;  /* White background for table */
   border-collapse: collapse;
   border-radius: 15px;
   overflow: hidden;

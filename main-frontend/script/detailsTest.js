@@ -14,10 +14,12 @@ var TaskDetail = /** @class */ (function () {
         this.initEventListeners();
         this.populateDurationDropdown();
     }
+
     TaskDetail.prototype.initEventListeners = function () {
         this.backButton.addEventListener('click', this.handleBackButton.bind(this));
         this.form.addEventListener("submit", this.handleFormSubmit.bind(this));
     };
+
     TaskDetail.prototype.populateDurationDropdown = function () {
         var _this = this;
         var durations = [5, 10, 15, 20, 30, 45, 60, 90, 120];
@@ -28,45 +30,54 @@ var TaskDetail = /** @class */ (function () {
             _this.durationSelect.appendChild(option);
         });
     };
+
     TaskDetail.prototype.handleBackButton = function (event) {
         event.preventDefault();
         alert('Navigating back...');
         // window.history.back();
     };
-    TaskDetail.prototype.handleFormSubmit = function (event) {
+
+    TaskDetail.prototype.handleFormSubmit = async function (event) {
         event.preventDefault();
-        if (!this.validateForm())
-            return;
-        var formData = {
-            title: this.titleInput.value.trim(),
-            duration: parseInt(this.durationSelect.value),
+
+        const formData = {
+            name: this.titleInput.value.trim(),
             description: this.descriptionTextarea.value.trim(),
-            startDateTime: "".concat(this.startDateInput.value, " ").concat(this.startTimeInput.value),
-            endDateTime: "".concat(this.endDateInput.value, " ").concat(this.endTimeInput.value)
+            start: `${this.startDateInput.value} ${this.startTimeInput.value}`,
+            end: `${this.endDateInput.value} ${this.endTimeInput.value}`,
+            timelimit: parseInt(this.durationSelect.value),
+            block: false // või true kui vajad mingi checkboxi või muu loogika alusel
         };
-        console.log('Form submitted:', formData);
-        alert('Testi detailid on koostatud!');
-        this.form.reset();
+
+        console.log('Saadame API-le:', formData);
+
+        try {
+            const response = await fetch('http://localhost:3006/test/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('Test edukalt loodud!');
+                this.form.reset();
+                window.location.href = '../html/testCreation.html';
+            } else {
+                alert(result.error || 'Midagi läks valesti.');
+            }
+        } catch (error) {
+            console.error('API viga:', error);
+            alert('Serveriga ei saanud ühendust. Palun proovi hiljem uuesti.');
+        }
     };
-    TaskDetail.prototype.validateForm = function () {
-        if (!this.titleInput.value.trim()) {
-            alert('Palun sisestage pealkiri!');
-            return false;
-        }
-        var start = new Date("".concat(this.startDateInput.value, "T").concat(this.startTimeInput.value));
-        var end = new Date("".concat(this.endDateInput.value, "T").concat(this.endTimeInput.value));
-        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-            alert('Palun sisestage kehtivad kuupäevad ja kellaajad!');
-            return false;
-        }
-        if (start >= end) {
-            alert('Algus peab olema enne lõppu!');
-            return false;
-        }
-        return true;
-    };
-    return TaskDetail;
-}());
-document.addEventListener('DOMContentLoaded', function (event) {
-    new TaskDetail();
-});
+
+    return TaskDetail; // ← Puudus!
+}()); // ← Funktsiooni kohene käivitamine
+
+// ← Klassist eksemplari loomine, et kõik käivituks:
+new TaskDetail();
+

@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 body {
-  font-family: 'Inter', sans-serif;
   background: #ffffff;
   min-height: 100vh;
 }
@@ -26,13 +25,13 @@ body {
   display: flex;
   gap: 80px;
   align-items: center;
+  margin-left: 9rem;
 }
 
 .nav-link {
   color: #888;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 500;
   transition: color 0.3s ease;
 }
 
@@ -92,7 +91,6 @@ body {
 
 .main-title {
   font-size: 28px;
-  font-weight: 700;
   color: #333;
   margin-bottom: 16px;
 }
@@ -105,7 +103,6 @@ body {
 }
 
 .test-time {
-  font-weight: 500;
   margin-bottom: 32px;
 }
 
@@ -115,7 +112,6 @@ body {
   border: none;
   padding: 14px 50px;
   font-size: 18px;
-  font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;

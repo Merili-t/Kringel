@@ -23,3 +23,16 @@ export const postQuestion = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+export const deleteQuestion = async (req, res) => {
+  try {
+    const qId = req.params.id;
+    const deletedCount = await db.delete(question).where(eq(qId, question.id));
+    if (deletedCount === 0){
+      return res.status(404).json({message: 'Question not found'});
+    }
+    return res.status(200).json({message: 'Question deleted'});
+  } catch (err) {
+    return res.status(500).json({error: err.message});
+  }
+};

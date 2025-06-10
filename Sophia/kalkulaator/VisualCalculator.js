@@ -1,9 +1,15 @@
 import { LatexCalculator } from "./LatexCalculator.js";
 export class VisualCalculator {
     constructor(inputId, resultId) {
-        this.inputField = document.getElementById(inputId);
+        const mathfield = document.getElementById(inputId);
+        this.inputField = mathfield;
         this.resultElement = document.getElementById(resultId);
         this.logic = new LatexCalculator();
+        this.logic.setContents(this.inputField.value);
+        if (!mathfield) {
+            console.error(`Element with id '${inputId}' not found!`);
+        }
+        this.inputField = mathfield;
         this.setupButtons();
         // Kuula MathLive input muutusi
         this.inputField.addEventListener('input', () => {
@@ -12,13 +18,12 @@ export class VisualCalculator {
         });
     }
     insertToInput(content) {
-        this.inputField.insert(content); //Mathlive
-        this.inputField.focus(); //kasutaja saab kohe edasi sisestada
+        this.inputField.insert(content);
+        this.inputField.focus();
     }
     setupButtons() {
         var _a, _b, _c, _d, _e;
         document.querySelectorAll('.calc-button').forEach((el) => {
-            // Seob nupud vajutustega
             const button = el;
             button.addEventListener('click', () => {
                 const content = button.getAttribute('data-content');
@@ -54,26 +59,20 @@ export class VisualCalculator {
             const result = this.logic.evaluate();
             this.resultElement.textContent = `= ${result}`;
         });
-        (_b = document.getElementById('calc-clear')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
-            this.inputField.value = ''; //Mathlive 
+        const clear = () => {
+            this.inputField.value = '';
             this.resultElement.textContent = '';
             this.logic.clear();
             this.inputField.focus();
-        });
-        (_c = document.getElementById('symbol-clear')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
-            this.inputField.value = ''; //Mathlive 
-            this.resultElement.textContent = '';
-            this.logic.clear();
-            this.inputField.focus();
-        });
-        (_d = document.getElementById('calc-backspace')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', () => {
+        };
+        (_b = document.getElementById('calc-clear')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', clear);
+        (_c = document.getElementById('symbol-clear')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', clear);
+        const backspace = () => {
             this.inputField.executeCommand('deleteBackward');
             this.inputField.focus();
-        });
-        (_e = document.getElementById('symbol-backspace')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', () => {
-            this.inputField.executeCommand('deleteBackward');
-            this.inputField.focus();
-        });
+        };
+        (_d = document.getElementById('calc-backspace')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', backspace);
+        (_e = document.getElementById('symbol-backspace')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', backspace);
         const symbolToggle = document.getElementById('toggle-symbols');
         const symbolPanel = document.getElementById('symbol-panel');
         const calcButtons = document.querySelector('.calc-buttons');

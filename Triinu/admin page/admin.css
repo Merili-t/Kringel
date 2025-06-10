@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+/* Sidebar Menu */
+.menu {
+  height: 100vh;
+  width: 18.775rem;
+  position: fixed;
+  background-color: #F6E6E6;
+  top: 0;
+  left: 0;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu a {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+}
+
+.logo-container {
+  margin: 2rem auto 3rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 150px;
+  height: auto;
+  display: block;
+}
+
+/* Buttons */
+.btn, .red-btn, .logout-btn, .res-btn {
+  font-size: 16px;
+  width: 13.375rem;
+  height: 3.125rem;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 4px 12px rgba(184, 20, 52, 0.5);
+  border-radius: 50px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.red-btn {
+  background-color: #B81434;
+  color: #fff;
+}
+
+.btn, .res-btn {
+  background-color: #fff;
+  color: #710A14;
+}
+
+.btn:hover, .res-btn:hover {
+  background-color: #F6E6E6;
+}
+
+.red-btn:hover, .logout-btn:hover {
+  background-color: #97102a;
+}
+
+/* Main Content */
+.main {
+  margin-left: 18.775rem;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.logout-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  margin-right: 3rem;
+}
+
+h1 {
+  margin-top: 2rem;
+  margin-left: 3rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Table Styling */
+table {
+  margin: 2rem 3rem;
+  width: calc(100% - 6rem);
+  background-color: #fff;  /* White background */
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #fff;  /* White header */
+  color: #666;
+}
+
+th, td {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+  background-color: #f8f9fa;  /* Gray hover */
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Action Button styles for Reset and Delete */
+.reset-btn, .delete-btn {
+  background-color: #B81434;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  transition: 0.3s ease;
+}
+
+.reset-btn:hover, .delete-btn:hover {
+  background-color: #97102a;
+}
+
+/* Container for bottom button */
+.res-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  padding: 0px 3rem;
+  margin-bottom: 3rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+  }
+  .main {
+    margin-left: 0;
+  }
+  table {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  th, td {
+    padding: 0.8rem;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+  .logout-btn-container {
+    margin-right: 1rem;
+  }
+  .res-btn-container {
+    padding: 0px 1rem;
+  }
+}

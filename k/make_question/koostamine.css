@@ -90,7 +90,7 @@ textarea {
 
 textarea:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #8a1929;
 }
 
 textarea::placeholder {
@@ -108,8 +108,8 @@ textarea::placeholder {
 }
 
 .image-upload-area:hover {
-    border-color: #007bff;
-    background: #f0f8ff;
+    border-color: #8a1929;
+    background: #f9f3f3;
 }
 
 .image-icon {
@@ -132,7 +132,7 @@ textarea::placeholder {
 .checkbox-group input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    accent-color: #007bff;
+    accent-color: #8a1929;
     cursor: pointer;
 }
 
@@ -154,7 +154,7 @@ textarea::placeholder {
 
 .points-input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #8a1929;
 }
 
 .dropdown {
@@ -177,7 +177,7 @@ textarea::placeholder {
 
 .dropdown-selected:hover,
 .dropdown.open .dropdown-selected {
-    border-color: #007bff;
+    border-color: #8a1929;
 }
 
 .dropdown-selected span {
@@ -203,7 +203,7 @@ textarea::placeholder {
     left: 0;
     right: 0;
     background: white;
-    border: 2px solid #007bff;
+    border: 2px solid #8a1929;
     border-top: none;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -225,7 +225,7 @@ textarea::placeholder {
 }
 
 .dropdown-option:hover {
-    background-color: #f0f8ff;
+    background-color: #f8ebeb;
 }
 
 .dropdown-option:last-child {
@@ -264,7 +264,7 @@ textarea::placeholder {
 
 .preview-input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #8a1929;
 }
 
 .preview-input::placeholder {
@@ -288,7 +288,7 @@ textarea::placeholder {
 .preview-option input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #007bff;
+    accent-color: #8a1929;
 }
 
 .preview-option label {

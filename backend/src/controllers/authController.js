@@ -35,7 +35,7 @@ export const login = async (req, res) => {
   if (!serverUserData.isLoggedIn && email && password) {
     const foundUser = await db.select().from(user).where(eq(user.email, email));
 
-    if (foundUser && (await argon2.verify(foundUser[0].password, password))) {
+    if (foundUser[0] && (await argon2.verify(foundUser[0].password, password))) {
       createSession(res, foundUser[0].userId, 'teacher', 'Logged in');
     } else {
       res.status(401).json({ error: 'Wrong email or password given' });

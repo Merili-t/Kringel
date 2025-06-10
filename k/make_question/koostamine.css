@@ -1,7 +1,13 @@
+/* Reset ja baas */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
 }
 
 body {
@@ -11,6 +17,7 @@ body {
     line-height: 1.5;
 }
 
+/* Struktuur ja paigutus */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -26,21 +33,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .header h1 {
     font-size: 32px;
     font-weight: 600;
     color: #333;
-    margin: 0;
 }
 
 .header-subtitle {
     color: #666;
     font-size: 16px;
-    position: absolute;
-    left: 170px;
-    top: 70px;
+    margin-top: 8px;
 }
 
 .next-question {
@@ -150,6 +155,7 @@ textarea::placeholder {
     font-size: 14px;
     width: 80px;
     transition: border-color 0.2s;
+    flex-shrink: 0;
 }
 
 .points-input:focus {
@@ -157,6 +163,7 @@ textarea::placeholder {
     border-color: #8a1929;
 }
 
+/* Dropdown */
 .dropdown {
     position: relative;
     width: 100%;
@@ -232,6 +239,7 @@ textarea::placeholder {
     border-radius: 0 0 6px 6px;
 }
 
+/* Preview */
 .preview-section {
     margin-top: 32px;
     padding-top: 24px;
@@ -298,6 +306,7 @@ textarea::placeholder {
     flex: 1;
 }
 
+/* Footer ja nupud */
 .footer {
     display: flex;
     justify-content: space-between;
@@ -337,28 +346,25 @@ textarea::placeholder {
     background: #c82333;
 }
 
+/* Responsiivsus */
 @media (max-width: 768px) {
     .content {
         grid-template-columns: 1fr;
         gap: 32px;
         padding: 32px 16px;
     }
-    
+
     .header {
         padding: 16px;
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
     }
-    
-    .header-subtitle {
-        position: static;
-    }
-    
+
     .next-question {
         align-self: flex-end;
     }
-    
+
     .footer {
         padding: 16px;
         flex-direction: column;

@@ -1,23 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-popup="testiSalvestus"]').forEach(button => {
+  document.querySelectorAll('[data-popup="delete"]').forEach(button => {
     button.addEventListener("click", () => {
-      showPopup("Test salvestatud", "Test on edukalt salvestatud.", [
+      showPopup("Kustuta", "Kas oled kindel, et soovid selle kustutada?", [
         {
-          text: "OK",
+          text: "Kustuta",
           action: () => {
-            fetch("popups.php", {
+            fetch("../php/popups.php", {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: "type=testiSalvestus&testisooritus_id=123&lahendaja_id=456"
+              body: "type=kustuta&test_id=123"
             })
               .then(res => res.text())
               .then(msg => {
                 alert(msg);
+                clearQuestionForm();
                 closePopup();
-                window.location.href = "index.html";
               });
           }
-        }
+        },
+        { text: "Tühista", cancel: true }
       ]);
     });
   });

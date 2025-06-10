@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { 
           text: "Jah", 
           action: () => {
-            window.location.href = "../account/login/login.html";
+            window.location.href = "login.html";
           } 
         },
         { text: "Ei", cancel: true }

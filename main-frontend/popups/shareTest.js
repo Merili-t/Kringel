@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-popup="jagamine"]').forEach(button => {
+  document.querySelectorAll('[data-popup="shareTest"]').forEach(button => {
     button.addEventListener("click", () => {
       showPopup("Jaga testi", "Vali jagamise viis:", [
         {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
           text: "PDF",
-          action: () => triggerPopup("pdfKinnitus")  
+          action: () => triggerPopup("pdfConfirm")  
         },
         {
           text: "Tühista",

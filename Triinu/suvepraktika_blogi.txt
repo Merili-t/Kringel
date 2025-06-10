@@ -14,52 +14,66 @@ See võib hõlmata:
 Esmaspäev 09.06.2025 -- sissejuhatus
 Arenduse osa:
 Algne plaan oli õppida selgeks react ja teha siiani valminud js ja html failid sellega vastavalt ümber. 
-See paraku osutus liiga keeruliseks ning seega langetasime otsuse, et see jääb mõneks teiseks projektiks, et mitte liigselt aega kulutada.
-Hakkasime siis tegelema hoopis front-end ja back-end ühendustele. See osutus arvatust oluliselt keerulisemaks ja võttis pea terve ülejäänud päeva.
+See paraku osutus liiga keeruliseks ning seega langetasime otsuse, et see jääb mõneks teiseks projektiks, 
+et mitte liigselt aega kulutada.Hakkasime siis tegelema hoopis front-end ja back-end ühendustele. See 
+osutus arvatust oluliselt keerulisemaks ja võttis pea terve ülejäänud päeva.
 Õppisin:
 - dockerit kasutama
 - looma andmebaasi ühendusi vastavalt kontekstile (mingil määral)
 - natuke reacti, kuid mitte piisavalt, et kasutada
 
 Meeskonnas toimetamisest:
-Kui algne plaan oli minna siianiselt javaScriptilt üle reactile siis kuna neli viiest meeskonnaliikmest seda varasemalt õppinud polnud langetasime ühiselt otsuse,
-et see on siiski liiga keeruline ning jääme ikkagi algse plaani juurde.
-Arutatud sai igasuguseid asju ning koos ehitasime ka andmebaasi ning tegelesime selle ühendusega (lõpuks sai suure vaevaga sisselogimise ühendus loodud, juhhuuu!). 
+Kui algne plaan oli minna siianiselt javaScriptilt üle reactile siis kuna neli viiest meeskonnaliikmest 
+seda varasemalt õppinud polnud langetasime ühiselt otsuse,et see on siiski liiga keeruline ning jääme ikkagi
+algse plaani juurde. Arutatud sai igasuguseid asju ning koos ehitasime ka andmebaasi ning tegelesime selle 
+ühendusega (lõpuks sai suure vaevaga sisselogimise ühendus enam-vähem loodud, juhhuuu!). 
 
 Rollid:
-Merili oli kindlalt edasi meeskonna juhi positsioonis ja nagu arvata jaotusime üsna kiirelt suundade järgi frontendi ja backendi poolteks. Ühed tegelesid siis vastavalt loodud html koodide 
-ühendamise jms-ga ning teised andmebaasiehituse ja ühendamisega.
+Merili oli kindlalt edasi meeskonna juhi positsioonis ja nagu arvata jaotusime üsna kiirelt suundade järgi 
+frontendi ja backendi poolteks. Ühed tegelesid siis vastavalt loodud html koodide ühendamise jms-ga ning 
+teised andmebaasiehituse ja ühendamisega.
 
 Kliendisuhtlust:
-täna ei toimunud
+Merili saatis kliendile ühe kirja selle osas, et jääb siis plaan anda lõpus üle kood ja nad tegelevad domeeni jms-ga ise.
 
 Tööharjumused ja nende muutumine:
-- Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
+- Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles 
+natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
 
 
 
-Esmaspäev 09.06.2025 -- sissejuhatus
+Teisipäev 10.06.2025 -- Ühenduste üritused
 Arenduse osa:
-Algne plaan oli õppida selgeks react ja teha siiani valminud js ja html failid sellega vastavalt ümber. 
-See paraku osutus liiga keeruliseks ning seega langetasime otsuse, et see jääb mõneks teiseks projektiks, et mitte liigselt aega kulutada.
-Hakkasime siis tegelema hoopis front-end ja back-end ühendustele. See osutus arvatust oluliselt keerulisemaks ja võttis pea terve ülejäänud päeva.
-Õppisin:
-- dockerit kasutama
-- looma andmebaasi ühendusi vastavalt kontekstile (mingil määral)
-- natuke reacti, kuid mitte piisavalt, et kasutada
+Eesmärk oli võimalikult palju andmebaasiühendusi toimima saada, eelkõige login, createAccount ja paroolivahetus. 
+Paroolivahetuse otsustasime muuta hoopis admin-lehe teemaks, kus siis vastavalt adminkonto saab kõiki kontosid
+hallata. Selle disain sai samuti valmis tehtud, kuid veel mitte teistega ühendatud.Palju sai ümber tehtud ka 
+failihaldust ning sellele vastavalt erroreid lahendatud. Ettevalmistused said tehtud veel paari andmebaasiühenduse 
+reaalseks töötamiseks, kuigi lõpuni valmis need veel ei saanud. Samuti sai Lisette tehtud frontend osa tehtud 
+ümber, sest kuigi kokku oli lepitud js+html kasutus ning reacti kasutamist vaid kaalutud, siis Lisette oli siiski
+teinud oma osa kasutades reacti ning tema enda puudumisel tuli meil teistel välja nuputada, kuidas see js+html 
+formaati ümber korraldada.
 
 Meeskonnas toimetamisest:
-Kui algne plaan oli minna siianiselt javaScriptilt üle reactile siis kuna neli viiest meeskonnaliikmest seda varasemalt õppinud polnud langetasime ühiselt otsuse,
-et see on siiski liiga keeruline ning jääme ikkagi algse plaani juurde.
-Arutatud sai igasuguseid asju ning koos ehitasime ka andmebaasi ning tegelesime selle ühendusega (lõpuks sai suure vaevaga sisselogimise ühendus loodud, juhhuuu!). 
+Meeskonnatöö oli tihe ja sujuv, kui välja arvata Lisette puudumine ning temaga suhtluse põhimõtteliselt puudumine. 
+Tööjaotus oli sujuv ja muutus/kujunes sellele vastavalt, kui kaua kellelgi mingi asjaga aega läks vms. Tunda oli 
+puudust backendi osa tööjõust, sest meie lisajõud Sven tundub olevat ainus, kes tegelikult aru saab ja oskab seda 
+teha-korraldada ning tööd on ühe inimese jaoks üsna palju. Ma üritan ise ka vaikselt mingeid asju õppida ja mõnest 
+asjast saan ka juba veidi rohkem aru, aga kaugel sellest, et oskaksin samal tasemel ühendusi ehitada vms nagu Sven.
 
 Rollid:
-Merili oli kindlalt edasi meeskonna juhi positsioonis ja nagu arvata jaotusime üsna kiirelt suundade järgi frontendi ja backendi poolteks. Ühed tegelesid siis vastavalt loodud html koodide 
-ühendamise jms-ga ning teised andmebaasiehituse ja ühendamisega.
+Merili haldas toimuvat ja seadis eesmärke, teadis alati, kes mida teeb ja kuidas asjad on korraldatud, kõik peale
+backendi. Backendi "liider" on meil selgelt Sven, sest Lisette, kes algselt pidi rohkem mingeid asju tegema ei 
+ilmunud täna isegi mitte kohale ja isegi kui oleks siis ei mina ega tema ei oska reaalselt tegelikult Sveni aidata 
+ja neid ühendusi korraldada, sest oleme õppinud andmebaase kasutama vaid veidi sügisel ning mitte piisavalt, et 
+sellest praegu piisaks. 
+Merili, Age ja Sophia tegelesid frontendi asjadega ning vahepeal üritasid minu abiga ka natuke andmbaasiühendusi 
+korda saada. Sven tegeles põhiliselt andmebaaside ja ühendustega ning mina aitasin nii palju kui oskasin, leidsin 
+vigu ja ehitasin/parandasin js-koodi poolseid ühendusi.
 
 Kliendisuhtlust:
 täna ei toimunud
 
 Tööharjumused ja nende muutumine:
-- Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
-
+Lisette hilinemisest sai kohale mitte tulemine ning tundub, et tema ebausaldusväärsus saab paraku üha tüüpilisemaks. 
+Teiste osas oli muu eilsele sarnane -- suuremate errorite puhul küsimused Svenile, kui ikka ise hakkama ei saa üldse; 
+ülesannetejaotus, jätkuvalt veidi segadust dockeriga ja nii palju git commite, et sealt ei leia enam küll varsti edasi.

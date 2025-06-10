@@ -29,6 +29,11 @@ h2{
     margin: 0;
 }
 
+.logout-btn{
+    margin-top: 4rem;
+    margin-right: 0;
+}
+
 .content-container{
     min-height: 100vh;
     padding: 0 4rem 3rem 0;

@@ -5,3 +5,5 @@ MATH/FÜÜSIKA kalkulaator (esialgselt tehtud)
 
 - disable mathlive sounds (vaja leida fix)
 - fix calc
+
+- lisada testi lahendamisele millises blokis oled 

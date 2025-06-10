@@ -35,7 +35,7 @@ export const login = async (req, res) => {
   if (!serverUserData.isLoggedIn && email && password) {
     const foundUser = await db.select().from(user).where(eq(user.email, email));
 
-    if (foundUser && (await argon2.verify(foundUser[0].password, password))) {
+    if (foundUser[0] && (await argon2.verify(foundUser[0].password, password))) {
       createSession(res, foundUser[0].userId, 'teacher', 'Logged in');
     } else {
       res.status(401).json({ error: 'Wrong email or password given' });
@@ -78,11 +78,12 @@ export const register = async (req, res) => {
 
   if (userType === 'teacher' && email && password) {
     // Teacher registration
-    if (!(await db.query.user.findFirst({ where: eq(user.email.toLowerCase(), email) }))) {
+    const lowEmail = email.toLowerCase();
+    if (!(await db.query.user.findFirst({ where: eq(user.email, lowEmail) }))) {
       try {
         await db
           .insert(user)
-          .values({ id, email: email.toLowerCase(), password: await argon2.hash(password) });
+          .values({ id, email: lowEmail, password: await argon2.hash(password) });
         return createSession(res, id, userType, 'Account created and logged in');
       } catch (err) {
         console.error(err);

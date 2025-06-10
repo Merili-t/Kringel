@@ -3,7 +3,7 @@ import * as t from 'drizzle-orm/mysql-core';
 import timestamps from '../timestamps.js';
 
 import block from './block.js';
-import matrix from './questionMartix.js';
+import matrix from './questionMatrix.js';
 
 export default table('question', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid

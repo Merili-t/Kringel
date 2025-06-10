@@ -3,7 +3,7 @@ import { v7 as uuidv7 } from 'uuid';
 import db from '../database/drizzle.js';
 import test from '../database/models/test.js';
 
-const getTests = async res => {
+export const getTests = async res => {
   try {
     const testId = req.params.id;
     const result = await db.select().from(test).where(eq(test.id, testId));
@@ -12,7 +12,7 @@ const getTests = async res => {
     return res.status(500).json({ error: err.message });
   }
 };
-const postTests = async (req, res) => {
+export const postTests = async (req, res) => {
   try {
     const { name, description, timelimit, start, end, blockId } = req.body;
     const id = uuidv7();
@@ -22,5 +22,3 @@ const postTests = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
-
-const testController = { getTests, postTests };

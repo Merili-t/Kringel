@@ -6,7 +6,7 @@ import db from '../drizzle.js';
 import user from '../models/user.js';
 
 export default async () => {
-  const adminExists = await db.query.user.findFirst({ where: eq(user.username, 'admin') });
+  const adminExists = await db.query.user.findFirst({ where: eq(user.email, 'teacher@kringel.ee') });
 
   if (!adminExists) {
     await db

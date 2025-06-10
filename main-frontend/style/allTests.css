@@ -5,25 +5,6 @@ html, body{
     background-color: #fff;
 }
 
-.grid{
-    display: grid;
-    grid-template-columns: 19rem 1fr;
-    grid-column-gap: 1.8rem;
-    min-height: 100vh;
-}
-
-.logo{
-    max-width: 150px;
-    width: 100%;
-    height: auto;
-}
-
-.logo-wrapper {
-    display: flex;
-    justify-content: center;
-    padding-top: 1.5rem;      
-}
-
 h2{
     font-size: 3rem;
     margin: 0;

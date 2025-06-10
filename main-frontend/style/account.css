@@ -102,7 +102,7 @@ input[type="email"],
 .toggle-password {
   position: absolute;
   right: 10px;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   cursor: pointer;
   user-select: none;
@@ -110,98 +110,12 @@ input[type="email"],
   color: #821b25;
 }
 
-/* button:not(.popup-btn):not(.pdf-popup-btn) {
-  width: 20%;
-  padding: 12px 0;
-  font-size: 26px;
-  font-weight: 600;
-  background-color: #b52634;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
-}
-
-button:not(.popup-btn):not(.pdf-popup-btn):hover {
-  background-color: #821b25;
-} */
-
 #send-reset {
   min-width: 180px;
 }
 
-.pdf-popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #E9CDCC;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  width: 85vw;      
-  height: 80vh;     
-  max-width: none;   
-  text-align: center;
-  z-index: 1000;
-}
-
-.pdf-popup-content {
-  width: 100%;
-  height: 100%;
-  padding: 10px;        
-  box-sizing: border-box;
-  position: relative;
-}
-
-.pdf-iframe {
-  width: 100%;
-  height: calc(100% - 20px); 
-  border: none;
-}
-
-.pdf-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 30px;
-  cursor: pointer;
-  z-index: 1010;
-}
-
-.pdf-popup-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  padding: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  background-color: #b52634;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 1010;
-}
-
-.pdf-popup-btn:hover {
-  background-color: #821b25;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
 * {
   box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #fff;
-  margin: 0;
-  padding: 20px;
-  color: #000;
 }
 
 header {
@@ -399,39 +313,4 @@ textarea:focus {
   border: none;
   color: #b52634;
   cursor: pointer;
-}
-
-.red-btn {
-  background: #b52634;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.red-btn:hover {
-  background: #821b25;
-}
-
-.save-btn {
-  background: #b52634;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.save-btn:hover {
-  background: #821b25;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
 }

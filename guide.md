@@ -53,7 +53,8 @@ Typescript faili kompileerimine
 
 ### Outdated
 
-NODE versioon
+NODE version 21.7.3
+
 - Vaadake üle mis teie node versioon ja vajadusel updatei
 nvm install     # Paigaldab automaatselt versiooni .nvmrc alusel (kui ei siis vaata versiooni sealt failist)
-nvm use         # Kasutab seda versioonig
+nvm use

@@ -37,26 +37,46 @@ var TaskDetail = /** @class */ (function () {
         // window.history.back();
     };
 
-    TaskDetail.prototype.handleFormSubmit = function (event) {
+    TaskDetail.prototype.handleFormSubmit = async function (event) {
         event.preventDefault();
 
-        var formData = {
-            title: this.titleInput.value.trim(),
-            duration: parseInt(this.durationSelect.value),
+        const formData = {
+            name: this.titleInput.value.trim(),
             description: this.descriptionTextarea.value.trim(),
-            startDateTime: "".concat(this.startDateInput.value, " ").concat(this.startTimeInput.value),
-            endDateTime: "".concat(this.endDateInput.value, " ").concat(this.endTimeInput.value)
+            start: `${this.startDateInput.value} ${this.startTimeInput.value}`,
+            end: `${this.endDateInput.value} ${this.endTimeInput.value}`,
+            timelimit: parseInt(this.durationSelect.value),
+            block: false // või true kui vajad mingi checkboxi või muu loogika alusel
         };
 
-        console.log('Form submitted:', formData);
-        this.form.reset();
+        console.log('Saadame API-le:', formData);
 
-        window.location.href = '../make_question/koostamine.html';
+        try {
+            const response = await fetch('http://localhost:3006/test/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('Test edukalt loodud!');
+                this.form.reset();
+                window.location.href = '../make_question/koostamine.html';
+            } else {
+                alert(result.error || 'Midagi läks valesti.');
+            }
+        } catch (error) {
+            console.error('API viga:', error);
+            alert('Serveriga ei saanud ühendust. Palun proovi hiljem uuesti.');
+        }
     };
 
-    return TaskDetail;
-}());
+    return TaskDetail; // ← Puudus!
+}()); // ← Funktsiooni kohene käivitamine
 
-document.addEventListener('DOMContentLoaded', function (event) {
-    new TaskDetail();
-});
+// ← Klassist eksemplari loomine, et kõik käivituks:
+new TaskDetail();

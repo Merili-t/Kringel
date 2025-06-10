@@ -36,3 +36,30 @@ täna ei toimunud
 Tööharjumused ja nende muutumine:
 - Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
 
+
+
+Esmaspäev 09.06.2025 -- sissejuhatus
+Arenduse osa:
+Algne plaan oli õppida selgeks react ja teha siiani valminud js ja html failid sellega vastavalt ümber. 
+See paraku osutus liiga keeruliseks ning seega langetasime otsuse, et see jääb mõneks teiseks projektiks, et mitte liigselt aega kulutada.
+Hakkasime siis tegelema hoopis front-end ja back-end ühendustele. See osutus arvatust oluliselt keerulisemaks ja võttis pea terve ülejäänud päeva.
+Õppisin:
+- dockerit kasutama
+- looma andmebaasi ühendusi vastavalt kontekstile (mingil määral)
+- natuke reacti, kuid mitte piisavalt, et kasutada
+
+Meeskonnas toimetamisest:
+Kui algne plaan oli minna siianiselt javaScriptilt üle reactile siis kuna neli viiest meeskonnaliikmest seda varasemalt õppinud polnud langetasime ühiselt otsuse,
+et see on siiski liiga keeruline ning jääme ikkagi algse plaani juurde.
+Arutatud sai igasuguseid asju ning koos ehitasime ka andmebaasi ning tegelesime selle ühendusega (lõpuks sai suure vaevaga sisselogimise ühendus loodud, juhhuuu!). 
+
+Rollid:
+Merili oli kindlalt edasi meeskonna juhi positsioonis ja nagu arvata jaotusime üsna kiirelt suundade järgi frontendi ja backendi poolteks. Ühed tegelesid siis vastavalt loodud html koodide 
+ühendamise jms-ga ning teised andmebaasiehituse ja ühendamisega.
+
+Kliendisuhtlust:
+täna ei toimunud
+
+Tööharjumused ja nende muutumine:
+- Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
+

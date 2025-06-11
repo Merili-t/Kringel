@@ -10,9 +10,8 @@ export default table('question_matrix', {
     .char('block_id', { length: 36 })
     .references(() => block.id)
     .notNull(),
-  name: t.varchar('name', { length: 255 }),
-  description: t.text('description'),
   orderNumber: t.int('order_number').notNull(),
+  description: t.text('description').notNull(),
   points: t.int('points').default(0).notNull(),
   ...timestamps,
 });

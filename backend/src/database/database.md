@@ -8,13 +8,14 @@
 
 ## user
 
-| Name       | Type         | Key   | Notes                 |
-| ---------- | ------------ | ----- | --------------------- |
-| id         | CHAR(36)     | PK, N | UUID                  |
-| email      | VARCHAR(255) | N, U  | Must be UNIQUE        |
-| password   | VARCHAR(255) | N     | Required              |
-| created_at | TIMESTAMP    |       | Set automatically     |
-| updated_at | TIMESTAMP    |       | Updated automatically |
+| Name       | Type         | Key   | Notes                               |
+| ---------- | ------------ | ----- | ----------------------------------- |
+| id         | CHAR(36)     | PK, N | UUID                                |
+| email      | VARCHAR(255) | N, U  | Must be UNIQUE                      |
+| password   | VARCHAR(255) | N     | Required                            |
+| userType   | ENUM         | N     | One of: `admin`, `teacher`, `guest` |
+| created_at | TIMESTAMP    |       | Set automatically                   |
+| updated_at | TIMESTAMP    |       | Updated automatically               |
 
 ## team
 
@@ -73,7 +74,7 @@
 | id           | CHAR(36)  | PK, N | UUID                    |
 | block_id     | CHAR(36)  | FK, N | Referances `block(id)`  |
 | matrix_id    | CHAR(36)  | FK    | Referances `matrix(id)` |
-| type:        | INTEGER   | N     | Required                |
+| type         | INTEGER   | N     | Required                |
 | order_number | INTEGER   | N     | Required                |
 | description  | TEXT      | N     | Required                |
 | points       | INTEGER   | N     | DEFAULT 0               |
@@ -82,16 +83,15 @@
 
 ## question_matrix
 
-| Name         | Type         | Key   | Notes                  |
-| ------------ | ------------ | ----- | ---------------------- |
-| id           | CHAR(36)     | PK, N | UUID                   |
-| block_id     | CHAR(36)     | FK, N | Referances `block(id)` |
-| name         | VARCHAR(255) |       |                        |
-| description  | TEXT         |       |                        |
-| order_number | INTEGER      | N     | Required               |
-| points       | INTEGER      | N     | DEFAULT 0              |
-| created_at   | TIMESTAMP    |       | Set automatically      |
-| updated_at   | TIMESTAMP    |       | Updated automatically  |
+| Name         | Type      | Key   | Notes                  |
+| ------------ | --------- | ----- | ---------------------- |
+| id           | CHAR(36)  | PK, N | UUID                   |
+| block_id     | CHAR(36)  | FK, N | Referances `block(id)` |
+| order_number | INTEGER   | N     | Required               |
+| description  | TEXT      |       |                        |
+| points       | INTEGER   | N     | DEFAULT 0              |
+| created_at   | TIMESTAMP |       | Set automatically      |
+| updated_at   | TIMESTAMP |       | Updated automatically  |
 
 ## block
 
@@ -105,10 +105,11 @@
 
 ## answer_variant
 
-| Name       | Type      | Key   | Notes                 |
-| ---------- | --------- | ----- | --------------------- |
-| id         | CHAR(36)  | PK, N | UUID                  |
-| correct    | BOOLEAN   | N     | DEFAULT FALSE         |
-| answer     | TEXT      | N     | Required              |
-| created_at | TIMESTAMP |       | Set automatically     |
-| updated_at | TIMESTAMP |       | Updated automatically |
+| Name        | Type      | Key   | Notes                 |
+| ----------- | --------- | ----- | --------------------- |
+| id          | CHAR(36)  | PK, N | UUID                  |
+| question_id | CHAR(36)  | FK, N | UUID                  |
+| correct     | BOOLEAN   | N     | DEFAULT FALSE         |
+| answer      | TEXT      | N     | Required              |
+| created_at  | TIMESTAMP |       | Set automatically     |
+| updated_at  | TIMESTAMP |       | Updated automatically |

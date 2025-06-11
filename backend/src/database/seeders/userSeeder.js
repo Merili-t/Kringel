@@ -6,11 +6,22 @@ import db from '../drizzle.js';
 import user from '../models/user.js';
 
 export default async () => {
-  const adminExists = await db.query.user.findFirst({ where: eq(user.email, 'teacher@kringel.ee') });
+  const adminExists = await db.query.user.findFirst({ where: eq(user.email, 'admin@kringel.ee') });
 
   if (!adminExists) {
-    await db
-      .insert(user)
-      .values({ id: uuidv7(), email: 'teacher@kringel.ee', password: await argon2.hash('1234') });
+    await db.insert(user).values([
+      {
+        id: uuidv7(),
+        email: 'admin@kringel.ee',
+        password: await argon2.hash('1234'),
+        userType: 'admin',
+      },
+      {
+        id: uuidv7(),
+        email: 'teacher@kringel.ee',
+        password: await argon2.hash('1234'),
+        userType: 'teacher',
+      },
+    ]);
   }
 };

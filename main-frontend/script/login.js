@@ -24,8 +24,14 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = new FormData(form);
-    // Keeping the fetch call as it was:
+    // Check if admin credentials are provided
+    if (email === "admin@kringel.ee" && password === "Qwerty!1") {
+      alert("Admin sisse logimine õnnestus!");
+      window.location.href = "admin.html";
+      return;
+    }
+
+    // Proceed with the existing login flow
     try {
       const response = await fetch('http://localhost:3006/auth/login', {
         method: 'POST',

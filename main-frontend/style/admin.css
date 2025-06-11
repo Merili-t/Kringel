@@ -12,29 +12,8 @@ body {
   min-height: 100vh;
 }
 
-/* Sidebar Menu */
-.menu {
-  height: 100vh;
-  width: 18.775rem;
-  position: fixed;
-  background-color: #F6E6E6;
-  top: 0;
-  left: 0;
-  padding: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.menu a {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  text-decoration: none;
-}
-
 .logo-container {
-  margin: 2rem auto 3rem auto;
+  margin: 2rem auto 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;

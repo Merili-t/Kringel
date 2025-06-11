@@ -6,7 +6,8 @@
 .logout-btn, 
 .create-account-btn,
 .contact-btn,
-.save-new-pwd-btn{
+.save-new-pwd-btn,
+.admin-btn{
     font-size: 16px;
     width: 13.375rem;
     height: 3.125rem;
@@ -23,7 +24,8 @@
 .contact-btn, 
 .login-btn, 
 .logout-btn, 
-.create-account-btn{
+.create-account-btn,
+.admin-btn{
     box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
 }
 
@@ -34,7 +36,8 @@
 .create-test-btn, 
 .startpage-btn, 
 .guide-btn, 
-.contact-btn{
+.contact-btn,
+.admin-btn{
     margin-bottom: 1rem;
     margin-left: 2.7rem;
 }
@@ -44,7 +47,8 @@
 .login-btn, 
 .create-account-btn,
 .save-new-pwd-btn,
-.form-btn{
+.form-btn, 
+.admin-btn{
     background-color: #B81434;
     color: #fff;
 }
@@ -68,7 +72,8 @@
 .create-account-btn:hover,
 .save-new-pwd-btn:hover,
 .form-btn:hover,
-.save-btn:hover{
+.save-btn:hover,
+.admin-btn:hover{
     background-color: #97102a;
 }
 

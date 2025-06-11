@@ -18,16 +18,18 @@
     </div>
     <!-- You can add additional admin-specific navigation here if desired -->
     <br>
-    <button class="admin-btn poppins-semibold" onclick="navigateTo('admin')"> 
-      ADMIN PANEL
-    </button>
+    <div class="logout-btn-container">
+      <a href="#" onclick="navigateTo('admin')">
+        <button class="admin-btn poppins-semibold">ADMIN PANEL</button>
+      </a>
+      <button class="create-account-btn nav-btn poppins-semibold" data-target="createAccount.html">KONTO LOOMINE</button>
+      <br>
+      <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
+    </div>
   </div>
 
   <!-- Main Content -->
   <div class="main">
-    <div class="logout-btn-container">
-      <button class="logout-btn" onclick="logout()">LOGI VÄLJA</button>
-    </div>
     <h1>Administraatori paneel: Õpetajate kontod</h1>
     
     <table>

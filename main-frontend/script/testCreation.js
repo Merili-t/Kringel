@@ -491,116 +491,167 @@ class QuizBuilder {
     }
 
     collectQuizData() {
-        // Build the quiz payload as expected by the API
+        // Build the basic payload object.
         const quizData = {
-        name: "Temporary Test Name",              // Replace with actual test title if available
-        descripion: "Temporary Description",        // Note the MD typo ("descripion")
-        start: new Date().toISOString(),             // In a real system, use a proper start date/time
-        end: new Date().toISOString(),               // In a real system, use a proper end date/time
-        timelimit: 60,                               // Can be dynamic if needed
-        block: [
+            name: "Temporary Test Name",
+            descripion: "Temporary Description", // (Note: the typo is intentional to match the API.)
+            start: new Date().toISOString(),
+            end: new Date().toISOString(),
+            timelimit: 60,
+            block: [
             {
-            blockNumber: 1,
-            blockQuestions: []
+                blockNumber: 1,
+                blockQuestions: []
             }
-        ]
+            ]
         };
+
+        // Set quiz type and content based on the selected answer type.
         quizData.type = this.getCurrentQuizType();
         quizData.content = {};
 
-        const previewContent = document.getElementById('preview-content');
-        if (!previewContent) return quizData;
-
-        // Collect data based on quiz type
+        // Collect additional content based on quiz type
         switch (quizData.type) {
             case 'luhike-tekst':
-                quizData.content.answer = previewContent.querySelector('input')?.value || '';
-                break;
+            quizData.content.answer = document.querySelector("#preview-content input")?.value || "";
+            break;
             case 'pikk-tekst':
-                quizData.content.answer = previewContent.querySelector('textarea')?.value || '';
-                break;
+            quizData.content.answer = document.querySelector("#preview-content textarea")?.value || "";
+            break;
             case 'uks-oige':
-                quizData.content.options = this.collectSingleChoiceData();
-                break;
+            quizData.content.options = this.collectSingleChoiceData();
+            break;
             case 'mitu-oiget':
-                quizData.content.options = this.collectMultipleChoiceData();
-                break;
-            case 'keemia_tasakaalustamine':
-                quizData.content.equation = document.getElementById('chemistry-input-field')?.value || '';
-                break;
-            case 'keemia_ahelad':
-                // Collect drawing data
-                const canvas = document.getElementById('chemistry-drawing-canvas');
-                if (canvas && window.chemistryDrawingTool) {
-                    quizData.content.shapes = window.chemistryDrawingTool.shapes;
+            quizData.content.options = this.collectMultipleChoiceData();
+            break;
+            case 'keemia tasakaalustamine':
+            quizData.content.equation = document.getElementById("chemistry-input-field")?.value || "";
+            break;
+            case 'keemia ahelad':
+            {
+                const canvasElem = document.getElementById("chemistry-drawing-canvas");
+                if (canvasElem && window.chemistryDrawingTool) {
+                quizData.content.shapes = window.chemistryDrawingTool.shapes;
                 }
-                break;
+            }
+            break;
             case 'interaktiivne':
-                // For an interactive picture, collect the uploaded image's data URL.
+            {
                 const imgElem = document.getElementById("uploaded-image");
                 if (imgElem) {
-                    quizData.content.imageData = imgElem.src;
+                quizData.content.imageData = imgElem.src;
                 }
-                break;
+            }
+            break;
             case 'joonistamine':
-                // For drawings, obtain the canvas data URL (assuming canvas with id "drawing-canvas").
+            {
                 const drawingCanvas = document.getElementById("drawing-canvas");
                 if (drawingCanvas) {
-                    quizData.content.drawingData = drawingCanvas.toDataURL();
+                quizData.content.drawingData = drawingCanvas.toDataURL();
                 }
-                break;    
             }
-        // Collect question-specific data.
+            break;
+            default:
+            break;
+        }
+
+        // Get the question text.
         const questionTextElem = document.getElementById("question-text");
         const questionText = questionTextElem ? questionTextElem.value.trim() : "";
         if (!questionText) {
-        alert("Palun sisesta küsimuse tekst!");
-        return null;
+            alert("Palun sisesta küsimuse tekst!");
+            return null;
         }
-        // Points for this question (defaulting to 20 if none provided)
-        const pointsElem = document.getElementById("points-input");
-        const points = pointsElem ? pointsElem.value.trim() : "20";
+
+        // -- Points Handling --
+        // Get the checkbox and input elements.
+        const pointsCheckbox = document.getElementById("additional-points");
+        const pointsInput = document.getElementById("points-input");
+        
+        // If the checkbox is unchecked then points will be null.
+        // If checked, convert the value (if any) to a number; if the field is empty, leave it null.
+        let ptsStr = pointsInput.value.trim();
+        const points = pointsCheckbox.checked && ptsStr !== "" ? Number(ptsStr) : null;
 
         // Determine answer type from the dropdown.
+        // The dropdown's span carries a data-value representing the answer type string.
         const dropdown = document.getElementById("dropdown-selected");
-        const answerType = dropdown && dropdown.querySelector("span")
-        ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
-        : "luhike-tekst";
+        const answerTypeStr = dropdown && dropdown.querySelector("span")
+                ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
+                : "luhike-tekst";
 
-        // Gather answer variables based on answer type.
+        // Convert the answer type string into a code, per your API.
+        // "one_correct" -> 0,
+        // "many_correct" -> 1,
+        // "text" -> 2,
+        // "matrix" -> 3,
+        // "picture" -> 4,
+        // "chemistry" -> 5,
+        // "drawing" -> 6.
+        let answerTypeCode;
+        switch (answerTypeStr) {
+            case "uks-oige":
+            answerTypeCode = 0;
+            break;
+            case "mitu-oiget":
+            answerTypeCode = 1;
+            break;
+            case "luhike-tekst":
+            case "pikk-tekst":
+            answerTypeCode = 2;
+            break;
+            case "maatriks-uks":
+            case "maatriks-mitu":
+            answerTypeCode = 3;
+            break;
+            case "interaktiivne":
+            answerTypeCode = 4;
+            break;
+            case "keemia tasakaalustamine":
+            answerTypeCode = 5;
+            break;
+            case "joonistamine":
+            answerTypeCode = 6;
+            break;
+            default:
+            answerTypeCode = 2;
+        }
+
+        // Collect answer variables depending on the answer type.
         let answerVariables = [];
-        if (answerType === "uks-oige") {
-        const optionRows = document.querySelectorAll("#single-options .option-row");
-        optionRows.forEach(row => {
+        if (answerTypeStr === "uks-oige") {
+            const optionRows = document.querySelectorAll("#single-options .option-row");
+            optionRows.forEach(row => {
             const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
             const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
             answerVariables.push({ answer: optText, correct: isCorrect });
-        });
-        } else if (answerType === "mitu-oiget") {
-        const optionRows = document.querySelectorAll("#multiple-options .option-row");
-        optionRows.forEach(row => {
+            });
+        } else if (answerTypeStr === "mitu-oiget") {
+            const optionRows = document.querySelectorAll("#multiple-options .option-row");
+            optionRows.forEach(row => {
             const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
             const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
             answerVariables.push({ answer: optText, correct: isCorrect });
-        });
+            });
         } else {
-        // For text or similar answer types, attempt to get the answer from preview input/textarea.
-        const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
-        if (answerInput) {
+            // For text or similar types, try to get the answer from the preview input or textarea.
+            const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
+            if (answerInput) {
             answerVariables.push({ answer: answerInput.value.trim(), correct: true });
-        }
+            }
         }
 
-        // Add the question to the quiz block.
+        // Add the built question object to the first block.
         quizData.block[0].blockQuestions.push({
-        question: questionText,
-        points: parseInt(points),
-        answerType: this.getAnswerTypeCode(answerType),
-        answerVariables: answerVariables
+            question: questionText,
+            points: points,
+            answerType: answerTypeCode,
+            answerVariables: answerVariables
         });
 
         return quizData;
-    }
+        }
+
 
     getCurrentQuizType() {
         const dropdown = document.getElementById('dropdown-selected');
@@ -634,105 +685,146 @@ class QuizBuilder {
             this.setupDropdown();
             this.setupEventListeners();
             this.setupQuestionImageUpload();
-        });
-    }
+            const pointsCheckbox = document.getElementById('additional-points');
+            const pointsInput = document.getElementById('points-input');
+
+            // Initially hide the points input if unchecked.
+            if (!pointsCheckbox.checked) {
+                pointsInput.style.display = 'none';
+            } else {
+                pointsInput.style.display = 'block';
+            }
+
+            // Add a listener: when checkbox state changes, show or hide points input.
+            pointsCheckbox.addEventListener('change', () => {
+                if (pointsCheckbox.checked) {
+                // Show input and (optionally) set a default value if blank.
+                pointsInput.style.display = 'block';
+                if (!pointsInput.value.trim()) {
+                    pointsInput.value = 20;
+                }
+                } else {
+                // Hide the input and clear its value.
+                pointsInput.style.display = 'none';
+                pointsInput.value = "";
+                }
+            });
+            });
+        }
 
     // Lisa see kood QuizBuilder klassi sisse, näiteks init() meetodi järele
 
-setupQuestionImageUpload() {
-    // Otsime küsimuse pildi üleslaadimise elementi
-    const uploadPicDiv = document.querySelector('.upload-pic');
-    if (!uploadPicDiv) return;
+    setupQuestionImageUpload() {
+    // Find the element that should respond to the click across its entire area.
+    const uploadArea = document.querySelector('.image-upload-area'); // Use the whole container instead of just the text element
+    if (!uploadArea) return;
 
-    // Loome peidetud file input
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.style.display = 'none';
     fileInput.id = 'question-image-upload';
-    
-    // Lisame file inputi DOM-i
+
     document.body.appendChild(fileInput);
-    
-    // Lisame click event uploadPicDiv-ile
-    uploadPicDiv.addEventListener('click', () => {
+
+    // Make the entire upload area clickable.
+    uploadArea.addEventListener('click', () => {
         fileInput.click();
     });
-    
-    // File input change event
+
+    // Listen for file change.
     fileInput.addEventListener('change', (e) => {
         this.handleQuestionImageUpload(e.target);
     });
-}
+    }
 
-handleQuestionImageUpload(input) {
-    const file = input.files[0];
-    if (!file) return;
-    
-    const uploadPicDiv = document.querySelector('.upload-pic');
-    if (!uploadPicDiv) return;
-    
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        // Asendame upload-pic sisu pildiga
-        uploadPicDiv.innerHTML = `
+
+    handleQuestionImageUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const uploadArea = document.querySelector('.upload-pic');
+        if (!uploadArea) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Create the image container HTML with both the change image button and "X" remove button.
+            uploadArea.innerHTML = `
             <div style="position: relative; display: inline-block;">
                 <img src="${e.target.result}" 
-                     style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;" 
-                     alt="Küsimuse pilt" />
-                <button type="button" 
-                        style="position: absolute; top: 5px; right: 5px; background: #f44336; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;"
-                        title="Eemalda pilt"
-                        onclick="this.closest('.upload-pic').innerHTML = '<p>Lisa pilt küsimuse juurde</p>'; document.getElementById('question-image-upload').value = '';">
-                    ×
-                </button>
+                    style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;" 
+                    alt="Küsimuse pilt" />
+                <button type="button" class="remove-image-btn"
+                style="position: absolute; top: 5px; right: 5px; background: #f44336; color: white; border: none; 
+                        border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;"
+                title="Eemalda pilt">&times;</button>
                 <div style="margin-top: 8px;">
-                    <button type="button" 
-                            style="padding: 6px 12px; background:rgb(135, 22, 22); color: white; border: none; border-radius: 4px; cursor: pointer;"
-                            onclick="document.getElementById('question-image-upload').click();">
-                        Vaheta pilti
-                    </button>
+                <button type="button" id="change-image-btn"
+                    style="padding: 6px 12px; background: rgb(135, 22, 22); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Vaheta pilti
+                </button>
                 </div>
             </div>
-        `;
-    };
-    reader.readAsDataURL(file);
-}
+            `;
+            
+            // Attach event for the "×" - this button will only remove the image.
+            const removeBtn = uploadArea.querySelector('.remove-image-btn');
+            if (removeBtn) {
+            removeBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent bubbling so the file picker does not open.
+                // Remove the image and revert the upload area to its default state.
+                uploadArea.innerHTML = `<p>Lisa pilt küsimuse juurde</p>`;
+                // Reset the underlying file input.
+                document.getElementById('question-image-upload').value = '';
+            });
+            }
+            
+            // Attach event for the "Vaheta pilti" button, which still triggers the file picker.
+            const changeBtn = uploadArea.querySelector('#change-image-btn');
+            if (changeBtn) {
+            changeBtn.addEventListener('click', (event) => {
+                // Open file picker for swapping the image.
+                document.getElementById('question-image-upload').click();
+            });
+            }
+        };
+        reader.readAsDataURL(file);
+        }
+
 
     setupDropdown() {
         const dropdown = document.getElementById('answer-type-dropdown');
         const dropdownSelected = document.getElementById('dropdown-selected');
         const dropdownOptions = document.getElementById('dropdown-options');
-        
         if (!dropdown || !dropdownSelected || !dropdownOptions) return;
 
-        // Dropdown toggle
+        // Toggle dropdown on click.
         dropdownSelected.addEventListener('click', (e) => {
             e.stopPropagation();
-            const options = document.getElementById('dropdown-options');
-            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+            dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Option selection
+        // Option selection: update selection and close dropdown.
         dropdownOptions.addEventListener('click', (e) => {
             if (e.target.classList.contains('dropdown-option')) {
-                const value = e.target.getAttribute('data-value');
-                const text = e.target.textContent;
-                
-                dropdownSelected.querySelector('span').textContent = text;
-                dropdown.classList.remove('open');
-                
-                this.showPreview(value);
+            const value = e.target.getAttribute('data-value');
+            const text = e.target.textContent;
+            dropdownSelected.querySelector('span').textContent = text;
+            // Close the dropdown.
+            dropdownOptions.style.display = 'none';
+            dropdown.classList.remove('open');
+            // Show preview for the chosen answer type.
+            this.showPreview(value);
             }
         });
 
-        // Close dropdown when clicking outside
+        // Close dropdown if clicking outside.
         document.addEventListener('click', (e) => {
             if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('open');
+            dropdownOptions.style.display = 'none';
+            dropdown.classList.remove('open');
             }
         });
     }
+
 
     setupEventListeners() {
         // Global event delegation for dynamic content
@@ -816,26 +908,34 @@ handleQuestionImageUpload(input) {
     }
 
     renderShortText() {
-        const container = this.createContainer('Lühike tekstivastus:');
+        const container = this.createContainer('Lühike tekstivastus (eelvaade):');
         const input = this.createElement('input');
         input.type = 'text';
-        input.placeholder = 'Sisesta vastus';
-        input.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px;';
-        
+        // Instead of a placeholder, provide a default static value
+        input.value = 'Sisesta vastus';
+        // Make the input read-only so it cannot be edited
+        input.readOnly = true;
+        // Optional: also disable focus styles if desired
+        input.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px; background-color: #f9f9f9;';
         container.appendChild(input);
         document.getElementById('preview-content').appendChild(container);
     }
 
+
     renderLongText() {
-        const container = this.createContainer('Pikk tekstivastus:');
+        const container = this.createContainer('Pikk tekstivastus (eelvaade):');
         const textarea = this.createElement('textarea');
-        textarea.placeholder = 'Sisesta vastus';
+        // Provide a default example value if needed
+        textarea.value = 'Sisesta vastus';
+        // Make it read-only
+        textarea.readOnly = true;
+        // Set rows and style as before
         textarea.rows = 5;
-        textarea.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px; resize: vertical;';
-        
+        textarea.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px; background-color: #f9f9f9;';
         container.appendChild(textarea);
         document.getElementById('preview-content').appendChild(container);
     }
+
 
     renderMatrixSingle() {
         const container = this.createContainer('Maatriks - üks õige vastus reas:');
@@ -871,41 +971,40 @@ handleQuestionImageUpload(input) {
         document.getElementById('preview-content').appendChild(container);
     }
 
+    // --- In renderImageUpload() ---
     renderImageUpload() {
         const container = this.createContainer('Interaktiivne pilt:');
-        
+        // Create the upload area (initially clickable).
         const uploadArea = this.createElement('div', 'image-upload-area');
-        uploadArea.style.cssText = 'border: 2px dashed #8a1929; padding: 20px; text-align: center; margin-bottom: 10px; border-radius: 4px;';
-        
+        uploadArea.style.cssText =
+        'border: 2px dashed #8a1929; padding: 20px; text-align: center; margin-bottom: 10px; border-radius: 4px; cursor: pointer;';
+        // Create hidden file input.
         const fileInput = this.createElement('input');
         fileInput.type = 'file';
         fileInput.id = 'image-upload';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
-        fileInput.addEventListener('change', (e) => this.handleImageUpload(e.target));
-        
-        const preview = this.createElement('div', '', 'image-preview');
-        preview.style.marginBottom = '10px';
-        preview.innerHTML = `
-            <p>Lohista pilt siia või kliki pildi lisamiseks</p>
-        `;
-        
-        const selectButton = this.createAddButton('Vali pilt');
-        selectButton.addEventListener('click', () => fileInput.click());
-        preview.appendChild(selectButton);
+        fileInput.addEventListener('change', (e) => this.handleImageUpload(e.target, uploadArea));
+        // Save the upload click handler in a property so that it can be removed later.
+        uploadArea._handleUpload = () => fileInput.click();
+        // Make the entire upload area clickable.
+        uploadArea.addEventListener('click', uploadArea._handleUpload);
 
-        const hotspotControls = this.createElement('div', '', 'hotspot-controls');
-        hotspotControls.style.display = 'none';
-        hotspotControls.innerHTML = `
-            <p>Kliki pildil, et lisada vastusevariante:</p>
-            <div id="hotspot-list"></div>
-        `;
-        
-        uploadArea.appendChild(fileInput);
+        // Create preview area with instruction text.
+        const preview = this.createElement('div', 'image-preview');
+        preview.style.marginBottom = '10px';
+        preview.innerHTML = '<p>Lohista pilt siia või kliki, et lisada pilt</p>';
+        // Append the preview to the upload area.
         uploadArea.appendChild(preview);
+        // (Optional) Create hotspot controls container – hidden initially.
+        const hotspotControls = this.createElement('div', 'hotspot-controls');
+        hotspotControls.style.display = 'none';
+
         container.appendChild(uploadArea);
         container.appendChild(hotspotControls);
         document.getElementById('preview-content').appendChild(container);
+        // Also append the fileInput to the document (so it remains accessible).
+        document.body.appendChild(fileInput);
     }
 
     renderDrawingCanvas() {
@@ -1124,82 +1223,347 @@ handleQuestionImageUpload(input) {
             window.chemistryDrawingTool = new DrawingTool(canvas);
         }, 100);
     }
+
     createContainer(labelText) {
-    const container = this.createElement('div', 'answer-type-container');
-    const label = this.createElement('label');
-    label.style.cssText = 'font-weight: bold; margin-bottom: 10px; display: block;';
-    label.textContent = labelText;
-    container.appendChild(label);
-    return container;
-}
+        const container = this.createElement('div', 'answer-type-container');
+        const label = this.createElement('label');
+        label.style.cssText = 'font-weight: bold; margin-bottom: 10px; display: block;';
+        label.textContent = labelText;
+        container.appendChild(label);
+        return container;
+    }
 
-createElement(tag, className = '', id = '') {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (id) element.id = id;
-    return element;
-}
+    createElement(tag, className = '', id = '') {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (id) element.id = id;
+        return element;
+    }
 
-createAddButton(text, dataAction = '') {
-    const button = this.createElement('button', 'add-btn');
-    button.type = 'button';
-    button.textContent = `+ ${text}`;
-    button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #8a1929; color: white; border: none; border-radius: 4px; cursor: pointer;';
-    if (dataAction) button.setAttribute('data-action', dataAction);
-    return button;
-}
+    createAddButton(text, dataAction = '') {
+        const button = this.createElement('button', 'add-btn');
+        button.type = 'button';
+        button.textContent = `+ ${text}`;
+        button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #8a1929; color: white; border: none; border-radius: 4px; cursor: pointer;';
+        if (dataAction) button.setAttribute('data-action', dataAction);
+        return button;
+    }
 
-createSingleOption(index, placeholder) {
-    const row = this.createElement('div', 'option-row');
-    row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
-    
-    row.innerHTML = `
-        <input type="radio" name="single-choice" id="single${index + 1}" />
-        <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
-        <input type="radio" name="correct-single" value="${index}" title="Märgi õigeks" />
-        <span class="correct-label">Õige</span>
-        <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-    `;
-    
-    return row;
-}
+    createSingleOption(index, placeholder) {
+        const row = this.createElement('div', 'option-row');
+        row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
+        
+        row.innerHTML = `
+            <input type="radio" name="single-choice" id="single${index + 1}" />
+            <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
+            <input type="radio" name="correct-single" value="${index}" title="Märgi õigeks" />
+            <span class="correct-label">Õige</span>
+            <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+        `;
+        
+        return row;
+    }
 
-createMultipleOption(index, placeholder) {
-    const row = this.createElement('div', 'option-row');
-    row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
-    
-    row.innerHTML = `
-        <input type="checkbox" name="multiple-choice" id="multi${index + 1}" />
-        <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
-        <input type="checkbox" name="correct-multiple" value="${index}" title="Märgi õigeks" />
-        <span class="correct-label">Õige</span>
-        <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-    `;
-    
-    return row;
-}
+    createMultipleOption(index, placeholder) {
+        const row = this.createElement('div', 'option-row');
+        row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
+        
+        row.innerHTML = `
+            <input type="checkbox" name="multiple-choice" id="multi${index + 1}" />
+            <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
+            <input type="checkbox" name="correct-multiple" value="${index}" title="Märgi õigeks" />
+            <span class="correct-label">Õige</span>
+            <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+        `;
+        
+        return row;
+    }
 
-createMatrixTable(type) {
-    const table = this.createElement('table', 'matrix-table');
-    table.style.cssText = 'border-collapse: collapse; width: 100%; margin-top: 10px;';
-    table.dataset.type = type; // Store type for reference
-    
-    const thead = this.createElement('thead');
-    const headerRow = this.createElement('tr', 'matrix-header-row');
-    
-    // Empty corner cell
-    const cornerCell = this.createElement('th');
-    cornerCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; min-width: 100px;';
-    headerRow.appendChild(cornerCell);
-    
-    // Add initial columns with remove buttons
-    for (let i = 0; i < 2; i++) {
-        const th = this.createElement('th');
-        th.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+    createMatrixTable(type) {
+        const table = this.createElement('table', 'matrix-table');
+        table.style.cssText = 'border-collapse: collapse; width: 100%; margin-top: 10px;';
+        table.dataset.type = type; // Store type for reference
+        
+        const thead = this.createElement('thead');
+        const headerRow = this.createElement('tr', 'matrix-header-row');
+        
+        // Empty corner cell
+        const cornerCell = this.createElement('th');
+        cornerCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; min-width: 100px;';
+        headerRow.appendChild(cornerCell);
+        
+        // Add initial columns with remove buttons
+        for (let i = 0; i < 2; i++) {
+            const th = this.createElement('th');
+            th.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+            
+            const input = this.createElement('input');
+            input.type = 'text';
+            input.placeholder = `Veerg ${i + 1}`;
+            input.className = 'matrix-header';
+            input.style.cssText = 'border: none; background: transparent; width: calc(100% - 25px);';
+            
+            const removeBtn = this.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-btn matrix-col-remove';
+            removeBtn.innerHTML = '×';
+            removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
+            
+            th.appendChild(input);
+            th.appendChild(removeBtn);
+            headerRow.appendChild(th);
+        }
+        
+        // Actions column header
+        const actionsHeader = this.createElement('th');
+        actionsHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; width: 50px;';
+        actionsHeader.textContent = 'Tegevused';
+        headerRow.appendChild(actionsHeader);
+        
+        const tbody = this.createElement('tbody');
+        tbody.appendChild(this.createMatrixRow(0, 2, type));
+        tbody.appendChild(this.createMatrixRow(1, 2, type));
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        
+        return table;
+    }
+
+    createMatrixRow(rowIndex, colCount, type) {
+        const row = this.createElement('tr', 'matrix-row');
+        row.dataset.rowIndex = rowIndex;
+        
+        // Row label cell
+        const labelCell = this.createElement('td');
+        labelCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px;';
+        
+        const labelInput = this.createElement('input');
+        labelInput.type = 'text';
+        labelInput.placeholder = `Rida ${rowIndex + 1}`;
+        labelInput.className = 'matrix-row-label';
+        labelInput.style.cssText = 'border: none; width: 100%;';
+        
+        labelCell.appendChild(labelInput);
+        row.appendChild(labelCell);
+        
+        // Input cells
+        const inputType = type === 'single' ? 'radio' : 'checkbox';
+        
+        for (let i = 0; i < colCount; i++) {
+            const cell = this.createElement('td', 'matrix-cell');
+            cell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
+            cell.dataset.colIndex = i;
+            
+            const input = this.createElement('input');
+            input.type = inputType;
+            if (type === 'single') {
+                input.name = `matrix-row-${rowIndex}`;
+            } else {
+                input.name = `matrix-row-${rowIndex}-col-${i}`;
+            }
+            input.value = i;
+            
+            cell.appendChild(input);
+            row.appendChild(cell);
+        }
+        
+        // Remove button cell
+        const removeCell = this.createElement('td');
+        removeCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
+        
+        const removeBtn = this.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-btn matrix-row-remove';
+        removeBtn.innerHTML = '×';
+        removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;';
+        
+        removeCell.appendChild(removeBtn);
+        row.appendChild(removeCell);
+        
+        return row;
+    }
+
+    removeMatrixColumn(button) {
+        const table = button.closest('table');
+        const th = button.closest('th');
+        const headerRow = th.parentNode;
+        const colIndex = Array.from(headerRow.children).indexOf(th) - 1; // -1 for corner cell
+        
+        if (colIndex < 0) return; // Safety check
+        
+        // Don't allow removal if only one column remains
+        const totalColumns = headerRow.children.length - 2; // -2 for corner and actions columns
+        if (totalColumns <= 1) {
+            alert('Vähemalt üks veerg peab jääma!');
+            return;
+        }
+        
+        // Remove header
+        th.remove();
+        
+        // Remove corresponding cells from all rows
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td.matrix-cell');
+            if (cells[colIndex]) {
+                cells[colIndex].remove();
+            }
+        });
+        
+        // Update remaining cell indices and input names
+        this.updateMatrixCellIndices(table);
+    }
+
+    removeMatrixRow(button) {
+        const table = button.closest('table');
+        const row = button.closest('tr');
+        const tbody = table.querySelector('tbody');
+        
+        // Don't allow removal if only one row remains
+        if (tbody.children.length <= 1) {
+            alert('Vähemalt üks rida peab jääma!');
+            return;
+        }
+        
+        row.remove();
+        
+        // Update row indices and input names
+        this.updateMatrixRowIndices(table);
+    }
+
+    updateMatrixCellIndices(table) {
+        const type = table.dataset.type;
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach((row, rowIndex) => {
+            row.dataset.rowIndex = rowIndex;
+            const cells = row.querySelectorAll('td.matrix-cell');
+            
+            cells.forEach((cell, colIndex) => {
+                cell.dataset.colIndex = colIndex;
+                const input = cell.querySelector('input');
+                
+                if (type === 'single') {
+                    input.name = `matrix-row-${rowIndex}`;
+                } else {
+                    input.name = `matrix-row-${rowIndex}-col-${colIndex}`;
+                }
+                input.value = colIndex;
+            });
+            
+            // Update row label placeholder
+            const labelInput = row.querySelector('.matrix-row-label');
+            if (labelInput && !labelInput.value) {
+                labelInput.placeholder = `Rida ${rowIndex + 1}`;
+            }
+        });
+    }
+
+    updateMatrixRowIndices(table) {
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach((row, index) => {
+            row.dataset.rowIndex = index;
+            const labelInput = row.querySelector('.matrix-row-label');
+            if (labelInput && !labelInput.value) {
+                labelInput.placeholder = `Rida ${index + 1}`;
+            }
+            
+            // Update input names
+            const type = table.dataset.type;
+            const inputs = row.querySelectorAll('td.matrix-cell input');
+            inputs.forEach((input, colIndex) => {
+                if (type === 'single') {
+                    input.name = `matrix-row-${index}`;
+                } else {
+                    input.name = `matrix-row-${index}-col-${colIndex}`;
+                }
+            });
+        });
+    }
+
+    // Event handlers
+    handleAddButton(button) {
+        const action = button.getAttribute('data-action') || button.textContent.toLowerCase();
+        
+        if (action.includes('single-option') || button.closest('.answer-type-container')?.querySelector('#single-options')) {
+            this.addSingleOption();
+        } else if (action.includes('multiple-option') || button.closest('.answer-type-container')?.querySelector('#multiple-options')) {
+            this.addMultipleOption();
+        } else if (action.includes('matrix-row-single')) {
+            this.addMatrixRow('single');
+        } else if (action.includes('matrix-column-single')) {
+            this.addMatrixColumn('single');
+        } else if (action.includes('matrix-row-multiple')) {
+            this.addMatrixRow('multiple');
+        } else if (action.includes('matrix-column-multiple')) {
+            this.addMatrixColumn('multiple');
+        }
+    }
+
+    removeOption(button) {
+        if (button.classList.contains('matrix-row-remove')) {
+            this.removeMatrixRow(button);
+        } else if (button.classList.contains('matrix-col-remove')) {
+            this.removeMatrixColumn(button);
+        } else {
+            button.closest('.option-row').remove();
+        }
+    }
+
+    addSingleOption() {
+        const container = document.getElementById('single-options');
+        if (!container) return;
+        
+        const optionCount = container.children.length;
+        const newOption = this.createSingleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
+        container.appendChild(newOption);
+    }
+
+    addMultipleOption() {
+        const container = document.getElementById('multiple-options');
+        if (!container) return;
+        
+        const optionCount = container.children.length;
+        const newOption = this.createMultipleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
+        container.appendChild(newOption);
+    }
+
+    addMatrixRow(type) {
+        const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
+        const table = document.querySelector(selector);
+        if (!table) return;
+        
+        const tbody = table.querySelector('tbody');
+        const rowCount = tbody.children.length;
+        const colCount = table.querySelectorAll('thead th').length - 2; // -2 for corner and actions columns
+        
+        const newRow = this.createMatrixRow(rowCount, colCount, type);
+        tbody.appendChild(newRow);
+    }
+
+    addMatrixColumn(type) {
+        const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
+        const table = document.querySelector(selector);
+        if (!table) return;
+        
+        const thead = table.querySelector('thead tr');
+        const tbody = table.querySelector('tbody');
+        const currentColCount = thead.children.length - 2; // -2 for corner and actions columns
+        
+        // Add header before the actions column
+        const newHeader = this.createElement('th');
+        newHeader.style.cssText = 'border: 1px solid #8a1929; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
         
         const input = this.createElement('input');
         input.type = 'text';
-        input.placeholder = `Veerg ${i + 1}`;
+        input.placeholder = `Veerg ${currentColCount + 1}`;
         input.className = 'matrix-header';
         input.style.cssText = 'border: none; background: transparent; width: calc(100% - 25px);';
         
@@ -1209,353 +1573,154 @@ createMatrixTable(type) {
         removeBtn.innerHTML = '×';
         removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
         
-        th.appendChild(input);
-        th.appendChild(removeBtn);
-        headerRow.appendChild(th);
-    }
-    
-    // Actions column header
-    const actionsHeader = this.createElement('th');
-    actionsHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; width: 50px;';
-    actionsHeader.textContent = 'Tegevused';
-    headerRow.appendChild(actionsHeader);
-    
-    const tbody = this.createElement('tbody');
-    tbody.appendChild(this.createMatrixRow(0, 2, type));
-    tbody.appendChild(this.createMatrixRow(1, 2, type));
-    
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-    table.appendChild(tbody);
-    
-    return table;
-}
-
-createMatrixRow(rowIndex, colCount, type) {
-    const row = this.createElement('tr', 'matrix-row');
-    row.dataset.rowIndex = rowIndex;
-    
-    // Row label cell
-    const labelCell = this.createElement('td');
-    labelCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px;';
-    
-    const labelInput = this.createElement('input');
-    labelInput.type = 'text';
-    labelInput.placeholder = `Rida ${rowIndex + 1}`;
-    labelInput.className = 'matrix-row-label';
-    labelInput.style.cssText = 'border: none; width: 100%;';
-    
-    labelCell.appendChild(labelInput);
-    row.appendChild(labelCell);
-    
-    // Input cells
-    const inputType = type === 'single' ? 'radio' : 'checkbox';
-    
-    for (let i = 0; i < colCount; i++) {
-        const cell = this.createElement('td', 'matrix-cell');
-        cell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
-        cell.dataset.colIndex = i;
+        newHeader.appendChild(input);
+        newHeader.appendChild(removeBtn);
         
-        const input = this.createElement('input');
-        input.type = inputType;
-        if (type === 'single') {
-            input.name = `matrix-row-${rowIndex}`;
-        } else {
-            input.name = `matrix-row-${rowIndex}-col-${i}`;
-        }
-        input.value = i;
+        // Insert before the last column (actions column)
+        thead.insertBefore(newHeader, thead.lastElementChild);
         
-        cell.appendChild(input);
-        row.appendChild(cell);
-    }
-    
-    // Remove button cell
-    const removeCell = this.createElement('td');
-    removeCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
-    
-    const removeBtn = this.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'remove-btn matrix-row-remove';
-    removeBtn.innerHTML = '×';
-    removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;';
-    
-    removeCell.appendChild(removeBtn);
-    row.appendChild(removeCell);
-    
-    return row;
-}
-
-removeMatrixColumn(button) {
-    const table = button.closest('table');
-    const th = button.closest('th');
-    const headerRow = th.parentNode;
-    const colIndex = Array.from(headerRow.children).indexOf(th) - 1; // -1 for corner cell
-    
-    if (colIndex < 0) return; // Safety check
-    
-    // Don't allow removal if only one column remains
-    const totalColumns = headerRow.children.length - 2; // -2 for corner and actions columns
-    if (totalColumns <= 1) {
-        alert('Vähemalt üks veerg peab jääma!');
-        return;
-    }
-    
-    // Remove header
-    th.remove();
-    
-    // Remove corresponding cells from all rows
-    const tbody = table.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr');
-    
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td.matrix-cell');
-        if (cells[colIndex]) {
-            cells[colIndex].remove();
-        }
-    });
-    
-    // Update remaining cell indices and input names
-    this.updateMatrixCellIndices(table);
-}
-
-removeMatrixRow(button) {
-    const table = button.closest('table');
-    const row = button.closest('tr');
-    const tbody = table.querySelector('tbody');
-    
-    // Don't allow removal if only one row remains
-    if (tbody.children.length <= 1) {
-        alert('Vähemalt üks rida peab jääma!');
-        return;
-    }
-    
-    row.remove();
-    
-    // Update row indices and input names
-    this.updateMatrixRowIndices(table);
-}
-
-updateMatrixCellIndices(table) {
-    const type = table.dataset.type;
-    const tbody = table.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr');
-    
-    rows.forEach((row, rowIndex) => {
-        row.dataset.rowIndex = rowIndex;
-        const cells = row.querySelectorAll('td.matrix-cell');
-        
-        cells.forEach((cell, colIndex) => {
-            cell.dataset.colIndex = colIndex;
-            const input = cell.querySelector('input');
+        // Add cells to existing rows
+        const inputType = type === 'single' ? 'radio' : 'checkbox';
+        tbody.querySelectorAll('tr').forEach((row, rowIndex) => {
+            const newCell = this.createElement('td', 'matrix-cell');
+            newCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
+            newCell.dataset.colIndex = currentColCount;
             
+            const input = this.createElement('input');
+            input.type = inputType;
             if (type === 'single') {
                 input.name = `matrix-row-${rowIndex}`;
             } else {
-                input.name = `matrix-row-${rowIndex}-col-${colIndex}`;
+                input.name = `matrix-row-${rowIndex}-col-${currentColCount}`;
             }
-            input.value = colIndex;
+            input.value = currentColCount;
+            
+            newCell.appendChild(input);
+            
+            // Insert before the last cell (remove button cell)
+            row.insertBefore(newCell, row.lastElementChild);
         });
-        
-        // Update row label placeholder
-        const labelInput = row.querySelector('.matrix-row-label');
-        if (labelInput && !labelInput.value) {
-            labelInput.placeholder = `Rida ${rowIndex + 1}`;
-        }
-    });
-}
-
-updateMatrixRowIndices(table) {
-    const tbody = table.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr');
-    
-    rows.forEach((row, index) => {
-        row.dataset.rowIndex = index;
-        const labelInput = row.querySelector('.matrix-row-label');
-        if (labelInput && !labelInput.value) {
-            labelInput.placeholder = `Rida ${index + 1}`;
-        }
-        
-        // Update input names
-        const type = table.dataset.type;
-        const inputs = row.querySelectorAll('td.matrix-cell input');
-        inputs.forEach((input, colIndex) => {
-            if (type === 'single') {
-                input.name = `matrix-row-${index}`;
-            } else {
-                input.name = `matrix-row-${index}-col-${colIndex}`;
-            }
-        });
-    });
-}
-
-// Event handlers
-handleAddButton(button) {
-    const action = button.getAttribute('data-action') || button.textContent.toLowerCase();
-    
-    if (action.includes('single-option') || button.closest('.answer-type-container')?.querySelector('#single-options')) {
-        this.addSingleOption();
-    } else if (action.includes('multiple-option') || button.closest('.answer-type-container')?.querySelector('#multiple-options')) {
-        this.addMultipleOption();
-    } else if (action.includes('matrix-row-single')) {
-        this.addMatrixRow('single');
-    } else if (action.includes('matrix-column-single')) {
-        this.addMatrixColumn('single');
-    } else if (action.includes('matrix-row-multiple')) {
-        this.addMatrixRow('multiple');
-    } else if (action.includes('matrix-column-multiple')) {
-        this.addMatrixColumn('multiple');
     }
-}
 
-removeOption(button) {
-    if (button.classList.contains('matrix-row-remove')) {
-        this.removeMatrixRow(button);
-    } else if (button.classList.contains('matrix-col-remove')) {
-        this.removeMatrixColumn(button);
-    } else {
-        button.closest('.option-row').remove();
-    }
-}
-
-addSingleOption() {
-    const container = document.getElementById('single-options');
-    if (!container) return;
-    
-    const optionCount = container.children.length;
-    const newOption = this.createSingleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
-    container.appendChild(newOption);
-}
-
-addMultipleOption() {
-    const container = document.getElementById('multiple-options');
-    if (!container) return;
-    
-    const optionCount = container.children.length;
-    const newOption = this.createMultipleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
-    container.appendChild(newOption);
-}
-
-addMatrixRow(type) {
-    const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
-    const table = document.querySelector(selector);
-    if (!table) return;
-    
-    const tbody = table.querySelector('tbody');
-    const rowCount = tbody.children.length;
-    const colCount = table.querySelectorAll('thead th').length - 2; // -2 for corner and actions columns
-    
-    const newRow = this.createMatrixRow(rowCount, colCount, type);
-    tbody.appendChild(newRow);
-}
-
-addMatrixColumn(type) {
-    const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
-    const table = document.querySelector(selector);
-    if (!table) return;
-    
-    const thead = table.querySelector('thead tr');
-    const tbody = table.querySelector('tbody');
-    const currentColCount = thead.children.length - 2; // -2 for corner and actions columns
-    
-    // Add header before the actions column
-    const newHeader = this.createElement('th');
-    newHeader.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
-    
-    const input = this.createElement('input');
-    input.type = 'text';
-    input.placeholder = `Veerg ${currentColCount + 1}`;
-    input.className = 'matrix-header';
-    input.style.cssText = 'border: none; background: transparent; width: calc(100% - 25px);';
-    
-    const removeBtn = this.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'remove-btn matrix-col-remove';
-    removeBtn.innerHTML = '×';
-    removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
-    
-    newHeader.appendChild(input);
-    newHeader.appendChild(removeBtn);
-    
-    // Insert before the last column (actions column)
-    thead.insertBefore(newHeader, thead.lastElementChild);
-    
-    // Add cells to existing rows
-    const inputType = type === 'single' ? 'radio' : 'checkbox';
-    tbody.querySelectorAll('tr').forEach((row, rowIndex) => {
-        const newCell = this.createElement('td', 'matrix-cell');
-        newCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
-        newCell.dataset.colIndex = currentColCount;
-        
-        const input = this.createElement('input');
-        input.type = inputType;
-        if (type === 'single') {
-            input.name = `matrix-row-${rowIndex}`;
-        } else {
-            input.name = `matrix-row-${rowIndex}-col-${currentColCount}`;
-        }
-        input.value = currentColCount;
-        
-        newCell.appendChild(input);
-        
-        // Insert before the last cell (remove button cell)
-        row.insertBefore(newCell, row.lastElementChild);
-    });
-}
-
-    // Image upload methods
-    handleImageUpload(input) {
+    // --- In handleImageUpload() ---
+    handleImageUpload(input, uploadArea) {
         const file = input.files[0];
         if (!file) return;
-        
         const reader = new FileReader();
         reader.onload = (e) => {
-            const preview = document.getElementById('image-preview');
-            preview.innerHTML = `
-                <img id="uploaded-image" src="${e.target.result}" 
-                     style="max-width: 100%; max-height: 400px; position: relative; cursor: crosshair;" />
-                <div style="margin-top: 10px;">
-                    <button type="button" class="add-btn">Vaheta pilti</button>
-                </div>
+            // Replace uploadArea innerHTML with the image plus change and remove buttons.
+            uploadArea.innerHTML = `
+            <div style="position: relative; display: inline-block;">
+            <img id="uploaded-image" src="${e.target.result}"
+                style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #ddd; display: block;"
+                alt="Küsimuse pilt" />
+            <button type="button" class="remove-image-btn"
+                style="position: absolute; top: 5px; right: 5px; background: #f44336; color: white; border: none;
+                border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;" title="Eemalda pilt">
+                &times;
+            </button>
+            </div>
+            <div style="margin-top: 8px;">
+            <button type="button" id="change-image-btn"
+                style="padding: 6px 12px; background: rgb(135, 22, 22); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Vaheta pilti
+            </button>
+            </div>
             `;
+            // *** Remove the file picker activation handler now that an image exists ***
+            if (uploadArea._handleUpload) {
+                uploadArea.removeEventListener('click', uploadArea._handleUpload);
+                // Optionally delete the stored handler so it isn’t used again.
+                delete uploadArea._handleUpload;
+            }
             
-            // Add click handler for hotspots
-            const img = preview.querySelector('#uploaded-image');
-            img.addEventListener('click', (event) => this.addHotspot(event));
+            // Set the cursor to default, so clicking the image doesn't look clickable for new file upload.
+            uploadArea.style.cursor = 'default';
             
-            // Add handler for change image button
-            preview.querySelector('.add-btn').addEventListener('click', () => input.click());
+            // Attach event for the "Vaheta pilti" button: clicking it should open the file picker.
+            const changeBtn = uploadArea.querySelector('#change-image-btn');
+            if (changeBtn) {
+                changeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    // Reattach the original file picker handler in case the user wants to swap the image.
+                    uploadArea._handleUpload = () => document.getElementById('image-upload').click();
+                    uploadArea.addEventListener('click', uploadArea._handleUpload);
+                    document.getElementById('image-upload').click();
+                });
+            }
             
-            document.getElementById('hotspot-controls').style.display = 'block';
+            // Attach event for the "remove" button.
+            const removeBtn = uploadArea.querySelector('.remove-image-btn');
+            if (removeBtn) {
+                removeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    // Reset the upload area to its original state.
+                    uploadArea.innerHTML = '<div class="image-preview" style="margin-bottom:10px;"><p>Lohista pilt siia või kliki, et lisada pilt</p></div>';
+                    // Reattach the file picker handler.
+                    uploadArea._handleUpload = () => document.getElementById('image-upload').click();
+                    uploadArea.addEventListener('click', uploadArea._handleUpload);
+                    // Reset the file input.
+                    document.getElementById('image-upload').value = "";
+                    // Hide hotspot controls if needed.
+                    const hotspotControls = document.querySelector('.hotspot-controls');
+                    if (hotspotControls) {
+                        hotspotControls.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Show hotspot controls so the user can add hotspots.
+            const hotspotControls = document.querySelector('.hotspot-controls');
+            if (hotspotControls) {
+                hotspotControls.style.display = 'block';
+            }
+            
+            // Bind hotspot creation on the image.
+            const imgElem = document.getElementById('uploaded-image');
+            if (imgElem) {
+                imgElem.addEventListener('click', (event) => this.addHotspot(event));
+            }
         };
         reader.readAsDataURL(file);
     }
 
+
+
+    // Adds a hotspot dot based on the click coordinates over the image.
     addHotspot(event) {
         const img = event.target;
         const rect = img.getBoundingClientRect();
         const x = ((event.clientX - rect.left) / rect.width * 100).toFixed(1);
         const y = ((event.clientY - rect.top) / rect.height * 100).toFixed(1);
         
-        const hotspotList = document.getElementById('hotspot-list');
-        const hotspotCount = hotspotList.children.length + 1;
+        // Create a small dot that represents a hotspot.
+        const dot = document.createElement('div');
+        dot.style.position = 'absolute';
+        dot.style.left = `${x}%`;
+        dot.style.top = `${y}%`;
+        dot.style.width = '12px';
+        dot.style.height = '12px';
+        dot.style.background = '#8a1929';
+        dot.style.border = '1px solid white';
+        dot.style.borderRadius = '50%';
+        dot.style.cursor = 'pointer';
         
-        const hotspotDiv = this.createElement('div', 'hotspot-item');
-        hotspotDiv.style.cssText = 'margin: 5px 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; gap: 10px;';
-        hotspotDiv.innerHTML = `
-            <strong>Punkt ${hotspotCount}</strong> (${x}%, ${y}%)
-            <input type="text" placeholder="Sisesta vastus" style="padding: 4px; border: 1px solid #8a1929; border-radius: 4px;" />
-            <label style="display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" title="Õige vastus" />
-                <span>Õige</span>
-            </label>
-            <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-        `;
+        // When a hotspot dot is clicked, remove it.
+        dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dot.remove();
+        });
         
-        hotspotList.appendChild(hotspotDiv);
-        
-        // Add visual marker on image
-        this.addImageMarker(img, x, y, hotspotCount);
+        // The image's container (which holds the image) should be positioned relative.
+        // We assume that the uploaded image is inside a relatively positioned container.
+        const container = img.parentElement;
+        if (container) {
+            container.appendChild(dot);
+        }
     }
+
+
+
 
     addImageMarker(img, x, y, number) {
         const marker = this.createElement('div');
@@ -1583,7 +1748,7 @@ addMatrixColumn(type) {
         img.parentElement.appendChild(marker);
     }
 
-    // Drawing canvas methods
+        // Drawing canvas methods
     initializeDrawing() {
         const canvas = document.getElementById('drawing-canvas');
         if (!canvas) return;

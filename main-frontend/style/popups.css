@@ -55,6 +55,16 @@
   border: 1px solid #b52634;
 }
 
+.popup-input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
 .pdf-popup {
   display: none;
   position: fixed;

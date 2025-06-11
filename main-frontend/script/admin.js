@@ -24,56 +24,12 @@ async function loadAccounts() {
     });
   } catch (error) {
     console.error('Failed to load accounts:', error);
-    alert('Kasutajakontode laadimine ebaõnnestus.');
-  }
-}
-
-// Function to change a teacher's password in the database
-async function resetPassword(email) {
-  let newPass = prompt(`Sisesta uus parool ${email} jaoks:`);
-  if (newPass !== null && newPass.trim() !== "") {
-    try {
-      const response = await fetch('http://localhost:3006/auth/resetPassword', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, newPassword: newPass })
-      });
-
-      const result = await response.json();
-      if (result.message) {
-        alert(`Parool muudetud ${email} jaoks!`);
-      } else {
-        alert(result.error || "Parooli muutmine ebaõnnestus.");
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-    }
-  } else {
-    alert("Uus parool ei olnud sisestatud. Parooli ei muudetud.");
-  }
-}
-
-// Function to delete a teacher's account from the database
-async function deleteAccount(email) {
-  if (confirm(`Oled kindel, et soovid kustutada konto ${email}?`)) {
-    try {
-      const response = await fetch('http://localhost:3006/auth/deleteUser', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-
-      const result = await response.json();
-      if (result.message) {
-        alert(`Konto kustutatud: ${email}`);
-        loadAccounts(); // Reload accounts after deletion
-      } else {
-        alert(result.error || "Konto kustutamine ebaõnnestus.");
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-    }
+    showPopup(
+      "Viga",
+      "Kasutajakontode laadimine ebaõnnestus. Palun proovi hiljem uuesti.",
+      [
+        { text: "OK", cancel: true }
+      ]
+    );
   }
 }

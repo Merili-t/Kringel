@@ -73,7 +73,7 @@ Logs user out.
 #### Response
 
 ```json
-{ "id": "uuid-v7-string" }
+{ "message": "Test created", "id": "uuid-v7-string" }
 ```
 
 ## GET /test/:id
@@ -85,11 +85,14 @@ Return test with specific id.
 ```json
 {
   "id": "uuid-v7-string",
+  "userId": "uuid-v7-string",
   "name": "test",
   "description": "Fun test",
-  "start": "2025-06-08 13:24:19",
-  "end": "2025-06-08 13:24:19",
-  "timeLimit": 60
+  "start": "2025-06-08T13:24:19.000Z",
+  "end": "2025-06-08T13:24:19.000Z",
+  "timeLimit": 60,
+  "createdAt": "2025-06-11T09:26:44.000Z",
+  "updatedAt": "2025-06-11T09:26:44.000Z"
 }
 ```
 
@@ -104,24 +107,32 @@ Returns all tests.
 #### Response
 
 ```json
-[
 {
-  "id": "uuid-v7-string",
-  "name": "test",
-  "description": "Fun test",
-  "start": "2025-06-08 13:24:19",
-  "end": "2025-06-08 13:24:19",
-  "timeLimit": 60,
-},
-{
-  "id": "uuid-v7-string",
-  "name": "test",
-  "description": "Fun test",
-  "start": "2025-06-08 13:24:19",
-  "end": "2025-06-08 13:24:19",
-  "timeLimit": 60,
-}, ...
-]
+  "tests": [
+    {
+      "id": "uuid-v7-string",
+      "userId": "uuid-v7-string",
+      "name": "test",
+      "description": "Fun test",
+      "start": "2025-06-08T13:24:19.000Z",
+      "end": "2025-06-08T13:24:19.000Z",
+      "timeLimit": 60,
+      "createdAt": "2025-06-11T09:26:44.000Z",
+      "updatedAt": "2025-06-11T09:26:44.000Z"
+    },
+    {
+      "id": "uuid-v7-string",
+      "userId": "uuid-v7-string",
+      "name": "test",
+      "description": "Fun test",
+      "start": "2025-06-08T13:24:19.000Z",
+      "end": "2025-06-08T13:24:19.000Z",
+      "timeLimit": 60,
+      "createdAt": "2025-06-11T09:55:35.000Z",
+      "updatedAt": "2025-06-11T09:55:35.000Z"
+    }
+  ]
+}
 ```
 
 ## /block
@@ -131,7 +142,7 @@ Returns all tests.
 #### Request Body (JSON)
 
 ```json
-{ "testId": "uuid-v7-string", "blockNumber": "1" }
+{ "testId": "uuid-v7-string", "blockNumber": 1 }
 ```
 
 #### Response
@@ -140,17 +151,24 @@ Returns all tests.
 { "message": "Block created", "id": "uuid-v7-string" }
 ```
 
-## GET /block/:testId
+## GET /block/test/:testId
 
 Get all blocks for a test.
 
 #### Response
 
 ```json
-[
-  { "id": "uuid-v7-string", "testId": "uuid-v7-string", "blockNumber": "1" },
-  { "id": "uuid-v7-string", "testId": "uuid-v7-string", "blockNumber": "2" }
-]
+{
+  "blocks": [
+    {
+      "id": "uuid-v7-string",
+      "testId": "uuid-v7-string",
+      "blockNumber": 1,
+      "createdAt": "2025-06-11T10:16:50.000Z",
+      "updatedAt": "2025-06-11T10:16:50.000Z"
+    }
+  ]
+}
 ```
 
 #### URL parameters
@@ -164,7 +182,13 @@ Get a block with id.
 #### Response
 
 ```json
-{ "id": "uuid-v7-string", "testId": "uuid-v7-string", "blockNumber": "1" }
+{
+  "id": "uuid-v7-string",
+  "testId": "uuid-v7-string",
+  "blockNumber": 1,
+  "createdAt": "2025-06-11T10:16:50.000Z",
+  "updatedAt": "2025-06-11T10:16:50.000Z"
+}
 ```
 
 #### URL parameters
@@ -181,15 +205,15 @@ Get a block with id.
 
 ```json
 {
+  "blockId": "uuid-v7-string",
   "question": "This is a hard question",
   "points": 10,
   "answerType": 0,
-  "questionNumber": "1",
+  "orderNumber": 1,
   "answerVariables": [
     { "correct": true, "answer": "This is the first option" },
     { "correct": false, "answer": "This is the second option" }
-  ],
-  "blockId": "uuid-v7-string"
+  ]
 }
 ```
 
@@ -197,36 +221,35 @@ Get a block with id.
 
 ```json
 {
+  "blockId": "uuid-v7-string",
   "question": "This is a matrix question",
   "points": 10,
-  "answerType": 4,
-  "questionNumber": "2",
+  "answerType": 3,
+  "orederNumber": 2,
   "answerVariables": [
     {
-      "question": "This is a matrix question question",
+      "blockId": "uuid-v7-string",
+      "question": "This is a hard question",
       "points": 10,
       "answerType": 0,
-      "questionNumber": "1",
+      "orderNumber": 1,
       "answerVariables": [
         { "correct": true, "answer": "This is the first option" },
         { "correct": false, "answer": "This is the second option" }
-      ],
-      "blockId": "uuid-v7-string"
+      ]
     },
     {
-      "question": "This is a matrix question question",
+      "blockId": "uuid-v7-string",
+      "question": "This is a hard question",
       "points": 10,
-      "answerType": 1,
-      "questionNumber": "2",
+      "answerType": 0,
+      "orderNumber": 1,
       "answerVariables": [
         { "correct": true, "answer": "This is the first option" },
-        { "correct": true, "answer": "This is the second option" },
-        { "correct": false, "answer": "This is the false option" }
-      ],
-      "blockId": "uuid-v7-string"
+        { "correct": false, "answer": "This is the second option" }
+      ]
     }
-  ],
-  "blockId": "uuid-v7-string"
+  ]
 }
 ```
 
@@ -247,11 +270,11 @@ Get a block with id.
   "picture": 4,
   "chemistry": 5,
   "drawing": 6,
-  "calculator": 7,
+  "calculator": 7
 }
 ```
 
-## GET /question/:blockId
+## GET /question/block/:blockId
 
 Get all questions that belong to block.
 
@@ -261,15 +284,19 @@ Get all questions that belong to block.
 
 ```json
 {
-  "id": "uuid-v7-string",
-  "question": "This is a hard question",
-  "points": 10,
-  "answerType": 0,
-  "answerVariables": [
-    { "correct": true, "answer": "This is the first option" },
-    { "correct": false, "answer": "This is the second option" }
-  ],
-  "blockId": "uuid-v7-string"
+  "blockQuestions": [
+    {
+      "id": "uuid-v7-string",
+      "blockId": "uuid-v7-string",
+      "matrixId": null,
+      "type": 0,
+      "orderNumber": 1,
+      "description": "This is a hard question",
+      "points": 10,
+      "createdAt": "2025-06-11T11:02:48.000Z",
+      "updatedAt": "2025-06-11T11:02:48.000Z"
+    }
+  ]
 }
 ```
 
@@ -323,14 +350,14 @@ Get question by id.
 ```json
 {
   "id": "uuid-v7-string",
-  "question": "This is a hard question",
+  "blockId": "uuid-v7-string",
+  "matrixId": null,
+  "type": 0,
+  "orderNumber": 1,
+  "description": "This is a hard question",
   "points": 10,
-  "answerType": 0,
-  "answerVariables": [
-    { "correct": true, "answer": "This is the first option" },
-    { "correct": false, "answer": "This is the second option" }
-  ],
-  "blockId": "uuid-v7-string"
+  "createdAt": "2025-06-11T11:02:48.000Z",
+  "updatedAt": "2025-06-11T11:02:48.000Z"
 }
 ```
 

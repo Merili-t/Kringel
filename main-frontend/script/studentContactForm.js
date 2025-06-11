@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Funktsioon, mis asendab täpitähed sobivate tähtedega (võid vajadusel lisada ka tühikute asendamise)
-function sanitizeFileName(teamName) {
+function cleanFileName(teamName) {
   return teamName
     .replace(/ö/g, "o")
     .replace(/Ö/g, "O")
@@ -102,25 +102,23 @@ async function submitContactForm() {
   let requestBody, headers = {};
 
   if (videoFile) {
-    // Faili ümbernimetamine: kasutame tiimi nime ilma täpitähtedeta
-    let sanitizedTeamName = sanitizeFileName(team);
-    // Säilitame faili laiendi (näiteks .mp4, .mov jne)
+    // Faili ümbernimetamine: tiimi nime ilma täpitähtedeta
+    let cleanTeamName = cleanFileName(team);
     let fileExtension = "";
     const dotIndex = videoFile.name.lastIndexOf(".");
     if (dotIndex !== -1) {
       fileExtension = videoFile.name.substring(dotIndex);
     }
-    const newFileName = sanitizedTeamName + fileExtension;
-    // Luuakse uus File objekt, sest originaalse failinime muutmine pole lubatud
+    const newFileName = cleanTeamName + fileExtension;
+
     videoFile = new File([videoFile], newFileName, {
       type: videoFile.type,
       lastModified: videoFile.lastModified,
     });
 
-    // Kasutame FormData-d, et saata failid
     const formData = new FormData();
     formData.append("email", email);
-    formData.append("teamName", team); // Tiimi nimi saadetakse originaalsena, et andmebaasi salvestada
+    formData.append("teamName", team); 
     formData.append("participantNames", names);
     formData.append("school", school);
     formData.append("videoFile", videoFile);
@@ -128,9 +126,8 @@ async function submitContactForm() {
       formData.append("videoLink", videoLink);
     }
     requestBody = formData;
-    // FormData puhul ei määra käsitsi Content-Type päist!
+    
   } else {
-    // Kui video fail puudub ja saadetakse ainult link, saadetakse JSON
     headers["Content-Type"] = "application/json";
     requestBody = JSON.stringify({
       email: email,
@@ -145,7 +142,8 @@ async function submitContactForm() {
     // API päring; muuda URL vajadusel vastavalt oma keskkonnale
     const response = await fetch("http://localhost:3006/test/contact", {
       method: "POST",
-      headers: headers,
+      // Kui requestBody on FormData, ära lisa headers objekti üldse!
+      ...(requestBody instanceof FormData ? {} : { headers }),
       credentials: "include",
       body: requestBody,
     });

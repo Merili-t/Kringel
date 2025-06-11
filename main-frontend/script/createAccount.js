@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");
   form.addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const email = form.email.value.trim();
     const password = form.password.value;
@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Creating FormData and sending the request
     const formData = new FormData(form);
 
     try {

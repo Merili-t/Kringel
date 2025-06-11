@@ -1,17 +1,8 @@
-Iga(!) üliõpilane kirjutab iga(!) päev kokkuvõtte oma päevast. Isiklikku osa kirjutamist ei delgeerita kellelegi 
-teisele. Lisaks vastutab keegi meeskonnast ühispäeviku pidamise eest, kus kajastub meeskonna koostöö, ühised saavutused jne.
-See ei pea olema meeskonna juht.
+TRIINU SUVEPRAKTIKA BLOGI
 
-Mida blogida?
--------------
-Iga päeva lõpus kirjutab igaüks enda kohta päevikusse päeva peamise sündmuse, avastuse, kogemuse, nurjumise,..
-koos mõttega, mida ta sellest õppis (vt eespool Kolbi mudelit).
-See võib hõlmata:
+----------------------------------------------------------------------------------------------------------------------------
+ESMASPÄEV 09.06.2025 -- sissejuhatus
 
-
-
-
-Esmaspäev 09.06.2025 -- sissejuhatus
 Arenduse osa:
 Algne plaan oli õppida selgeks react ja teha siiani valminud js ja html failid sellega vastavalt ümber. 
 See paraku osutus liiga keeruliseks ning seega langetasime otsuse, et see jääb mõneks teiseks projektiks, 
@@ -39,10 +30,9 @@ Merili saatis kliendile ühe kirja selle osas, et jääb siis plaan anda lõpus 
 Tööharjumused ja nende muutumine:
 - Hetkel veel vara harjumusi hinnata, palju öelda ei oska... Lisette jäi harjumuspäraselt hiljaks ja suhtles 
 natuke vähe, tema tegevuste osas on teistel meil veidi segadust. 
+----------------------------------------------------------------------------------------------------------------------------
+TEISIPÄEV 10.06.2025 -- Ühenduste üritused
 
-
-
-Teisipäev 10.06.2025 -- Ühenduste üritused
 Arenduse osa:
 Eesmärk oli võimalikult palju andmebaasiühendusi toimima saada, eelkõige login, createAccount ja paroolivahetus. 
 Paroolivahetuse otsustasime muuta hoopis admin-lehe teemaks, kus siis vastavalt adminkonto saab kõiki kontosid
@@ -77,3 +67,5 @@ Tööharjumused ja nende muutumine:
 Lisette hilinemisest sai kohale mitte tulemine ning tundub, et tema ebausaldusväärsus saab paraku üha tüüpilisemaks. 
 Teiste osas oli muu eilsele sarnane -- suuremate errorite puhul küsimused Svenile, kui ikka ise hakkama ei saa üldse; 
 ülesannetejaotus, jätkuvalt veidi segadust dockeriga ja nii palju git commite, et sealt ei leia enam küll varsti edasi.
+
+----------------------------------------------------------------------------------------------------------------------------

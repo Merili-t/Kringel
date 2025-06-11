@@ -29,51 +29,48 @@
     box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
 }
 
-.create-account-btn{
-    margin-top: 2rem;
-}
-
 .create-test-btn, 
 .startpage-btn, 
 .guide-btn, 
 .contact-btn,
-.admin-btn{
+.admin-btn,
+.create-account-btn{
     margin-bottom: 1rem;
     margin-left: 2.7rem;
 }
 
 .create-test-btn, 
 .logout-btn, 
-.login-btn, 
-.create-account-btn,
+.login-btn,
 .save-new-pwd-btn,
-.form-btn, 
-.admin-btn{
+.form-btn{
     background-color: #B81434;
     color: #fff;
 }
 
 .startpage-btn, 
 .guide-btn, 
-.contact-btn{
+.contact-btn,
+.create-account-btn,
+.admin-btn{
     background-color: #fff;
     color: #710A14;
 }
 
 .startpage-btn:hover, 
 .guide-btn:hover, 
-.contact-btn:hover{
+.create-account-btn:hover,
+.contact-btn:hover, 
+.admin-btn:hover{
     background-color: #F6E6E6;
 }
 
 .create-test-btn:hover, 
 .login-btn:hover, 
 .logout-btn:hover, 
-.create-account-btn:hover,
 .save-new-pwd-btn:hover,
 .form-btn:hover,
-.save-btn:hover,
-.admin-btn:hover{
+.save-btn:hover{
     background-color: #97102a;
 }
 

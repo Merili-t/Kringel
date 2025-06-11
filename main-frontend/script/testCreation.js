@@ -445,7 +445,7 @@ class QuizBuilder {
         this.init();
     }
     saveQuiz(quizData) {
-        return fetch('http://localhost:3006/question/upload', {
+        return fetch('http://localhost:3006/test/upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -491,11 +491,22 @@ class QuizBuilder {
     }
 
     collectQuizData() {
+        // Build the quiz payload as expected by the API
         const quizData = {
-            type: this.getCurrentQuizType(),
-            content: {},
-            timestamp: new Date().toISOString()
+        name: "Temporary Test Name",              // Replace with actual test title if available
+        descripion: "Temporary Description",        // Note the MD typo ("descripion")
+        start: new Date().toISOString(),             // In a real system, use a proper start date/time
+        end: new Date().toISOString(),               // In a real system, use a proper end date/time
+        timelimit: 60,                               // Can be dynamic if needed
+        block: [
+            {
+            blockNumber: 1,
+            blockQuestions: []
+            }
+        ]
         };
+        quizData.type = this.getCurrentQuizType();
+        quizData.content = {};
 
         const previewContent = document.getElementById('preview-content');
         if (!previewContent) return quizData;
@@ -525,6 +536,54 @@ class QuizBuilder {
                 }
                 break;
             }
+        // Collect question-specific data.
+        const questionTextElem = document.getElementById("question-text");
+        const questionText = questionTextElem ? questionTextElem.value.trim() : "";
+        if (!questionText) {
+        alert("Palun sisesta küsimuse tekst!");
+        return null;
+        }
+        // Points for this question (defaulting to 0 if none provided)
+        const pointsElem = document.getElementById("points-input");
+        const points = pointsElem ? pointsElem.value.trim() : "0";
+
+        // Determine answer type from the dropdown.
+        const dropdown = document.getElementById("dropdown-selected");
+        const answerType = dropdown && dropdown.querySelector("span")
+        ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
+        : "luhike-tekst";
+
+        // Gather answer variables based on answer type.
+        let answerVariables = [];
+        if (answerType === "uks-oige") {
+        const optionRows = document.querySelectorAll("#single-options .option-row");
+        optionRows.forEach(row => {
+            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+            const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
+            answerVariables.push({ answer: optText, correct: isCorrect });
+        });
+        } else if (answerType === "mitu-oiget") {
+        const optionRows = document.querySelectorAll("#multiple-options .option-row");
+        optionRows.forEach(row => {
+            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+            const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
+            answerVariables.push({ answer: optText, correct: isCorrect });
+        });
+        } else {
+        // For text or similar answer types, attempt to get the answer from preview input/textarea.
+        const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
+        if (answerInput) {
+            answerVariables.push({ answer: answerInput.value.trim(), correct: true });
+        }
+        }
+
+        // Add the question to the quiz block.
+        quizData.block[0].blockQuestions.push({
+        question: questionText,
+        points: parseInt(points),
+        answerType: this.getAnswerTypeCode(answerType),
+        answerVariables: answerVariables
+        });
 
         return quizData;
     }

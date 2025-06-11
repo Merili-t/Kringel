@@ -4,17 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juhend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href=
+      "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
+      rel="stylesheet">
   <link rel="stylesheet" href="../style/contactsHomepage.css" />
   <link rel="stylesheet" href="../style/buttons.css" />
   <link rel="stylesheet" href="../style/contacts.css">
+  <link rel="stylesheet" href="../style/main.css" />
 </head>
 <body>
 
   <!-- HEADER JA NAV -->
   <header class="header">
     <nav class="nav">
-      <a href="tutorialHome.html" class="nav-link">Juhend</a>
-      <a href="#" class="nav-link">Kontakt</a>
+      <a href="tutorialHome.html" class="nav-link poppins-medium">Juhend</a>
+      <a href="#" class="nav-link poppins-medium">Kontakt</a>
     </nav>
   </header>
 
@@ -26,7 +32,7 @@
 
   <!-- PÕHISISU -->
   <main>
-    <h1>Kontaktandmed</h1>
+    <h1 class="poppins-bold">Kontaktandmed</h1>
 
     <div class="contacts-section">
           <div class="contacts-header">
@@ -46,7 +52,7 @@
           <div class="contacts-header">
             <h3 class="poppins-bold">Kirjuta meile!</h3>
           </div>
-            <form action="../php/helpForm.php" method="POST"> 
+            <form action="../script/helpForm.js" method="POST"> 
               <label class="form-title poppins-semibold">
                 Pealkiri:
                 <input type="text" name="title" placeholder="Siseta sõnumi pealkiri..." required>

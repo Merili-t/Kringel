@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -24,8 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = new FormData(form);
-    // Keeping the fetch call as it was:
     try {
       const response = await fetch('http://localhost:3006/auth/login', {
         method: 'POST',
@@ -37,10 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
           password: password.toString(),
         }),
       });
+
       const result = await response.json();
+
       if (result.message) {
         alert("Sisselogimine õnnestus!");
-        window.location.href = "allTests.html";
+        if (result.userType === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "allTests.html";
+        }
       } else {
         alert(result.error || "Sisselogimine ebaõnnestus.");
       }

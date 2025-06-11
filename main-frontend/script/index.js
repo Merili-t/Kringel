@@ -14,7 +14,7 @@ function startTest() {
     const userConfirmed = confirm('Kas oled kindel, et soovid testi alustada?');
     
     if (userConfirmed) {
-        window.location.href = '../instructions/sooritaja.html';
+        window.location.href = 'html/studentGuide.html';
     }
 }
 

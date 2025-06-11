@@ -445,7 +445,7 @@ class QuizBuilder {
         this.init();
     }
     saveQuiz(quizData) {
-        return fetch('http://localhost:3006/quiz/save', {
+        return fetch('http://localhost:3006/question/upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,5 +1,4 @@
 body {
-    font-family: sans-serif;
     background: #fff;
     margin: 0;
     padding: 0;
@@ -35,13 +34,13 @@ body {
     align-items: center;
     padding-left: 40px;
     padding-top: 50px;
+    margin-left: 4rem;
 }
 
 .nav-link {
     color: #888;
     text-decoration: none;
     font-size: 16px;
-    font-weight: 500;
     transition: color 0.3s ease;
 }
 
@@ -50,17 +49,17 @@ body {
 }
 
 .logo {
-    font-weight: bold;
     margin-left: auto;
 }
 
 main {
     padding: 2rem;
+    margin: 2rem;
 }
 
 h1 {
     font-size: 2rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 h2 {

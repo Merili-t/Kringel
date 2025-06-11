@@ -137,7 +137,7 @@ Returns all tests.
 #### Response
 
 ```json
-{ "id": "uuid-v7-string", "testId": "uuid-v7-string", "blockNumber": "1" }
+{ "message": "Block created", "id": "uuid-v7-string" }
 ```
 
 ## GET /block/:testId
@@ -184,6 +184,7 @@ Get a block with id.
   "question": "This is a hard question",
   "points": 10,
   "answerType": 0,
+  "questionNumber": "1",
   "answerVariables": [
     { "correct": true, "answer": "This is the first option" },
     { "correct": false, "answer": "This is the second option" }
@@ -199,11 +200,13 @@ Get a block with id.
   "question": "This is a matrix question",
   "points": 10,
   "answerType": 4,
+  "questionNumber": "2",
   "answerVariables": [
     {
       "question": "This is a matrix question question",
       "points": 10,
       "answerType": 0,
+      "questionNumber": "1",
       "answerVariables": [
         { "correct": true, "answer": "This is the first option" },
         { "correct": false, "answer": "This is the second option" }
@@ -214,6 +217,7 @@ Get a block with id.
       "question": "This is a matrix question question",
       "points": 10,
       "answerType": 1,
+      "questionNumber": "2",
       "answerVariables": [
         { "correct": true, "answer": "This is the first option" },
         { "correct": true, "answer": "This is the second option" },
@@ -229,7 +233,7 @@ Get a block with id.
 #### Response
 
 ```json
-{ "id": "uuid-v7-string" }
+{ "message": "Question created", "id": "uuid-v7-string" }
 ```
 
 ##### Answer types:

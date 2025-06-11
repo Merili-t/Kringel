@@ -688,7 +688,7 @@ handleQuestionImageUpload(input) {
                 </button>
                 <div style="margin-top: 8px;">
                     <button type="button" 
-                            style="padding: 6px 12px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            style="padding: 6px 12px; background:rgb(135, 22, 22); color: white; border: none; border-radius: 4px; cursor: pointer;"
                             onclick="document.getElementById('question-image-upload').click();">
                         Vaheta pilti
                     </button>
@@ -775,7 +775,7 @@ handleQuestionImageUpload(input) {
             // Add save button after rendering
             setTimeout(() => {
                 const saveButton = this.createAddButton('Salvesta Quiz');
-                saveButton.style.background = '#2196F3';
+                saveButton.style.background = '#8a1929';
                 saveButton.addEventListener('click', () => {
                     const quizData = this.collectQuizData();
                     this.saveQuiz(quizData);
@@ -820,7 +820,7 @@ handleQuestionImageUpload(input) {
         const input = this.createElement('input');
         input.type = 'text';
         input.placeholder = 'Sisesta vastus';
-        input.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;';
+        input.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px;';
         
         container.appendChild(input);
         document.getElementById('preview-content').appendChild(container);
@@ -831,7 +831,7 @@ handleQuestionImageUpload(input) {
         const textarea = this.createElement('textarea');
         textarea.placeholder = 'Sisesta vastus';
         textarea.rows = 5;
-        textarea.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; resize: vertical;';
+        textarea.style.cssText = 'width: 100%; padding: 8px; font-size: 1rem; border: 1px solid #8a1929; border-radius: 4px; resize: vertical;';
         
         container.appendChild(textarea);
         document.getElementById('preview-content').appendChild(container);
@@ -875,7 +875,7 @@ handleQuestionImageUpload(input) {
         const container = this.createContainer('Interaktiivne pilt:');
         
         const uploadArea = this.createElement('div', 'image-upload-area');
-        uploadArea.style.cssText = 'border: 2px dashed #ccc; padding: 20px; text-align: center; margin-bottom: 10px; border-radius: 4px;';
+        uploadArea.style.cssText = 'border: 2px dashed #8a1929; padding: 20px; text-align: center; margin-bottom: 10px; border-radius: 4px;';
         
         const fileInput = this.createElement('input');
         fileInput.type = 'file';
@@ -938,7 +938,7 @@ handleQuestionImageUpload(input) {
         const canvas = this.createElement('canvas', '', 'drawing-canvas');
         canvas.width = 500;
         canvas.height = 300;
-        canvas.style.cssText = 'border: 1px solid #ccc; cursor: crosshair; display: block;';
+        canvas.style.cssText = 'border: 1px solid #8a1929; cursor: crosshair; display: block;';
         
         container.appendChild(controls);
         container.appendChild(canvas);
@@ -1054,7 +1054,7 @@ handleQuestionImageUpload(input) {
         actionButtonsDiv.style.cssText = 'display: flex; gap: 10px; margin-top: 10px;';
         
         const undoBtn = this.createAddButton('Undo (Z)');
-        undoBtn.style.background = '#ff9800';
+        undoBtn.style.background = 'rgb(89, 154, 118)';
         undoBtn.addEventListener('click', () => {
             if (window.chemistryDrawingTool) {
                 window.chemistryDrawingTool.undo();
@@ -1062,7 +1062,7 @@ handleQuestionImageUpload(input) {
         });
         
         const redoBtn = this.createAddButton('Redo (Y)');
-        redoBtn.style.background = '#ff9800';
+        redoBtn.style.background = 'rgb(89, 154, 118)';
         redoBtn.addEventListener('click', () => {
             if (window.chemistryDrawingTool) {
                 window.chemistryDrawingTool.redo();
@@ -1070,7 +1070,7 @@ handleQuestionImageUpload(input) {
         });
         
         const deleteBtn = this.createAddButton('Kustuta valitud (Del)');
-        deleteBtn.style.background = '#f44336';
+        deleteBtn.style.background = 'rgb(192, 137, 144)';
         deleteBtn.addEventListener('click', () => {
             if (window.chemistryDrawingTool) {
                 window.chemistryDrawingTool.deleteSelected();
@@ -1078,7 +1078,7 @@ handleQuestionImageUpload(input) {
         });
         
         const clearBtn = this.createAddButton('Puhasta kõik');
-        clearBtn.style.background = '#f44336';
+        clearBtn.style.background = 'rgb(192, 137, 144)';
         clearBtn.addEventListener('click', () => {
             if (window.chemistryDrawingTool && confirm('Kas oled kindel, et soovid kõik kustutada?')) {
                 window.chemistryDrawingTool.deleteAll();
@@ -1144,7 +1144,7 @@ createAddButton(text, dataAction = '') {
     const button = this.createElement('button', 'add-btn');
     button.type = 'button';
     button.textContent = `+ ${text}`;
-    button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;';
+    button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #8a1929; color: white; border: none; border-radius: 4px; cursor: pointer;';
     if (dataAction) button.setAttribute('data-action', dataAction);
     return button;
 }
@@ -1158,7 +1158,7 @@ createSingleOption(index, placeholder) {
         <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
         <input type="radio" name="correct-single" value="${index}" title="Märgi õigeks" />
         <span class="correct-label">Õige</span>
-        <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+        <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
     `;
     
     return row;
@@ -1173,7 +1173,7 @@ createMultipleOption(index, placeholder) {
         <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
         <input type="checkbox" name="correct-multiple" value="${index}" title="Märgi õigeks" />
         <span class="correct-label">Õige</span>
-        <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+        <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
     `;
     
     return row;
@@ -1207,7 +1207,7 @@ createMatrixTable(type) {
         removeBtn.type = 'button';
         removeBtn.className = 'remove-btn matrix-col-remove';
         removeBtn.innerHTML = '×';
-        removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
+        removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
         
         th.appendChild(input);
         th.appendChild(removeBtn);
@@ -1237,7 +1237,7 @@ createMatrixRow(rowIndex, colCount, type) {
     
     // Row label cell
     const labelCell = this.createElement('td');
-    labelCell.style.cssText = 'border: 1px solid #ccc; padding: 8px;';
+    labelCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px;';
     
     const labelInput = this.createElement('input');
     labelInput.type = 'text';
@@ -1253,7 +1253,7 @@ createMatrixRow(rowIndex, colCount, type) {
     
     for (let i = 0; i < colCount; i++) {
         const cell = this.createElement('td', 'matrix-cell');
-        cell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+        cell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
         cell.dataset.colIndex = i;
         
         const input = this.createElement('input');
@@ -1271,13 +1271,13 @@ createMatrixRow(rowIndex, colCount, type) {
     
     // Remove button cell
     const removeCell = this.createElement('td');
-    removeCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+    removeCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
     
     const removeBtn = this.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'remove-btn matrix-row-remove';
     removeBtn.innerHTML = '×';
-    removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;';
+    removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;';
     
     removeCell.appendChild(removeBtn);
     row.appendChild(removeCell);
@@ -1459,7 +1459,7 @@ addMatrixColumn(type) {
     
     // Add header before the actions column
     const newHeader = this.createElement('th');
-    newHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+    newHeader.style.cssText = 'border: 1px solid #8a1929; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
     
     const input = this.createElement('input');
     input.type = 'text';
@@ -1471,7 +1471,7 @@ addMatrixColumn(type) {
     removeBtn.type = 'button';
     removeBtn.className = 'remove-btn matrix-col-remove';
     removeBtn.innerHTML = '×';
-    removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
+    removeBtn.style.cssText = 'background: #8a1929; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
     
     newHeader.appendChild(input);
     newHeader.appendChild(removeBtn);
@@ -1483,7 +1483,7 @@ addMatrixColumn(type) {
     const inputType = type === 'single' ? 'radio' : 'checkbox';
     tbody.querySelectorAll('tr').forEach((row, rowIndex) => {
         const newCell = this.createElement('td', 'matrix-cell');
-        newCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+        newCell.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; text-align: center;';
         newCell.dataset.colIndex = currentColCount;
         
         const input = this.createElement('input');
@@ -1543,12 +1543,12 @@ addMatrixColumn(type) {
         hotspotDiv.style.cssText = 'margin: 5px 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; gap: 10px;';
         hotspotDiv.innerHTML = `
             <strong>Punkt ${hotspotCount}</strong> (${x}%, ${y}%)
-            <input type="text" placeholder="Sisesta vastus" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px;" />
+            <input type="text" placeholder="Sisesta vastus" style="padding: 4px; border: 1px solid #8a1929; border-radius: 4px;" />
             <label style="display: flex; align-items: center; gap: 5px;">
                 <input type="checkbox" title="Õige vastus" />
                 <span>Õige</span>
             </label>
-            <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+            <button type="button" class="remove-btn" style="background: #8a1929; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
         `;
         
         hotspotList.appendChild(hotspotDiv);
@@ -1565,7 +1565,7 @@ addMatrixColumn(type) {
             top: ${y}%;
             width: 24px;
             height: 24px;
-            background: #f44336;
+            background: #8a1929;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -1587,24 +1587,66 @@ addMatrixColumn(type) {
     initializeDrawing() {
         const canvas = document.getElementById('drawing-canvas');
         if (!canvas) return;
-        
         const ctx = canvas.getContext('2d');
+        
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
+        let mode = 'draw'; // Modes: "draw" or "erase"
+        const eraserSize = 20; // You can base this off your brush-size input if desired
         
-        const startDrawing = (e) => {
-            isDrawing = true;
-            [lastX, lastY] = this.getMousePos(canvas, e);
+        // Create and insert a simple eraser toggle button into your existing controls.
+        const colorInput = document.getElementById('drawing-color');
+        const brushSize = document.getElementById('brush-size');
+        const controlsContainer = canvas.previousElementSibling;
+        
+        const eraserBtn = document.createElement('button');
+        eraserBtn.textContent = 'Kustutama';
+        eraserBtn.style.margin = '5px';
+        eraserBtn.style.padding = '8px 12px';
+        eraserBtn.style.background = '#9e9e9e';
+        eraserBtn.style.color = 'white';
+        eraserBtn.style.border = 'none';
+        eraserBtn.style.borderRadius = '4px';
+        eraserBtn.style.cursor = 'pointer';
+        
+        eraserBtn.addEventListener('click', () => {
+            // Toggle mode between drawing and erasing.
+            mode = mode === 'draw' ? 'erase' : 'draw';
+            eraserBtn.textContent = mode === 'erase' ? 'Joonistama' : 'Kustutama';
+        });
+        
+        // Append the eraser button to your drawing controls.
+        if (controlsContainer) {
+            controlsContainer.appendChild(eraserBtn);
+        }
+        
+        // Helper to get mouse position relative to the canvas.
+        const getMousePos = (canvas, e) => {
+            const rect = canvas.getBoundingClientRect();
+            return [e.clientX - rect.left, e.clientY - rect.top];
         };
         
+        // Start drawing (or erasing)
+        const startDrawing = (e) => {
+            isDrawing = true;
+            [lastX, lastY] = getMousePos(canvas, e);
+        };
+        
+        // Stop drawing when the mouse is released or leaves the canvas.
+        const stopDrawing = () => {
+            isDrawing = false;
+        };
+        
+        // The drawing (or erasing) function.
         const draw = (e) => {
             if (!isDrawing) return;
+            const [currentX, currentY] = getMousePos(canvas, e);
             
-            const [currentX, currentY] = this.getMousePos(canvas, e);
-            const color = document.getElementById('drawing-color')?.value || '#000000';
-            const size = document.getElementById('brush-size')?.value || 3;
-            
+            if (mode === 'draw') {
+            // Drawing mode: draw a line from last position to current
+            const color = colorInput ? colorInput.value : '#000000';
+            const size = brushSize ? brushSize.value : 3;
             ctx.strokeStyle = color;
             ctx.lineWidth = size;
             ctx.lineCap = 'round';
@@ -1614,46 +1656,47 @@ addMatrixColumn(type) {
             ctx.moveTo(lastX, lastY);
             ctx.lineTo(currentX, currentY);
             ctx.stroke();
+            } else if (mode === 'erase') {
+            // Eraser mode: clear a rectangle around the current position
+            // (You can adjust eraserSize as needed)
+            ctx.clearRect(currentX - eraserSize / 2, currentY - eraserSize / 2, eraserSize, eraserSize);
+            }
             
             [lastX, lastY] = [currentX, currentY];
         };
         
-        const stopDrawing = () => {
-            isDrawing = false;
-        };
-        
+        // Attach mouse events to the canvas.
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
         
-        // Touch events for mobile
+        // Also add simple touch events for mobile devices.
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            // Convert touch to a synthetic mouse event
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
+            clientX: touch.clientX,
+            clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
         });
-        
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
+            clientX: touch.clientX,
+            clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
         });
-        
         canvas.addEventListener('touchend', (e) => {
             e.preventDefault();
             const mouseEvent = new MouseEvent('mouseup', {});
             canvas.dispatchEvent(mouseEvent);
         });
-    }
+        }
 
     getMousePos(canvas, e) {
         const rect = canvas.getBoundingClientRect();

@@ -535,6 +535,20 @@ class QuizBuilder {
                     quizData.content.shapes = window.chemistryDrawingTool.shapes;
                 }
                 break;
+            case 'interaktiivne':
+                // For an interactive picture, collect the uploaded image's data URL.
+                const imgElem = document.getElementById("uploaded-image");
+                if (imgElem) {
+                    quizData.content.imageData = imgElem.src;
+                }
+                break;
+            case 'joonistamine':
+                // For drawings, obtain the canvas data URL (assuming canvas with id "drawing-canvas").
+                const drawingCanvas = document.getElementById("drawing-canvas");
+                if (drawingCanvas) {
+                    quizData.content.drawingData = drawingCanvas.toDataURL();
+                }
+                break;    
             }
         // Collect question-specific data.
         const questionTextElem = document.getElementById("question-text");

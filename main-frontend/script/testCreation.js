@@ -490,85 +490,118 @@ class QuizBuilder {
         });
     }
 
-    // Lisa need konstantid oma faili algusesse
-const ANSWER_TYPES = {
-    "uks-oige": 0,        // one_correct
-    "mitu-oiget": 1,      // many_correct  
-    "luhike-tekst": 2,    // text
-    "pikk-tekst": 2,      // text (sama kui lühike tekst)
-    "matrix": 3,          // kui sul on matrix tüüp
-    "interaktiivne": 4,   // picture
-    "keemia_tasakaalustamine": 5, // chemistry
-    "keemia_ahelad": 5,   // chemistry (sama kui tasakaalustamine)
-    "joonistamine": 6     // drawing
-};
-
-// Kui sul on eraldi quiz tüübid (test vs küsimuse tüüp), siis võib-olla nii:
-const QUIZ_TYPES = {
-    "standard": 0,  // või mis iganes su quiz tüübid on
-    "timed": 1,
-    // jne...
-};
-
-// Parandatud meetod
-getAnswerTypeCode(answerType) {
-    return ANSWER_TYPES[answerType] !== undefined ? ANSWER_TYPES[answerType] : 2; // default text
-}
-
-// Parandatud collectQuizData meetod osa
-collectQuizData() {
-    const quizData = {
-        name: "Temporary Test Name",
-        descripion: "Temporary Description", // Võiksid selle typo ka parandada -> "description"
-        start: new Date().toISOString(),
-        end: new Date().toISOString(),
-        timelimit: 60,
+    collectQuizData() {
+        // Build the quiz payload as expected by the API
+        const quizData = {
+        name: "Temporary Test Name",              // Replace with actual test title if available
+        descripion: "Temporary Description",        // Note the MD typo ("descripion")
+        start: new Date().toISOString(),             // In a real system, use a proper start date/time
+        end: new Date().toISOString(),               // In a real system, use a proper end date/time
+        timelimit: 60,                               // Can be dynamic if needed
         block: [
             {
-                blockNumber: 1,
-                blockQuestions: []
+            blockNumber: 1,
+            blockQuestions: []
             }
         ]
-    };
+        };
+        quizData.type = this.getCurrentQuizType();
+        quizData.content = {};
 
-    // Määra quiz type kui number, mitte string
-    const currentQuizType = this.getCurrentQuizType(); // tagastab string
-    quizData.type = QUIZ_TYPES[currentQuizType] || 0; // konverdi numbriks
+        const previewContent = document.getElementById('preview-content');
+        if (!previewContent) return quizData;
 
-    quizData.content = {};
+        // Collect data based on quiz type
+        switch (quizData.type) {
+            case 'luhike-tekst':
+                quizData.content.answer = previewContent.querySelector('input')?.value || '';
+                break;
+            case 'pikk-tekst':
+                quizData.content.answer = previewContent.querySelector('textarea')?.value || '';
+                break;
+            case 'uks-oige':
+                quizData.content.options = this.collectSingleChoiceData();
+                break;
+            case 'mitu-oiget':
+                quizData.content.options = this.collectMultipleChoiceData();
+                break;
+            case 'keemia_tasakaalustamine':
+                quizData.content.equation = document.getElementById('chemistry-input-field')?.value || '';
+                break;
+            case 'keemia_ahelad':
+                // Collect drawing data
+                const canvas = document.getElementById('chemistry-drawing-canvas');
+                if (canvas && window.chemistryDrawingTool) {
+                    quizData.content.shapes = window.chemistryDrawingTool.shapes;
+                }
+                break;
+            case 'interaktiivne':
+                // For an interactive picture, collect the uploaded image's data URL.
+                const imgElem = document.getElementById("uploaded-image");
+                if (imgElem) {
+                    quizData.content.imageData = imgElem.src;
+                }
+                break;
+            case 'joonistamine':
+                // For drawings, obtain the canvas data URL (assuming canvas with id "drawing-canvas").
+                const drawingCanvas = document.getElementById("drawing-canvas");
+                if (drawingCanvas) {
+                    quizData.content.drawingData = drawingCanvas.toDataURL();
+                }
+                break;    
+            }
+        // Collect question-specific data.
+        const questionTextElem = document.getElementById("question-text");
+        const questionText = questionTextElem ? questionTextElem.value.trim() : "";
+        if (!questionText) {
+        alert("Palun sisesta küsimuse tekst!");
+        return null;
+        }
+        // Points for this question (defaulting to 20 if none provided)
+        const pointsElem = document.getElementById("points-input");
+        const points = pointsElem ? pointsElem.value.trim() : "20";
 
-    const previewContent = document.getElementById('preview-content');
-    if (!previewContent) return quizData;
-
-    // Su olemasolev switch loogika jääb samaks...
-    const currentType = this.getCurrentQuizType(); // string variant switch jaoks
-    switch (currentType) {
-        case 'luhike-tekst':
-            quizData.content.answer = previewContent.querySelector('input')?.value || '';
-            break;
-        // ... ülejäänud case'id jäävad samaks
-    }
-
-    // ... ülejäänud kood ...
-
-    // Siin on peamine muudatus:
-    const dropdown = document.getElementById("dropdown-selected");
-    const answerType = dropdown && dropdown.querySelector("span")
+        // Determine answer type from the dropdown.
+        const dropdown = document.getElementById("dropdown-selected");
+        const answerType = dropdown && dropdown.querySelector("span")
         ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
         : "luhike-tekst";
 
-    // ... answer variables kogumine ...
+        // Gather answer variables based on answer type.
+        let answerVariables = [];
+        if (answerType === "uks-oige") {
+        const optionRows = document.querySelectorAll("#single-options .option-row");
+        optionRows.forEach(row => {
+            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+            const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
+            answerVariables.push({ answer: optText, correct: isCorrect });
+        });
+        } else if (answerType === "mitu-oiget") {
+        const optionRows = document.querySelectorAll("#multiple-options .option-row");
+        optionRows.forEach(row => {
+            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+            const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
+            answerVariables.push({ answer: optText, correct: isCorrect });
+        });
+        } else {
+        // For text or similar answer types, attempt to get the answer from preview input/textarea.
+        const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
+        if (answerInput) {
+            answerVariables.push({ answer: answerInput.value.trim(), correct: true });
+        }
+        }
 
-    // Lisa küsimus - SIIN kasuta numbrit!
-    quizData.block[0].blockQuestions.push({
+        // Add the question to the quiz block.
+        quizData.block[0].blockQuestions.push({
         question: questionText,
         points: parseInt(points),
-        answerType: this.getAnswerTypeCode(answerType), // Tagastab numbri!
+        answerType: this.getAnswerTypeCode(answerType),
         answerVariables: answerVariables
-    });
+        });
 
-    return quizData;
-}
+        return quizData;
+    }
+
     getCurrentQuizType() {
         const dropdown = document.getElementById('dropdown-selected');
         return dropdown?.querySelector('span')?.dataset?.value || 'luhike-tekst';

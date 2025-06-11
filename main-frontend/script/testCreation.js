@@ -1459,7 +1459,7 @@ addMatrixColumn(type) {
     
     // Add header before the actions column
     const newHeader = this.createElement('th');
-    newHeader.style.cssText = 'border: 1px solid #8a1929; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+    newHeader.style.cssText = 'border: 1px solid rgb(218, 214, 214); padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
     
     const input = this.createElement('input');
     input.type = 'text';

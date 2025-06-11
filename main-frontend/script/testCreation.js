@@ -1587,24 +1587,66 @@ addMatrixColumn(type) {
     initializeDrawing() {
         const canvas = document.getElementById('drawing-canvas');
         if (!canvas) return;
-        
         const ctx = canvas.getContext('2d');
+        
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
+        let mode = 'draw'; // Modes: "draw" or "erase"
+        const eraserSize = 20; // You can base this off your brush-size input if desired
         
-        const startDrawing = (e) => {
-            isDrawing = true;
-            [lastX, lastY] = this.getMousePos(canvas, e);
+        // Create and insert a simple eraser toggle button into your existing controls.
+        const colorInput = document.getElementById('drawing-color');
+        const brushSize = document.getElementById('brush-size');
+        const controlsContainer = canvas.previousElementSibling;
+        
+        const eraserBtn = document.createElement('button');
+        eraserBtn.textContent = 'Kustutama';
+        eraserBtn.style.margin = '5px';
+        eraserBtn.style.padding = '8px 12px';
+        eraserBtn.style.background = '#9e9e9e';
+        eraserBtn.style.color = 'white';
+        eraserBtn.style.border = 'none';
+        eraserBtn.style.borderRadius = '4px';
+        eraserBtn.style.cursor = 'pointer';
+        
+        eraserBtn.addEventListener('click', () => {
+            // Toggle mode between drawing and erasing.
+            mode = mode === 'draw' ? 'erase' : 'draw';
+            eraserBtn.textContent = mode === 'erase' ? 'Joonistama' : 'Kustutama';
+        });
+        
+        // Append the eraser button to your drawing controls.
+        if (controlsContainer) {
+            controlsContainer.appendChild(eraserBtn);
+        }
+        
+        // Helper to get mouse position relative to the canvas.
+        const getMousePos = (canvas, e) => {
+            const rect = canvas.getBoundingClientRect();
+            return [e.clientX - rect.left, e.clientY - rect.top];
         };
         
+        // Start drawing (or erasing)
+        const startDrawing = (e) => {
+            isDrawing = true;
+            [lastX, lastY] = getMousePos(canvas, e);
+        };
+        
+        // Stop drawing when the mouse is released or leaves the canvas.
+        const stopDrawing = () => {
+            isDrawing = false;
+        };
+        
+        // The drawing (or erasing) function.
         const draw = (e) => {
             if (!isDrawing) return;
+            const [currentX, currentY] = getMousePos(canvas, e);
             
-            const [currentX, currentY] = this.getMousePos(canvas, e);
-            const color = document.getElementById('drawing-color')?.value || '#000000';
-            const size = document.getElementById('brush-size')?.value || 3;
-            
+            if (mode === 'draw') {
+            // Drawing mode: draw a line from last position to current
+            const color = colorInput ? colorInput.value : '#000000';
+            const size = brushSize ? brushSize.value : 3;
             ctx.strokeStyle = color;
             ctx.lineWidth = size;
             ctx.lineCap = 'round';
@@ -1614,46 +1656,47 @@ addMatrixColumn(type) {
             ctx.moveTo(lastX, lastY);
             ctx.lineTo(currentX, currentY);
             ctx.stroke();
+            } else if (mode === 'erase') {
+            // Eraser mode: clear a rectangle around the current position
+            // (You can adjust eraserSize as needed)
+            ctx.clearRect(currentX - eraserSize / 2, currentY - eraserSize / 2, eraserSize, eraserSize);
+            }
             
             [lastX, lastY] = [currentX, currentY];
         };
         
-        const stopDrawing = () => {
-            isDrawing = false;
-        };
-        
+        // Attach mouse events to the canvas.
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
         
-        // Touch events for mobile
+        // Also add simple touch events for mobile devices.
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            // Convert touch to a synthetic mouse event
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
+            clientX: touch.clientX,
+            clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
         });
-        
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
+            clientX: touch.clientX,
+            clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
         });
-        
         canvas.addEventListener('touchend', (e) => {
             e.preventDefault();
             const mouseEvent = new MouseEvent('mouseup', {});
             canvas.dispatchEvent(mouseEvent);
         });
-    }
+        }
 
     getMousePos(canvas, e) {
         const rect = canvas.getBoundingClientRect();

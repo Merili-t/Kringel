@@ -557,9 +557,9 @@ class QuizBuilder {
         alert("Palun sisesta küsimuse tekst!");
         return null;
         }
-        // Points for this question (defaulting to 0 if none provided)
+        // Points for this question (defaulting to 20 if none provided)
         const pointsElem = document.getElementById("points-input");
-        const points = pointsElem ? pointsElem.value.trim() : "0";
+        const points = pointsElem ? pointsElem.value.trim() : "20";
 
         // Determine answer type from the dropdown.
         const dropdown = document.getElementById("dropdown-selected");

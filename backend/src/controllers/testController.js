@@ -1,25 +1,72 @@
 import { eq } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
-import db from '../database/drizzle.js';
-import test from '../database/models/test.js';
 
-export const getTests = async res => {
+import * as zod from '../database/zod.js';
+import db from '../database/drizzle.js';
+import testModel from '../database/models/test.js';
+
+export const upload = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.testUploadSchema.safeParse(req.body);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    console.log(req.body);
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const { name, description, start, end, timeLimit } = result.data;
+  const testId = uuidv7();
+  const userId = serverUserData.userId;
+
   try {
-    const testId = req.params.id;
-    const result = await db.select().from(test).where(eq(test.id, testId));
-    return res.json(result);
+    await db
+      .insert(testModel)
+      .values({
+        id: testId,
+        userId: userId,
+        name,
+        description,
+        start: new Date(start),
+        end: new Date(end),
+        timeLimit,
+      });
+
+    return res.status(200).json({ message: 'Test created', id: testId });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Failed to create test' });
   }
 };
-export const postTests = async (req, res) => {
+
+export const getByTestId = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const testId = result.data;
+
   try {
-    const { name, description, timelimit, start, end, blockId } = req.body;
-    const id = uuidv7();
-    await db.insert(test).values({ id, name, description, timelimit, start, end, blockId });
-    return res.status(201).json({ message: 'Test created', id });
+    const test = await db.select().from(testModel).where(eq(testModel.id, testId));
+
+    return res.status(200).json(test[0]);
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Failed to get test' });
+  }
+};
+
+export const getTests = async (req, res) => {
+  try {
+    const tests = await db.select().from(testModel);
+
+    return res.status(200).json({ tests });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to get tests' });
   }
 };
 export const deleteTests = async (req, res) => {

@@ -1,28 +1,23 @@
 # API Documentation
 
-## /user
+## /auth
 
-### POST /user/register
+### POST /auth/register
 
 Registers a new user or guest.
 
 #### Request Body (JSON)
 
-For regular users:
+For teacher:
 
 ```json
-{
-  "email": "user@example.com",
-  "username": "myuser",
-  "password": "securePassword123",
-  "userType": "student"
-}
+{ "email": "user@example.com", "password": "1234", "userType": "teacher" }
 ```
 
 For guests:
 
 ```json
-{ "username": "guest123", "userType": "guest" }
+{ "email": "guest@kringel.ee", "name": "guest1, guest2", "userType": "guest" }
 ```
 
 #### Responses
@@ -33,14 +28,14 @@ For guests:
 
 ---
 
-### POST /user/login
+### POST /auth/login
 
-Logs in a user using email and password.
+Logs in a teacher using email and password.
 
 #### Request Body (JSON)
 
 ```json
-{ "email": "user@example.com", "password": "securePassword123" }
+{ "email": "teacher@kringel.ee", "password": "1234" }
 ```
 
 #### Responses
@@ -49,24 +44,17 @@ Logs in a user using email and password.
 - `400 Bad Request`: Missing fields.
 - `401 Unauthorized`: Wrong email or password.
 
-### GET /user/\:id
+### GET /auth/logout
 
-Returns public information for a user.
+Logs user out.
 
-#### URL Parameters
+#### Responses
 
-- `:id` — UUID of the user
+- `200 OK`: Logged in, JWT token set in cookie.
+- `400 Bad Request`: Missing fields.
+- `401 Unauthorized`: Wrong email or password.
 
-#### Response
-
-```json
-{ "id": "uuid-v7-string", "email": "user@example.com", "username": "myuser", "userType": "student" }
-```
-
-- `200 OK`: User found.
-- `404 Not Found`: No user with given ID.
-
----
+## /test
 
 ## POST /test/upload
 
@@ -75,68 +63,200 @@ Returns public information for a user.
 ```json
 {
   "name": "test",
-  "descripion": "Fun test",
+  "description": "Fun test",
   "start": "2025-06-08 13:24:19",
   "end": "2025-06-08 13:24:19",
-  "timelimit": 60,
-  "block": [
+  "timeLimit": 60
+}
+```
+
+#### Response
+
+```json
+{ "message": "Test created", "id": "uuid-v7-string" }
+```
+
+## GET /test/:id
+
+Return test with specific id.
+
+#### Response
+
+```json
+{
+  "id": "uuid-v7-string",
+  "userId": "uuid-v7-string",
+  "name": "test",
+  "description": "Fun test",
+  "start": "2025-06-08T13:24:19.000Z",
+  "end": "2025-06-08T13:24:19.000Z",
+  "timeLimit": 60,
+  "createdAt": "2025-06-11T09:26:44.000Z",
+  "updatedAt": "2025-06-11T09:26:44.000Z"
+}
+```
+
+#### URL parameters
+
+- `:id` — UUID of the test
+
+## GET /test/tests
+
+Returns all tests.
+
+#### Response
+
+```json
+{
+  "tests": [
     {
+      "id": "uuid-v7-string",
+      "userId": "uuid-v7-string",
+      "name": "test",
+      "description": "Fun test",
+      "start": "2025-06-08T13:24:19.000Z",
+      "end": "2025-06-08T13:24:19.000Z",
+      "timeLimit": 60,
+      "createdAt": "2025-06-11T09:26:44.000Z",
+      "updatedAt": "2025-06-11T09:26:44.000Z"
+    },
+    {
+      "id": "uuid-v7-string",
+      "userId": "uuid-v7-string",
+      "name": "test",
+      "description": "Fun test",
+      "start": "2025-06-08T13:24:19.000Z",
+      "end": "2025-06-08T13:24:19.000Z",
+      "timeLimit": 60,
+      "createdAt": "2025-06-11T09:55:35.000Z",
+      "updatedAt": "2025-06-11T09:55:35.000Z"
+    }
+  ]
+}
+```
+
+## /block
+
+## POST /block/upload
+
+#### Request Body (JSON)
+
+```json
+{ "testId": "uuid-v7-string", "blockNumber": 1 }
+```
+
+#### Response
+
+```json
+{ "message": "Block created", "id": "uuid-v7-string" }
+```
+
+## GET /block/test/:testId
+
+Get all blocks for a test.
+
+#### Response
+
+```json
+{
+  "blocks": [
+    {
+      "id": "uuid-v7-string",
+      "testId": "uuid-v7-string",
       "blockNumber": 1,
-      "blockQuestions": [
-        {
-          "question": "This is a hard question",
-          "points": 10,
-          "answerType": 0,
-          "answerVariables": [
-            { "correct": true, "answer": "This is the first option" },
-            { "correct": false, "answer": "This is the second option" }
-          ]
-        },
-        {
-          "question": "This is a easy question",
-          "points": 5,
-          "answerType": 1,
-          "answerVariables": [
-            { "correct": true, "answer": "This is the first option" },
-            { "correct": true, "answer": "This is the second option" },
-            { "correct": false, "answer": "This is the third option" }
-          ]
-        }
+      "createdAt": "2025-06-11T10:16:50.000Z",
+      "updatedAt": "2025-06-11T10:16:50.000Z"
+    }
+  ]
+}
+```
+
+#### URL parameters
+
+- `:testId` — UUID of the test you want to get the blocks for.
+
+## GET /block/:id
+
+Get a block with id.
+
+#### Response
+
+```json
+{
+  "id": "uuid-v7-string",
+  "testId": "uuid-v7-string",
+  "blockNumber": 1,
+  "createdAt": "2025-06-11T10:16:50.000Z",
+  "updatedAt": "2025-06-11T10:16:50.000Z"
+}
+```
+
+#### URL parameters
+
+- `:id` — UUID of the block.
+
+## /question
+
+## POST /question/upload
+
+#### Request Body (JSON)
+
+##### Regular question
+
+```json
+{
+  "blockId": "uuid-v7-string",
+  "question": "This is a hard question",
+  "points": 10,
+  "answerType": 0,
+  "orderNumber": 1,
+  "answerVariables": [
+    { "correct": true, "answer": "This is the first option" },
+    { "correct": false, "answer": "This is the second option" }
+  ]
+}
+```
+
+##### Matrix question
+
+```json
+{
+  "blockId": "uuid-v7-string",
+  "question": "This is a matrix question",
+  "points": 10,
+  "answerType": 3,
+  "orederNumber": 2,
+  "answerVariables": [
+    {
+      "blockId": "uuid-v7-string",
+      "question": "This is a hard question",
+      "points": 10,
+      "answerType": 0,
+      "orderNumber": 1,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": false, "answer": "This is the second option" }
       ]
     },
     {
-      "blockNumber": 2,
-      "blockQuestions": [
-        {
-          "question": "This is a matrix question",
-          "points": 10,
-          "answerType": 4,
-          "answerVariables": [
-            {
-              "question": "This is a matrix question question",
-              "points": 10,
-              "answerType": 0,
-              "answerVariables": [
-                { "correct": true, "answer": "This is the first option" },
-                { "correct": false, "answer": "This is the second option" }
-              ]
-            },
-            {
-              "question": "This is a matrix question question",
-              "points": 10,
-              "answerType": 1,
-              "answerVariables": [
-                { "correct": true, "answer": "This is the first option" },
-                { "correct": true, "answer": "This is the second option" },
-                { "correct": false, "answer": "This is the false option" }
-              ]
-            }
-          ]
-        }
+      "blockId": "uuid-v7-string",
+      "question": "This is a hard question",
+      "points": 10,
+      "answerType": 0,
+      "orderNumber": 1,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": false, "answer": "This is the second option" }
       ]
     }
   ]
 }
+```
+
+#### Response
+
+```json
+{ "message": "Question created", "id": "uuid-v7-string" }
 ```
 
 ##### Answer types:
@@ -149,9 +269,138 @@ Returns public information for a user.
   "matrix": 3,
   "picture": 4,
   "chemistry": 5,
-  "drawing": 6
+  "drawing": 6,
+  "calculator": 7
 }
 ```
+
+## GET /question/block/:blockId
+
+Get all questions that belong to block.
+
+#### Response
+
+##### Regular question
+
+```json
+{
+  "blockQuestions": [
+    {
+      "id": "uuid-v7-string",
+      "blockId": "uuid-v7-string",
+      "matrixId": null,
+      "type": 0,
+      "orderNumber": 1,
+      "description": "This is a hard question",
+      "points": 10,
+      "createdAt": "2025-06-11T11:02:48.000Z",
+      "updatedAt": "2025-06-11T11:02:48.000Z"
+    }
+  ]
+}
+```
+
+##### Matrix question
+
+```json
+{
+  "id": "uuid-v7-string",
+  "question": "This is a matrix question",
+  "points": 10,
+  "answerType": 4,
+  "answerVariables": [
+    {
+      "id": "uuid-v7-string",
+      "question": "This is a matrix question question",
+      "points": 10,
+      "answerType": 0,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": false, "answer": "This is the second option" }
+      ]
+    },
+    {
+      "id": "uuid-v7-string",
+      "question": "This is a matrix question question",
+      "points": 10,
+      "answerType": 1,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": true, "answer": "This is the second option" },
+        { "correct": false, "answer": "This is the false option" }
+      ]
+    }
+  ],
+  "blockId": "uuid-v7-string"
+}
+```
+
+#### URL parameters
+
+- `:blockId` — UUID of the block.
+
+## GET /question/:id
+
+Get question by id.
+
+#### Response
+
+##### Regular question
+
+```json
+{
+  "id": "uuid-v7-string",
+  "blockId": "uuid-v7-string",
+  "matrixId": null,
+  "type": 0,
+  "orderNumber": 1,
+  "description": "This is a hard question",
+  "points": 10,
+  "createdAt": "2025-06-11T11:02:48.000Z",
+  "updatedAt": "2025-06-11T11:02:48.000Z"
+}
+```
+
+##### Matrix question
+
+```json
+{
+  "id": "uuid-v7-string",
+  "question": "This is a matrix question",
+  "points": 10,
+  "answerType": 4,
+  "answerVariables": [
+    {
+      "id": "uuid-v7-string",
+      "question": "This is a matrix question question",
+      "points": 10,
+      "answerType": 0,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": false, "answer": "This is the second option" }
+      ]
+    },
+    {
+      "id": "uuid-v7-string",
+      "question": "This is a matrix question question",
+      "points": 10,
+      "answerType": 1,
+      "answerVariables": [
+        { "correct": true, "answer": "This is the first option" },
+        { "correct": true, "answer": "This is the second option" },
+        { "correct": false, "answer": "This is the false option" }
+      ]
+    }
+  ],
+  "blockId": "uuid-v7-string"
+}
+```
+
+#### URL parameters
+
+- `:id` — UUID of the question.
+
+## Other
 
 ## Cookies
 

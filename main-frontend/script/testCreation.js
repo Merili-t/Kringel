@@ -700,36 +700,36 @@ handleQuestionImageUpload(input) {
 }
 
     setupDropdown() {
-        const dropdown = document.getElementById('answer-type-dropdown');
+        const dropdown         = document.getElementById('answer-type-dropdown');
         const dropdownSelected = document.getElementById('dropdown-selected');
-        const dropdownOptions = document.getElementById('dropdown-options');
-        
+        const dropdownOptions  = document.getElementById('dropdown-options');
+
         if (!dropdown || !dropdownSelected || !dropdownOptions) return;
 
-        // Dropdown toggle
-        dropdownSelected.addEventListener('click', (e) => {
+        // Toggle the menu
+        dropdownSelected.addEventListener('click', e => {
             e.stopPropagation();
-            const options = document.getElementById('dropdown-options');
-            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+            dropdownOptions.style.display =
+            dropdownOptions.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Option selection
-        dropdownOptions.addEventListener('click', (e) => {
-            if (e.target.classList.contains('dropdown-option')) {
-                const value = e.target.getAttribute('data-value');
-                const text = e.target.textContent;
-                
-                dropdownSelected.querySelector('span').textContent = text;
-                dropdown.classList.remove('open');
-                
-                this.showPreview(value);
-            }
+        // Handle clicks *inside* the options panel
+        dropdownOptions.addEventListener('click', e => {
+            const opt = e.target;
+            if (!opt.classList.contains('dropdown-option')) return;
+
+            const value = opt.getAttribute('data-value');
+            const text  = opt.textContent;
+
+            dropdownSelected.querySelector('span').textContent = text;
+            dropdownOptions.style.display = 'none';
+            this.showPreview(value);
         });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
+        // close if you click outside
+        document.addEventListener('click', e => {
             if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('open');
+            dropdownOptions.style.display = 'none';
             }
         });
     }
@@ -747,45 +747,68 @@ handleQuestionImageUpload(input) {
     }
 
     showPreview(value) {
-        const previewSection = document.getElementById('preview-section');
-        const previewContent = document.getElementById('preview-content');
-        
+        const previewSection        = document.getElementById('preview-section');
+        const previewContent        = document.getElementById('preview-content');
+        const calculatorWrapper     = document.getElementById('calculator-wrapper');
+        const calculatorIframe      = document.getElementById('calculator-iframe');
+        const genericPreviewWrapper = document.getElementById('generic-preview-wrapper');
+
         if (!previewSection || !previewContent) return;
-
         previewSection.style.display = 'block';
-        previewContent.innerHTML = '';
-        
-        const renderers = {
-            'luhike-tekst': () => this.renderShortText(),
-            'pikk-tekst': () => this.renderLongText(),
-            'mitu-oiget': () => this.renderMultipleChoice(),
-            'uks-oige': () => this.renderSingleChoice(),
-            'maatriks-uks': () => this.renderMatrixSingle(),
-            'maatriks-mitu': () => this.renderMatrixMultiple(),
-            'joonistamine': () => this.renderDrawingCanvas(),
-            'interaktiivne': () => this.renderImageUpload(),
-            'keemia_tasakaalustamine': () => this.renderChemistryBalance(),
-            'keemia_ahelad': () => this.renderChemistryChains()
-        };
 
-        const renderer = renderers[value];
-        if (renderer) {
-            renderer();
-            
-            // Add save button after rendering
-            setTimeout(() => {
-                const saveButton = this.createAddButton('Salvesta Quiz');
-                saveButton.style.background = '#8a1929';
-                saveButton.addEventListener('click', () => {
-                    const quizData = this.collectQuizData();
-                    this.saveQuiz(quizData);
-                });
-                previewContent.appendChild(saveButton);
-            }, 100);
-        } else {
-            previewContent.innerHTML = '<p>Vali vastuse tüüp, et näha eelvaadet.</p>';
+        // Completely wipe out any old preview
+        previewContent.innerHTML = `
+            <div id="calculator-wrapper" style="display:none; margin-top:1rem;">
+            <iframe id="calculator-iframe" src="" width="100%" height="600"
+                    style="border:1px solid #ccc;"></iframe>
+            <p><strong>Saadetud vastus:</strong>
+                <span id="calculator-answer-preview"></span></p>
+            </div>
+            <div id="generic-preview-wrapper" style="display:none;"></div>
+        `;
+
+        // Re-grab the wrappers (they’ve just been re-inserted)
+        const calcWrap   = document.getElementById('calculator-wrapper');
+        const calcFrame  = document.getElementById('calculator-iframe');
+        const genWrap    = document.getElementById('generic-preview-wrapper');
+
+        // Calc iframe
+        calcFrame.src = ''; // Reset the src to avoid stale content
+        if (value === 'latex-kalkulaator') {
+            calcWrap.style.display = 'block';
+            calcFrame.src          = 'calculator.html';
         }
-    }
+        // Otherwise show the generic wrapper and call your renderer
+        else {
+            genWrap.style.display = 'block';
+            const renderers = {
+            'luhike-tekst':            () => this.renderShortText(),
+            'pikk-tekst':              () => this.renderLongText(),
+            'uks-oige':                () => this.renderSingleChoice(),
+            'mitu-oiget':              () => this.renderMultipleChoice(),
+            'maatriks-uks':            () => this.renderMatrixSingle(),
+            'maatriks-mitu':           () => this.renderMatrixMultiple(),
+            'joonistamine':            () => this.renderDrawingCanvas(),
+            'interaktiivne':           () => this.renderImageUpload(),
+            'keemia_tasakaalustamine': () => this.renderChemistryBalance(),
+            'keemia_ahelad':           () => this.renderChemistryChains()
+            };
+            if (renderers[value]) {
+            renderers[value]();
+            } else {
+            genWrap.innerHTML = `<p>${value} eelvaade pole veel seadistatud.</p>`;
+            }
+        }
+
+        // 5) Finally append your save‐button once
+        const saveButton = this.createAddButton('Salvesta Quiz');
+        saveButton.style.background = '#8a1929';
+        saveButton.addEventListener('click', () => {
+            const quizData = this.collectQuizData();
+            this.saveQuiz(quizData);
+        });
+        previewContent.appendChild(saveButton);
+        }
 
     renderSingleChoice() {
         const container = this.createContainer('Ühe õige vastuse valik:');

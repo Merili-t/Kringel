@@ -1,4 +1,4 @@
-/* Reset ja baas */
+
 * {
     margin: 0;
     padding: 0;
@@ -434,4 +434,32 @@ textarea::placeholder {
     color: #333;
 }
 
+.dropdown-options {
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
 
+.dropdown.open .dropdown-options.show {
+  display: block;
+}
+
+/* give your preview‐pane a stacking context */
+#preview-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* push the calculator iframe above everything else */
+#calculator-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#calculator-iframe {
+  pointer-events: auto;   /* allow clicks */
+  position: relative;
+  z-index: 3;             /* higher than save-button, overlays, etc */
+}

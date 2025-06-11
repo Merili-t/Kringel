@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testi koostamine</title>
-    <link rel="stylesheet" href="../main-frontend/style/testCreation.css">
+    <link rel="stylesheet" href="../style/testCreation.css">
 </head>
 <body>
     <div class="container">
@@ -74,6 +74,8 @@
                             <div class="dropdown-option" data-value="interaktiivne">Interaktiivne pilt</div>
                             <div class="dropdown-option" data-value="keemia_tasakaalustamine">Keemia tasakaalustamine</div>
                             <div class="dropdown-option" data-value="keemia_ahelad">Keemia ahelad</div>
+                            <div class="dropdown-option" data-value="latex-kalkulaator">Matemaatiline kalkulaator</div>
+
                         </div>
                     </div>
                 </div>
@@ -81,6 +83,11 @@
                 <div class="preview-section" id="preview-section" style="display: none;">
                     <h3>Eelvaade</h3>
                     <div class="preview-content" id="preview-content">
+                        <div id="calculator-wrapper" style="display:none; margin-top: 1rem;">
+                            <iframe id="calculator-iframe" src="" width="100%" height="600" style="border:1px solid #ccc;"></iframe>
+                            <p><strong>Saadetud vastus:</strong> <span id="calculator-answer-preview"></span></p>
+                        </div>
+                        <div id="generic-preview-wrapper" style="display:none;"></div>
                     </div>
                 </div>
             </div>
@@ -104,13 +111,6 @@
     </div>
 
     <script src="../script/testCreation.js"></script>
-    <script>
-    document.getElementById('add-question').addEventListener('click', function() {
-        document.getElementById('add-popup').style.display = 'block';
-    });
-    document.getElementById('popup-close').addEventListener('click', function() {
-        document.getElementById('add-popup').style.display = 'none';
-    });
-    </script>
+
 </body>
 </html>

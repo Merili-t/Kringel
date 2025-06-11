@@ -1,0 +1,23 @@
+<div id="juhend">
+    <p>NB! Kalkulaatoris võib esineda vigu!</p>
+     <h3>Kasutusjuhend</h3>
+      <ul>
+        <li>Sisesta valem ülalolevasse lahtrisse.</li>
+        <li>Valemi koostamiseks võid kasutada nii kalkulaatori nuppe kui ka klaviatuuri (numbrid, tähed, +, –, = jne). Korrutusmärk võib erineda visuaalselt kalkulaatorilt/klaviatuurilt sisestades, aga arvutab samamoodi!</li>
+        <li>Komakohtade puhul kasuta punkti, näiteks <code>2.5</code> (Koma ei arvuta!!)</li>
+        <li>Vajuta <b>"="</b>, et arvutada ja näha lõppvastust (kasulik näiteks kontrollimiseks enne esitust).</li>
+        <li>Kui sisestatud valemis on ainult tähed või füüsikalised sümbolid, ei pruugi arvutus õnnestuda – need on mõeldud visuaalseks esituseks.</li>
+        <li>Soovi korral võid kirjutada ka lihtsalt <code>=</code> klaviatuurilt, et näidata valemit ilma arvutamata.</li>
+
+        <li>Vajuta <b>"Valemimärgid"</b>, et näha lisasümboleid (sh astmed ja indeksid).</li>
+        <li>Teisel lehel on olemas nii üla- kui allindeks ning mõlemad koos. Esimene indeks on mõeldud astendamiseks (nt <code>xʸ</code>), teine allindeksiteks (nt <code>aₙ</code>).</li>
+        <li>Mõlema indeksi lisamine eraldi võib mõnikord neid paigast nihutada – kasuta pigem spetsiaalset nuppu mõlema jaoks.</li>
+
+        <li><b>"xʸ"</b> (astendamine) on olemas mõlemal lehel, et seda oleks alati mugav kasutada.</li>
+        <li>Lõpmatuse märgi saamiseks kirjuta järjest kaks väikest <b>"o"</b> tähte (<code>oo</code> → ∞).</li>
+
+        <li><b>"AC"</b> kustutab kogu sisendi, <b>"←"</b> kustutab viimase märgi.</li>
+        <li>NB! Mõnel juhul võib <b>"←"</b> vajutamisel mängida heli – see on teadaolev viga, mida pole veel eemaldatud.</li>
+      </ul>
+
+    </div>

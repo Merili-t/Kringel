@@ -1,4 +1,4 @@
-import { LatexCalculator } from "./LatexCalculator.js";
+import { LatexCalculator } from "/LatexCalculator.js";
 export class VisualCalculator {
     constructor(inputId, resultId) {
         const mathfield = document.getElementById(inputId);

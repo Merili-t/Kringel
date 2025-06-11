@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("si", $hashedPassword, $userId);
 
     if ($stmt->execute()) {
-      header("Location: ../login/login.php");
+      header("Location: ../php/login.php");
       exit();
     } else {
       echo "Viga parooli uuendamisel: " . $stmt->error;

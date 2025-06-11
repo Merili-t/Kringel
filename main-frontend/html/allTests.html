@@ -1,13 +1,14 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Kõik testid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href=
         "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
         rel="stylesheet">
-    <link rel="stylesheet" href="allTests.css">
+    <link rel="stylesheet" href="../style/allTests.css">
     <link rel="stylesheet" href="../style/popups.css">
     <link rel="stylesheet" href="../style/buttons.css">
     <link rel="stylesheet" href="../style/main.css">
@@ -20,19 +21,19 @@
             <img src="../images/logoTransparent.png" alt="logo KRINGEL" class="logo">
           </div>
           <br>
-          <button class="create-test-btn poppins-semibold nav-btn" data-target="../detailsTest/details.html">
+          <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
             TESTI KOOSTAMINE
           </button>
           <br>
-          <button class="startpage-btn poppins-semibold nav-btn" data-target="../allTests/allTests.html"> 
+          <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html"> 
             AVALEHELE
           </button>
           <br>
-          <button class="guide-btn poppins-semibold nav-btn" data-target="../teacherGuide/guide.html">
+          <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
             JUHEND
           </button>
           <br>
-          <button class="contact-btn poppins-semibold nav-btn" data-target="../teacherContacts/contacts.html">
+          <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">
             KONTAKTANDMED
           </button>
         </div>
@@ -56,14 +57,12 @@
               <img src="../images/testIcon.png" alt="computer quiz icon" class="test-icon">
               <div class="questions poppins-regular">5 küsimust</div> <!-- see mitu küsimust päriselt tuleb andmebaasist -->
             </div>
-            <div class="text-icon-container">
+            <div style="cursor: pointer;" class="text-icon-container nav-btn" data-target="testAnswers.html">
               <img src="../images/keyIcon.png" alt="key icon" class="test-icon">
-              <div class="answers poppins-regular nav-btn" data-target="">Vastused</div> <!-- VAJA LISADA DATA TARGET ÜHE TESTI VASTUSED VAADE -->
+              <div class="answers poppins-regular">Vastused</div>
             </div>
-            <div class="text-icon-container">
-              <button style="all: unset; cursor: pointer;" data-popup="kustuta">
-                <img src="../images/trashIcon.png" alt="trash icon" class="test-icon">
-              </button>
+            <div style="cursor: pointer;" class="text-icon-container" data-popup="delete">
+              <img src="../images/trashIcon.png" alt="trash icon" class="test-icon">
               <div class="delete-test poppins-regular">Kustuta test</div>
             </div>
           </div>
@@ -71,11 +70,11 @@
 
       </div>
     </div>
-    <script src="../buttons.js"></script>
+    <script src="../script/buttons.js"></script>
     <script src="../popups/popupHelper.js" defer></script>
     <script src="../popups/logout.js" defer></script>
-    <script src="../popups/kustuta.js" defer></script>
-
+    <script src="../popups/delete.js" defer></script>
+    <script src="./script/allTests.js"></script>
 
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">

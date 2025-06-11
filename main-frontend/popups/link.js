@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('[data-popup="link"]').forEach(button => {
     button.addEventListener("click", () => {
-      fetch("popups.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "type=link&test_id=123"
-      })
-        .then(res => res.text())
-        .then(link => {
-          navigator.clipboard.writeText(link);
+      const link = window.location.origin + "/index.html";
+      
+      navigator.clipboard.writeText(link)
+        .then(() => {
           showPopup("Link kopeeritud", link, [
-            { text: "Tagasi", action: () => triggerPopup("jagamine") }
+            { text: "Tagasi", action: () => triggerPopup("shareTest") }
           ]);
+        })
+        .catch(err => {
+          console.error("Clipboard error:", err);
+          alert("Linki ei õnnestunud kopeerida.");
         });
     });
   });

@@ -4,71 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juhend</title>
-  <link rel="stylesheet" href="contactsHomepage.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href=
+      "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
+      rel="stylesheet">
+  <link rel="stylesheet" href="../style/contactsHomepage.css" />
   <link rel="stylesheet" href="../style/buttons.css" />
+  <link rel="stylesheet" href="../style/contacts.css">
+  <link rel="stylesheet" href="../style/main.css" />
 </head>
 <body>
 
   <!-- HEADER JA NAV -->
   <header class="header">
     <nav class="nav">
-      <a href="../tutorial/juhend.html" class="nav-link">Juhend</a>
-      <a href="#" class="nav-link">Kontakt</a>
+      <a href="tutorialHome.html" class="nav-link poppins-medium">Juhend</a>
+      <a href="#" class="nav-link poppins-medium">Kontakt</a>
     </nav>
   </header>
 
   <div class="banner">
-    <a href="../homepage/homepage.html">
+    <a href="../index.html">
         <img src="../images/banner.png" alt="Kringel Banner" class="banner-img">
     </a>
   </div>
 
   <!-- PÕHISISU -->
   <main>
-    <h1>Kontaktandmed</h1>
+    <h1 class="poppins-bold">Kontaktandmed</h1>
 
-    <div class="accordion">
-      <div class="accordion-body">
+    <div class="contacts-section">
+          <div class="contacts-header">
+            <h3 class="poppins-bold">Süsteemi probleemide ja küsimuste korral:</h3>
+          </div>
+          <div class="contacts-content poppins-regular">KONTAKT: admin@gmail.com</div>
+          <div class="contacts-content poppins-regular">TELEFON: +372 XXXX XXXX</div>
 
-        <h2>Süsteemi probleemide ja küsimuste korral</h2>
-        <p>KONTAKT: admin@gmail.com</p>
-        <p>TEL: xxxxxxxx</p>
-
-        <h2>Küsimused testi kohta</h2>
-        <p>KONTAKT: admin@gmail.com</p>
-        <p>TEL: xxxxxxxx</p>
-
-        <!-- KONTAKTIVORM -->
+          <div class="contacts-header">
+            <h3 class="poppins-bold">Koostöösoovide ja äripäringute korral:</h3>
+          </div>
+          <div class="contacts-content poppins-regular">KONTAKT: teaduskook@tlu.ee</div>
+          <div class="contacts-content poppins-regular">TELEFON: +372 XXXX XXXX</div>
+        </div>
+        
         <div class="contacts-section">
           <div class="contacts-header">
             <h3 class="poppins-bold">Kirjuta meile!</h3>
           </div>
+            <form action="../script/helpForm.js" method="POST"> 
+              <label class="form-title poppins-semibold">
+                Pealkiri:
+                <input type="text" name="title" placeholder="Siseta sõnumi pealkiri..." required>
+              </label><br><br>
 
-          <form action="helpForm.php" method="POST"> 
-            <label class="form-title poppins-semibold">
-              Pealkiri:
-              <input type="text" name="title" placeholder="Sisesta sõnumi pealkiri..." required>
-            </label><br><br>
+              <label class="form-content poppins-semibold">
+                Sõnum:
+                <textarea name="content" placeholder="Sisesta sõnumi sisu..." required></textarea>
+              </label><br><br>
 
-            <label class="form-content poppins-semibold">
-              Sõnum:
-              <textarea name="content" placeholder="Sisesta sõnumi sisu..." required></textarea>
-            </label><br><br>
-
-            <label class="form-user-email poppins-semibold">
-              Sinu e-mail:
-              <input type="email" name="email" placeholder="Sisesta enda email..." required>
-            </label><br><br>
-
-            <!-- CAPTCHA võimalik tulevikus -->
-            <button class="form-btn poppins-semibold" type="submit">SAADA</button>
-          </form>
+              <label class="form-user-email poppins-semibold">
+                Sinu e-mail:
+                <input type="email" name="email" placeholder="Sisesta enda email..." required>
+              </label><br><br>
+                <!-- lisada CAPTCHA? -->
+              <button class="form-btn poppins-semibold" type="submit">SAADA</button>
+            </form>
         </div>
-
-      </div>
-    </div>
   </main>
 
-  <script src="kontakt.js"></script>
 </body>
 </html>

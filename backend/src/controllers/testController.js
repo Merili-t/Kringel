@@ -69,3 +69,15 @@ export const getTests = async (req, res) => {
     return res.status(500).json({ error: 'Failed to get tests' });
   }
 };
+export const deleteTests = async (req, res) => {
+  try{
+    const testId = req.params.id;
+    const deletedCount = await db.delete(test).where(eq(test.id, testId));
+    if (deletedCount === 0){
+      return res.status(404).json({message: 'Test not found'});
+    }
+    return res.status(200).json({message: 'Test deleted'});
+  }catch (err) {
+    return res.status(500).json({error: err.message});
+  }
+};

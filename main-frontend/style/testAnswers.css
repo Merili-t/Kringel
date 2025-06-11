@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.logo-container {
+  margin: 2rem auto 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 150px;
+  height: auto;
+  display: block;
+}
+
+.res-btn {
+  font-size: 16px;
+  width: 13.375rem;
+  height: 3.125rem;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 4px 12px rgba(184, 20, 52, 0.5);
+  border-radius: 50px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  transition: all 0.3s ease;
+}
+
+.res-btn {
+  background-color: #fff;
+  color: #710A14;
+}
+
+.res-btn:hover {
+  background-color: #F6E6E6;
+}
+
+.main {
+  margin-left: 18.775rem;
+  padding: 0px 10px;
+  margin-top: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.logout-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  margin-right: 3rem;
+}
+
+h1 {
+  margin-top: 2rem;
+  margin-left: 3rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.infoContainer {
+  margin-left: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 2rem;
+  background-color: #fff5f5; 
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 16px;
+}
+
+.details {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 3rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 16px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+.questions-icon {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>');
+}
+
+.date-icon {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>');
+}
+
+.participants-icon {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V16h2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5H4z"/></svg>');
+}
+
+.res-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  padding: 0px 3rem;
+  margin-bottom: 3rem;
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background-color: #f5f5f5;
+}
+
+table {
+  margin: 2rem 3rem;
+  width: calc(100% - 6rem);
+  background-color: #fff; /* Table background now white */
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table header with white background */
+thead {
+  background-color: #fff;
+  color: #666;
+}
+
+th, td {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+/* Hover state remains gray */
+tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.del-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.pdf-download {
+  margin: 2rem 3rem;
+  text-align: left;
+}
+
+.pdf-link {
+  color: #B81434;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.pdf-link:hover {
+  text-decoration: underline;
+}
+
+/* Team checkbox styling */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #B81434;
+}
+
+/* New style for a wider "TAGASI VASTUSTE JUURDE" button */
+.wider-btn {
+  width: 16rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .menu {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+  }
+  .main {
+    margin-left: 0;
+  }
+  .details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  table {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  th, td {
+    padding: 0.8rem;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+  .infoContainer {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .logout-btn-container {
+    margin-right: 1rem;
+  }
+  .res-btn-container {
+    padding: 0px 1rem;
+  }
+}

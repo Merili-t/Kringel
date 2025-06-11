@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.logo-container {
+  margin: 2rem auto 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 150px;
+  height: auto;
+  display: block;
+}
+
+/* Main Content */
+.main {
+  margin-left: 18.775rem;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.logout-btn{
+  margin-bottom: 1rem;
+  margin-left: 2.7rem;
+}
+
+h1 {
+  margin-top: 2rem;
+  margin-left: 3rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Table Styling */
+table {
+  margin: 2rem 3rem;
+  width: calc(100% - 6rem);
+  background-color: #fff;  /* White background for table */
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #fff;  /* White header */
+  color: #666;
+}
+
+th, td {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+  background-color: #f8f9fa;  /* Gray hover */
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Action Button styles for Reset and Delete */
+.reset-btn, .delete-btn {
+  background-color: #B81434;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  transition: 0.3s ease;
+}
+
+.reset-btn:hover, .delete-btn:hover {
+  background-color: #97102a;
+}
+
+/* Container for bottom button */
+.res-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  padding: 0px 3rem;
+  margin-bottom: 3rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+  }
+  .main {
+    margin-left: 0;
+  }
+  table {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  th, td {
+    padding: 0.8rem;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+  .logout-btn-container {
+    margin-right: 1rem;
+  }
+  .res-btn-container {
+    padding: 0px 1rem;
+  }
+}

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -24,23 +25,27 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = new FormData(form);
-    // Keeping the fetch call as it was:
     try {
-      const response = await fetch('http://localhost:3006/user/login', {
+      const response = await fetch('http://localhost:3006/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: 'admin@kringel.ee',
-          password: '1234',
+          email: email.toString(),
+          password: password.toString(),
         }),
       });
+
       const result = await response.json();
-      if (result.success) {
+
+      if (result.message) {
         alert("Sisselogimine õnnestus!");
-        window.location.href = "../allTests/allTests.html";
+        if (result.userType === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "allTests.html";
+        }
       } else {
         alert(result.error || "Sisselogimine ebaõnnestus.");
       }

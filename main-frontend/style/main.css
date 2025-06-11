@@ -71,7 +71,7 @@
     padding-top: 1.5rem;      
 }
 
-.nav-container{
+.menu, .nav-container{
     height: 100%;
     width: 18.775rem;
     position: fixed;

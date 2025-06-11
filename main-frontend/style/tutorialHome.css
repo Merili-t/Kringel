@@ -11,6 +11,7 @@ body {
     align-items: left;
     padding-left: 40px;
     padding-top: 50px;
+    margin-left: 4rem;
   }
   
   .nav-link {
@@ -42,44 +43,12 @@ body {
   
   main {
     padding: 2rem;
+    margin: 2rem;
   }
   
   h1 {
     font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .accordion {
-    margin-top: 2rem;
-  }
-  
-  .accordion-item {
-    background: #fff0f0;
-    border-radius: 12px;
     margin-bottom: 1rem;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  
-  .accordion-header {
-    padding: 1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .accordion-body {
-    padding: 1rem;
-    display: none;
-  }
-  
-  .accordion-item.active .accordion-body {
-    display: block;
-  }
-  
-  .toggle {
-    font-size: 1rem;
   }
 
   body {
@@ -123,39 +92,6 @@ body {
     font-size: 2rem;
     margin-bottom: 0.5rem;
   }
-  
-  .accordion {
-    margin-top: 2rem;
-  }
-  
-  .accordion-item {
-    background: #fff0f0;
-    border-radius: 30px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  
-  .accordion-header {
-    padding: 3rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .accordion-body {
-    padding: 1rem;
-    display: none;
-  }
-  
-  .accordion-item.active .accordion-body {
-    display: block;
-  }
-  
-  .toggle {
-    font-size: 1rem;
-  }
 
   .header {
     flex-direction: column;
@@ -164,3 +100,10 @@ body {
     padding-bottom: 40px;
     border-bottom: 1px solid #ccc;
   }
+
+  .tutorial-description {
+    color: #393939;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}

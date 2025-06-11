@@ -9,12 +9,9 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../style/main.css" />
-    <link rel="stylesheet" href="../style/popups.css" />
     <link rel="stylesheet" href="../style/buttons.css" />
     <link rel="stylesheet" href="../style/account.css" />
     <script defer src="../script/login.js"></script>
-    <script defer src="../popups/popupHelper.js"></script>
-    <script defer src="../popups/passwordChange.js"></script>
   </head>
   <body>
     <div class="logo-container">
@@ -41,32 +38,10 @@
           <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
 
         </div>
-        <div class="forgot-password poppins-regular">
-          <a href="#" id="forgot-password-link" class="button-link-light"
-            >Unustasid parooli?</a
-          >
-        </div>
       </div>
       <div>
         <button class="login-btn poppins-bold" type="submit">Logi sisse</button>
       </div>
     </form>
-    
-    <div id="overlay" class="popup-overlay" style="display: none;"></div>
-    
-    <div id="forgot-popup" class="popup" style="display: none;">
-      <h3 class="poppins-medium">Sisesta oma meiliaadress</h3>
-      <input
-        type="email"
-        id="reset-email"
-        placeholder="Email..."
-        required
-        style="margin-top: 10px; width: 100%; padding: 5px;"
-      />
-      <div style="margin-top: 15px;">
-        <button id="send-reset" class="popup-btn">Saada parooli uuendamise link</button>
-        <button id="cancel-reset" class="popup-btn cancel">Tühista</button>
-      </div>
-    </div>
   </body>
 </html>

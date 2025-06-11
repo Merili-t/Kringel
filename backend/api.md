@@ -246,7 +246,8 @@ Get a block with id.
   "matrix": 3,
   "picture": 4,
   "chemistry": 5,
-  "drawing": 6
+  "drawing": 6,
+  "calculator": 7,
 }
 ```
 

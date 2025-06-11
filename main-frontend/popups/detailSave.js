@@ -4,17 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
       showPopup("Salvesta", "Kas soovid muudatused salvestada?", [
         {
           text: "Salvesta",
-          action: () => {
-            fetch("../php/popups.php", {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: "type=detailiSalvestus&some_field=muudetudV22rtus&test_id=123"
-            })
-              .then(res => res.text())
-              .then(msg => {
-                alert(msg);
-                closePopup();
+          action: async () => {
+            try {
+              const data = {
+                test_id: 123,
+                some_field: "muudetudV22rtus" 
+              };
+
+              const response = await fetch('http://localhost:3006/tests/update', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
               });
+
+              const result = await response.json();
+              alert(result.message || "Salvestamine õnnestus!");
+            } catch (error) {
+              console.error("Error updating test details:", error);
+              alert("Salvestamine ebaõnnestus.");
+            }
+            closePopup();
           }
         },
         { text: "Tühista", cancel: true }

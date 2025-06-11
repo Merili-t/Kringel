@@ -1,15 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize the dropdown for duration options.
   populateDurationDropdown();
 
   const form = document.getElementById("detailForm");
   const backButton = document.querySelector(".back-button");
 
-  // Optionally, set up the back button to navigate back.
-  backButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    window.history.back();
-  });
+  if (backButton) {
+    backButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.location.href = "../html/allTests.html";
+    });
+  } else {
+    console.error("Back button element was not found.");
+  }
 
   // When the user submits the form, save the test details.
   form.addEventListener("submit", async function (e) {
@@ -64,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok) {
         alert("Test edukalt loodud!");
         form.reset();
-        // Redirect to testCreation.html after successful save
+        // Redirect to testCreation.html after successful save.
         window.location.href = "../html/testCreation.html";
       } else {
         alert(result.error || "Midagi läks valesti.");
@@ -76,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Helper function to dynamically populate the duration dropdown.
+// Helper function to populate the duration dropdown.
 function populateDurationDropdown() {
   const durationSelect = document.getElementById("duration");
   const durations = [5, 10, 15, 20, 30, 45, 60, 90, 120]; // in minutes

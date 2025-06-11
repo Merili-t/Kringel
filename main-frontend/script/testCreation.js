@@ -560,8 +560,71 @@ class QuizBuilder {
         document.addEventListener('DOMContentLoaded', () => {
             this.setupDropdown();
             this.setupEventListeners();
+            this.setupQuestionImageUpload();
         });
     }
+
+    // Lisa see kood QuizBuilder klassi sisse, näiteks init() meetodi järele
+
+setupQuestionImageUpload() {
+    // Otsime küsimuse pildi üleslaadimise elementi
+    const uploadPicDiv = document.querySelector('.upload-pic');
+    if (!uploadPicDiv) return;
+
+    // Loome peidetud file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+    fileInput.id = 'question-image-upload';
+    
+    // Lisame file inputi DOM-i
+    document.body.appendChild(fileInput);
+    
+    // Lisame click event uploadPicDiv-ile
+    uploadPicDiv.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // File input change event
+    fileInput.addEventListener('change', (e) => {
+        this.handleQuestionImageUpload(e.target);
+    });
+}
+
+handleQuestionImageUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    const uploadPicDiv = document.querySelector('.upload-pic');
+    if (!uploadPicDiv) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        // Asendame upload-pic sisu pildiga
+        uploadPicDiv.innerHTML = `
+            <div style="position: relative; display: inline-block;">
+                <img src="${e.target.result}" 
+                     style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;" 
+                     alt="Küsimuse pilt" />
+                <button type="button" 
+                        style="position: absolute; top: 5px; right: 5px; background: #f44336; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;"
+                        title="Eemalda pilt"
+                        onclick="this.closest('.upload-pic').innerHTML = '<p>Lisa pilt küsimuse juurde</p>'; document.getElementById('question-image-upload').value = '';">
+                    ×
+                </button>
+                <div style="margin-top: 8px;">
+                    <button type="button" 
+                            style="padding: 6px 12px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            onclick="document.getElementById('question-image-upload').click();">
+                        Vaheta pilti
+                    </button>
+                </div>
+            </div>
+        `;
+    };
+    reader.readAsDataURL(file);
+}
 
     setupDropdown() {
         const dropdown = document.getElementById('answer-type-dropdown');
@@ -757,7 +820,7 @@ class QuizBuilder {
         const selectButton = this.createAddButton('Vali pilt');
         selectButton.addEventListener('click', () => fileInput.click());
         preview.appendChild(selectButton);
-        
+
         const hotspotControls = this.createElement('div', '', 'hotspot-controls');
         hotspotControls.style.display = 'none';
         hotspotControls.innerHTML = `
@@ -887,285 +950,484 @@ class QuizBuilder {
     }
 
     renderChemistryChains() {
-        const container = this.createContainer('Keemia ahelad:');
+        const container = this.createContainer('Keemia ahelad - joonistamine:');
         
-        const chainBuilder = this.createElement('div', 'chemistry-chains');
-        chainBuilder.style.cssText = 'background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;';
+        // Drawing controls
+        const controls = this.createElement('div', 'chemistry-drawing-controls');
+        controls.style.cssText = 'margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;';
         
-        const chainType = this.createElement('div', 'chain-type-selector');
-        chainType.style.cssText = 'margin-bottom: 15px;';
-        chainType.innerHTML = `
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">Ahela tüüp:</label>
-            <select id="chain-type" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px;">
-                <option value="alkaan">Alkaanid</option>
-                <option value="alkeen">Alkeenid</option>
-                <option value="alkiin">Alkiinid</option>
-                <option value="tsukloalkaan">Tsükloalkaanid</option>
-                <option value="aromaatne">Aromaatsed ühendid</option>
-            </select>
-        `;
+        // Shape buttons
+        const shapeButtons = [
+            { text: 'Joon', action: 'line' },
+            { text: 'Topeltjoon', action: 'doubleLine' },
+            { text: 'Kolmikjoon', action: 'tripleLine' },
+            { text: 'Kuusnurk', action: 'hexagon' },
+            { text: 'Märgistatud kuusnurk', action: 'labeledHexagon' },
+            { text: 'Tekst', action: 'text' }
+        ];
         
-        const chainLength = this.createElement('div', 'chain-length');
-        chainLength.style.cssText = 'margin-bottom: 15px;';
-        chainLength.innerHTML = `
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">Süsinike arv:</label>
-            <input type="number" id="carbon-count" min="1" max="20" value="4" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100px;" />
-        `;
-        
-        const functionalGroups = this.createElement('div', 'functional-groups');
-        functionalGroups.style.cssText = 'margin-bottom: 15px;';
-        functionalGroups.innerHTML = `
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">Funktsionaalsed rühmad:</label>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <label><input type="checkbox" value="OH"> Hüdroksüül (-OH)</label>
-                <label><input type="checkbox" value="COOH"> Karboksüül (-COOH)</label>
-                <label><input type="checkbox" value="NH2"> Amino (-NH₂)</label>
-                <label><input type="checkbox" value="CHO"> Aldehüüd (-CHO)</label>
-                <label><input type="checkbox" value="CO"> Ketoon (=O)</label>
-            </div>
-        `;
-        
-        const generateButton = this.createAddButton('Genereeri struktuur');
-        generateButton.style.background = '#FF9800';
-        
-        const structureArea = this.createElement('div', 'structure-display');
-        structureArea.style.cssText = 'margin-top: 15px; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 4px; min-height: 150px; text-align: center;';
-        structureArea.innerHTML = '<p style="color: #666; margin: 0;">Struktuuri valem ja nimetus ilmuvad siia...</p>';
-        
-        const answerSection = this.createElement('div', 'chain-answer');
-        answerSection.style.cssText = 'margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 4px;';
-        answerSection.innerHTML = `
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">Õige vastus:</label>
-            <input type="text" placeholder="Sisesta ühendi nimi" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <input type="text" placeholder="Sisesta molekulvalem" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-        `;
-        
-        chainBuilder.appendChild(chainType);
-        chainBuilder.appendChild(chainLength);
-        chainBuilder.appendChild(functionalGroups);
-        chainBuilder.appendChild(generateButton);
-        chainBuilder.appendChild(structureArea);
-        chainBuilder.appendChild(answerSection);
-        
-        container.appendChild(chainBuilder);
-        document.getElementById('preview-content').appendChild(container);
-    }
-
-    // Helper methods
-    createContainer(labelText) {
-        const container = this.createElement('div', 'answer-type-container');
-        const label = this.createElement('label');
-        label.style.cssText = 'font-weight: bold; margin-bottom: 10px; display: block;';
-        label.textContent = labelText;
-        container.appendChild(label);
-        return container;
-    }
-
-    createElement(tag, className = '', id = '') {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (id) element.id = id;
-        return element;
-    }
-
-    createAddButton(text, dataAction = '') {
-        const button = this.createElement('button', 'add-btn');
-        button.type = 'button';
-        button.textContent = `+ ${text}`;
-        button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;';
-        if (dataAction) button.setAttribute('data-action', dataAction);
-        return button;
-    }
-
-    createSingleOption(index, placeholder) {
-        const row = this.createElement('div', 'option-row');
-        row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
-        
-        row.innerHTML = `
-            <input type="radio" name="single-choice" id="single${index + 1}" />
-            <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
-            <input type="radio" name="correct-single" value="${index}" title="Märgi õigeks" />
-            <span class="correct-label">Õige</span>
-            <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-        `;
-        
-        return row;
-    }
-
-    createMultipleOption(index, placeholder) {
-        const row = this.createElement('div', 'option-row');
-        row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
-        
-        row.innerHTML = `
-            <input type="checkbox" name="multiple-choice" id="multi${index + 1}" />
-            <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
-            <input type="checkbox" name="correct-multiple" value="${index}" title="Märgi õigeks" />
-            <span class="correct-label">Õige</span>
-            <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-        `;
-        
-        return row;
-    }
-
-    createMatrixTable(type) {
-        const table = this.createElement('table', 'matrix-table');
-        table.style.cssText = 'border-collapse: collapse; width: 100%; margin-top: 10px;';
-        
-        const thead = this.createElement('thead');
-        const headerRow = this.createElement('tr');
-        
-        headerRow.innerHTML = `
-            <th style="border: 1px solid #ccc; padding: 8px; background: #f5f5f5;"></th>
-            <th style="border: 1px solid #ccc; padding: 8px; background: #f5f5f5;">
-                <input type="text" placeholder="Veerg 1" class="matrix-header" style="border: none; background: transparent; width: 100%;" />
-            </th>
-            <th style="border: 1px solid #ccc; padding: 8px; background: #f5f5f5;">
-                <input type="text" placeholder="Veerg 2" class="matrix-header" style="border: none; background: transparent; width: 100%;" />
-            </th>
-            <th style="border: 1px solid #ccc; padding: 8px; background: #f5f5f5;">
-                <button type="button" class="remove-btn matrix-col-remove" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-            </th>
-        `;
-        
-        const tbody = this.createElement('tbody');
-        tbody.appendChild(this.createMatrixRow(0, 2, type));
-        tbody.appendChild(this.createMatrixRow(1, 2, type));
-        
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        
-        return table;
-    }
-
-    createMatrixRow(rowIndex, colCount, type) {
-        const row = this.createElement('tr');
-        let rowHTML = `<td style="border: 1px solid #ccc; padding: 8px;">
-            <input type="text" placeholder="Rida ${rowIndex + 1}" class="matrix-row-label" style="border: none; width: 100%;" />
-        </td>`;
-        
-        const inputType = type === 'single' ? 'radio' : 'checkbox';
-        const nameAttr = type === 'single' ? `matrix-row-${rowIndex}` : `matrix-row-${rowIndex}`;
-        
-        for (let i = 0; i < colCount; i++) {
-            rowHTML += `<td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
-                <input type="${inputType}" name="${nameAttr}" value="${i}" />
-            </td>`;
-        }
-        
-        rowHTML += `<td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
-            <button type="button" class="remove-btn matrix-row-remove" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
-        </td>`;
-        
-        row.innerHTML = rowHTML;
-        return row;
-    }
-
-    // Event handlers
-    handleAddButton(button) {
-        const action = button.getAttribute('data-action') || button.textContent.toLowerCase();
-        
-        if (action.includes('single-option') || button.closest('.answer-type-container')?.querySelector('#single-options')) {
-            this.addSingleOption();
-        } else if (action.includes('multiple-option') || button.closest('.answer-type-container')?.querySelector('#multiple-options')) {
-            this.addMultipleOption();
-        } else if (action.includes('matrix-row-single')) {
-            this.addMatrixRow('single');
-        } else if (action.includes('matrix-column-single')) {
-            this.addMatrixColumn('single');
-        } else if (action.includes('matrix-row-multiple')) {
-            this.addMatrixRow('multiple');
-        } else if (action.includes('matrix-column-multiple')) {
-            this.addMatrixColumn('multiple');
-        }
-    }
-
-    removeOption(button) {
-        if (button.classList.contains('matrix-row-remove')) {
-            this.removeMatrixRow(button);
-        } else if (button.classList.contains('matrix-col-remove')) {
-            this.removeMatrixColumn(button);
-        } else {
-            button.closest('.option-row').remove();
-        }
-    }
-
-    addSingleOption() {
-        const container = document.getElementById('single-options');
-        if (!container) return;
-        
-        const optionCount = container.children.length;
-        const newOption = this.createSingleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
-        container.appendChild(newOption);
-    }
-
-    addMultipleOption() {
-        const container = document.getElementById('multiple-options');
-        if (!container) return;
-        
-        const optionCount = container.children.length;
-        const newOption = this.createMultipleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
-        container.appendChild(newOption);
-    }
-
-    addMatrixRow(type) {
-        const selector = type === 'single' ? '#matrix-single tbody' : '#matrix-multiple tbody';
-        const tbody = document.querySelector(selector);
-        if (!tbody) return;
-        
-        const rowCount = tbody.children.length;
-        const colCount = document.querySelectorAll(`${selector.replace('tbody', 'thead')} th`).length - 2;
-        
-        const newRow = this.createMatrixRow(rowCount, colCount, type);
-        tbody.appendChild(newRow);
-    }
-
-    addMatrixColumn(type) {
-        const selector = type === 'single' ? '#matrix-single' : '#matrix-multiple';
-        const table = document.querySelector(`${selector} table`);
-        if (!table) return;
-        
-        const thead = table.querySelector('thead tr');
-        const tbody = table.querySelector('tbody');
-        const colCount = thead.children.length - 2;
-        
-        // Add header
-        const newHeader = this.createElement('th');
-        newHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5;';
-        newHeader.innerHTML = `<input type="text" placeholder="Veerg ${colCount + 1}" class="matrix-header" style="border: none; background: transparent; width: 100%;" />`;
-        thead.insertBefore(newHeader, thead.lastElementChild);
-        
-        // Add cells to existing rows
-        const inputType = type === 'single' ? 'radio' : 'checkbox';
-        tbody.querySelectorAll('tr').forEach((row, rowIndex) => {
-            const newCell = this.createElement('td');
-            newCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
-            newCell.innerHTML = `<input type="${inputType}" name="matrix-row-${rowIndex}" value="${colCount}" />`;
-            row.insertBefore(newCell, row.lastElementChild);
+        shapeButtons.forEach(shape => {
+            const button = this.createAddButton(shape.text);
+            button.addEventListener('click', () => {
+                if (window.chemistryDrawingTool) {
+                    window.chemistryDrawingTool.addShape(shape.action);
+                }
+            });
+            controls.appendChild(button);
         });
-    }
-
-    removeMatrixRow(button) {
-        const row = button.closest('tr');
-        if (row) row.remove();
-    }
-
-    removeMatrixColumn(button) {
-        const table = button.closest('table');
-        const headerRow = button.closest('tr');
-        const colIndex = Array.from(headerRow.children).indexOf(button.closest('th'));
         
-        // Remove header
-        button.closest('th').remove();
+        // Action buttons
+        const actionButtonsDiv = this.createElement('div');
+        actionButtonsDiv.style.cssText = 'display: flex; gap: 10px; margin-top: 10px;';
         
-        // Remove corresponding cells from all rows
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            if (row.children[colIndex]) {
-                row.children[colIndex].remove();
+        const undoBtn = this.createAddButton('Undo (Z)');
+        undoBtn.style.background = '#ff9800';
+        undoBtn.addEventListener('click', () => {
+            if (window.chemistryDrawingTool) {
+                window.chemistryDrawingTool.undo();
             }
         });
+        
+        const redoBtn = this.createAddButton('Redo (Y)');
+        redoBtn.style.background = '#ff9800';
+        redoBtn.addEventListener('click', () => {
+            if (window.chemistryDrawingTool) {
+                window.chemistryDrawingTool.redo();
+            }
+        });
+        
+        const deleteBtn = this.createAddButton('Kustuta valitud (Del)');
+        deleteBtn.style.background = '#f44336';
+        deleteBtn.addEventListener('click', () => {
+            if (window.chemistryDrawingTool) {
+                window.chemistryDrawingTool.deleteSelected();
+            }
+        });
+        
+        const clearBtn = this.createAddButton('Puhasta kõik');
+        clearBtn.style.background = '#f44336';
+        clearBtn.addEventListener('click', () => {
+            if (window.chemistryDrawingTool && confirm('Kas oled kindel, et soovid kõik kustutada?')) {
+                window.chemistryDrawingTool.deleteAll();
+            }
+        });
+        
+        actionButtonsDiv.appendChild(undoBtn);
+        actionButtonsDiv.appendChild(redoBtn);
+        actionButtonsDiv.appendChild(deleteBtn);
+        actionButtonsDiv.appendChild(clearBtn);
+        
+        // Instructions
+        const instructions = this.createElement('div', 'instructions');
+        instructions.style.cssText = 'margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 4px; font-size: 14px;';
+        instructions.innerHTML = `
+            <strong>Juhised:</strong><br>
+            • Kliki kujundile, et see valida<br>
+            • Lohista valitud kujundit<br>
+            • Kasuta nooleklahve üles/alla, et pöörata valitud kujundit<br>
+            • Topeltkliki tekstil, et seda muuta<br>
+            • Delete/Backspace kustutab valitud kujundi
+        `;
+        
+        controls.appendChild(actionButtonsDiv);
+        controls.appendChild(instructions);
+        
+        // Canvas
+        const canvasContainer = this.createElement('div', 'canvas-container');
+        canvasContainer.style.cssText = 'border: 2px solid #ddd; border-radius: 8px; padding: 10px; background: white;';
+        
+        const canvas = this.createElement('canvas', '', 'chemistry-drawing-canvas');
+        canvas.width = 800;
+        canvas.height = 500;
+        canvas.style.cssText = 'border: 1px solid #ccc; cursor: pointer; display: block; background: white;';
+        
+        canvasContainer.appendChild(canvas);
+        container.appendChild(controls);
+        container.appendChild(canvasContainer);
+        document.getElementById('preview-content').appendChild(container);
+        
+        // Initialize drawing tool after DOM is ready
+        setTimeout(() => {
+            window.chemistryDrawingTool = new DrawingTool(canvas);
+        }, 100);
     }
+    createContainer(labelText) {
+    const container = this.createElement('div', 'answer-type-container');
+    const label = this.createElement('label');
+    label.style.cssText = 'font-weight: bold; margin-bottom: 10px; display: block;';
+    label.textContent = labelText;
+    container.appendChild(label);
+    return container;
+}
+
+createElement(tag, className = '', id = '') {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (id) element.id = id;
+    return element;
+}
+
+createAddButton(text, dataAction = '') {
+    const button = this.createElement('button', 'add-btn');
+    button.type = 'button';
+    button.textContent = `+ ${text}`;
+    button.style.cssText = 'margin: 5px; padding: 8px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;';
+    if (dataAction) button.setAttribute('data-action', dataAction);
+    return button;
+}
+
+createSingleOption(index, placeholder) {
+    const row = this.createElement('div', 'option-row');
+    row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
+    
+    row.innerHTML = `
+        <input type="radio" name="single-choice" id="single${index + 1}" />
+        <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
+        <input type="radio" name="correct-single" value="${index}" title="Märgi õigeks" />
+        <span class="correct-label">Õige</span>
+        <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+    `;
+    
+    return row;
+}
+
+createMultipleOption(index, placeholder) {
+    const row = this.createElement('div', 'option-row');
+    row.style.cssText = 'display: flex; align-items: center; margin-bottom: 8px; gap: 10px;';
+    
+    row.innerHTML = `
+        <input type="checkbox" name="multiple-choice" id="multi${index + 1}" />
+        <input type="text" placeholder="${placeholder}" class="option-input" style="flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" />
+        <input type="checkbox" name="correct-multiple" value="${index}" title="Märgi õigeks" />
+        <span class="correct-label">Õige</span>
+        <button type="button" class="remove-btn" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px;">×</button>
+    `;
+    
+    return row;
+}
+
+createMatrixTable(type) {
+    const table = this.createElement('table', 'matrix-table');
+    table.style.cssText = 'border-collapse: collapse; width: 100%; margin-top: 10px;';
+    table.dataset.type = type; // Store type for reference
+    
+    const thead = this.createElement('thead');
+    const headerRow = this.createElement('tr', 'matrix-header-row');
+    
+    // Empty corner cell
+    const cornerCell = this.createElement('th');
+    cornerCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; min-width: 100px;';
+    headerRow.appendChild(cornerCell);
+    
+    // Add initial columns with remove buttons
+    for (let i = 0; i < 2; i++) {
+        const th = this.createElement('th');
+        th.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+        
+        const input = this.createElement('input');
+        input.type = 'text';
+        input.placeholder = `Veerg ${i + 1}`;
+        input.className = 'matrix-header';
+        input.style.cssText = 'border: none; background: transparent; width: calc(100% - 25px);';
+        
+        const removeBtn = this.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-btn matrix-col-remove';
+        removeBtn.innerHTML = '×';
+        removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
+        
+        th.appendChild(input);
+        th.appendChild(removeBtn);
+        headerRow.appendChild(th);
+    }
+    
+    // Actions column header
+    const actionsHeader = this.createElement('th');
+    actionsHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; width: 50px;';
+    actionsHeader.textContent = 'Tegevused';
+    headerRow.appendChild(actionsHeader);
+    
+    const tbody = this.createElement('tbody');
+    tbody.appendChild(this.createMatrixRow(0, 2, type));
+    tbody.appendChild(this.createMatrixRow(1, 2, type));
+    
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    
+    return table;
+}
+
+createMatrixRow(rowIndex, colCount, type) {
+    const row = this.createElement('tr', 'matrix-row');
+    row.dataset.rowIndex = rowIndex;
+    
+    // Row label cell
+    const labelCell = this.createElement('td');
+    labelCell.style.cssText = 'border: 1px solid #ccc; padding: 8px;';
+    
+    const labelInput = this.createElement('input');
+    labelInput.type = 'text';
+    labelInput.placeholder = `Rida ${rowIndex + 1}`;
+    labelInput.className = 'matrix-row-label';
+    labelInput.style.cssText = 'border: none; width: 100%;';
+    
+    labelCell.appendChild(labelInput);
+    row.appendChild(labelCell);
+    
+    // Input cells
+    const inputType = type === 'single' ? 'radio' : 'checkbox';
+    
+    for (let i = 0; i < colCount; i++) {
+        const cell = this.createElement('td', 'matrix-cell');
+        cell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+        cell.dataset.colIndex = i;
+        
+        const input = this.createElement('input');
+        input.type = inputType;
+        if (type === 'single') {
+            input.name = `matrix-row-${rowIndex}`;
+        } else {
+            input.name = `matrix-row-${rowIndex}-col-${i}`;
+        }
+        input.value = i;
+        
+        cell.appendChild(input);
+        row.appendChild(cell);
+    }
+    
+    // Remove button cell
+    const removeCell = this.createElement('td');
+    removeCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+    
+    const removeBtn = this.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'remove-btn matrix-row-remove';
+    removeBtn.innerHTML = '×';
+    removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;';
+    
+    removeCell.appendChild(removeBtn);
+    row.appendChild(removeCell);
+    
+    return row;
+}
+
+removeMatrixColumn(button) {
+    const table = button.closest('table');
+    const th = button.closest('th');
+    const headerRow = th.parentNode;
+    const colIndex = Array.from(headerRow.children).indexOf(th) - 1; // -1 for corner cell
+    
+    if (colIndex < 0) return; // Safety check
+    
+    // Don't allow removal if only one column remains
+    const totalColumns = headerRow.children.length - 2; // -2 for corner and actions columns
+    if (totalColumns <= 1) {
+        alert('Vähemalt üks veerg peab jääma!');
+        return;
+    }
+    
+    // Remove header
+    th.remove();
+    
+    // Remove corresponding cells from all rows
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td.matrix-cell');
+        if (cells[colIndex]) {
+            cells[colIndex].remove();
+        }
+    });
+    
+    // Update remaining cell indices and input names
+    this.updateMatrixCellIndices(table);
+}
+
+removeMatrixRow(button) {
+    const table = button.closest('table');
+    const row = button.closest('tr');
+    const tbody = table.querySelector('tbody');
+    
+    // Don't allow removal if only one row remains
+    if (tbody.children.length <= 1) {
+        alert('Vähemalt üks rida peab jääma!');
+        return;
+    }
+    
+    row.remove();
+    
+    // Update row indices and input names
+    this.updateMatrixRowIndices(table);
+}
+
+updateMatrixCellIndices(table) {
+    const type = table.dataset.type;
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+    
+    rows.forEach((row, rowIndex) => {
+        row.dataset.rowIndex = rowIndex;
+        const cells = row.querySelectorAll('td.matrix-cell');
+        
+        cells.forEach((cell, colIndex) => {
+            cell.dataset.colIndex = colIndex;
+            const input = cell.querySelector('input');
+            
+            if (type === 'single') {
+                input.name = `matrix-row-${rowIndex}`;
+            } else {
+                input.name = `matrix-row-${rowIndex}-col-${colIndex}`;
+            }
+            input.value = colIndex;
+        });
+        
+        // Update row label placeholder
+        const labelInput = row.querySelector('.matrix-row-label');
+        if (labelInput && !labelInput.value) {
+            labelInput.placeholder = `Rida ${rowIndex + 1}`;
+        }
+    });
+}
+
+updateMatrixRowIndices(table) {
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+    
+    rows.forEach((row, index) => {
+        row.dataset.rowIndex = index;
+        const labelInput = row.querySelector('.matrix-row-label');
+        if (labelInput && !labelInput.value) {
+            labelInput.placeholder = `Rida ${index + 1}`;
+        }
+        
+        // Update input names
+        const type = table.dataset.type;
+        const inputs = row.querySelectorAll('td.matrix-cell input');
+        inputs.forEach((input, colIndex) => {
+            if (type === 'single') {
+                input.name = `matrix-row-${index}`;
+            } else {
+                input.name = `matrix-row-${index}-col-${colIndex}`;
+            }
+        });
+    });
+}
+
+// Event handlers
+handleAddButton(button) {
+    const action = button.getAttribute('data-action') || button.textContent.toLowerCase();
+    
+    if (action.includes('single-option') || button.closest('.answer-type-container')?.querySelector('#single-options')) {
+        this.addSingleOption();
+    } else if (action.includes('multiple-option') || button.closest('.answer-type-container')?.querySelector('#multiple-options')) {
+        this.addMultipleOption();
+    } else if (action.includes('matrix-row-single')) {
+        this.addMatrixRow('single');
+    } else if (action.includes('matrix-column-single')) {
+        this.addMatrixColumn('single');
+    } else if (action.includes('matrix-row-multiple')) {
+        this.addMatrixRow('multiple');
+    } else if (action.includes('matrix-column-multiple')) {
+        this.addMatrixColumn('multiple');
+    }
+}
+
+removeOption(button) {
+    if (button.classList.contains('matrix-row-remove')) {
+        this.removeMatrixRow(button);
+    } else if (button.classList.contains('matrix-col-remove')) {
+        this.removeMatrixColumn(button);
+    } else {
+        button.closest('.option-row').remove();
+    }
+}
+
+addSingleOption() {
+    const container = document.getElementById('single-options');
+    if (!container) return;
+    
+    const optionCount = container.children.length;
+    const newOption = this.createSingleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
+    container.appendChild(newOption);
+}
+
+addMultipleOption() {
+    const container = document.getElementById('multiple-options');
+    if (!container) return;
+    
+    const optionCount = container.children.length;
+    const newOption = this.createMultipleOption(optionCount, `Sisesta vastus ${optionCount + 1}`);
+    container.appendChild(newOption);
+}
+
+addMatrixRow(type) {
+    const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
+    const table = document.querySelector(selector);
+    if (!table) return;
+    
+    const tbody = table.querySelector('tbody');
+    const rowCount = tbody.children.length;
+    const colCount = table.querySelectorAll('thead th').length - 2; // -2 for corner and actions columns
+    
+    const newRow = this.createMatrixRow(rowCount, colCount, type);
+    tbody.appendChild(newRow);
+}
+
+addMatrixColumn(type) {
+    const selector = type === 'single' ? '#matrix-single table' : '#matrix-multiple table';
+    const table = document.querySelector(selector);
+    if (!table) return;
+    
+    const thead = table.querySelector('thead tr');
+    const tbody = table.querySelector('tbody');
+    const currentColCount = thead.children.length - 2; // -2 for corner and actions columns
+    
+    // Add header before the actions column
+    const newHeader = this.createElement('th');
+    newHeader.style.cssText = 'border: 1px solid #ccc; padding: 8px; background: #f5f5f5; position: relative; min-width: 120px;';
+    
+    const input = this.createElement('input');
+    input.type = 'text';
+    input.placeholder = `Veerg ${currentColCount + 1}`;
+    input.className = 'matrix-header';
+    input.style.cssText = 'border: none; background: transparent; width: calc(100% - 25px);';
+    
+    const removeBtn = this.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'remove-btn matrix-col-remove';
+    removeBtn.innerHTML = '×';
+    removeBtn.style.cssText = 'background: #f44336; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 12px; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); cursor: pointer;';
+    
+    newHeader.appendChild(input);
+    newHeader.appendChild(removeBtn);
+    
+    // Insert before the last column (actions column)
+    thead.insertBefore(newHeader, thead.lastElementChild);
+    
+    // Add cells to existing rows
+    const inputType = type === 'single' ? 'radio' : 'checkbox';
+    tbody.querySelectorAll('tr').forEach((row, rowIndex) => {
+        const newCell = this.createElement('td', 'matrix-cell');
+        newCell.style.cssText = 'border: 1px solid #ccc; padding: 8px; text-align: center;';
+        newCell.dataset.colIndex = currentColCount;
+        
+        const input = this.createElement('input');
+        input.type = inputType;
+        if (type === 'single') {
+            input.name = `matrix-row-${rowIndex}`;
+        } else {
+            input.name = `matrix-row-${rowIndex}-col-${currentColCount}`;
+        }
+        input.value = currentColCount;
+        
+        newCell.appendChild(input);
+        
+        // Insert before the last cell (remove button cell)
+        row.insertBefore(newCell, row.lastElementChild);
+    });
+}
 
     // Image upload methods
     handleImageUpload(input) {

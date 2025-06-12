@@ -1,23 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
 body {
   font-family: 'Poppins', sans-serif;
-  text-align: center;
-  margin: 0;
-  padding: 20px;
   background-color: white;
 }
 
-h1, h2, h3, h4, h5 {
+h1{
+    margin-top: 3rem;
+    margin-bottom: 10px;
+    color: #821b25;
+}
+
+h2, h3, h4, h5 {
   margin-top: 0px;
   margin-bottom: 10px;
   color: #821b25;
 }
 
-.logo-container img {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
+.main{
+  text-align: center;
 }
 
 .button-link {
@@ -65,18 +64,6 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 10px;
 }
 
-.tutorial li {
-  margin-bottom: 2px;
-  line-height: 1.15;
-}
-
-.big-checkbox {
-  transform: scale(1.5);
-  margin-right: 8px;
-  cursor: pointer;
-  vertical-align: middle;
-}
-
 input[type="email"],
 .password-field input {
   width: 100%;
@@ -108,70 +95,4 @@ input[type="email"],
   user-select: none;
   font-size: 18px;
   color: #821b25;
-}
-
-#send-reset {
-  min-width: 180px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.header-left {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.header-right a {
-  text-decoration: none;
-  color: #b52634;
-  font-size: 16px;
-  transition: color 0.3s ease;
-}
-
-.header-right a:hover {
-  color: #821b25;
-}
-
-.main-container {
-  display: flex;
-  gap: 20px;
-}
-
-.left-column {
-  width: 55%;
-}
-
-.right-column {
-  width: 45%;
-}
-
-.section-label {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-}
-
-textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 10px;
-  border: 1px solid #d3d3d3;
-  border-radius: 5px;
-  resize: vertical;
-  transition: border-color 0.3s ease;
-}
-
-textarea:focus {
-  outline: none;
-  border-color: #b52634;
 }

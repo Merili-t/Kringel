@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
             action: async () => {
               try {
                 const response = await fetch('http://localhost:3006/auth/logout', {
-                  method: "POST", // or GET if your API expects that
+                  method: "GET", // or GET if your API expects that
                   headers: {
                     "Content-Type": "application/json",
                     // Include authorization headers or credentials if needed

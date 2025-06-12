@@ -1,26 +1,156 @@
 import { eq } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
 import db from '../database/drizzle.js';
-import question from '../database/models/question.js';
+import questionModel from '../database/models/question.js';
+import questionMatrix from '../database/models/questionMatrix.js';
+import answerVariant from '../database/models/answerVariant.js';
+import * as zod from '../database/zod.js';
+import { block } from '../database/schema.js';
 
-export const getQuestion = async res => {
-  try {
-    const qId = req.params.id;
-    const result = await db.select().from(question).where(eq(question.id, qId));
-    return res.json(result);
-  } catch (err) {
-    return res.statud(500).json({ error: err.message });
+export const upload = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.questionSchema.safeParse(req.body);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    console.log(req.body);
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const { blockId, question, points, answerType, orderNumber, answerVariables } = result.data;
+  const questionId = uuidv7();
+
+  const insertQuestion = async (
+    insertId,
+    insertBlockId,
+    insertMatrixId,
+    insertType,
+    insertOrderNumber,
+    insertDescription,
+    insertPoints
+  ) => {
+    await db
+      .insert(questionModel)
+      .values({
+        id: insertId,
+        blockId: insertBlockId,
+        matrixId: insertMatrixId !== undefined ? insertMatrixId : null,
+        type: insertType,
+        orderNumber: insertOrderNumber,
+        description: insertDescription,
+        points: insertPoints,
+      });
+  };
+
+  const insertAnswer = async (insertId, insertQuestionId, insertCorrect, thisAnswer) => {
+    await db
+      .insert(answerVariant)
+      .values({
+        id: insertId,
+        questionId: insertQuestionId,
+        correct: insertCorrect,
+        answer: thisAnswer,
+      });
+  };
+
+  if (answerType === 3) {
+    try {
+      await db
+        .insert(questionMatrix)
+        .values({ id: questionId, blockId, orderNumber, description: question, points });
+
+      answerVariables.forEach(async question => {
+        try {
+          const matrixQuestionId = uuidv7();
+
+          insertQuestion(
+            matrixQuestionId,
+            question.blockId,
+            questionId,
+            question.answerType,
+            question.orderNumber,
+            question.question,
+            question.points
+          );
+
+          question.answerVariables.forEach(async answer => {
+            try {
+              insertAnswer(uuidv7(), questionId, answer.question, answer.answer);
+            } catch (err) {
+              return res.satus(500).json({ error: 'Failed to answer variant' });
+            }
+          });
+        } catch (err) {
+          return res.satus(500).json({ error: 'Failed to create question' });
+        }
+      });
+    } catch (err) {
+      return res.satus(500).json({ error: 'Failed to create matrix question' });
+    }
+
+    return res.status(200).json({ message: 'Matrix question created', id: questionId });
+  } else {
+    try {
+      insertQuestion(questionId, blockId, null, answerType, orderNumber, question, points);
+    } catch (err) {
+      return res.satus(500).json({ error: 'Failed to create question' });
+    }
+
+    answerVariables.forEach(async answer => {
+      try {
+        insertAnswer(uuidv7(), questionId, answer.question, answer.correct, answer.answer);
+      } catch (err) {
+        return res.satus(500).json({ error: 'Failed to answer variant' });
+      }
+    });
+
+    return res.status(200).json({ message: 'Question created', id: questionId });
   }
 };
 
-export const postQuestion = async (req, res) => {
+export const getByBlockId = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.blockId);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const blockId = result.data;
+
   try {
-    const id = uuidv7();
-    const { blockId, typeId, orderNumber, description, points } = req.body;
-    await db.insert(question).values({ id, orderNumber, description, points, typeId, blockId });
-    return res.status(200).json({ message: 'Question created', id });
+    const blockQuestions = await db
+      .select()
+      .from(questionModel)
+      .where(questionModel.blockId, blockId);
+
+    return res.status(200).json({ blockQuestions });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Failed to get questions' });
+  }
+};
+
+export const getByQuestionId = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const questionId = result.data;
+
+  try {
+    const question = await db.select().from(questionModel).where(eq(questionModel.id, questionId));
+
+    return res.status(200).json(question[0]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to get question' });
   }
 };
 

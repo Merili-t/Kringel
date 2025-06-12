@@ -1,30 +1,37 @@
 <!DOCTYPE html>
-<html lang="et">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loo konto</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../style/main.css" />
-    <link rel="stylesheet" href="../style/popups.css" />
-    <link rel="stylesheet" href="../style/buttons.css" />
-    <link rel="stylesheet" href="../style/account.css" />
-    <script defer src="../script/createAccount.js"></script>
-    <script defer src="../popups/popupHelper.js"></script>
-    <script defer src="../popups/termsConditions.js"></script>
-  </head>
-  <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Manage Teacher Accounts</title>
+  <link rel="stylesheet" href="../style/admin.css">
+  <link rel="stylesheet" href="../style/buttons.css">
+  <link rel="stylesheet" href="../style/popups.css">
+  <link rel="stylesheet" href="../style/createAccount.css">
+  <link rel="stylesheet" href="../style/main.css">
+  
+</head>
+<body>
+  <!-- Sidebar Menu -->
+  <div class="menu">
     <div class="logo-container">
-      <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
+      <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
     </div>
-    <h1 class="poppins-bold">Loo konto</h1>
-    <h3 class="poppins-medium">
-      Konto olemas? <a href="login.html" class="button-link">Logi sisse.</a>
-    </h3>
-    <form action="../php/createAccount.js" method="POST" id="createForm">
+    <!-- You can add additional admin-specific navigation here if desired -->
+    <br>
+    <div class="logout-btn-container">
+      <button class="admin-btn poppins-semibold nav-btn" data-target="admin.html">ADMIN PANEL</button>
+      <br>
+      <button class="create-account-btn nav-btn poppins-semibold" data-target="createAccount.html">KONTO LOOMINE</button>
+      <br>
+      <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1>Loo konto</h1>
+    <form action="../script/createAccount.js" method="POST" id="createForm"> 
       <div class="tutorial poppins-regular">
         <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
         <input
@@ -57,26 +64,24 @@
           <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
         </div>
       </div>
-      <label>
-        <input type="checkbox" required class="big-checkbox" />
-        Konto loomisel nõustun
-        <a href="#" id="termsLink" class="button-link"
-          >kasutustingimuste ja privaatsuspoliitikaga</a
-        >.
-      </label>
       <div>
-        <button class="create-account-btn poppins-bold nav-btn" type="submit" data-target="login.html">Loo konto</button>
+        <button class="create-account-btn poppins-bold nav-btn" type="submit" data-target="login.html">LOO KONTO</button>
       </div>
     </form>
-    
-    <div id="overlay" class="popup-overlay"></div>
+  </div>
 
-    <div id="terms-popup" class="popup pdf-popup">
-      <div class="pdf-popup-content">
-        <span class="pdf-close">&times;</span>
-        <embed id="pdfViewer" src="../privacyPolicy-termsOfUse.pdf#zoom=FitH" class="pdf-iframe" />
-        <button class="pdf-popup-btn">Sulge</button>
-      </div>
-    </div>
-  </body>
+  <script src="../popups/popupHelper.js" defer></script>
+  <script src="../popups/logout.js" defer></script>
+  <script src="../script/createAccount.js"></script>
+  <script src="../script/buttons.js"></script>
+  
+
+  <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title" class="poppins-medium"></h3>
+    <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
+    <div id="popup-actions" style="margin-top: 20px;"></div>
+  </div>
+
+</body>
 </html>

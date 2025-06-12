@@ -33,8 +33,6 @@ h1, h2, h3 {
   margin: 0 auto 30px;
 }
 
-
-
 .key {
   padding: 20px;
   font-size: 28px;
@@ -67,23 +65,35 @@ canvas {
   margin-bottom: 10px;
 }
 
-
 .drawing-keyboard {
   margin-bottom: 10px;
   text-align: center; 
 }
 
-.drawing-keyboard button {
+.drawing-keyboard button:not(.redo, .undo, .delete-key) {
+  background-color: #b52634;
+}
+
+.drawing-keyboard button{
   padding: 8px 12px;
   margin: 0 5px;
   font-size: 14px;
-  background-color: #b52634;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
 }
+
+.redo,
+.undo{
+  background-color: rgb(89, 154, 118);
+}
+
+.delete-key{
+  background-color: rgb(192, 137, 144);
+}
+
 .drawing-keyboard button:hover {
   background-color: #821b25;
 }

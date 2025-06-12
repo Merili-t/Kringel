@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  
+  <script type="module" src="https://unpkg.com/mathlive?module"></script>
+  <script type="module" src="../script/calculatorMain.js"></script>
+  <link rel="stylesheet" href="../style/CalculatorMain.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper">
+  <div id="main-wrapper">
+    <div id="calculator-area">
+      <div class = "calc-wrapper">
+          <math-field 
+            id="latexInput" 
+            virtual-keyboard-mode="manual"
+            virtual-keyboard-toolbar="false"
+            smart-mode="false"
+            smart-fence="false"
+            substitute-variables="false"> 
+          </math-field>
+  
+          <!-- Tulemus -->
+          <div id="resultArea" style="margin-top: 1rem; font-size: 1.4rem; font-weight: bold;"></div>
+  
+          <!-- Klahvid -->
+          <div class="calc-buttons keypad">
+            <!-- Funktsioonide rida -->
+            <button class="calc-button" data-content="\sqrt{#0}">√</button>
+            <button class="calc-button" data-content="\pi">π</button>
+            <button class="calc-button" data-content="\sin(#0)">sin</button>
+            <button class="calc-button" data-content="\cos(#0)">cos</button>
+            
+            <button class="calc-button" data-content="\tan(#0)">tan</button>
+            <button class="calc-button" data-content="^{#0}">xʸ</button>
+            <button class="calc-button" data-content="\frac{#0}{#?}">÷</button>
+            <button class="calc-button" data-content="*">×</button>
+  
+            <button class="calc-button" data-content="\ln(#0)">ln</button>
+            <button class="calc-button" data-content="\log(#0)">log</button>
+            <button class="calc-button" data-content="(">(</button>
+            <button class="calc-button" data-content=")">)</button>
+  
+            <!-- Numbriklahvid -->
+            <button class="calc-button" data-content="7">7</button>
+            <button class="calc-button" data-content="8">8</button>
+            <button class="calc-button" data-content="9">9</button>
+            <button class="calc-button" data-content="-">−</button>
+  
+            <button class="calc-button" data-content="4">4</button>
+            <button class="calc-button" data-content="5">5</button>
+            <button class="calc-button" data-content="6">6</button>
+            <button class="calc-button" data-content="+">+</button>
+  
+            <button class="calc-button" data-content="1">1</button>
+            <button class="calc-button" data-content="2">2</button>
+            <button class="calc-button" data-content="3">3</button>
+            <button id="calc-backspace">←</button>
+  
+            <button class="calc-button" data-content="0">0</button>
+            <button class="calc-button" data-content=".">.</button>
+            <button id="calc-clear">AC</button>
+            <button id="calc-evaluate">=</button>
+          </div>
+  
+          <!-- valemimärkide ala (esialgu peidetud) -->
+          <div id="symbol-panel" style="display:none; margin-top: 1rem;">
+            <!-- Kreeka tähed -->
+            <!-- SHIFT töötab nende data-upper/data-lower väärtuste põhjal -->
+            <button class="calc-button greek" data-content="\alpha" data-upper="\Alpha" data-lower="\alpha" data-char-upper="Α" data-char-lower="α">α</button>
+            <button class="calc-button greek" data-content="\beta" data-upper="\Beta" data-lower="\beta" data-char-upper="Β" data-char-lower="β">β</button>
+            <button class="calc-button greek" data-content="\gamma" data-upper="\Gamma" data-lower="\gamma" data-char-upper="Γ" data-char-lower="γ">γ</button>
+            <button class="calc-button greek" data-content="\delta" data-upper="\Delta" data-lower="\delta" data-char-upper="Δ" data-char-lower="δ">δ</button>
+            <button class="calc-button greek" data-content="\epsilon" data-upper="\Epsilon" data-lower="\epsilon" data-char-upper="Ε" data-char-lower="ε">ε</button>
+            <button class="calc-button greek" data-content="\zeta" data-upper="\Zeta" data-lower="\zeta" data-char-upper="Ζ" data-char-lower="ζ">ζ</button>
+            <button class="calc-button greek" data-content="\eta" data-upper="\Eta" data-lower="\eta" data-char-upper="Η" data-char-lower="η">η</button>
+            <button class="calc-button greek" data-content="\theta" data-upper="\Theta" data-lower="\theta" data-char-upper="Θ" data-char-lower="θ">θ</button>
+            <button class="calc-button greek" data-content="\iota" data-upper="\Iota" data-lower="\iota" data-char-upper="Ι" data-char-lower="ι">ι</button>
+            <button class="calc-button greek" data-content="\kappa" data-upper="\Kappa" data-lower="\kappa" data-char-upper="Κ" data-char-lower="κ">κ</button>
+            <button class="calc-button greek" data-content="\lambda" data-upper="\Lambda" data-lower="\lambda" data-char-upper="Λ" data-char-lower="λ">λ</button>
+            <button class="calc-button greek" data-content="\mu" data-upper="\Mu" data-lower="\mu" data-char-upper="Μ" data-char-lower="μ">μ</button>
+            <button class="calc-button greek" data-content="\nu" data-upper="\Nu" data-lower="\nu" data-char-upper="Ν" data-char-lower="ν">ν</button>
+            <button class="calc-button greek" data-content="\xi" data-upper="\Xi" data-lower="\xi" data-char-upper="Ξ" data-char-lower="ξ">ξ</button>
+            <button class="calc-button greek" data-content="\omicron" data-upper="\Omicron" data-lower="\omicron" data-char-upper="Ο" data-char-lower="ο">ο</button>
+            <button class="calc-button greek" data-content="\pi" data-upper="\Pi" data-lower="\pi" data-char-upper="Π" data-char-lower="π">π</button>
+            <button class="calc-button greek" data-content="\rho" data-upper="\Rho" data-lower="\rho" data-char-upper="Ρ" data-char-lower="ρ">ρ</button>
+            <button class="calc-button greek" data-content="\sigma" data-upper="\Sigma" data-lower="\sigma" data-char-upper="Σ" data-char-lower="σ">σ</button>
+            <button class="calc-button greek" data-content="\tau" data-upper="\Tau" data-lower="\tau" data-char-upper="Τ" data-char-lower="τ">τ</button>
+            <button class="calc-button greek" data-content="\upsilon" data-upper="\Upsilon" data-lower="\upsilon" data-char-upper="Υ" data-char-lower="υ">υ</button>
+            <button class="calc-button greek" data-content="\phi" data-upper="\Phi" data-lower="\phi" data-char-upper="Φ" data-char-lower="φ">φ</button>
+            <button class="calc-button greek" data-content="\chi" data-upper="\Chi" data-lower="\chi" data-char-upper="Χ" data-char-lower="χ">χ</button>
+            <button class="calc-button greek" data-content="\psi" data-upper="\Psi" data-lower="\psi" data-char-upper="Ψ" data-char-lower="ψ">ψ</button>
+            <button class="calc-button greek" data-content="\omega" data-upper="\Omega" data-lower="\omega" data-char-upper="Ω" data-char-lower="ω">ω</button>
+
+            <button class="calc-button" data-content="_{#0}">xᵧ</button>
+            <button class="calc-button" data-content="^{#0}">xʸ</button>
+            <button class="calc-button" data-content="_{#0}^{#?}">xᵧʸ</button>
+            <button class="calc-button" data-content="\degree">°</button>
+            <button class="calc-button" data-content="<">&lt;</button>
+            <button class="calc-button" data-content=">">&gt;</button>
+      
+            <button class="calc-button" data-content="\%">%</button>
+            <button class="calc-button" data-content="\approx">≈</button>
+            <button id="shift-toggle" style="grid-column: span 4;">SHIFT</button>
+            <button id="symbol-backspace">←</button>
+            <button id="symbol-clear">AC</button>
+            <button id="back-to-calc" style="margin-top:1rem;">Tagasi kalkulaatori juurde</button>
+          </div>
+  
+          <div style="margin-top: 1rem;">
+            <button id="toggle-symbols">Valemimärgid</button>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

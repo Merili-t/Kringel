@@ -1,0 +1,109 @@
+body {
+    font-family: sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 120px;
+    align-items: left;
+    padding-left: 40px;
+    padding-top: 50px;
+    margin-left: 4rem;
+  }
+  
+  .nav-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #555;
+  }
+  
+  .banner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.banner-img {
+    height: 100px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+  
+  main {
+    padding: 2rem;
+    margin: 2rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  body {
+    font-family: sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1rem;
+    align-items: center;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .logo {
+    font-weight: bold;
+    margin-left: auto;
+  }
+  
+  .kringel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100px;
+    margin: 0;
+    z-index: 1000;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .tutorial-description {
+    color: #393939;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}

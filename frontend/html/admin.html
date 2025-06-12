@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Kontode haldamine</title>
+  <link rel="stylesheet" href="../style/admin.css">
+  <link rel="stylesheet" href="../style/buttons.css">
+  <link rel="stylesheet" href="../style/popups.css">
+  <link rel="stylesheet" href="../style/main.css">
+  
+</head>
+<body>
+  <!-- Sidebar Menu -->
+  <div class="menu">
+    <div class="logo-container">
+      <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
+    </div>
+    <!-- You can add additional admin-specific navigation here if desired -->
+    <br>
+    <div class="logout-btn-container">
+      <button class="admin-btn poppins-semibold nav-btn" data-target="admin.html">ADMIN PANEL</button>
+      <br>
+      <button class="create-account-btn nav-btn poppins-semibold" data-target="createAccount.html">KONTO LOOMINE</button>
+      <br>
+      <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1>Administraatori paneel: Õpetajate kontod</h1>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Toimingud</th>
+        </tr>
+      </thead>
+      <tbody id="accounts-tbody">
+        <!-- Teacher accounts will be inserted here by admin.js -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="../popups/popupHelper.js" defer></script>
+  <script src="../popups/resetPassword.js" defer></script>
+  <script src="../popups/deleteAccount.js" defer></script>
+  <script src="../popups/logout.js" defer></script>
+  <script src="../script/admin.js"></script>
+  <script src="../script/buttons.js"></script>
+  
+
+  <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
+  <div id="custom-popup" class="popup">
+    <h3 id="popup-title" class="poppins-medium"></h3>
+    <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
+    <div id="popup-actions" style="margin-top: 20px;"></div>
+  </div>
+
+</body>
+</html>

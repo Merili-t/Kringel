@@ -1,0 +1,202 @@
+:root {
+  --primary-red: #b32c3b;
+  --primary-red-hover: #a0212f;
+  --light-gray: #f0f0f0;
+  --white: #ffffff;
+  --dark-gray: #333;
+  --border-radius: 12px;
+  --button-font: "Poppins", sans-serif;
+  --button-size: 1.1rem;
+}
+
+body {
+  font-family: var(--button-font);
+  background-color: var(--white);
+  color: #222;
+  padding: 1rem;
+  margin: 2rem auto;
+}
+
+#main-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+
+#juhend {
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+#calculator-area {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  max-width: 650px;
+}
+
+math-field {
+  width: 100%;
+  font-size: 1.4rem;
+  margin: 1rem 0;
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+#resultArea {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: right;
+  color: var(--dark-gray);
+}
+
+.keypad,
+.calc-buttons,
+.shift-toggle,
+#symbol-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Üldine nuppude stiil */
+.calc-button,
+#shift-toggle,
+#calc-clear,
+#calc-backspace,
+#calc-evaluate,
+#toggle-symbols,
+#back-to-calc,
+#symbol-backspace,
+#symbol-clear {
+  padding: 1.2rem;
+  font-size: var(--button-size);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  user-select: none;
+  border: none;
+}
+
+.calc-button[data-content="0"],
+.calc-button[data-content="1"],
+.calc-button[data-content="2"],
+.calc-button[data-content="3"],
+.calc-button[data-content="4"],
+.calc-button[data-content="5"],
+.calc-button[data-content="6"],
+.calc-button[data-content="7"],
+.calc-button[data-content="8"],
+.calc-button[data-content="9"] {
+  background-color: var(--white);
+  color: #222;
+  border: 1px solid #ccc;
+}
+
+.calc-button:not([data-content="0"]):not([data-content="1"]):not([data-content="2"])
+:not([data-content="3"]):not([data-content="4"]):not([data-content="5"])
+:not([data-content="6"]):not([data-content="7"]):not([data-content="8"])
+:not([data-content="9"]) {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+#calc-clear,
+#calc-backspace,
+#calc-evaluate,
+#toggle-symbols,
+#back-to-calc,
+#symbol-backspace,
+#symbol-clear {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+#calc-evaluate {
+  grid-column: span 2;
+}
+
+#back-to-calc {
+  grid-column: span 4;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  filter: brightness(0.95);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* MathLive lisanuppude peitmine */
+math-field::part(virtual-keyboard-toggle),
+math-field::part(menu-toggle) {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .keypad {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .calc-button {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  #resultArea {
+    font-size: 1.3rem;
+  }
+
+  math-field {
+    font-size: 1.2rem;
+  }
+}
+
+#calc-evaluate {
+  background-color: var(--primary-red);
+  color: white;
+  grid-column: span 1; 
+}
+
+.calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+#juhend {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+#juhend ul {
+  padding-left: 1.25rem;
+}
+
+#juhend li {
+  margin-bottom: 0.8rem;
+}
+
+#juhend code {
+  background-color: #eee;
+  color: #111;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: inline-block;
+  margin: 0.1rem 0;
+}
+

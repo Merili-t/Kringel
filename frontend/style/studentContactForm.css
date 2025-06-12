@@ -1,0 +1,77 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.form-left,
+.form-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #f7f7f7;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.upload-label,
+.video-link-label {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.upload-box {
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  background-color: #fff;
+}
+
+.upload-box img {
+  width: 48px;
+  height: 48px;
+  opacity: 0.6;
+}
+
+.video-link-input {
+  margin-top: 0.5rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #aaa;
+  background-color: #f7f7f7;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+}
+
+/* Responsive – väiksemates vaadetes üks veerg */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.upload-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #f7f7f7;
+}
+.upload-box:hover {
+  background-color: #f0f0f0;
+}

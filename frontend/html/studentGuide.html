@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../style/studentGuide.css" />
+<title>Testi sooritamise juhend</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<!-- Loading indicator -->
+<div id="loading" style="text-align: center; padding: 20px;">
+    <p>Laen testi andmeid...</p>
+</div>
+
+<!-- Error message -->
+<div id="error-message" style="display: none; color: red; text-align: center; padding: 20px;">
+    <p>Viga testi andmete laadimisel. Proovige hiljem uuesti.</p>
+</div>
+
+<!-- Main content - initially hidden -->
+<div id="main-content" style="display: none;">
+    <div class="header-box">
+        <span id="test-title">"Testi pealkiri"</span> juhend
+    </div>
+    
+    <div class="info-grid">
+        <div class="left-column">
+            <div class="info-item">
+                <h3>
+                    <img src="../images/clock.png" class="icon" alt="kell_logo">
+                    Testi on aega sooritada <span id="test-duration">...</span>
+                </h3>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="info-item">
+                <h3>
+                    <img src="../images/exam2.png" class="icon" alt="küsimus_logo">
+                    Test koosneb <span id="question-count">...</span> küsimusest
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test description -->
+    <div class="section" id="test-description-section" style="display: none;">
+        <h3>
+            <img src="../images/document.png" class="icon" alt="dokument_logo">
+            Testi kirjeldus
+        </h3>
+        <p id="test-description"></p>
+    </div>
+
+    <!-- Test period info -->
+    <div class="section">
+        <h3>
+            <img src="../images/calendar.png" class="icon" alt="kalendri_logo">
+            Testi periood
+        </h3>
+        <p>
+            Test on avatud <strong id="test-start-date">...</strong> kuni <strong id="test-end-date">...</strong>
+        </p>
+        <div id="test-status" class="test-status">
+            <span id="status-indicator">...</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>
+            <img src="../images/document.png" class="icon" alt="dokument_logo">
+            Õigekiri
+        </h3>
+        <ul>
+            <li>Reeglid, mida järgida testi lahendamisel</li>
+            <li>Näiteks sisestamise kohta, kuidas töötavad suured ja väikesed tähed</li>
+            <li>Arvude puhul kasutada kas koma või punkti</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>
+            <img src="../images/file.png" class="icon" alt="küsimus_logo">
+            Kuidas videoklipi üleslaadida? (kui on mingeid muid ülesandeid mida lisaks testi lahendamiseks tegema peab)
+        </h3>
+        <ul>
+            <li>Juhend videoklipi üleslaadimiseks</li>
+            <li>Kui pikk video olema peab</li>
+        </ul>
+    </div>
+
+    <div class="button-container">
+        <a href="studentContactForm.html" class="button" id="continue-button">Edasi</a>
+    </div>
+</div>
+</div>
+
+<!-- Basic CSS for status indicator -->
+<style>
+.test-status {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-upcoming {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-expired {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+#loading {
+    font-size: 16px;
+    color: #666;
+}
+</style>
+
+<!-- Load JavaScript -->
+<script src="../js/studentGuide.js"></script>
+</body>
+</html>

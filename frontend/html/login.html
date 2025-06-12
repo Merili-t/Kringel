@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logi sisse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/buttons.css" />
+    <link rel="stylesheet" href="../style/account.css" />
+    <script defer src="../script/login.js"></script>
+  </head>
+  <body>
+    <div class="logo-container">
+      <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
+    </div>
+    <h1 class="poppins-bold">Logi sisse</h1>
+    <form action="" method="POST" id="createForm" onsubmit="handleLogin(event)">
+      <div class="tutorial poppins-regular">
+        <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
+        <input
+          type="email"
+          name="email"
+          placeholder="Sisesta email..."
+          required
+        />
+        <h3 class="poppins-medium">Sisesta parool<sup>*</sup></h3>
+        <div class="password-field">
+          <input
+            type="password"
+            name="password"
+            placeholder="Sisesta parool..."
+            required
+          />
+          <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
+
+        </div>
+      </div>
+      <div>
+        <button class="login-btn poppins-bold" type="submit">Logi sisse</button>
+      </div>
+    </form>
+  </body>
+</html>

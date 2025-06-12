@@ -39,45 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Palun sisesta algus- ja lõpukuupäev ning aeg.");
       return;
     }
-
-    // Construct the payload.
-    // <<-- Fix: note "timeLimit" key with a capital 'L' as per API docs.
-    const payload = {
-      name: title,
-      description: description,
-      timeLimit: parseInt(duration),
-      start: `${startDate} ${startTime}`,
-      end: `${endDate} ${endTime}`,
-    };
-
-    console.log("Saadame API-le:", payload);
-
-    try {
-      const response = await fetch("http://localhost:3006/test/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await response.json();
-      console.log(response);
-      /*
-      if (response.ok) {
-        alert("Test edukalt loodud!");
-        form.reset();
-        // Redirect to testCreation.html after successful save.
-        window.location.href = "../html/testCreation.html";
-      } else {
-        alert(result.error || "Midagi läks valesti.");
-      }
-      */
-    } catch (error) {
-      console.log(error)
-      // console.error("Error saving test details:", error);
-      alert("Serveriga ühenduse loomine ebaõnnestus. Palun proovi hiljem uuesti.");
-    }
   });
 });
 

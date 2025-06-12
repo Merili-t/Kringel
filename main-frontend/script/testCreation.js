@@ -445,49 +445,9 @@ class QuizBuilder {
         this.init();
     }
     saveQuiz(quizData) {
-        return fetch('http://localhost:3006/test/upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(quizData),
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert("Quiz salvestatud!");
-                return result.quizId;
-            } else {
-                alert(result.error || "Salvestamine ebaõnnestus.");
-                throw new Error(result.error);
-            }
-        })
-        .catch(error => {
-            console.error("Save error:", error);
-            alert("Midagi läks valesti salvestamisel.");
-        });
     }
 
     loadQuiz(quizId) {
-        return fetch(`http://localhost:3006/quiz/load/${quizId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                return result.quizData;
-            } else {
-                alert(result.error || "Laadimine ebaõnnestus.");
-                throw new Error(result.error);
-            }
-        })
-        .catch(error => {
-            console.error("Load error:", error);
-            alert("Midagi läks valesti laadimisel.");
-        });
     }
 
     collectQuizData() {
@@ -839,27 +799,22 @@ class QuizBuilder {
     }
 
     showPreview(value) {
-        console.log("showPreview() called with value:", value);
         const previewSection        = document.getElementById('preview-section');
         const previewContent        = document.getElementById('preview-content');
         const calculatorWrapper     = document.getElementById('calculator-wrapper');
         const calculatorIframe      = document.getElementById('calculator-iframe');
         const genericPreviewWrapper = document.getElementById('generic-preview-wrapper');
 
-        if (!previewSection || !previewContent) {
-            console.error("Missing preview section or preview content elements");
-            return;
-        }
-        
+        if (!previewSection || !previewContent) return;
         previewSection.style.display = 'block';
 
         // Completely wipe out any old preview
         previewContent.innerHTML = `
             <div id="calculator-wrapper" style="display:none; margin-top:1rem;">
-                <iframe id="calculator-iframe" src="" width="100%" height="600"
-                        style="border:1px solid #ccc;"></iframe>
-                <p><strong>Saadetud vastus:</strong>
-                    <span id="calculator-answer-preview"></span></p>
+            <iframe id="calculator-iframe" src="" width="100%" height="600"
+                    style="border:1px solid #ccc;"></iframe>
+            <p><strong>Saadetud vastus:</strong>
+                <span id="calculator-answer-preview"></span></p>
             </div>
             <div id="generic-preview-wrapper" style="display:none;"></div>
         `;
@@ -869,43 +824,43 @@ class QuizBuilder {
         const calcFrame  = document.getElementById('calculator-iframe');
         const genWrap    = document.getElementById('generic-preview-wrapper');
 
-        // Reset the iframe src to avoid stale content
-        calcFrame.src = '';
-        console.log("Before condition, calcFrame.src reset to:", calcFrame.src);
-
-        // If the selected answer type calls for the LaTeX calculator
+        // Calc iframe
+        calcFrame.src = ''; // Reset the src to avoid stale content
         if (value === 'latex-kalkulaator') {
-            console.log("Value indicates LaTeX calculator. Setting iframe source.");
             calcWrap.style.display = 'block';
-            // Check if calculator.html is accessible at the expected path.
-            calcFrame.src = 'calculator.html';
-            console.log("calcFrame.src set to:", calcFrame.src);
+            calcFrame.src          = 'calculator.html';
         }
-        // Otherwise, show the generic preview and use the corresponding renderer
+        // Otherwise show the generic wrapper and call your renderer
         else {
             genWrap.style.display = 'block';
             const renderers = {
-                'luhike-tekst':            () => this.renderShortText(),
-                'pikk-tekst':              () => this.renderLongText(),
-                'uks-oige':                () => this.renderSingleChoice(),
-                'mitu-oiget':              () => this.renderMultipleChoice(),
-                'maatriks-uks':            () => this.renderMatrixSingle(),
-                'maatriks-mitu':           () => this.renderMatrixMultiple(),
-                'joonistamine':            () => this.renderDrawingCanvas(),
-                'interaktiivne':           () => this.renderImageUpload(),
-                'keemia_tasakaalustamine': () => this.renderChemistryBalance(),
-                'keemia_ahelad':           () => this.renderChemistryChains()
+            'luhike-tekst':            () => this.renderShortText(),
+            'pikk-tekst':              () => this.renderLongText(),
+            'uks-oige':                () => this.renderSingleChoice(),
+            'mitu-oiget':              () => this.renderMultipleChoice(),
+            'maatriks-uks':            () => this.renderMatrixSingle(),
+            'maatriks-mitu':           () => this.renderMatrixMultiple(),
+            'joonistamine':            () => this.renderDrawingCanvas(),
+            'interaktiivne':           () => this.renderImageUpload(),
+            'keemia_tasakaalustamine': () => this.renderChemistryBalance(),
+            'keemia_ahelad':           () => this.renderChemistryChains()
             };
             if (renderers[value]) {
-                console.log("Found renderer for value:", value);
-                renderers[value]();
+            renderers[value]();
             } else {
-                console.log("No renderer found for value:", value);
-                genWrap.innerHTML = `<p>${value} eelvaade pole veel seadistatud.</p>`;
+            genWrap.innerHTML = `<p>${value} eelvaade pole veel seadistatud.</p>`;
             }
         }
-    }
 
+        // 5) Finally append your save‐button once
+        const saveButton = this.createAddButton('Salvesta Quiz');
+        saveButton.style.background = '#8a1929';
+        saveButton.addEventListener('click', () => {
+            const quizData = this.collectQuizData();
+            this.saveQuiz(quizData);
+        });
+        previewContent.appendChild(saveButton);
+        }
 
     renderSingleChoice() {
         const container = this.createContainer('Ühe õige vastuse valik:');
@@ -1909,218 +1864,7 @@ class QuizBuilder {
 }
 
 // Initialize the quiz builder
-// --- Initialize the Quiz Builder ---
 const quizBuilder = new QuizBuilder();
-
-// --- "Lisa" Button: Show Popup Instead of Alert ---
-document.getElementById('add-question').addEventListener('click', () => {
-  const quizData = quizBuilder.collectQuizData();
-  if (!quizData) {
-    alert("Palun sisesta vajalik küsimuse info!");
-    return;
-  }
-  // Show the custom popup defined in the HTML (for adding a question or block options)
-  document.getElementById("add-popup").style.display = "block";
-});
-
-// Optional: If your popup doesn’t already have a close listener
-document.getElementById("popup-close").addEventListener("click", () => {
-  document.getElementById("add-popup").style.display = "none";
-});
-
-// --- "Lõpeta testi koostamine" Button: Full Save Procedure ---
-document.querySelector('.next-question').addEventListener('click', async () => {
-  const quizData = quizBuilder.collectQuizData();
-  if (!quizData) {
-    alert("Palun sisesta küsimuse andmed enne testi lõpetamist!");
-    return;
-  }
-  
-  try {
-    // 1. Create the Test via POST /test/upload
-    const testResponse = await fetch('http://localhost:3006/test/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: quizData.name || "Nimetu test",            // Ensure `name` exists
-        description: quizData.description || "Kirjeldus puudub",
-        start: quizData.start,                            // Ensure ISO format if necessary
-        end: quizData.end,
-        timeLimit: quizData.timelimit                     // Make sure key name matches API expectations
-      })
-    });
-    const testResult = await testResponse.json();
-    if (!testResult.id) {
-      throw new Error("Testi loomine ebaõnnestus");
-    }
-
-    // 2. Create the Block via POST /block/upload using testResult.id
-    const blockResponse = await fetch('http://localhost:3006/block/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        testId: testResult.id,
-        blockNumber: 1
-      })
-    });
-    const blockResult = await blockResponse.json();
-    if (!blockResult.id) {
-      throw new Error("Bloki loomine ebaõnnestus");
-    }
-
-    // 3. Upload Each Question via POST /question/upload
-    const questions = quizData.block[0].blockQuestions;
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      await fetch('http://localhost:3006/question/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          blockId: blockResult.id,
-          question: q.question,
-          points: q.points,
-          answerType: q.answerType,      // Ensure this is a number as per your API
-          orderNumber: i + 1,
-          answerVariables: q.answerVariables
-        })
-      });
-    }
-
-    alert("Test salvestatud edukalt!");
-    window.location.href = `/test/${testResult.id}`;
-
-  } catch (err) {
-    console.error("Viga lõpliku salvestusega:", err);
-    alert("Midagi läks valesti salvestamisel, proovi uuesti.");
-  }
-});
-
-// --- Dropdown Setup ---
-// In your QuizBuilder class, you likely have something like:
-QuizBuilder.prototype.setupDropdown = function() {
-  const dropdown = document.getElementById('answer-type-dropdown');
-  const dropdownSelected = document.getElementById('dropdown-selected');
-  const dropdownOptions = document.getElementById('dropdown-options');
-  if (!dropdown || !dropdownSelected || !dropdownOptions) return;
-
-  // Toggle dropdown on clicking the selected area
-  dropdownSelected.addEventListener('click', (e) => {
-    e.stopPropagation();
-    // Toggle visible state
-    dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
-  });
-  
-  // Handle selection from dropdown options
-  dropdownOptions.addEventListener('click', e => {
-    const opt = e.target;
-    if (!opt.classList.contains('dropdown-option')) return;
-    const value = opt.getAttribute('data-value');
-    const text = opt.textContent;
-    // Update the displayed text and optionally store value in data- attributes
-    dropdownSelected.querySelector('span').textContent = text;
-    dropdownOptions.style.display = 'none';
-    // Render the preview for the selected answer type
-    this.showPreview(value);
-  });
-  
-  // Close dropdown if clicking outside
-  document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target)) {
-      dropdownOptions.style.display = 'none';
-      dropdown.classList.remove('open');
-    }
-  });
-};
-
-// --- Note on answer types ---
-// When collecting quiz data (in collectQuizData), ensure that the answer type is set as a number:
-// For example:
-QuizBuilder.prototype.collectQuizData = function() {
-  const quizData = {
-    name: "Temporary Test Name",
-    descripion: "Temporary Description",  // Note: typo intentionally matching your API if needed.
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
-    timelimit: 60,
-    block: [{
-      blockNumber: 1,
-      blockQuestions: []
-    }]
-  };
-  // Determine the answer type from dropdown
-  const dropdown = document.getElementById("dropdown-selected");
-  let answerTypeStr = dropdown && dropdown.querySelector("span") ? dropdown.querySelector("span").dataset.value || "luhike-tekst" : "luhike-tekst";
-  let answerTypeCode;
-  switch (answerTypeStr) {
-    case "uks-oige":
-      answerTypeCode = 0;
-      break;
-    case "mitu-oiget":
-      answerTypeCode = 1;
-      break;
-    case "luhike-tekst":
-    case "pikk-tekst":
-      answerTypeCode = 2;
-      break;
-    case "maatriks-uks":
-    case "maatriks-mitu":
-      answerTypeCode = 3;
-      break;
-    case "interaktiivne":
-      answerTypeCode = 4;
-      break;
-    case "keemia tasakaalustamine":
-      answerTypeCode = 5;
-      break;
-    case "joonistamine":
-      answerTypeCode = 6;
-      break;
-    default:
-      answerTypeCode = 2;
-  }
-  // Collect answer variables as needed (example for single choice)
-  let answerVariables = [];
-  if (answerTypeStr === "uks-oige") {
-    const optionRows = document.querySelectorAll("#single-options .option-row");
-    optionRows.forEach(row => {
-      const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
-      const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
-      answerVariables.push({ answer: optText, correct: isCorrect });
-    });
-  } else if (answerTypeStr === "mitu-oiget") {
-    const optionRows = document.querySelectorAll("#multiple-options .option-row");
-    optionRows.forEach(row => {
-      const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
-      const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
-      answerVariables.push({ answer: optText, correct: isCorrect });
-    });
-  } else {
-    // For text and others, for instance:
-    const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
-    if (answerInput) {
-      answerVariables.push({ answer: answerInput.value.trim(), correct: true });
-    }
-  }
-  
-  // Get the question text from your textarea
-  const questionTextElem = document.getElementById("question-text");
-  const questionText = questionTextElem ? questionTextElem.value.trim() : "";
-  if (!questionText) {
-    alert("Palun sisesta küsimuse tekst!");
-    return null;
-  }
-  
-  // Add the question object to the block
-  quizData.block[0].blockQuestions.push({
-    question: questionText,
-    points: document.getElementById("points-input").value.trim() || null,
-    answerType: answerTypeCode,
-    answerVariables: answerVariables
-  });
-  
-  return quizData;
-};
-
 
 // Legacy function support (if needed)
 window.closeDropdown = () => {

@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="../style/main.css" />
     <link rel="stylesheet" href="../style/buttons.css" />
     <link rel="stylesheet" href="../style/account.css" />
-    <script defer src="../script/login.js"></script>
+    <script defer type="module" src="../script/login.js"></script> <!-- Add type="module" before your script where you want to use fetch -->
   </head>
   <body>
     <div class="logo-container">
       <img src="../images/logo.png" alt="Logo" style="height: 200px;" />
     </div>
     <h1 class="poppins-bold">Logi sisse</h1>
-    <form action="" method="POST" id="createForm" onsubmit="handleLogin(event)">
+    <form id="createForm"> <!-- This is what form should look like -->
       <div class="tutorial poppins-regular">
         <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
         <input

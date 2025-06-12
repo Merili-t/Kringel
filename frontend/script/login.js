@@ -1,70 +1,42 @@
-/*document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("createForm");
+import createFetch from "./utils/createFetch"; // Import in your file
 
-    form.addEventListener("submit", handleLogin);
-  });
-*/
-  async function handleLogin(e) {
-    e.preventDefault();
-    const form = document.getElementById("createForm");
+document.addEventListener("DOMContentLoaded", function () { // This is inportat to have 
+  const form = document.getElementById("createForm");
 
-    const email = form.email.value.trim();
-    const password = form.password.value;
+  form.addEventListener("submit", handleLogin); // handleLogin has to be a function where you use fetch
+});
 
-    if (!email && !password) {
-      alert("Palun sisesta email ja parool.");
-      return;
-    }
-    if (!email) {
-      alert("Meiliaadress on sisestamata.");
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Palun sisesta kehtiv meiliaadress.");
-      return;
-    }
-    if (!password) {
-      alert("Parool on tühi.");
-      return;
-    }
 
-    try {
-      document.cookie = `token=${sessionStorage.getItem('token')}; path=/`;
+async function handleLogin(e) { // Needs to have async to be able to use fetch
+  e.preventDefault();
+  const form = document.getElementById("createForm");
 
-      const response = await fetch('http://localhost:3006/auth/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const result = await response.json();
-
-      if (result.message) {
-        sessionStorage.setItem('token', result.token);
-        document.cookie = `token=${result.token}; path=/`;
-
-        alert("Sisselogimine õnnestus!");
-        window.location.href = result.userType === "admin" ? "admin.html" : "allTests.html";
-      } else {
-        alert(result.error || "Sisselogimine ebaõnnestus.");
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-    }
+  const data = {
+    email: form.email.value.trim(),
+    password: form.password.value
   }
 
-  function toggleVisibility(icon) {
-    const input = icon.previousElementSibling;
-    if (input.type === "password") {
-      input.type = "text";
-      icon.textContent = "🙈";
+  try {
+    const result = await createFetch('/auth/login', 'POST', data); // createFetch wants (route, method, data) in this order. For POST data is an object and for GET a string
+
+    if (result.message) {
+      window.location.href = result.userType === "admin" ? "admin.html" : "allTests.html";
     } else {
-      input.type = "password";
-      icon.textContent = "👁";
+      alert(result.error || "Sisselogimine ebaõnnestus.");
     }
-  } 
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
+  }
+}
+
+function toggleVisibility(icon) {
+  const input = icon.previousElementSibling;
+  if (input.type === "password") {
+    input.type = "text";
+    icon.textContent = "🙈";
+  } else {
+    input.type = "password";
+    icon.textContent = "👁";
+  }
+}

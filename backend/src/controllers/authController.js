@@ -10,8 +10,6 @@ import team from '../database/models/team.js';
 
 const createSession = (res, id, userType, message, userTypeMessage) => {
   const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '7d' });
-  res.json({ message, token });
-  /*
   res
     .cookie('token', token, {
       httpOnly: true,
@@ -20,7 +18,6 @@ const createSession = (res, id, userType, message, userTypeMessage) => {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     })
     .json({ message, userTypeMessage });
-  */
 };
 
 export const login = async (req, res) => {
@@ -50,7 +47,7 @@ export const login = async (req, res) => {
       res.status(401).json({ error: 'Wrong email or password given' });
     }
   } else if (serverUserData.isLoggedIn && serverUserData.userType === 'teacher') {
-    res.json({ message: 'Logged in' });
+    res.json({ message: 'Logged in', userType: 'teacher' });
   } else {
     res.status(400).json({ error: 'Email and password are required' });
   }

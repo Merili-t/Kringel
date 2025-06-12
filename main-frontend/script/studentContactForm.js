@@ -137,29 +137,5 @@ async function submitContactForm() {
       videoLink: videoLink,
     });
   }
-
-  try {
-    // API päring; muuda URL vajadusel vastavalt oma keskkonnale
-    const response = await fetch("http://localhost:3006/test/contact", {
-      method: "POST",
-      // Kui requestBody on FormData, ära lisa headers objekti üldse!
-      ...(requestBody instanceof FormData ? {} : { headers }),
-      credentials: "include",
-      body: requestBody,
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert("Kontaktandmed edukalt salvestatud!");
-      console.log("Kontaktandmed salvestatud:", result);
-      window.location.href = "solvingTest.html";
-    } else {
-      alert("Andmete salvestamine ebaõnnestus: " + (result.error || "Tundmatu viga"));
-    }
-  } catch (error) {
-    console.error("Kontaktandmete saatmise viga:", error);
-    alert("Viga andmete saatmisel. Palun proovi uuesti.");
-  }
 }
 

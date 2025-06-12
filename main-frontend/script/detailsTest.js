@@ -41,13 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Construct the payload.
+    // <<-- Fix: note "timeLimit" key with a capital 'L' as per API docs.
     const payload = {
       name: title,
       description: description,
-      timelimit: parseInt(duration),
+      timeLimit: parseInt(duration),
       start: `${startDate} ${startTime}`,
       end: `${endDate} ${endTime}`,
-      block: [] // Adjust this if you later need to send block data.
     };
 
     console.log("Saadame API-le:", payload);
@@ -62,7 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const result = await response.json();
-
+      console.log(response);
+      /*
       if (response.ok) {
         alert("Test edukalt loodud!");
         form.reset();
@@ -71,8 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         alert(result.error || "Midagi läks valesti.");
       }
+      */
     } catch (error) {
-      console.error("Error saving test details:", error);
+      console.log(error)
+      // console.error("Error saving test details:", error);
       alert("Serveriga ühenduse loomine ebaõnnestus. Palun proovi hiljem uuesti.");
     }
   });
@@ -89,3 +92,4 @@ function populateDurationDropdown() {
     durationSelect.appendChild(option);
   });
 }
+

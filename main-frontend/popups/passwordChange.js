@@ -34,18 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       try {
-        const formData = new FormData();
-        formData.append("email", email);
-        const response = await fetch("http://localhost:3006/user/password???", { 
-          method: "POST",
-          body: formData,
-        });
-        const result = await response.json();
-        alert(result.message);
-        if (result.success) {
+        // Stub: simulate sending a password reset email.
+        console.log("Simulating password reset request for email:", email);
+        setTimeout(() => {
+          // Simulate a successful response from the server.
+          alert("Parooli lähtestuse juhised saadetud! (Stub)");
           forgotPopup.style.display = "none";
           overlay.style.display = "none";
-        }
+        }, 500);
       } catch (error) {
         console.error("Viga:", error);
         alert("Midagi läks valesti.");

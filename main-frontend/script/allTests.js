@@ -1,45 +1,54 @@
 // allTests.js
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // Define the endpoint for fetching tests
-  const testsEndpoint = "http://localhost:3006/tests";
+  // --- Stub: Replace the network fetch with dummy tests data ---
+  const tests = [
+    {
+      name: 'Testi nimi 1',
+      description: 'Kirjeldus testile 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      questionsCount: 5,
+      responsesCount: 3
+    },
+    {
+      name: 'Testi nimi 2',
+      description: 'Kirjeldus testile 2: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.',
+      questionsCount: 10,
+      responsesCount: 7
+    },
+    {
+      name: 'Testi nimi 3',
+      description: 'Kirjeldus testile 3: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      questionsCount: 8,
+      responsesCount: 4
+    }
+  ];
 
   try {
-    // Fetch the tests data from your backend
-    const response = await fetch(testsEndpoint, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    // Assume the response is a JSON array of tests:
-    // [ { name: 'Testi nimi', description: 'Kirjeldus...', questionsCount: 5, responsesCount: 3 }, ... ]
-    const tests = await response.json();
+    // Original fetch call removed. Now using stubbed 'tests' data.
+    // const response = await fetch(testsEndpoint, { ... });
+    // const tests = await response.json();
 
     // Select the container where tests will be injected.
-    // Here, the HTML has a container with the class "test-section" that holds a test header and then a container,
-    // so we’ll assume we want to insert each test into a central container (e.g., a div with class "test-section").
     const testSectionContainer = document.querySelector(".test-section");
 
     // Optional: Clear any existing content in the test section.
     testSectionContainer.innerHTML = "";
 
-    // For each test data, dynamically create a test card.
+    // For each test, dynamically create a test card.
     tests.forEach((test) => {
       // Create a wrapper for a single test.
       const testWrapper = document.createElement("div");
       testWrapper.classList.add("test-container");
-      
+
       // Create header container for test info 
       const testHeader = document.createElement("div");
       testHeader.classList.add("test-header");
-      
+
       // Test name
       const testName = document.createElement("h3");
       testName.classList.add("poppins-bold");
       testName.textContent = test.name;
-      
+
       // Test description
       const description = document.createElement("div");
       description.classList.add("test-description", "poppins-regular");

@@ -8,26 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
           { 
             text: "Jah", 
             action: async () => {
-              try {
-                const response = await fetch('http://localhost:3006/auth/logout', {
-                  method: "GET", // or GET if your API expects that
-                  headers: {
-                    "Content-Type": "application/json",
-                    // Include authorization headers or credentials if needed
-                  }
-                  // body: JSON.stringify({ token: yourTokenVariable }), // if required
-                });
-                const result = await response.json();
-                if (result.success) {
-                  alert("Oled välja logitud!");
-                  window.location.href = "login.html";
-                } else {
-                  alert(result.error || "Väljalogimine ebaõnnestus.");
-                }
-              } catch (error) {
-                console.error("Logout error:", error);
-                alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-              }
+              // Stub: simulate network delay and logout success.
+              setTimeout(() => {
+                alert("Oled välja logitud! (Stub)");
+                window.location.href = "login.html";
+              }, 500);
             } 
           },
           { 

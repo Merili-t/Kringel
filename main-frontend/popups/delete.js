@@ -5,17 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           text: "Kustuta",
           action: () => {
-            fetch("../php/popups.php", {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: "type=kustuta&test_id=123"
-            })
-              .then(res => res.text())
-              .then(msg => {
-                alert(msg);
-                clearQuestionForm();
-                closePopup();
-              });
+            setTimeout(() => {
+              alert("Kustutamine õnnestus (stub).");
+              clearQuestionForm();
+              closePopup();
+            }, 500);
           }
         },
         { text: "Tühista", cancel: true }

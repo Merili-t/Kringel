@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // --- Prepare the request payload ---
+            // (The endpoint and fetchOptions are defined here for reference)
             const endpoint = "http://localhost:3006/questions/save";
             let fetchOptions;
 
@@ -67,6 +68,18 @@ document.addEventListener("DOMContentLoaded", () => {
               };
             }
 
+            // --- Stub for saving the question ---
+            console.log("Simulating save to", endpoint, "with options:", fetchOptions);
+            // Simulate network delay then "return" a successful response.
+            setTimeout(() => {
+              const result = { message: "Küsimus salvestatud edukalt! (Stub)" };
+              alert(result.message);
+              closePopup();
+            }, 500);
+
+            // --- End of stub ---
+            /*
+            // Original fetch call (removed in stub):
             try {
               const response = await fetch(endpoint, fetchOptions);
               const result = await response.json();
@@ -76,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
               console.error("Error saving question:", error);
               alert("Küsimuse salvestamine ebaõnnestus.");
             }
+            */
           }
         }
       ]);

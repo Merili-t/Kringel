@@ -5,27 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           text: "Salvesta",
           action: async () => {
-            try {
-              const data = {
-                test_id: 123,
-                some_field: "muudetudV22rtus" 
-              };
-
-              const response = await fetch('http://localhost:3006/tests/update', {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-              });
-
-              const result = await response.json();
-              alert(result.message || "Salvestamine õnnestus!");
-            } catch (error) {
-              console.error("Error updating test details:", error);
-              alert("Salvestamine ebaõnnestus.");
-            }
-            closePopup();
+            // Prepare data (if needed for logging or future integration)
+            const data = {
+              test_id: 123,
+              some_field: "muudetudV22rtus" 
+            };
+            console.log("Simulating update with data:", data);
+            // Stub: simulate a network delay and a successful update without an actual fetch
+            setTimeout(() => {
+              alert("Salvestamine õnnestus! (Stub)");
+              closePopup();
+            }, 500);
           }
         },
         { text: "Tühista", cancel: true }

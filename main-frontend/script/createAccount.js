@@ -26,30 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const formData = new FormData(form);
-
-    try {
-      const response = await fetch('http://localhost:3006/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.toString(),
-          password: password.toString(),
-        }),
-      });
-
-      const result = await response.json();
-      if (result.message) {
-        alert("Konto loomine õnnestus!");
-        window.location.href = "allTests.html";
-      } else {
-        alert(result.error || "Konto loomine ebaõnnestus.");
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-    }
   });
 });
 

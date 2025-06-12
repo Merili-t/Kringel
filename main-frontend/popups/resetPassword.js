@@ -9,23 +9,16 @@ async function resetPassword(email) {
         text: "Salvesta",
         action: async () => {
           if (inputPassword.trim() !== "") {
-            try {
-              const response = await fetch('http://localhost:3006/auth/resetPassword', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, newPassword: inputPassword })
-              });
-
-              const result = await response.json();
-              if (result.message) {
+            // Stub: Simulate the async behavior and a successful password reset.
+            setTimeout(() => {
+              // Simulated result:
+              const success = true; // Change as needed to simulate failures.
+              if (success) {
                 alert(`Parool muudetud: ${email}`);
               } else {
-                alert(result.error || "Parooli muutmine ebaõnnestus.");
+                alert("Parooli muutmine ebaõnnestus.");
               }
-            } catch (error) {
-              console.error("Fetch error:", error);
-              alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
-            }
+            }, 500);
           } else {
             alert("Parooli väli oli tühi. Parooli ei muudetud.");
           }
@@ -35,13 +28,13 @@ async function resetPassword(email) {
     ]
   );
 
-  // Lisa input popupi sisse – enne nuppe
+  // Add the input field inside the popup – before the action buttons.
   const actions = document.getElementById("popup-actions");
   const input = document.createElement("input");
   input.type = "password";
   input.placeholder = "Uus parool";
   input.className = "popup-input";
-  input.oninput = (e) => inputPassword = e.target.value;
+  input.oninput = (e) => (inputPassword = e.target.value);
 
   actions.insertAdjacentElement("afterbegin", input);
 }

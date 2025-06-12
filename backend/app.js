@@ -22,7 +22,7 @@ let app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cors({
-  origin: 'http://127.0.0.1:5500', // Temp
+  origin: 'http://127.0.0.1:5173', // Temp
   credentials: true
 }));
 app.use(express.urlencoded({ extended: false }));

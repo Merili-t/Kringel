@@ -1,4 +1,4 @@
-import { BaseCalculator } from '/BaseCalculator.js';
+import { BaseCalculator } from './BaseCalculator.js';
 // @ts-ignore: Use the ComputeEngine from the CDN
 import { ComputeEngine } from 'https://unpkg.com/@cortex-js/compute-engine?module';
 const ce = new ComputeEngine();

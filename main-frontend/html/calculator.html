@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h2>Matemaatika ja füüsika kalkulaator</h2>
 <div class="wrapper">
   <div id="main-wrapper">
     <div id="calculator-area">
@@ -118,22 +117,5 @@
     </div>
   </div>
 </div>
-<script>
-  const sendButton = document.createElement('button');
-  sendButton.textContent = 'Saada vastus';
-  sendButton.style.marginTop = '1rem';
-  sendButton.style.padding = '10px';
-  sendButton.style.backgroundColor = '#007BFF';
-  sendButton.style.color = 'white';
-  sendButton.style.border = 'none';
-  sendButton.style.borderRadius = '5px';
-  sendButton.onclick = () => {
-    const latexInput = document.getElementById('latexInput');
-    if (!latexInput) return;
-    const latex = latexInput.value;
-    window.parent.postMessage({ type: 'calculator-answer', latex }, '*');
-  };
-  document.body.appendChild(sendButton);
-</script>
 </body>
 </html>

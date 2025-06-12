@@ -1,26 +1,47 @@
-import { LatexCalculator } from "/LatexCalculator.js";
+
+import { LatexCalculator } from "./LatexCalculator.js";
+
+// Disable all MathLive sounds globally
+MathfieldElement.soundsDirectory = null;
+MathfieldElement.keypressSound = {
+  default: null,
+  delete:  null,
+  return:  null,
+  spacebar:null
+};
+MathfieldElement.plonkSound = null;
+
 export class VisualCalculator {
     constructor(inputId, resultId) {
+        // 2) Grab the mathfield
         const mathfield = document.getElementById(inputId);
+        if (!mathfield) {
+            console.error(`Element with id '${inputId}' not found!`);
+            return;
+        }
         this.inputField = mathfield;
         this.resultElement = document.getElementById(resultId);
         this.logic = new LatexCalculator();
         this.logic.setContents(this.inputField.value);
-        if (!mathfield) {
-            console.error(`Element with id '${inputId}' not found!`);
-        }
-        this.inputField = mathfield;
+
+        // 3) Prune the built-in context menu
+        mathfield.menuItems = mathfield.menuItems.filter(item =>
+            item.id === 'insert'
+        );
+
         this.setupButtons();
-        // Kuula MathLive input muutusi
+        // Listen for MathLive input changes
         this.inputField.addEventListener('input', () => {
             const content = this.inputField.value;
             this.logic.setContents(content);
         });
     }
+
     insertToInput(content) {
         this.inputField.insert(content);
         this.inputField.focus();
     }
+
     setupButtons() {
         var _a, _b, _c, _d, _e;
         document.querySelectorAll('.calc-button').forEach((el) => {
@@ -47,8 +68,7 @@ export class VisualCalculator {
                     if (shiftActive && upper && upperChar) {
                         button.innerText = upperChar;
                         button.setAttribute('data-content', upper);
-                    }
-                    else if (lower && lowerChar) {
+                    } else if (lower && lowerChar) {
                         button.innerText = lowerChar;
                         button.setAttribute('data-content', lower);
                     }
@@ -93,4 +113,5 @@ export class VisualCalculator {
         }
     }
 }
-console.log("test");
+
+console.log("VisualCalculator initialized");

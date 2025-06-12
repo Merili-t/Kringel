@@ -1,5 +1,5 @@
 // API base URL - muuda vastavalt oma backend URL-ile
-const API_BASE_URL = 'http://localhost:3000/api'; // või sinu serveri URL
+const API_BASE_URL = 'http://localhost:3006/test'; // või sinu serveri URL
 
 // Testi ID - võid saada URL parameetrist või muul viisil
 let testId = null;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Funktsioon testi ID saamiseks URL parameetrist
 function getTestIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('testId');
+    return urlParams.get('testId') || '47371e41-475d-11f0-9ae9-b6dee83d52ff'; // fallback testimiseks
 }
 
 // Peamine funktsioon testi andmete laadimiseks
@@ -71,11 +71,11 @@ async function fetchTestData(testId) {
             // 'Authorization': `Bearer ${getAuthToken()}`
         }
     });
-    
+
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return await response.json();
 }
 
@@ -88,12 +88,12 @@ async function fetchQuestionCount(testId) {
                 'Content-Type': 'application/json'
             }
         });
-        
+
         if (!response.ok) {
             console.warn('Küsimuste arvu laadimine ebaõnnestus');
             return 0;
         }
-        
+
         const data = await response.json();
         return data.count || 0;
     } catch (error) {
@@ -108,7 +108,7 @@ function populateTestData(testData, questionCount) {
     elements.testTitle.textContent = testData.name || 'Nimetu test';
     
     // Testi kestus minutites
-    const duration = testData.timeLimit || 0;
+    const duration = testData.time_limit || 0;
     elements.testDuration.textContent = formatDuration(duration);
     
     // Küsimuste arv
@@ -137,12 +137,15 @@ function populateTestData(testData, questionCount) {
 }
 
 // Funktsioon kestuse vormindamiseks
-function formatDuration(minutes) {
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    
     if (minutes < 60) {
         return `${minutes} minutit`;
     } else {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
+        
         if (remainingMinutes === 0) {
             return `${hours} tund${hours !== 1 ? 'i' : ''}`;
         } else {
@@ -168,7 +171,7 @@ function updateTestStatus(startDate, endDate) {
     const now = new Date();
     let statusText = '';
     let statusClass = '';
-    
+
     if (now < startDate) {
         // Test pole veel alanud
         statusText = 'Test pole veel alanud';
@@ -182,7 +185,7 @@ function updateTestStatus(startDate, endDate) {
         statusText = 'Test on hetkel aktiivne';
         statusClass = 'status-active';
     }
-    
+
     elements.statusIndicator.textContent = statusText;
     elements.testStatus.className = `test-status ${statusClass}`;
 }

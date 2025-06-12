@@ -4,6 +4,7 @@
     "mathlive": "^0.105.3"
   },
   "devDependencies": {
+    "@types/react": "^19.1.8",
     "typescript": "^5.8.3"
   }
 }

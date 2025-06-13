@@ -1,14 +1,15 @@
 // allTests.js
 import createFetch from "./utils/createFetch"; // Import createFetch
 
-document.addEventListener("DOMContentLoaded", async function () {
-  await loadTests();
+document.addEventListener("DOMContentLoaded", function () {
+  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL); // Debug line
+  loadTests();
 });
 
-async function loadTests() {
+async function loadTests() { // Needs to have async to be able to use fetch
   try {
-    // Use createFetch to get tests data - assuming your backend endpoint is /tests
-    const result = await createFetch('/tests', 'GET');
+    // createFetch wants (route, method, data) in this order. For GET data is a string or null
+    const result = await createFetch('/test', 'GET', null);
     
     if (result.error) {
       console.error("Error fetching tests:", result.error);
@@ -38,7 +39,8 @@ async function addQuestionCounts(tests) {
   try {
     // Get question counts for all tests
     for (let test of tests) {
-      const questionResult = await createFetch('/questions/count', 'GET', test.id);
+      // For GET with parameter, pass the test ID as string
+      const questionResult = await createFetch(`/question/count/${test.id}`, 'GET', null);
       test.questionsCount = questionResult.error ? 0 : (questionResult.count || 0);
     }
   } catch (error) {
@@ -80,12 +82,12 @@ function renderTests(tests) {
     const testHeader = document.createElement("div");
     testHeader.classList.add("test-header");
     
-    // Test name
+    // Test name - using correct database field 'name'
     const testName = document.createElement("h3");
     testName.classList.add("poppins-bold");
     testName.textContent = test.name || "Testi nimi";
     
-    // Test description
+    // Test description - using correct database field 'description'
     const testDescription = document.createElement("div");
     testDescription.classList.add("test-description", "poppins-regular");
     testDescription.textContent = test.description || "Kirjeldus...";
@@ -122,7 +124,7 @@ function renderTests(tests) {
     answersContainer.style.cursor = "pointer";
     answersContainer.classList.add("text-icon-container", "nav-btn");
     answersContainer.setAttribute("data-target", "testAnswers.html");
-    // You might want to pass test ID: answersContainer.setAttribute("data-test-id", test.id);
+    answersContainer.setAttribute("data-test-id", test.id); // Pass test ID - 'id' field exists in database
     
     const keyIcon = document.createElement("img");
     keyIcon.src = "../images/keyIcon.png";
@@ -141,7 +143,7 @@ function renderTests(tests) {
     deleteContainer.style.cursor = "pointer";
     deleteContainer.classList.add("text-icon-container");
     deleteContainer.setAttribute("data-popup", "delete");
-    deleteContainer.setAttribute("data-test-id", test.id); // Store test ID for deletion
+    deleteContainer.setAttribute("data-test-id", test.id); // Store test ID for deletion - 'id' field exists
     
     const trashIcon = document.createElement("img");
     trashIcon.src = "../images/trashIcon.png";
@@ -170,9 +172,11 @@ function renderTests(tests) {
 }
 
 // Function to delete a test - can be called from delete popup
-async function deleteTest(testId) {
+async function deleteTest(testId) { // Needs to have async to be able to use fetch
   try {
-    const result = await createFetch('/tests', 'DELETE', { id: testId });
+    // For DELETE, data is an object with correct field name 'id'
+    const data = { id: testId };
+    const result = await createFetch('/test', 'DELETE', data); // Changed from '/tests' to '/test' for consistency
     
     if (result.error) {
       alert("Testi kustutamine ebaõnnestus.");

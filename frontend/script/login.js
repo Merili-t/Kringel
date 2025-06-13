@@ -40,3 +40,4 @@ function toggleVisibility(icon) {
     icon.textContent = "👁";
   }
 }
+

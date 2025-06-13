@@ -116,3 +116,26 @@ export const logout = (req, res) => {
     return res.status(400).json({ error: 'User is not logged in' });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const userId = result.data;
+
+  try {
+    const deleteUser = await db.delete(user).where(eq(user.id, userId));
+    if (deleteUser.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.status(200).json({ message: 'User deleted' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to delete user' });
+  }
+};

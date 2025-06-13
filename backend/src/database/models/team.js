@@ -8,7 +8,7 @@ export default table('team', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   attemptId: t
     .char('attempt_id', { length: 36 })
-    .references(() => testAttempt.id)
+    .references(() => testAttempt.id, { onDelete: 'cascade' })
     .default(null),
   email: t.varchar('email', { length: 255 }).notNull(),
   name: t.text('name').notNull(),

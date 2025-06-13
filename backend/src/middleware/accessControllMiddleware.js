@@ -1,4 +1,4 @@
-const userLevel = { guest: 1, teacher: 2 };
+const userLevel = { guest: 1, teacher: 2, admin: 3 };
 
 const requireLevel = minLevel => (req, res, next) => {
   const userType = req.serverUserData?.userType;
@@ -15,5 +15,6 @@ const requireLevel = minLevel => (req, res, next) => {
 
 const level1 = requireLevel(userLevel.guest);
 const level2 = requireLevel(userLevel.teacher);
+const level3 = requireLevel(userLevel.admin);
 
-export { level1, level2 };
+export { level1, level2, level3 };

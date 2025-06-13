@@ -8,7 +8,7 @@ export default table('question_matrix', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   blockId: t
     .char('block_id', { length: 36 })
-    .references(() => block.id)
+    .references(() => block.id, { onDelete: 'cascade' })
     .notNull(),
   orderNumber: t.int('order_number').notNull(),
   description: t.text('description').notNull(),

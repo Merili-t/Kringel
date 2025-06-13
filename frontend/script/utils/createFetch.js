@@ -9,13 +9,13 @@ const createFetch = async (route, method, data) => {
   let stringArr = route.split('/');
   route = stringArr.join('/');
 
-  if (method.toUpperCase() === 'GET' && ['string', 'number', 'undefined'].includes(typeof data)) {
+  if (['GET', 'DELETE'].includes(method.toUpperCase()) && ['string', 'number', 'undefined'].includes(typeof data)) {
     url += route + (data !== undefined ? `/${data}` : '');
   }
   
-  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method.toUpperCase()) && data && data instanceof Object) {
+  if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && data && data instanceof Object) {
     url += route;
-    fetchOptions.method = 'POST';
+    fetchOptions.method = method.toUpperCase();
     fetchOptions.headers = { 'Content-Type': 'application/json' };
     fetchOptions.body = JSON.stringify(data);
   }

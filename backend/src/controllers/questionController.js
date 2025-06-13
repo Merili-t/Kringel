@@ -155,14 +155,24 @@ export const getByQuestionId = async (req, res) => {
 };
 
 export const deleteQuestion = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const questionId = result.data;
+
   try {
-    const qId = req.params.id;
-    const deletedCount = await db.delete(question).where(eq(qId, question.id));
-    if (deletedCount === 0){
-      return res.status(404).json({message: 'Question not found'});
+    const deleteQuestion = await db.delete(questionModel).where(eq(questionModel.id, questionId));
+    if (deleteQuestion.affectedRows === 0) {
+      return res.status(404).json({ message: 'Question not found' });
     }
-    return res.status(200).json({message: 'Question deleted'});
+    return res.status(200).json({ message: 'Question deleted' });
   } catch (err) {
-    return res.status(500).json({error: err.message});
+    return res.status(500).json({ error: 'Failed to delete question' });
   }
 };

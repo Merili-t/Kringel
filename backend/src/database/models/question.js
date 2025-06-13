@@ -9,7 +9,7 @@ export default table('question', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   blockId: t
     .char('block_id', { length: 36 })
-    .references(() => block.id)
+    .references(() => block.id, { onDelete: 'cascade' })
     .notNull(),
   matrixId: t.char('matrix_id', { length: 36 }).references(() => matrix.id),
   type: t.int('type').notNull(),

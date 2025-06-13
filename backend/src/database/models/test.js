@@ -8,7 +8,7 @@ export default table('test', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   userId: t
     .char('user_id', { length: 36 })
-    .references(() => user.id)
+    .references(() => user.id, { onDelete: 'cascade' })
     .notNull(),
   name: t.varchar('name', { length: 255 }).notNull(),
   description: t.text(),

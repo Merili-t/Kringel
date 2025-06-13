@@ -26,8 +26,6 @@ For guests:
 - `400 Bad Request`: Missing or invalid fields.
 - `500 Internal Server Error`: Could not create user.
 
----
-
 ### POST /auth/login
 
 Logs in a teacher using email and password.
@@ -53,6 +51,20 @@ Logs user out.
 - `200 OK`: Logged in, JWT token set in cookie.
 - `400 Bad Request`: Missing fields.
 - `401 Unauthorized`: Wrong email or password.
+
+### DELETE /auth/delete/:id
+
+Deletes user.
+
+#### Responses
+
+```json
+{
+  "message": "User deleted"
+}
+```
+
+---
 
 ## /test
 
@@ -135,6 +147,20 @@ Returns all tests.
 }
 ```
 
+### DELETE /test/delete/:id
+
+Deletes test.
+
+#### Responses
+
+```json
+{
+  "message": "Test deleted"
+}
+```
+
+---
+
 ## /block
 
 ## POST /block/upload
@@ -194,6 +220,20 @@ Get a block with id.
 #### URL parameters
 
 - `:id` — UUID of the block.
+
+### DELETE /block/delete/:id
+
+Deletes block.
+
+#### Responses
+
+```json
+{
+  "message": "Block deleted"
+}
+```
+
+---
 
 ## /question
 
@@ -399,6 +439,35 @@ Get question by id.
 #### URL parameters
 
 - `:id` — UUID of the question.
+
+### DELETE /question/delete/:id
+
+Deletes question.
+
+#### Responses
+
+```json
+{
+  "message": "Question deleted"
+}
+```
+
+---
+## /variant
+
+### DELETE /variant/delete/:id
+
+Deletes answer variant.
+
+#### Responses
+
+```json
+{
+  "message": "Answer variant deleted"
+}
+```
+
+---
 
 ## Other
 

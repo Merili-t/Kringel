@@ -8,7 +8,7 @@ export default table('block', {
   id: t.char('id', { length: 36 }).primaryKey().notNull(), // stores uuid
   testId: t
     .char('test_id', { length: 36 })
-    .references(() => test.id)
+    .references(() => test.id, { onDelete: 'cascade' })
     .notNull(),
   blockNumber: t.int('block_number').notNull(),
   ...timestamps,

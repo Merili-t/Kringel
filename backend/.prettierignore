@@ -3,3 +3,4 @@ build
 dist
 bin
 /src/database/migrations
+api.md

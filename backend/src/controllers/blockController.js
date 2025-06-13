@@ -67,3 +67,26 @@ export const getByBlockId = async (req, res) => {
     return res.satus(500).json({ error: 'Failed to get block' });
   }
 };
+
+export const deleteBlock = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.idSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const blockId = result.data;
+
+  try {
+    const deleteBlock = await db.delete(blockModel).where(eq(blockModel.id, blockId));
+    if (deleteBlock.affectedRows === 0) {
+      return res.status(404).json({ message: 'Block not found' });
+    }
+    return res.status(200).json({ message: 'Block deleted' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to delete block' });
+  }
+};

@@ -1,39 +1,34 @@
 import createFetch from "./utils/createFetch";
 
-console.log("🧠 Script loaded");
+console.log(`[🧠 ${new Date().toISOString()}] Script loaded`);
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("🚀 DOM fully loaded and ready!");
+  console.log(`[🚀 ${new Date().toISOString()}] DOM fully loaded`);
 
   populateDurationDropdown();
 
   const form = document.getElementById("createForm");
   const backButton = document.querySelector(".back-button");
 
-  console.log("🎯 Lookup: form =", form);
-  console.log("🎯 Lookup: backButton =", backButton);
+  console.log(`[🎯 ${new Date().toISOString()}] form:`, form);
+  console.log(`[🎯 ${new Date().toISOString()}] backButton:`, backButton);
 
   if (backButton) {
-    console.log("🧭 Adding click event to back button");
     backButton.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔙 Back button clicked. Navigating to allTests.html...");
+      console.log(`[🔙 ${new Date().toISOString()}] Back clicked`);
       window.location.href = "../html/allTests.html";
     });
-  } else {
-    console.error("❌ Back button not found.");
   }
 
   if (!form) {
-    console.error("❌ Form not found. Submit handler not attached.");
+    console.error(`[❌ ${new Date().toISOString()}] Form not found`);
     return;
   }
 
-  console.log("📌 Attaching submit handler to form");
-
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
-    console.log("📨 Submit event triggered");
+    console.log(`[📨 ${new Date().toISOString()}] Submit triggered`);
 
     try {
       const title = document.getElementById("title")?.value.trim();
@@ -44,12 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const endDate = document.getElementById("endDate")?.value;
       const endTime = document.getElementById("endTime")?.value;
 
-      console.log("📝 Form input values:", {
+      console.log(`[📝 ${new Date().toISOString()}] Input values:`, {
         title, duration, description, startDate, startTime, endDate, endTime
       });
 
       if (!title || !duration || !startDate || !startTime || !endDate || !endTime) {
-        console.warn("⚠️ Validation failed. Fields missing.");
+        console.warn(`[⚠️ ${new Date().toISOString()}] Validation failed`);
         alert("Palun täida kõik vajalikud väljad.");
         return;
       }
@@ -62,39 +57,37 @@ document.addEventListener("DOMContentLoaded", function () {
         end: `${endDate} ${endTime}`,
       };
 
-      console.log("📦 Ready to send payload:", payload);
+      console.log(`[📦 ${new Date().toISOString()}] Sending payload:`, payload);
 
       const result = await createFetch('/test/upload', 'POST', payload);
 
-      console.log("📬 Server response received:", result);
+      console.log(`[✅ ${new Date().toISOString()}] Server response:`, result);
 
       if (result.message || result.success) {
-        console.log("✅ Upload successful — redirecting.");
         alert("Test edukalt loodud!");
         form.reset();
-        window.location.href = "../html/testCreation.html";
+        const shouldRedirect = true;
+        if (shouldRedirect) {
+          console.log(`[➡️ ${new Date().toISOString()}] Redirecting to testCreation.html`);
+          window.location.href = "../html/testCreation.html";
+        } else {
+          console.log(`[🛑 ${new Date().toISOString()}] Redirect skipped for debugging`);
+        }
       } else {
-        console.warn("⚠️ Upload failed with server response:", result);
         alert(result.error || "Midagi läks valesti.");
       }
-
     } catch (error) {
-      console.error("💥 Unexpected error during submission:", error);
+      console.error(`[🔥 ${new Date().toISOString()}] Submission error:`, error);
       alert("Serveriga ühenduse loomine ebaõnnestus. Palun proovi hiljem uuesti.");
+    } finally {
+      console.log(`[📤 ${new Date().toISOString()}] Submit handler finished`);
     }
-
-    console.log("📤 Form submit handler completed");
   });
 });
 
 function populateDurationDropdown() {
-  console.log("⏳ Running populateDurationDropdown()");
+  console.log(`[⏳ ${new Date().toISOString()}] Populating duration dropdown`);
   const durationSelect = document.getElementById("duration");
-  if (!durationSelect) {
-    console.error("❌ Cannot populate duration — element not found.");
-    return;
-  }
-
   const durations = [5, 10, 15, 20, 30, 45, 60, 90, 120];
   durations.forEach(min => {
     const option = document.createElement("option");
@@ -102,5 +95,5 @@ function populateDurationDropdown() {
     option.textContent = `${min} min`;
     durationSelect.appendChild(option);
   });
-  console.log("✅ Duration options populated:", durations);
+  console.log(`[✅ ${new Date().toISOString()}] Duration options added`);
 }

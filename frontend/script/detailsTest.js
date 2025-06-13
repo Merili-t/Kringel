@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const shouldRedirect = true;
         if (shouldRedirect) {
           console.log(`[➡️ ${new Date().toISOString()}] Redirecting to testCreation.html`);
-          window.location.href = "../html/testCreation.html";
+          //window.location.href = "../html/testCreation.html";
         } else {
           console.log(`[🛑 ${new Date().toISOString()}] Redirect skipped for debugging`);
         }

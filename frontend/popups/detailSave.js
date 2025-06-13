@@ -1,3 +1,5 @@
+import createFetch from "./utils/createFetch";
+
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('[data-popup="detailSave"]').forEach(button => {
     button.addEventListener("click", () => {
@@ -8,18 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
               const data = {
                 test_id: 123,
-                some_field: "muudetudV22rtus" 
+                some_field: "muudetudV22rtus"
               };
 
-              const response = await fetch('http://localhost:3006/tests/update', {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-              });
-
-              const result = await response.json();
+              const result = await createFetch("/test/upload", "POST", data);
               alert(result.message || "Salvestamine õnnestus!");
             } catch (error) {
               console.error("Error updating test details:", error);

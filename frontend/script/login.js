@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () { // This is inportat 
   form.addEventListener("submit", handleLogin); // handleLogin has to be a function where you use fetch
 });
 
-
+ 
 async function handleLogin(e) { // Needs to have async to be able to use fetch
   e.preventDefault();
   const form = document.getElementById("createForm");

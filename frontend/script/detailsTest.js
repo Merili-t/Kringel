@@ -1,3 +1,5 @@
+import createFetch from "./utils/createFetch";
+
 document.addEventListener("DOMContentLoaded", function () {
   populateDurationDropdown();
 
@@ -11,13 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   } else {
     console.error("Back button element was not found.");
-  }
+  } 
 
   // When the user submits the form, save the test details.
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    // Gather form inputs.
     const title = document.getElementById("title").value.trim();
     const duration = document.getElementById("duration").value;
     const description = document.getElementById("description").value.trim();
@@ -26,56 +27,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const endDate = document.getElementById("endDate").value;
     const endTime = document.getElementById("endTime").value;
 
-    // Basic validation.
-    if (!title) {
-      alert("Palun sisesta pealkiri.");
-      return;
-    }
-    if (!duration) {
-      alert("Palun vali sooritus aeg.");
-      return;
-    }
-    if (!startDate || !startTime || !endDate || !endTime) {
-      alert("Palun sisesta algus- ja lõpukuupäev ning aeg.");
+    if (!title || !duration || !startDate || !startTime || !endDate || !endTime) {
+      alert("Palun täida kõik vajalikud väljad.");
       return;
     }
 
-    // Construct the payload.
-    // <<-- Fix: note "timeLimit" key with a capital 'L' as per API docs.
     const payload = {
       name: title,
-      description: description,
+      description,
       timeLimit: parseInt(duration),
       start: `${startDate} ${startTime}`,
       end: `${endDate} ${endTime}`,
     };
 
-    console.log("Saadame API-le:", payload);
-
     try {
-      const response = await fetch("http://localhost:3006/test/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload)
-      });
+      const result = await createFetch('/test/upload', 'POST', payload);
 
-      const result = await response.json();
-      console.log(response);
-      /*
-      if (response.ok) {
+      if (result.message || result.success) {
         alert("Test edukalt loodud!");
         form.reset();
-        // Redirect to testCreation.html after successful save.
         window.location.href = "../html/testCreation.html";
       } else {
         alert(result.error || "Midagi läks valesti.");
       }
-      */
     } catch (error) {
-      console.log(error)
-      // console.error("Error saving test details:", error);
+      console.error("Fetch error:", error);
       alert("Serveriga ühenduse loomine ebaõnnestus. Palun proovi hiljem uuesti.");
     }
   });

@@ -1,36 +1,39 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "../script/utils/createFetch";
 
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll('[data-popup="delete"]').forEach(button => {
-    button.addEventListener("click", () => {
-      const testId = button.dataset.testId;
-      
-      showPopup("Kustuta", "Kas oled kindel, et soovid selle kustutada?", [
-        {
-          text: "Kustuta",
-          action: () => handleDelete(testId)
-        },
-        { text: "Tühista", cancel: true }
-      ]);
-    });
-  });
+document.addEventListener("click", (e) => {
+  const deleteBtn = e.target.closest('[data-popup="delete"]');
+  if (deleteBtn) {
+    e.preventDefault();
+    const testId = deleteBtn.dataset.testId;
+    showPopup("Kustuta", "Kas oled kindel, et soovid selle kustutada?", [
+      {
+        text: "Kustuta",
+        action: async () => {
+          await handleDelete(testId);
+        }
+      },
+      { text: "Tühista", cancel: true }
+    ]);
+  }
 });
 
 async function handleDelete(testId) {
-  const data = {
-    type: "kustuta",
-    test_id: testId
-  };
-
   try {
-    // Replace '/test' with the correct endpoint for deleting a test from your database.
+    const data = {
+      type: "kustuta", // Your API might expect this or just the id
+      test_id: testId
+    };
     const result = await createFetch("/test/delete", "DELETE", data);
-    alert(result.message || "Testi kustutamine õnnestus.");
-    clearQuestionForm();
-    closePopup();
-    // Optionally, remove the deleted test's element from the DOM if needed.
+    if (result.error) {
+      alert("Testi kustutamine ebaõnnestus.");
+      return false;
+    }
+    // Refresh the list after deletion so only that test is removed.
+    await loadTests();
+    return true;
   } catch (error) {
     console.error("Viga testi kustutamisel:", error);
     alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
+    return false;
   }
 }

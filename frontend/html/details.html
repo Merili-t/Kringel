@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testi detailid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href=
+    "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
     <link rel="stylesheet" href="../style/detailsTest.css">
     <link rel="stylesheet" href="../style/main.css">
 </head>
@@ -15,46 +20,45 @@
                     <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            <h1>Detailid</h1>
+            <h1 class="poppins-bold">Detailid</h1>
         </div>
 
         <form id="createForm">
             <div class="form-group">
-                <label for="title">Pealkiri:</label>
+                <label for="title" class="poppins-bold">Pealkiri:</label>
                 <input type="text" id="title" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="duration">Sooritus aeg (minutites):</label>
-                <select id="duration" class="form-control"></select>
+                <label for="duration" class="poppins-bold">Sooritus aeg (minutites):</label>
+                <select id="duration" class="form-control poppins-regular"></select>
             </div>
 
             <div class="form-group">
-                <label for="description">Kirjeldus:</label>
-                <textarea id="description" class="form-control"></textarea>
+                <label for="description" class="poppins-bold">Kirjeldus:</label>
+                <textarea id="description" class="form-control poppins-regular"></textarea>
             </div>
 
             <div class="date-time-row">
                 <div class="form-group date-time-group">
-                    <label for="startDate">Algus kuupäev:</label>
-                    <input type="date" id="startDate" class="form-control">
-                    <input type="time" id="startTime" class="form-control">
+                    <label for="startDate" class="poppins-bold">Algus kuupäev:</label>
+                    <input type="date" id="startDate" class="form-control poppins-regular">
+                    <input type="time" id="startTime" class="form-control poppins-regular">
                 </div>
 
                 <div class="form-group date-time-group">
-                    <label for="endDate">Lõpp kuupäev:</label>
-                    <input type="date" id="endDate" class="form-control">
-                    <input type="time" id="endTime" class="form-control">
+                    <label for="endDate" class="poppins-bold">Lõpp kuupäev:</label>
+                    <input type="date" id="endDate" class="form-control poppins-regular">
+                    <input type="time" id="endTime" class="form-control poppins-regular">
                 </div>
             </div>
 
             <div class="button-container">
-                <button type="submit" class="submit-button nav-btn">Alusta koostamist</button>
+                <button type="submit" class="submit-button poppins-semibold">Alusta koostamist</button>
             </div>
         </form>
     </div>
 
     <script defer type="module" src="../script/detailsTest.js"></script>
-    <script src="../script/buttons.js"></script>
 </body>
 </html>

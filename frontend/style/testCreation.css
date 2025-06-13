@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     background-color: #f5f5f5;
     color: #333;
     line-height: 1.5;
@@ -38,7 +38,6 @@ body {
 
 .header h1 {
     font-size: 32px;
-    font-weight: 600;
     color: #333;
 }
 
@@ -76,7 +75,6 @@ body {
 .form-group label {
     display: block;
     font-size: 18px;
-    font-weight: 600;
     color: #333;
     margin-bottom: 12px;
 }
@@ -370,68 +368,6 @@ textarea::placeholder {
         flex-direction: column;
         gap: 16px;
     }
-}
-
-.popup-overlay {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(51, 51, 51, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.popup-box {
-    background: white;
-    padding: 32px;
-    border-radius: 12px;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    position: relative;
-    text-align: center;
-    margin: 0;
-    /* Lisa fallback absoluutne tsentreerimine */
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.popup-box h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 12px;
-}
-
-.popup-box p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 24px;
-}
-
-.popup-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-}
-
-.popup-close {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    background: transparent;
-    border: none;
-    font-size: 24px;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.popup-close:hover {
-    color: #333;
 }
 
 .dropdown-options {

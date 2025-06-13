@@ -4,6 +4,7 @@ import * as auth from './controllers/authController.js';
 import * as block from './controllers/blockController.js';
 import * as question from './controllers/questionController.js';
 import * as variant from './controllers/variantController.js';
+import * as admin from './controllers/adminController.js';
 import checkToken from './middleware/authMiddleware.js';
 import * as access from './middleware/accessControllMiddleware.js';
 
@@ -17,7 +18,6 @@ router.get('/', (req, res) => {
 router.post('/auth/login', checkToken, auth.login);
 router.post('/auth/register', checkToken, auth.register);
 router.get('/auth/logout', checkToken, access.level1, auth.logout);
-router.delete('/auth/delete/:id', checkToken, access.level3, auth.deleteUser);
 
 // test routes
 router.post('/test/upload', checkToken, access.level2, test.upload);
@@ -39,5 +39,10 @@ router.delete('/question/delete/:id', checkToken, access.level2, question.delete
 
 // Answer variant routes
 router.delete('/variant/delete/:id', checkToken, access.level2, variant.deleteVariant);
+
+// Admin routes
+router.get('/admin/users', checkToken, access.level3, admin.getUsers);
+router.patch('/admin/update', checkToken, access.level3, admin.updatePassword);
+router.delete('/admin/delete/:id', checkToken, access.level3, admin.deleteUser);
 
 export default router;

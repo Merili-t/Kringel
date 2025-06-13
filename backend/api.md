@@ -11,13 +11,21 @@ Registers a new user or guest.
 For teacher:
 
 ```json
-{ "email": "user@example.com", "password": "1234", "userType": "teacher" }
+{
+  "email": "user@example.com",
+  "password": "1234",
+  "userType": "teacher"
+}
 ```
 
 For guests:
 
 ```json
-{ "email": "guest@kringel.ee", "name": "guest1, guest2", "userType": "guest" }
+{
+  "email": "guest@kringel.ee",
+  "name": "guest1, guest2",
+  "userType": "guest"
+}
 ```
 
 #### Responses
@@ -33,7 +41,10 @@ Logs in a teacher using email and password.
 #### Request Body (JSON)
 
 ```json
-{ "email": "teacher@kringel.ee", "password": "1234" }
+{
+  "email": "teacher@kringel.ee",
+  "password": "1234"
+}
 ```
 
 #### Responses
@@ -52,7 +63,60 @@ Logs user out.
 - `400 Bad Request`: Missing fields.
 - `401 Unauthorized`: Wrong email or password.
 
-### DELETE /auth/delete/:id
+---
+
+## /admin
+
+## GET /admin/users
+
+Returns all users.
+
+#### Response
+
+```json
+{
+  "users": [
+    {
+      "id": "uuid-v7-string",
+      "email": "admin@kringel.ee",
+      "password": "super-secret-password",
+      "userType": "admin",
+      "createdAt": "2025-06-13T23:15:54.000Z",
+      "updatedAt": "2025-06-13T23:15:54.000Z"
+    },
+    {
+      "id": "uuid-v7-string",
+      "email": "teacher@kringel.ee",
+      "password": "super-secret-password",
+      "userType": "teacher",
+      "createdAt": "2025-06-13T23:15:54.000Z",
+      "updatedAt": "2025-06-13T23:19:28.000Z"
+    }
+  ]
+}
+```
+
+### PATCH /admin/password
+
+#### Request Body (JSON)
+
+```json
+{
+  "id": "uuid-v7-string",
+  "password": "1234"
+}
+```
+
+#### Response
+
+```json
+{
+  "message": "Password changed"
+}
+```
+
+
+### DELETE /admin/delete/:id
 
 Deletes user.
 
@@ -63,6 +127,10 @@ Deletes user.
   "message": "User deleted"
 }
 ```
+
+#### URL parameters
+
+- `:id` — UUID of the user
 
 ---
 
@@ -85,7 +153,10 @@ Deletes user.
 #### Response
 
 ```json
-{ "message": "Test created", "id": "uuid-v7-string" }
+{
+  "message": "Test created",
+  "id": "uuid-v7-string"
+}
 ```
 
 ## GET /test/:id
@@ -168,13 +239,19 @@ Deletes test.
 #### Request Body (JSON)
 
 ```json
-{ "testId": "uuid-v7-string", "blockNumber": 1 }
+{
+  "testId": "uuid-v7-string",
+  "blockNumber": 1
+}
 ```
 
 #### Response
 
 ```json
-{ "message": "Block created", "id": "uuid-v7-string" }
+{
+  "message": "Block created",
+  "id": "uuid-v7-string"
+}
 ```
 
 ## GET /block/test/:testId
@@ -296,7 +373,10 @@ Deletes block.
 #### Response
 
 ```json
-{ "message": "Question created", "id": "uuid-v7-string" }
+{
+  "message": "Question created",
+  "id": "uuid-v7-string"
+}
 ```
 
 ##### Answer types:

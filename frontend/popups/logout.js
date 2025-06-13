@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "../script/utils/createFetch";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('[data-popup="logout"]').forEach((button) => {

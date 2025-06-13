@@ -1,16 +1,17 @@
+import createFetch from "./utils/createFetch";
+
 document.addEventListener('DOMContentLoaded', function () {
   loadAccounts();
 });
 
-// Function to load teacher accounts from the backend
 async function loadAccounts() {
   const accountsTbody = document.getElementById('accounts-tbody');
   accountsTbody.innerHTML = '';
 
   try {
-    const response = await fetch('http://localhost:3006/auth/getUsers'); // Adjust the endpoint to match your API
-    const accounts = await response.json();
-
+    // Fetch the accounts using createFetch in the same style as your login
+    const accounts = await createFetch("/auth/getUsers", "GET", "");
+    
     accounts.forEach(account => {
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -32,4 +33,32 @@ async function loadAccounts() {
       ]
     );
   }
+}
+
+// Temporary function to simulate deletion of an account
+async function deleteAccount(email) {
+  try {
+    // Instead of calling the real backend deletion, we simulate a deletion delay
+    const result = await simulateDeleteUser(email);
+    console.log("Temporary deletion result:", result);
+    // Refresh the accounts list after the simulated deletion
+    await loadAccounts();
+  } catch (error) {
+    console.error("Failed to delete account:", error);
+    alert("Kontot kustutamine ebaõnnestus. Palun proovi hiljem uuesti.");
+  }
+}
+
+function simulateDeleteUser(email) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Simulate deletion by resolving with a dummy response.
+      resolve({ message: "User deletion simulated", deletedEmail: email });
+    }, 500);
+  });
+}
+
+function resetPassword(email) {
+  // Implement a similar simulation for resetting the password, or call the real function
+  alert(`Resetting password for ${email} (simulation)`);
 }

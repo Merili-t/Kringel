@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - konto loomine</title>
-  <link rel="stylesheet" href="../style/admin.css">
-  <link rel="stylesheet" href="../style/buttons.css">
-  <link rel="stylesheet" href="../style/popups.css">
-  <link rel="stylesheet" href="../style/createAccount.css">
-  <link rel="stylesheet" href="../style/main.css">
-  
+  <link rel="stylesheet" href="../style/admin.css" />
+  <link rel="stylesheet" href="../style/buttons.css" />
+  <link rel="stylesheet" href="../style/popups.css" />
+  <link rel="stylesheet" href="../style/createAccount.css" />
+  <link rel="stylesheet" href="../style/main.css" />
 </head>
 <body>
   <!-- Sidebar Menu -->
   <div class="menu">
     <div class="logo-container">
-      <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
+      <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo" />
     </div>
     <!-- You can add additional admin-specific navigation here if desired -->
-    <br>
+    <br />
     <div class="logout-btn-container">
       <button class="admin-btn poppins-semibold nav-btn" data-target="admin.html">ADMIN PANEL</button>
-      <br>
+      <br />
       <button class="create-account-btn nav-btn poppins-semibold" data-target="createAccount.html">KONTO LOOMINE</button>
-      <br>
+      <br />
       <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
     </div>
   </div>
@@ -31,7 +30,7 @@
   <!-- Main Content -->
   <div class="main">
     <h1>Loo konto</h1>
-    <form action="../script/createAccount.js" method="POST" id="createForm"> 
+    <form action="../script/createAccount.js" method="POST" id="createForm">
       <div class="tutorial poppins-regular">
         <h3 class="poppins-medium">Sisesta emaili aadress<sup>*</sup></h3>
         <input
@@ -65,23 +64,21 @@
         </div>
       </div>
       <div>
-        <button class="create-account-btn poppins-bold nav-btn" type="submit" data-target="login.html">LOO KONTO</button>
+        <button class="create-account-btn poppins-bold nav-btn" type="submit">LOO KONTO</button>
       </div>
     </form>
   </div>
 
   <script src="../popups/popupHelper.js" defer></script>
-  <script src="../popups/logout.js" defer></script>
-  <script src="../script/createAccount.js"></script>
+  <script defer type="module" src="../popups/logout.js"></script>
+  <script defer type="module" src="../script/createAccount.js"></script>
   <script src="../script/buttons.js"></script>
   
-
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">
     <h3 id="popup-title" class="poppins-medium"></h3>
     <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
     <div id="popup-actions" style="margin-top: 20px;"></div>
   </div>
-
 </body>
 </html>

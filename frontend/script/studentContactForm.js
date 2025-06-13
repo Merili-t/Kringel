@@ -1,3 +1,5 @@
+import createFetch from "./utils/createFetch";
+
 document.addEventListener("DOMContentLoaded", function () {
   // Faili üleslaadimise funktsioonid
   const fileInput = document.getElementById("video-upload");
@@ -65,33 +67,19 @@ function cleanFileName(teamName) {
 }
 
 async function submitContactForm() {
-  // Andmete lugemine
   const email = document.getElementById("email").value.trim();
   const team = document.getElementById("team").value.trim();
   const names = document.getElementById("names").value.trim();
   const school = document.getElementById("school").value.trim();
   let videoFile = document.getElementById("video-upload").files[0];
   const videoLink = document.querySelector(".video-link-input").value.trim();
-  
-  if (!email) {
-    alert("Palun sisesta email aadress.");
-    return;
-  }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     alert("Palun sisesta kehtiv email aadress.");
     return;
   }
-  if (!team) {
-    alert("Palun sisesta meeskonna nimi.");
-    return;
-  }
-  if (!names) {
-    alert("Palun sisesta osalejate nimed.");
-    return;
-  }
-  if (!school) {
-    alert("Palun sisesta kool.");
+  if (!team || !names || !school) {
+    alert("Palun täida kõik kohustuslikud väljad.");
     return;
   }
   if (!videoFile && !videoLink) {
@@ -99,67 +87,56 @@ async function submitContactForm() {
     return;
   }
 
-  let requestBody, headers = {};
-
-  if (videoFile) {
-    // Faili ümbernimetamine: tiimi nime ilma täpitähtedeta
-    let cleanTeamName = cleanFileName(team);
-    let fileExtension = "";
-    const dotIndex = videoFile.name.lastIndexOf(".");
-    if (dotIndex !== -1) {
-      fileExtension = videoFile.name.substring(dotIndex);
-    }
-    const newFileName = cleanTeamName + fileExtension;
-
-    videoFile = new File([videoFile], newFileName, {
-      type: videoFile.type,
-      lastModified: videoFile.lastModified,
-    });
-
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("teamName", team); 
-    formData.append("participantNames", names);
-    formData.append("school", school);
-    formData.append("videoFile", videoFile);
-    if (videoLink) {
-      formData.append("videoLink", videoLink);
-    }
-    requestBody = formData;
-    
-  } else {
-    headers["Content-Type"] = "application/json";
-    requestBody = JSON.stringify({
-      email: email,
-      teamName: team,
-      participantNames: names,
-      school: school,
-      videoLink: videoLink,
-    });
-  }
-
   try {
-    // API päring; muuda URL vajadusel vastavalt oma keskkonnale
-    const response = await fetch("http://localhost:3006/test/contact", {
-      method: "POST",
-      // Kui requestBody on FormData, ära lisa headers objekti üldse!
-      ...(requestBody instanceof FormData ? {} : { headers }),
-      credentials: "include",
-      body: requestBody,
-    });
+    let result;
 
-    const result = await response.json();
+    if (videoFile) {
+      // Kasutame otse fetch'i, kuna createFetch ei toeta FormData
+      let cleanTeamName = cleanFileName(team);
+      let extension = videoFile.name.substring(videoFile.name.lastIndexOf("."));
+      const newFileName = cleanTeamName + extension;
 
-    if (response.ok) {
-      alert("Kontaktandmed edukalt salvestatud!");
-      console.log("Kontaktandmed salvestatud:", result);
-      window.location.href = "solvingTest.html";
+      videoFile = new File([videoFile], newFileName, {
+        type: videoFile.type,
+        lastModified: videoFile.lastModified,
+      });
+
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("teamName", team);
+      formData.append("participantNames", names);
+      formData.append("school", school);
+      formData.append("videoFile", videoFile);
+      if (videoLink) formData.append("videoLink", videoLink);
+
+      const response = await fetch(import.meta.env.VITE_API_URL + "/test/contact", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      result = await response.json();
     } else {
-      alert("Andmete salvestamine ebaõnnestus: " + (result.error || "Tundmatu viga"));
+      // JSON andmed — kasutame createFetch
+      const data = {
+        email,
+        teamName: team,
+        participantNames: names,
+        school,
+        videoLink,
+      };
+
+      result = await createFetch("/test/contact", "POST", data);
+    }
+
+    if (result.error) {
+      alert("Andmete salvestamine ebaõnnestus: " + result.error);
+    } else {
+      alert("Kontaktandmed edukalt salvestatud!");
+      window.location.href = "solvingTest.html";
     }
   } catch (error) {
-    console.error("Kontaktandmete saatmise viga:", error);
-    alert("Viga andmete saatmisel. Palun proovi uuesti.");
+    console.error("Viga saatmisel:", error);
+    alert("Midagi läks valesti. Palun proovi uuesti.");
   }
 }
-

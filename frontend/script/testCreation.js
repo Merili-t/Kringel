@@ -1914,57 +1914,43 @@ class QuizBuilder {
 // --- Initialize the Quiz Builder ---
 const quizBuilder = new QuizBuilder();
 
-// --- "Lisa" Button: Show Popup Instead of Alert ---
-document.getElementById('add-question').addEventListener('click', () => {
-  const quizData = quizBuilder.collectQuizData();
-  if (!quizData) {
-    alert("Palun sisesta vajalik küsimuse info!");
-    return;
+// --- "Lisa" Button: Save Question First, Then Show Popup ---
+document.getElementById('add-question').addEventListener('click', async () => {
+  try {
+    // First save the current question
+    const questionSaved = await saveCurrentQuestion();
+    
+    if (questionSaved) {
+      // Only show popup if question was saved successfully
+      document.getElementById("add-popup").style.display = "block";
+    }
+  } catch (error) {
+    console.error("Error saving question:", error);
+    alert("Viga küsimuse salvestamisel!");
   }
-  // Show the custom popup defined in the HTML (for adding a question or block options)
-  document.getElementById("add-popup").style.display = "block";
 });
 
-// Optional: If your popup doesn’t already have a close listener
+// Close popup functionality
 document.getElementById("popup-close").addEventListener("click", () => {
   document.getElementById("add-popup").style.display = "none";
 });
 
 // --- "Lisa küsimus" functionality ---
-document.getElementById("add-question-option").addEventListener("click", async () => {
-  try {
-    // Save current question using your existing logic
-    const success = await saveCurrentQuestion();
-    
-    if (success) {
-      // Close popup
-      document.getElementById("add-popup").style.display = "none";
-      
-      // Clear form and open empty question creation form
-      clearQuestionForm();
-      
-      // Show success message
-      showSuccessMessage("Küsimus salvestatud! Koosta järgmine küsimus.");
-    }
-
-  } catch (error) {
-    console.error("Error adding question:", error);
-    alert("Viga küsimuse salvestamisel!");
-  }
+document.getElementById("add-question-option").addEventListener("click", () => {
+  document.getElementById("add-popup").style.display = "none";
+  
+  // Clear form and prepare for new question
+  clearQuestionForm();
+  
+  // Show success message
+  showSuccessMessage("Küsimus salvestatud! Koosta järgmine küsimus.");
 });
 
 // --- "Lisa plokk" functionality ---
 document.getElementById("add-block").addEventListener("click", async () => {
   try {
-    // First save current question using your existing logic
-    const questionSaved = await saveCurrentQuestion();
-    
-    if (!questionSaved) {
-      return; // Stop if question saving failed
-    }
-
     // Create new block in database
-    const newBlockResponse = await createFetch("/blocks/create", "POST", {
+    const newBlockResponse = await createFetch("/block/create", "POST", {
       name: `Plokk ${getNextBlockNumber()}`,
       testId: getCurrentTestId()
     });
@@ -1980,7 +1966,7 @@ document.getElementById("add-block").addEventListener("click", async () => {
     // Update UI to show new block
     updateBlockInfo(newBlockResponse.blockId, newBlockResponse.name);
     
-    // Clear form and open empty question creation form
+    // Clear form and prepare for new question in new block
     clearQuestionForm();
     
     // Show success message
@@ -1992,9 +1978,9 @@ document.getElementById("add-block").addEventListener("click", async () => {
   }
 });
 
-// --- Save Current Question (using your existing saveTest.js logic) ---
+// --- Save Current Question ---
 async function saveCurrentQuestion() {
-  // Get form data exactly like in your saveTest.js
+  // Get form data
   const questionText = document.getElementById("question-text").value.trim();
   if (!questionText) {
     alert("Palun sisesta küsimuse tekst!");
@@ -2030,7 +2016,7 @@ async function saveCurrentQuestion() {
     let result;
 
     if (imageFile) {
-      // If an image is present, build a FormData object (exactly like your code)
+      // If an image is present, build a FormData object
       const formData = new FormData();
       formData.append("questionText", questionText);
       formData.append("points", points);
@@ -2043,25 +2029,27 @@ async function saveCurrentQuestion() {
         formData.append("blockId", getCurrentBlockId());
       }
 
-      // Use fetch directly since createFetch is designed for JSON payloads
-      const response = await fetch("http://localhost:3006/question/upload", {
+      // For FormData, we need to use fetch directly since createFetch is designed for JSON
+      // But we'll construct the URL the same way createFetch does
+      const response = await fetch(import.meta.env.VITE_API_URL + "/question/upload", {
         method: "POST",
+        credentials: 'include',
         body: formData
       });
       result = await response.json();
     } else {
-      // Use createFetch to send the JSON payload (exactly like your code)
+      // Use createFetch for JSON payload
       result = await createFetch("/question/upload", "POST", {
         questionText,
         points,
         autoControl,
         answerType,
-        blockId: getCurrentBlockId() // Add block info
+        blockId: getCurrentBlockId()
       });
     }
 
     if (result.error) {
-      alert("Küsimuse salvestamine ebaõnnestus.");
+      alert("Küsimuse salvestamine ebaõnnestus: " + result.error);
       return false;
     } else {
       console.log(result.message || "Küsimus salvestatud edukalt!");
@@ -2156,7 +2144,7 @@ function updateBlockInfo(blockId, blockName) {
 }
 
 function getCurrentBlockId() {
-  // Return current block ID (you should set this when loading/creating blocks)
+  // Return current block ID
   return window.currentBlockId || 1; // Default fallback
 }
 
@@ -2173,7 +2161,6 @@ function getNextBlockNumber() {
 
 function getCurrentTestId() {
   // This should come from your application state/URL/localStorage
-  // You'll need to implement this based on how you track the current test
   return window.currentTestId || 1; // Default fallback
 }
 
@@ -2184,17 +2171,17 @@ function showSuccessMessage(message) {
   successDiv.textContent = message;
   successDiv.style.cssText = `
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #E9CDCC;
+    border: 1px solid #d3d3d3;
+    padding: 20px;
     z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    font-weight: 500;
-    max-width: 300px;
-    animation: slideIn 0.3s ease-out;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    text-align: center;
   `;
   
   // Add slide-in animation

@@ -1,5 +1,8 @@
+import createFetch from "./utils/createFetch";
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");
+
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -25,21 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = new FormData(form);
-
     try {
-      const response = await fetch('http://localhost:3006/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.toString(),
-          password: password.toString(),
-        }),
+      // Use createFetch for a POST request. Pass an object as the data.
+      const result = await createFetch("/auth/register", "POST", {
+        email: email.toString(),
+        password: password.toString(),
       });
 
-      const result = await response.json();
       if (result.message) {
         alert("Konto loomine õnnestus!");
         window.location.href = "allTests.html";

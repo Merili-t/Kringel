@@ -1930,6 +1930,305 @@ document.getElementById("popup-close").addEventListener("click", () => {
   document.getElementById("add-popup").style.display = "none";
 });
 
+// --- "Lisa küsimus" functionality ---
+document.getElementById("add-question-option").addEventListener("click", async () => {
+  try {
+    // Save current question using your existing logic
+    const success = await saveCurrentQuestion();
+    
+    if (success) {
+      // Close popup
+      document.getElementById("add-popup").style.display = "none";
+      
+      // Clear form and open empty question creation form
+      clearQuestionForm();
+      
+      // Show success message
+      showSuccessMessage("Küsimus salvestatud! Koosta järgmine küsimus.");
+    }
+
+  } catch (error) {
+    console.error("Error adding question:", error);
+    alert("Viga küsimuse salvestamisel!");
+  }
+});
+
+// --- "Lisa plokk" functionality ---
+document.getElementById("add-block").addEventListener("click", async () => {
+  try {
+    // First save current question using your existing logic
+    const questionSaved = await saveCurrentQuestion();
+    
+    if (!questionSaved) {
+      return; // Stop if question saving failed
+    }
+
+    // Create new block in database
+    const newBlockResponse = await createFetch("/blocks/create", "POST", {
+      name: `Plokk ${getNextBlockNumber()}`,
+      testId: getCurrentTestId()
+    });
+
+    if (newBlockResponse.error) {
+      alert("Viga ploki loomisel: " + newBlockResponse.error);
+      return;
+    }
+
+    // Close popup
+    document.getElementById("add-popup").style.display = "none";
+    
+    // Update UI to show new block
+    updateBlockInfo(newBlockResponse.blockId, newBlockResponse.name);
+    
+    // Clear form and open empty question creation form
+    clearQuestionForm();
+    
+    // Show success message
+    showSuccessMessage("Küsimus salvestatud ja uus plokk loodud! Koosta esimene küsimus uuele plokile.");
+
+  } catch (error) {
+    console.error("Error adding block:", error);
+    alert("Viga ploki lisamisel!");
+  }
+});
+
+// --- Save Current Question (using your existing saveTest.js logic) ---
+async function saveCurrentQuestion() {
+  // Get form data exactly like in your saveTest.js
+  const questionText = document.getElementById("question-text").value.trim();
+  if (!questionText) {
+    alert("Palun sisesta küsimuse tekst!");
+    return false;
+  }
+
+  const fileInput = document.getElementById("file-input");
+  const imageFile = fileInput && fileInput.files.length > 0 ? fileInput.files[0] : null;
+
+  const additionalPointsCheckbox = document.getElementById("additional-points");
+  const points =
+    additionalPointsCheckbox && additionalPointsCheckbox.checked
+      ? document.getElementById("points-input").value.trim()
+      : "";
+
+  const autoControl = document.getElementById("auto-control")?.checked;
+
+  const dropdownSelected = document.getElementById("dropdown-selected");
+  let answerType = "";
+  if (dropdownSelected) {
+    answerType = dropdownSelected.getAttribute("data-value");
+    if (!answerType || answerType === "Vali vastusetüüp...") {
+      answerType = dropdownSelected.textContent.trim();
+    }
+  }
+
+  if (!answerType || answerType === "Vali vastusetüüp...") {
+    alert("Palun vali vastusetüüp!");
+    return false;
+  }
+
+  try {
+    let result;
+
+    if (imageFile) {
+      // If an image is present, build a FormData object (exactly like your code)
+      const formData = new FormData();
+      formData.append("questionText", questionText);
+      formData.append("points", points);
+      formData.append("autoControl", autoControl);
+      formData.append("answerType", answerType);
+      formData.append("image", imageFile);
+      
+      // Add block info if available
+      if (getCurrentBlockId()) {
+        formData.append("blockId", getCurrentBlockId());
+      }
+
+      // Use fetch directly since createFetch is designed for JSON payloads
+      const response = await fetch("http://localhost:3006/question/upload", {
+        method: "POST",
+        body: formData
+      });
+      result = await response.json();
+    } else {
+      // Use createFetch to send the JSON payload (exactly like your code)
+      result = await createFetch("/question/upload", "POST", {
+        questionText,
+        points,
+        autoControl,
+        answerType,
+        blockId: getCurrentBlockId() // Add block info
+      });
+    }
+
+    if (result.error) {
+      alert("Küsimuse salvestamine ebaõnnestus.");
+      return false;
+    } else {
+      console.log(result.message || "Küsimus salvestatud edukalt!");
+      return true;
+    }
+  } catch (error) {
+    console.error("Error saving question:", error);
+    alert("Midagi läks valesti salvestamisel.");
+    return false;
+  }
+}
+
+// --- Helper Functions ---
+
+function clearQuestionForm() {
+  // Clear question text
+  document.getElementById('question-text').value = '';
+  
+  // Clear image upload area
+  const imageUpload = document.getElementById('image-upload');
+  imageUpload.innerHTML = `
+    <div class="image-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21,15 16,10 5,21"/>
+      </svg>
+    </div>
+    <div class="upload-pic">Vajuta kastikesele, et laadida pilt üles</div>
+  `;
+  
+  // Clear file input
+  const fileInput = document.getElementById('file-input');
+  if (fileInput) {
+    fileInput.value = '';
+  }
+  
+  // Clear and uncheck points
+  document.getElementById('additional-points').checked = false;
+  document.getElementById('points-input').value = '';
+  document.getElementById('points-input').style.display = 'none';
+  
+  // Clear auto-control if it exists
+  const autoControl = document.getElementById('auto-control');
+  if (autoControl) {
+    autoControl.checked = false;
+  }
+  
+  // Reset answer type dropdown to default state
+  const dropdownSelected = document.getElementById('dropdown-selected');
+  dropdownSelected.innerHTML = `
+    <span>Vali vastusetüüp...</span>
+    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+  dropdownSelected.removeAttribute('data-value');
+  
+  // Hide preview section
+  document.getElementById('preview-section').style.display = 'none';
+  
+  // Clear calculator wrapper if it exists
+  const calculatorWrapper = document.getElementById('calculator-wrapper');
+  if (calculatorWrapper) {
+    calculatorWrapper.style.display = 'none';
+  }
+  
+  // Clear generic preview wrapper
+  const genericPreview = document.getElementById('generic-preview-wrapper');
+  if (genericPreview) {
+    genericPreview.style.display = 'none';
+    genericPreview.innerHTML = '';
+  }
+  
+  // Remove any dynamically created answer option elements
+  const existingAnswerOptions = document.querySelectorAll('.answer-options, .matrix-options, .drawing-area');
+  existingAnswerOptions.forEach(option => option.remove());
+  
+  // Reset any global state related to current question
+  if (window.currentQuestionType) {
+    window.currentQuestionType = null;
+  }
+}
+
+function updateBlockInfo(blockId, blockName) {
+  // Update header to show new block
+  const headerSubtitle = document.querySelector('.header-subtitle');
+  headerSubtitle.textContent = `Uus küsimus - ${blockName}`;
+  
+  // Store current block ID for future use
+  window.currentBlockId = blockId;
+}
+
+function getCurrentBlockId() {
+  // Return current block ID (you should set this when loading/creating blocks)
+  return window.currentBlockId || 1; // Default fallback
+}
+
+function getNextBlockNumber() {
+  // Extract current block number from header and increment
+  const headerSubtitle = document.querySelector('.header-subtitle');
+  const match = headerSubtitle.textContent.match(/Plokk (\d+)/);
+  
+  if (match) {
+    return parseInt(match[1]) + 1;
+  }
+  return 2; // Default to block 2 if we can't determine current
+}
+
+function getCurrentTestId() {
+  // This should come from your application state/URL/localStorage
+  // You'll need to implement this based on how you track the current test
+  return window.currentTestId || 1; // Default fallback
+}
+
+function showSuccessMessage(message) {
+  // Create and show a temporary success message
+  const successDiv = document.createElement('div');
+  successDiv.className = 'success-message';
+  successDiv.textContent = message;
+  successDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-weight: 500;
+    max-width: 300px;
+    animation: slideIn 0.3s ease-out;
+  `;
+  
+  // Add slide-in animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  document.body.appendChild(successDiv);
+  
+  // Remove after 4 seconds with fade out
+  setTimeout(() => {
+    successDiv.style.animation = 'slideIn 0.3s ease-out reverse';
+    setTimeout(() => {
+      if (successDiv.parentNode) {
+        successDiv.parentNode.removeChild(successDiv);
+      }
+      if (style.parentNode) {
+        style.parentNode.removeChild(style);
+      }
+    }, 300);
+  }, 4000);
+}
+
 // --- "Lõpeta testi koostamine" Button: Full Save Procedure ---
 document.querySelector('.next-question').addEventListener('click', async () => {
   const quizData = quizBuilder.collectQuizData();

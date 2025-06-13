@@ -3,7 +3,7 @@ import createFetch from "./utils/createFetch";
 document.addEventListener("DOMContentLoaded", function () {
   populateDurationDropdown();
 
-  const form = document.getElementById("detailForm");
+  const form = document.getElementById("createForm");
   const backButton = document.querySelector(".back-button");
 
   if (backButton) {

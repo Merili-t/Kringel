@@ -7,17 +7,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function loadTests() {
   try {
-    // Use the endpoint to fetch tests
-    const result = await createFetch("/test/tests", "GET", null);
+    // Use the endpoint to fetch tests and pass an empty string for GET requests
+    const result = await createFetch("/test/tests", "GET", "");
+    console.log("Raw API result:", result);
+
     if (result.error) {
       console.error("Error fetching tests:", result.error);
       alert("Testide laadimine ebaõnnestus.");
       return;
     }
+
+    // Expect result is either an array or an object with a tests property.
     const tests = Array.isArray(result) ? result : result.tests || [];
+    console.log("Parsed tests array:", tests);
+
+    // Sort tests only if 'createdAt' exists on the first test
+    if (tests.length > 0 && tests[0].createdAt) {
+      tests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    // If tests exist but don't have questionsCount, add them.
     if (tests.length > 0 && !tests[0].hasOwnProperty("questionsCount")) {
       await addQuestionCounts(tests);
     }
+
     renderTests(tests);
   } catch (error) {
     console.error("Fetch error:", error);
@@ -28,7 +41,8 @@ async function loadTests() {
 async function addQuestionCounts(tests) {
   try {
     for (let test of tests) {
-      const questionResult = await createFetch(`/question/count/${test.id}`, "GET", null);
+      // Use an empty string for GET requests
+      const questionResult = await createFetch(`/question/count/${test.id}`, "GET", "");
       test.questionsCount = questionResult.error ? 0 : (questionResult.count || 0);
     }
   } catch (error) {

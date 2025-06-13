@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         form.reset();
         const shouldRedirect = true;
         if (shouldRedirect) {
-          // window.location.href = "../html/testCreation.html";
+          window.location.href = "../html/testCreation.html";
         }
       } else {
         alert(result.error || "Midagi läks valesti.");

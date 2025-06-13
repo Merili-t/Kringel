@@ -1,3 +1,5 @@
+import createFetch from "./utils/createFetch"; // Import createFetch
+
 // Quiz Builder JavaScript - Cleaned and Fixed Version
 class Keyboard {
     constructor(targetElement) {
@@ -1937,62 +1939,44 @@ document.querySelector('.next-question').addEventListener('click', async () => {
   }
   
   try {
-    // 1. Create the Test via POST /test/upload
-    const testResponse = await fetch('http://localhost:3006/test/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: quizData.name || "Nimetu test",            // Ensure `name` exists
+    // 1. Create the Test
+    const testResult = await createFetch('/test/upload', 'POST', {
+        name: quizData.name || "Nimetu test",
         description: quizData.description || "Kirjeldus puudub",
-        start: quizData.start,                            // Ensure ISO format if necessary
+        start: quizData.start,
         end: quizData.end,
-        timeLimit: quizData.timelimit                     // Make sure key name matches API expectations
-      })
+        timeLimit: quizData.timelimit
     });
-    const testResult = await testResponse.json();
-    if (!testResult.id) {
-      throw new Error("Testi loomine ebaõnnestus");
-    }
+    if (!testResult.id) throw new Error("Testi loomine ebaõnnestus");
 
-    // 2. Create the Block via POST /block/upload using testResult.id
-    const blockResponse = await fetch('http://localhost:3006/block/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    // 2. Create the Block
+    const blockResult = await createFetch('/block/upload', 'POST', {
         testId: testResult.id,
         blockNumber: 1
-      })
     });
-    const blockResult = await blockResponse.json();
-    if (!blockResult.id) {
-      throw new Error("Bloki loomine ebaõnnestus");
-    }
+    if (!blockResult.id) throw new Error("Bloki loomine ebaõnnestus");
 
-    // 3. Upload Each Question via POST /question/upload
+    // 3. Upload questions
     const questions = quizData.block[0].blockQuestions;
     for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      await fetch('http://localhost:3006/question/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          blockId: blockResult.id,
-          question: q.question,
-          points: q.points,
-          answerType: q.answerType,      // Ensure this is a number as per your API
-          orderNumber: i + 1,
-          answerVariables: q.answerVariables
-        })
-      });
+        const q = questions[i];
+        await createFetch('/question/upload', 'POST', {
+        blockId: blockResult.id,
+        question: q.question,
+        points: q.points,
+        answerType: q.answerType,
+        orderNumber: i + 1,
+        answerVariables: q.answerVariables
+        });
     }
 
     alert("Test salvestatud edukalt!");
     window.location.href = `/test/${testResult.id}`;
 
-  } catch (err) {
+    } catch (err) {
     console.error("Viga lõpliku salvestusega:", err);
     alert("Midagi läks valesti salvestamisel, proovi uuesti.");
-  }
+    }
 });
 
 // --- Dropdown Setup ---

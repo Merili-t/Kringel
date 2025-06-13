@@ -19,11 +19,12 @@ const elements = {
 
 document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
-  if (testId) {
-    loadTestData(testId);
-  } else {
-    showError("Testi ID puudub URL-ist");
+  // If no testId is provided in the URL, use the manual test ID.
+  if (!testId) {
+    testId = "019767ed-4f37-7168-99ab-c0a191ca10f2";
+    console.log("Using fallback testId:", testId);
   }
+  loadTestData(testId);
 });
 
 function getTestIdFromUrl() {
@@ -40,25 +41,25 @@ async function loadTestData(testId) {
     populateTestData(testData, questionCount);
     showMainContent();
   } catch (error) {
-    console.error("Viga testi andmete laadimisel:", error);
-    showError("Testi andmete laadimisel tekkis viga");
+    console.error("Error while loading test data:", error);
+    showError("An error occurred while loading test data");
   }
 }
 
 async function fetchTestData(testId) {
-  const result = await createFetch(`/tests/${testId}`, "GET", "");
+  const result = await createFetch(`/test/${testId}`, "GET", "");
   if (!result) {
-    throw new Error("Testi andmed puuduvad");
+    throw new Error("Unable to fetch test data");
   }
   return result;
 }
 
 async function fetchQuestionCount(testId) {
   try {
-    const result = await createFetch(`/tests/${testId}/questions/count`, "GET", "");
+    const result = await createFetch(`/test/${testId}/questions/count`, "GET", "");
     return result;
   } catch (error) {
-    console.warn("Viga küsimuste arvu laadimisel:", error);
+    console.warn("Error fetching question count:", error);
     return { count: 0 };
   }
 }
@@ -163,10 +164,6 @@ function showMainContent() {
   elements.loading.style.display = "none";
   elements.errorMessage.style.display = "none";
   elements.mainContent.style.display = "block";
-}
-
-function getAuthToken() {
-  return localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 }
 
 window.TestGuide = {

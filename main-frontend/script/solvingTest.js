@@ -1,4 +1,3 @@
-
 let interval; //Timeri jaoks edaspidi
 const blocks = [
   [
@@ -10,8 +9,6 @@ const blocks = [
   ],
   
 ];
-
-
 
 let currentBlock = 0;
 const totalBlocks = blocks.length;
@@ -127,4 +124,4 @@ function endTest() {
 document.getElementById("next-button").addEventListener("click", moveToNextBlock);
 renderBlocks();
 updateProgressBar();
-startTimer(120);
+startTimer(30);

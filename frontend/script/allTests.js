@@ -19,12 +19,36 @@ async function loadTests() {
     // Assume result is an array of tests or result.tests contains the array
     const tests = Array.isArray(result) ? result : result.tests || [];
     
+    // If backend doesn't provide questionsCount, fetch it separately for each test
+    if (tests.length > 0 && !tests[0].hasOwnProperty('questionsCount')) {
+      await addQuestionCounts(tests);
+    }
+    
     // Clear existing test content and rebuild
     renderTests(tests);
     
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Midagi läks valesti. Palun proovi hiljem uuesti.");
+  }
+}
+
+// Function to add question counts to tests if not provided by backend
+async function addQuestionCounts(tests) {
+  try {
+    // Get question counts for all tests
+    for (let test of tests) {
+      const questionResult = await createFetch('/questions/count', 'GET', test.id);
+      test.questionsCount = questionResult.error ? 0 : (questionResult.count || 0);
+    }
+  } catch (error) {
+    console.error("Error fetching question counts:", error);
+    // Set default count if fetch fails
+    tests.forEach(test => {
+      if (!test.questionsCount) {
+        test.questionsCount = 0;
+      }
+    });
   }
 }
 
@@ -85,8 +109,10 @@ function renderTests(tests) {
     
     const questionsText = document.createElement("div");
     questionsText.classList.add("questions", "poppins-regular");
-    // You'll need to get question count from your questions table
-    questionsText.textContent = `${test.questionsCount || 0} küsimust`;
+    // Display actual question count from database
+    const questionCount = test.questionsCount || 0;
+    const questionWord = questionCount === 1 ? "küsimus" : "küsimust";
+    questionsText.textContent = `${questionCount} ${questionWord}`;
     
     questionsContainer.appendChild(testIcon);
     questionsContainer.appendChild(questionsText);

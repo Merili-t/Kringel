@@ -175,7 +175,8 @@ Return test with specific id.
   "end": "2025-06-08T13:24:19.000Z",
   "timeLimit": 60,
   "createdAt": "2025-06-11T09:26:44.000Z",
-  "updatedAt": "2025-06-11T09:26:44.000Z"
+  "updatedAt": "2025-06-11T09:26:44.000Z",
+  "questions": 3
 }
 ```
 
@@ -201,7 +202,8 @@ Returns all tests.
       "end": "2025-06-08T13:24:19.000Z",
       "timeLimit": 60,
       "createdAt": "2025-06-11T09:26:44.000Z",
-      "updatedAt": "2025-06-11T09:26:44.000Z"
+      "updatedAt": "2025-06-11T09:26:44.000Z",
+      "questions": 3
     },
     {
       "id": "uuid-v7-string",
@@ -212,7 +214,8 @@ Returns all tests.
       "end": "2025-06-08T13:24:19.000Z",
       "timeLimit": 60,
       "createdAt": "2025-06-11T09:55:35.000Z",
-      "updatedAt": "2025-06-11T09:55:35.000Z"
+      "updatedAt": "2025-06-11T09:55:35.000Z",
+      "questions": 3
     }
   ]
 }

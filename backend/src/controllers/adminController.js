@@ -17,7 +17,7 @@ export const getUsers = async (req, res) => {
     return res.status(200).json({ users });
   } catch (err) {
     return res.status(500).json({ error: 'Failed to get users' });
-  };
+  }
 };
 
 export const updatePassword = async (req, res) => {
@@ -33,12 +33,15 @@ export const updatePassword = async (req, res) => {
   const { id, password } = result.data;
 
   try {
-    await db.update(user).set({ password: await argon2.hash(password) }).where(eq(user.id, id));
+    await db
+      .update(user)
+      .set({ password: await argon2.hash(password) })
+      .where(eq(user.id, id));
 
     return res.status(200).json({ message: 'Password changed' });
   } catch (err) {
     return res.status(500).json({ error: 'Failed to change password' });
-  };
+  }
 };
 
 export const deleteUser = async (req, res) => {

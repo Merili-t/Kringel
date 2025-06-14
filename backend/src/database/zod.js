@@ -32,10 +32,7 @@ export const blockUploadSchema = z.object({ testId: z.string(), blockNumber: z.n
 
 export const idSchema = z.string();
 
-export const passwordUpdateSchema = z.object({
-  id: z.string(),
-  password: z.string()
-});
+export const passwordUpdateSchema = z.object({ id: z.string(), password: z.string() });
 
 const answerVariable = z.object({ correct: z.boolean(), answer: z.string() });
 

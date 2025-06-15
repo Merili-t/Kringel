@@ -6,9 +6,16 @@
   <title>Testi lahendamine</title>
   <link rel="stylesheet" href="../style/solvingTest.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* Hide “Lõpeta” until the last block */
+    #end-button {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Testi pealkiri</h1>
+  <h1 id="test-title">Testi pealkiri</h1>
+
   <div class="header">
     <div class="progress-wrapper">
       <div class="progress-text" id="progress-text">0%</div>
@@ -32,11 +39,11 @@
     <button id="end-button">Lõpeta</button>
   </div>
 
-  <script src="../script/solvingTest.js"></script>
+  <!-- Load popups first, then our script with defer -->
   <script src="../popups/popupHelper.js" defer></script>
   <script src="../popups/testSubmitted.js" defer></script>
   <script src="../popups/timeOut.js" defer></script>
-
+  <script src="../script/solvingTest.js" defer></script>
 
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">
@@ -44,7 +51,5 @@
     <p id="popup-message" class="poppins-regular" style="margin-top: 10px;"></p>
     <div id="popup-actions" style="margin-top: 20px;"></div>
   </div>
-
 </body>
 </html>
- 

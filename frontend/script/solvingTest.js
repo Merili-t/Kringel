@@ -1,27 +1,122 @@
+import createFetch from "./utils/createFetch";
 
-let interval; //Timeri jaoks edaspidi
-const blocks = [
-  [
-    { type: "short", text: "1. Test küsimus" },
-    { type: "long", text: "2. Kirjelda..." }
-  ],
-  [
-    { type: "long", text: "3. Kirjelda..." }
-  ],
-  
-];
-
-
-
+let testId = null;
+let blocks = [];
 let currentBlock = 0;
-const totalBlocks = blocks.length;
+let interval;
+
+const elements = {
+  loading: document.getElementById("loading"),
+  errorMessage: document.getElementById("error-message"),
+  mainContent: document.getElementById("main-content"),
+  testTitle: document.getElementById("test-title"),
+  testDuration: document.getElementById("test-duration"),
+  questionCount: document.getElementById("question-count"),
+  timer: document.getElementById("timer"),
+  questionsWrapper: document.getElementById("blocks-container"),
+  progressBar: document.getElementById("progress-bar"),
+  progressText: document.getElementById("progress-text"),
+  nextButton: document.getElementById("next-button"),
+  endButton: document.getElementById("end-button"),
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  testId = getTestIdFromUrl();
+  if (!testId) {
+    testId = "0197684d-940e-767c-ad69-ed440fba0e45";
+    console.log("Using fallback testId:", testId);
+  }
+  await loadTestData(testId);
+});
+
+function getTestIdFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("testId");
+}
+
+function mapQuestionType(type) {
+  switch (type) {
+    case 0: return "one_correct";
+    case 1: return "many_correct";
+    case 2: return "text";
+    case 3: return "matrix";
+    case 4: return "picture";
+    case 5: return "chemistry";
+    case 6: return "drawing";
+    case 7: return "calculator";
+    default: return "unknown";
+  }
+}
+
+async function loadTestData(testId) {
+  try {
+    showLoading();
+
+    const testData = await createFetch(`/test/${testId}`, "GET", "");
+    const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
+
+    console.log("testData:", testData);
+    console.log("blockData:", blockData);
+
+    if (!testData || !Array.isArray(blockData.blocks)) {
+      throw new Error("Vigased andmed");
+    }
+
+    const allBlocks = [];
+
+    for (const block of blockData.blocks) {
+      const response = await createFetch(`/question/block/${block.id}`, "GET", "");
+      const questions = Array.isArray(response.blockQuestions)
+        ? response.blockQuestions
+        : [];
+
+      console.log("Küsimused plokis", block.block_number, questions);
+
+      const formattedQuestions = questions.map((q) => ({
+        type: mapQuestionType(q.type),
+        text: q.description || "",
+      }));
+
+      allBlocks.push({
+        blockOrder: block.block_number ?? 0,
+        questions: formattedQuestions,
+      });
+    }
+
+    // ÕIGE KOHT blocks muutujale väärtuse andmiseks
+    blocks = allBlocks
+      .sort((a, b) => a.blockOrder - b.blockOrder)
+      .map((b) => b.questions);
+
+    populateTestData(testData, blocks.flat().length);
+    renderBlocks();
+    updateProgressBar();
+
+    if (testData.timeLimit) {
+      startTimer(testData.timeLimit * 60);
+    }
+
+    showMainContent();
+  } catch (error) {
+    console.error("Testi laadimine ebaõnnestus:", error);
+    showError("Testi laadimine ebaõnnestus");
+  }
+}
+
+function populateTestData(testData, count) {
+  elements.testTitle.textContent = testData.name || "Nimetu test";
+  elements.testDuration.textContent = formatDuration(testData.timeLimit || 0);
+  elements.questionCount.textContent = count || "0";
+  document.title = testData.name || "Testi lahendamine";
+}
 
 function renderBlocks() {
-  const container = document.getElementById("blocks-container");
+  const container = elements.questionsWrapper;
   container.innerHTML = "";
 
   blocks.forEach((block, index) => {
     const blockDiv = document.createElement("div");
+    console.log("Plokk", index, block);
     blockDiv.className = "block";
     if (index === currentBlock) blockDiv.classList.add("active");
 
@@ -30,25 +125,25 @@ function renderBlocks() {
 
     block.forEach((q) => {
       const questionWrapper = document.createElement("div");
-      questionWrapper.className = "question"; // uus ümbris igale küsimusele
+      questionWrapper.className = "question";
 
       const qDiv = document.createElement("div");
       qDiv.className = "question-card";
 
-      if (q.type === "short") {
+      if (["text", "one_correct", "short"].includes(q.type)) {
         qDiv.innerHTML = `
           <label>${q.text}</label><br/>
           <input type="text" placeholder="Vastus..." />
         `;
-      } else if (q.type === "long") {
+      } else {
         qDiv.innerHTML = `
           <label>${q.text}</label><br/>
           <textarea placeholder="Pikk vastus..." rows="4"></textarea>
         `;
       }
 
-      questionWrapper.appendChild(qDiv);         // lisa question-card question divi sisse
-      questionContainer.appendChild(questionWrapper); // lisa question question-gridi sisse
+      questionWrapper.appendChild(qDiv);
+      questionContainer.appendChild(questionWrapper);
     });
 
     blockDiv.appendChild(questionContainer);
@@ -57,11 +152,9 @@ function renderBlocks() {
 }
 
 function updateProgressBar() {
-  const bar = document.getElementById("progress-bar");
-  const text = document.getElementById("progress-text");
-  const percent = Math.round(((currentBlock + 1) / totalBlocks) * 100);
-  bar.style.width = `${percent}%`;
-  text.textContent = `${percent}%`;
+  const percent = Math.round(((currentBlock + 1) / blocks.length) * 100);
+  elements.progressBar.style.width = `${percent}%`;
+  elements.progressText.textContent = `${percent}%`;
 }
 
 function moveToNextBlock() {
@@ -73,58 +166,66 @@ function moveToNextBlock() {
     allBlocks[currentBlock].classList.add("active");
     updateProgressBar();
 
-    // Kui jõudsid viimase plokini, näita "Lõpeta"
     if (currentBlock === allBlocks.length - 1) {
-      document.getElementById("next-button").style.display = "none";
-      document.getElementById("end-button").style.display = "inline-block";
+      elements.nextButton.style.display = "none";
+      elements.endButton.style.display = "inline-block";
     }
   }
 }
 
-
 function startTimer(duration) {
   let time = duration;
-  const timerDisplay = document.getElementById("timer");
 
-  const interval = setInterval(() => {
+  interval = setInterval(() => {
     const minutes = String(Math.floor(time / 60)).padStart(2, "0");
     const seconds = String(time % 60).padStart(2, "0");
-    timerDisplay.textContent = `${minutes}:${seconds}`;
+    elements.timer.textContent = `${minutes}:${seconds}`;
 
     if (--time < 0) {
       clearInterval(interval);
-      triggerTimeUpPopup();  // Call the popup function from aegOtsas.js
-            document.getElementById("next-button").disabled = true;
-        }
-    }, 1000);
+      triggerTimeUpPopup();
+      elements.nextButton.disabled = true;
+    }
+  }, 1000);
 }
 
-
 function endTest() {
-  clearInterval(interval); // peatab taimeri
-  // 1. Kogu kasutaja vastused (näide: kõik input ja textarea väärtused)
-  //const responses = [];
-  //document.querySelectorAll(".block.active input, .block.active textarea").forEach(el => {
-    //responses.push(el.value);
-  //});
-
-  // 2.koodi mis salvestab vastused andmebaasi või saadab serverisse
-  // Näiteks:
-  // fetch('/save-responses', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({ responses })
-  // });
-  //   .then(response => response.json())
-  //   .then(data => console.log('Success:', data))
-  //   .catch((error) => console.error('Error:', error));   
+  clearInterval(interval);
   alert("Test lõpetatud! Aitäh vastamast.");
 }
 
-// Test setup
-document.getElementById("next-button").addEventListener("click", moveToNextBlock);
-renderBlocks();
-updateProgressBar();
-startTimer(120);
+function formatDuration(minutes) {
+  if (minutes < 60) return `${minutes} minutit`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return m === 0
+    ? `${h} tund${h !== 1 ? "i" : ""}`
+    : `${h} tund${h !== 1 ? "i" : ""} ja ${m} minutit`;
+}
+
+function showLoading() {
+  elements.loading.style.display = "block";
+  elements.errorMessage.style.display = "none";
+  elements.mainContent.style.display = "none";
+}
+
+function showError(msg) {
+  elements.loading.style.display = "none";
+  elements.errorMessage.style.display = "block";
+  elements.mainContent.style.display = "none";
+  const p = elements.errorMessage.querySelector("p");
+  if (p) p.textContent = msg;
+}
+
+function showMainContent() {
+  elements.loading.style.display = "none";
+  elements.errorMessage.style.display = "none";
+  elements.mainContent.style.display = "block";
+}
+
+elements.nextButton.addEventListener("click", moveToNextBlock);
+elements.endButton.addEventListener("click", endTest);
+
+function triggerTimeUpPopup() {
+  alert("Aeg on otsas! Test lõpetatakse.");
+}

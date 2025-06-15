@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Testi lahendamine</title>
   <link rel="stylesheet" href="../style/solvingTest.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <h1>Testi pealkiri</h1>
+
   <div class="header">
     <div class="progress-wrapper">
       <div class="progress-text" id="progress-text">0%</div>
@@ -22,21 +22,29 @@
       <div class="timer" id="timer">00:00</div>
     </div>
   </div>
-  
-  <div id="blocks-container">
-    <!-- Plokid tulevad siia JS kaudu -->
+
+  <div id="loading" style="display:none;">Laadimine...</div>
+  <div id="error-message" style="display:none;"><p></p></div>
+
+  <div id="main-content" style="display: none;">
+    <h2 id="test-title"></h2>
+    <span id="test-duration" style="display: none"></span>
+    <span id="question-count" style="display: none"></span>
+
+    <div id="blocks-container">
+      <!-- Plokid tulevad siia JS kaudu -->
+    </div>
+
+    <div class="navigation">
+      <button id="next-button">Järgmine plokk</button>
+      <button id="end-button" style="display:none;">Lõpeta</button>
+    </div>
   </div>
 
-  <div class="navigation">
-    <button id="next-button">Järgmine plokk</button>
-    <button id="end-button">Lõpeta</button>
-  </div>
-
-  <script src="../script/solvingTest.js"></script>
+  <!-- Pop-upid -->
   <script src="../popups/popupHelper.js" defer></script>
   <script src="../popups/testSubmitted.js" defer></script>
   <script src="../popups/timeOut.js" defer></script>
-
 
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">
@@ -45,6 +53,7 @@
     <div id="popup-actions" style="margin-top: 20px;"></div>
   </div>
 
+  <!-- JavaScript -->
+  <script type="module" src="../script/solvingTest.js"></script>
 </body>
 </html>
- 

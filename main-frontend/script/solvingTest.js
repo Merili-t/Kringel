@@ -1,127 +1,154 @@
-let interval; //Timeri jaoks edaspidi
-const blocks = [
-  [
-    { type: "short", text: "1. Test küsimus" },
-    { type: "long", text: "2. Kirjelda..." }
-  ],
-  [
-    { type: "long", text: "3. Kirjelda..." }
-  ],
-  
-];
+// solvingTest.js
 
+let intervalId;
+let blocks = [];
 let currentBlock = 0;
-const totalBlocks = blocks.length;
+
+// UTIL: group flat question list into an array of blocks
+function groupQuestionsToBlocks(questions) {
+  const map = {};
+  questions.forEach(q => {
+    if (!map[q.block_number]) map[q.block_number] = [];
+    map[q.block_number].push({
+      type: q.type === 1 ? "short" : "long",
+      text: q.description
+    });
+  });
+  return Object
+    .keys(map)
+    .sort((a,b) => a - b)
+    .map(num => map[num]);
+}
+
+async function loadTest(testId) {
+  try {
+    // 1) fetch test metadata
+    const respTest = await fetch(`http://localhost:3006/test/${testId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!respTest.ok) throw new Error(`Test fetch failed: ${respTest.status}`);
+    const testData = await respTest.json();
+
+    // Set the page title
+    document.getElementById('test-title').textContent = testData.name;
+
+    // 2) fetch questions for that test
+    const respQs = await fetch(`http://localhost:3006/questions?testId=${testId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!respQs.ok) throw new Error(`Questions fetch failed: ${respQs.status}`);
+    const questions = await respQs.json();
+
+    // 3) build your `blocks` array from the questions
+    blocks = groupQuestionsToBlocks(questions);
+
+    // 4) kick off the timer
+    startTimer(testData.time_limit * 60);
+
+    // 5) initial render
+    renderBlocks();
+    updateProgressBar();
+
+  } catch (err) {
+    console.error(err);
+    alert("Ei õnnestu testi laadida. Kontrolli konsooli.");
+  }
+}
 
 function renderBlocks() {
   const container = document.getElementById("blocks-container");
   container.innerHTML = "";
 
-  blocks.forEach((block, index) => {
+  blocks.forEach((block, idx) => {
     const blockDiv = document.createElement("div");
     blockDiv.className = "block";
-    if (index === currentBlock) blockDiv.classList.add("active");
+    if (idx === currentBlock) blockDiv.classList.add("active");
 
-    const questionContainer = document.createElement("div");
-    questionContainer.className = "question-grid";
+    const grid = document.createElement("div");
+    grid.className = "question-grid";
 
-    block.forEach((q) => {
-      const questionWrapper = document.createElement("div");
-      questionWrapper.className = "question"; // uus ümbris igale küsimusele
-
-      const qDiv = document.createElement("div");
-      qDiv.className = "question-card";
+    block.forEach(q => {
+      const wrap = document.createElement("div");
+      wrap.className = "question";
+      const card = document.createElement("div");
+      card.className = "question-card";
 
       if (q.type === "short") {
-        qDiv.innerHTML = `
+        card.innerHTML = `
           <label>${q.text}</label><br/>
           <input type="text" placeholder="Vastus..." />
         `;
-      } else if (q.type === "long") {
-        qDiv.innerHTML = `
+      } else {
+        card.innerHTML = `
           <label>${q.text}</label><br/>
-          <textarea placeholder="Pikk vastus..." rows="4"></textarea>
+          <textarea rows="4" placeholder="Pikk vastus..."></textarea>
         `;
       }
 
-      questionWrapper.appendChild(qDiv);         // lisa question-card question divi sisse
-      questionContainer.appendChild(questionWrapper); // lisa question question-gridi sisse
+      wrap.appendChild(card);
+      grid.appendChild(wrap);
     });
 
-    blockDiv.appendChild(questionContainer);
+    blockDiv.appendChild(grid);
     container.appendChild(blockDiv);
   });
 }
 
 function updateProgressBar() {
   const bar = document.getElementById("progress-bar");
-  const text = document.getElementById("progress-text");
-  const percent = Math.round(((currentBlock + 1) / totalBlocks) * 100);
+  const txt = document.getElementById("progress-text");
+  const percent = Math.round(((currentBlock + 1) / blocks.length) * 100);
   bar.style.width = `${percent}%`;
-  text.textContent = `${percent}%`;
+  txt.textContent = `${percent}%`;
 }
 
 function moveToNextBlock() {
-  const allBlocks = document.querySelectorAll(".block");
-
-  if (currentBlock < allBlocks.length - 1) {
-    allBlocks[currentBlock].classList.remove("active");
+  const all = document.querySelectorAll(".block");
+  if (currentBlock < all.length - 1) {
+    all[currentBlock].classList.remove("active");
     currentBlock++;
-    allBlocks[currentBlock].classList.add("active");
+    all[currentBlock].classList.add("active");
     updateProgressBar();
-
-    // Kui jõudsid viimase plokini, näita "Lõpeta"
-    if (currentBlock === allBlocks.length - 1) {
+    if (currentBlock === all.length - 1) {
       document.getElementById("next-button").style.display = "none";
       document.getElementById("end-button").style.display = "inline-block";
     }
   }
 }
 
-
-function startTimer(duration) {
-  let time = duration;
-  const timerDisplay = document.getElementById("timer");
-
-  const interval = setInterval(() => {
-    const minutes = String(Math.floor(time / 60)).padStart(2, "0");
-    const seconds = String(time % 60).padStart(2, "0");
-    timerDisplay.textContent = `${minutes}:${seconds}`;
-
-    if (--time < 0) {
-      clearInterval(interval);
-      triggerTimeUpPopup();  // Call the popup function from aegOtsas.js
-            document.getElementById("next-button").disabled = true;
-        }
-    }, 1000);
+function startTimer(durationSec) {
+  let remaining = durationSec;
+  const display = document.getElementById("timer");
+  intervalId = setInterval(() => {
+    const min = String(Math.floor(remaining/60)).padStart(2, "0");
+    const sec = String(remaining%60).padStart(2, "0");
+    display.textContent = `${min}:${sec}`;
+    if (remaining-- <= 0) {
+      clearInterval(intervalId);
+      triggerTimeUpPopup();
+      document.getElementById("next-button").disabled = true;
+    }
+  }, 1000);
 }
 
-
 function endTest() {
-  clearInterval(interval); // peatab taimeri
-  // 1. Kogu kasutaja vastused (näide: kõik input ja textarea väärtused)
-  //const responses = [];
-  //document.querySelectorAll(".block.active input, .block.active textarea").forEach(el => {
-    //responses.push(el.value);
-  //});
-
-  // 2.koodi mis salvestab vastused andmebaasi või saadab serverisse
-  // Näiteks:
-  // fetch('/save-responses', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({ responses })
-  // });
-  //   .then(response => response.json())
-  //   .then(data => console.log('Success:', data))
-  //   .catch((error) => console.error('Error:', error));   
+  clearInterval(intervalId);
+  // TODO: gather answers & POST to server...
   alert("Test lõpetatud! Aitäh vastamast.");
 }
 
-// Test setup
-document.getElementById("next-button").addEventListener("click", moveToNextBlock);
-renderBlocks();
-updateProgressBar();
-startTimer(30);
+// get testId from URL: ?testId=...
+const params = new URLSearchParams(window.location.search);
+const testId = params.get("testId");
+if (!testId) {
+  alert("Testi ID puudub URL-is!");
+} else {
+  document.getElementById("next-button")
+          .addEventListener("click", moveToNextBlock);
+  document.getElementById("end-button")
+          .addEventListener("click", endTest);
+
+  loadTest(testId);
+}

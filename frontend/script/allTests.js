@@ -54,7 +54,7 @@ async function addQuestionCounts(tests) {
 }
 
 function renderTests(tests) {
-  const testSectionContainer = document.querySelector(".test-section");
+  const testSectionContainer = document.querySelector(".test-content");
   testSectionContainer.innerHTML = "";
   
   if (!tests || tests.length === 0) {
@@ -68,8 +68,9 @@ function renderTests(tests) {
   }
 
   tests.forEach(test => {
-    const testWrapper = document.createElement("div");
-    testWrapper.style.marginBottom = "20px";
+    const testSection = document.createElement("div");
+    testSection.classList.add("test-section");
+    testSection.style.marginBottom = "24px";
 
     const testHeader = document.createElement("div");
     testHeader.classList.add("test-header");
@@ -145,10 +146,10 @@ function renderTests(tests) {
     testContainer.appendChild(answersContainer);
     testContainer.appendChild(deleteContainer);
 
-    testWrapper.appendChild(testHeader);
-    testWrapper.appendChild(testContainer);
+    testSection.appendChild(testHeader);
+    testSection.appendChild(testContainer);
 
-    testSectionContainer.appendChild(testWrapper);
+    testSectionContainer.appendChild(testSection);
   });
 }
 

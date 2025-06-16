@@ -35,6 +35,11 @@ export class VisualCalculator {
             const content = this.inputField.value;
             this.logic.setContents(content);
         });
+
+        this.inputField.addEventListener('blur', () => {
+        const latex = this.logic.getContents();
+        console.log(latex);
+        });
     }
 
     insertToInput(content) {

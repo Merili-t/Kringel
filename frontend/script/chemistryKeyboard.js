@@ -101,6 +101,10 @@ window.onload = function () {
     e.preventDefault();
     alert('Paste is disabled.');
   });
+
+  inputFieldElement.addEventListener("blur", () => {
+  console.log("Sisestatud keemiline valem:", inputFieldElement.value);
+});
 };
 
 const input = document.getElementById("inputField");

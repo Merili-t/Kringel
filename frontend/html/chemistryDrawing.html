@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keemia Joonistamine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style/chemistryDrawing.css">
+</head>
+<body>
+
+  <div class="drawing-container">
+    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+
+    <div class="drawing-keyboard">
+      <button onclick="addShape('line')" class="poppins-medium">Üksikside</button>
+      <button onclick="addShape('doubleLine')" class="poppins-medium">Kaksikside</button>
+      <button onclick="addShape('tripleLine')" class="poppins-medium">Kolmikside</button>
+      <button onclick="addShape('hexagon')" class="poppins-medium">⬡ Heksagon</button>
+      <button onclick="addShape('labeledHexagon')" class="poppins-medium">⬡ Tekstiga Heksagon</button>
+    </div>
+
+    <div class="drawing-keyboard">
+      <button onclick="addShape('text')" class="poppins-medium">Tekst</button>
+      <button onclick="tool.undo()" class="poppins-medium">Undo (Z)</button>
+      <button onclick="tool.redo()" class="poppins-medium">Redo (Y)</button>
+      <button onclick="tool.deleteSelected()" class="poppins-medium">Kustuta</button>
+      <button onclick="tool.deleteAll()" class="poppins-medium">Kustuta kõik</button>
+    </div>
+  </div>
+
+  <script src="../script/chemistryDrawing.js"></script>
+</body>
+</html>

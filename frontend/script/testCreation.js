@@ -442,219 +442,148 @@ class InputField {
     }
 }
 
+async function saveQuiz(questionData) {
+  try {
+      console.log("API URL:", import.meta.env.VITE_API_URL);
+      console.log("Sending data:", questionData);
+      
+      const result = await createFetch("/question/upload", "POST", questionData);
+      console.log("Raw API result:", result);
+      
+      if (result.error) {
+          console.error("Error saving question:", result.error);
+          alert("Küsimuse salvestamine ebaõnnestus.");
+          return null;
+      }
+      
+      // Save to local tracking for order number calculation
+      saveQuestionToLocalTracking(questionData.blockId, {
+          ...questionData,
+          id: result.questionId || result.id
+      });
+      
+      alert("Küsimus salvestatud!");
+      return result.questionId || result.id;
+      
+  } catch (error) {
+      console.error("Save error:", error);
+      alert("Midagi läks valesti salvestamisel.");
+      return null;
+  }
+}
+
+function collectQuizData(blockId) {
+  // Get the question text.
+  const questionTextElem = document.getElementById("question-text");
+  const questionText = questionTextElem ? questionTextElem.value.trim() : "";
+  if (!questionText) {
+      alert("Palun sisesta küsimuse tekst!");
+      return null;
+  }
+
+  // -- Points Handling --
+  // Get the checkbox and input elements.
+  const pointsCheckbox = document.getElementById("additional-points");
+  const pointsInput = document.getElementById("points-input");
+  
+  // If the checkbox is unchecked then points will be null.
+  // If checked, convert the value (if any) to a number; if the field is empty, leave it null.
+  let ptsStr = pointsInput.value.trim();
+  const points = pointsCheckbox.checked && ptsStr !== "" ? Number(ptsStr) : null;
+
+  // Determine answer type from the dropdown.
+  // The dropdown's span carries a data-value representing the answer type string.
+  const dropdown = document.getElementById("dropdown-selected");
+  const answerTypeStr = dropdown && dropdown.querySelector("span")
+          ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
+          : "luhike-tekst";
+
+  // Convert the answer type string into a code, per your API.
+  // "one_correct": 0, "many_correct": 1, "text": 2, "matrix": 3, 
+  // "picture": 4, "chemistry": 5, "drawing": 6, "calculator": 7
+  let answerTypeCode;
+  switch (answerTypeStr) {
+      case "uks-oige":
+          answerTypeCode = 0; // one_correct
+          break;
+      case "mitu-oiget":
+          answerTypeCode = 1; // many_correct
+          break;
+      case "luhike-tekst":
+      case "pikk-tekst":
+          answerTypeCode = 2; // text
+          break;
+      case "maatriks-uks":
+      case "maatriks-mitu":
+          answerTypeCode = 3; // matrix
+          break;
+      case "interaktiivne":
+          answerTypeCode = 4; // picture
+          break;
+      case "keemia_tasakaalustamine":
+          answerTypeCode = 5; // chemistry
+          break;
+      case "joonistamine":
+          answerTypeCode = 6; // drawing
+          break;
+      case "kalkulaator":
+          answerTypeCode = 7; // calculator
+          break;
+      case "keemia_ahelad":
+          answerTypeCode = 7; // calculator
+          break;
+      default:
+          answerTypeCode = 2; // text
+  }
+
+  // Collect answer variables depending on the answer type.
+  let answerVariables = [];
+  if (answerTypeStr === "uks-oige") {
+      const optionRows = document.querySelectorAll("#single-options .option-row");
+      optionRows.forEach(row => {
+          const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+          const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
+          answerVariables.push({ answer: optText, correct: isCorrect });
+      });
+  } else if (answerTypeStr === "mitu-oiget") {
+      const optionRows = document.querySelectorAll("#multiple-options .option-row");
+      optionRows.forEach(row => {
+          const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
+          const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
+          answerVariables.push({ answer: optText, correct: isCorrect });
+      });
+  } else {
+      // For text or similar types, try to get the answer from the preview input or textarea.
+      const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
+      if (answerInput) {
+          answerVariables.push({ answer: answerInput.value.trim(), correct: true });
+      }
+  }
+
+  if ((answerTypeStr === "uks-oige" || answerTypeStr === "mitu-oiget") && answerVariables.length === 0) {
+    alert("Palun lisa vähemalt üks vastusevariant!");
+    return null;
+  }
+
+  // Build the question data object according to the API specification
+  const questionData = {
+      blockId:  parseInt(blockId), // This should be passed as a parameter
+      question: questionText,
+      points: points,
+      answerType: answerTypeCode,
+      orderNumber: orderNumber, // You may want to make this dynamic
+      answerVariables: answerVariables
+  };
+
+  console.log("Collected question data:", questionData);
+  return questionData;
+}
+
 class QuizBuilder {
     constructor() {
         this.init();
     }
-    saveQuiz(quizData) {
-        return fetch('http://localhost:3006/test/upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(quizData),
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert("Quiz salvestatud!");
-                return result.quizId;
-            } else {
-                alert(result.error || "Salvestamine ebaõnnestus.");
-                throw new Error(result.error);
-            }
-        })
-        .catch(error => {
-            console.error("Save error:", error);
-            alert("Midagi läks valesti salvestamisel.");
-        });
-    }
-
-    loadQuiz(quizId) {
-        return fetch(`http://localhost:3006/quiz/load/${quizId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                return result.quizData;
-            } else {
-                alert(result.error || "Laadimine ebaõnnestus.");
-                throw new Error(result.error);
-            }
-        })
-        .catch(error => {
-            console.error("Load error:", error);
-            alert("Midagi läks valesti laadimisel.");
-        });
-    }
-
-    collectQuizData() {
-        // Build the basic payload object.
-        const quizData = {
-            name: "Temporary Test Name",
-            descripion: "Temporary Description", // (Note: the typo is intentional to match the API.)
-            start: new Date().toISOString(),
-            end: new Date().toISOString(),
-            timelimit: 60,
-            block: [
-            {
-                blockNumber: 1,
-                blockQuestions: []
-            }
-            ]
-        };
-
-        // Set quiz type and content based on the selected answer type.
-        quizData.type = this.getCurrentQuizType();
-        quizData.content = {};
-
-        // Collect additional content based on quiz type
-        switch (quizData.type) {
-            case 'luhike-tekst':
-            quizData.content.answer = document.querySelector("#preview-content input")?.value || "";
-            break;
-            case 'pikk-tekst':
-            quizData.content.answer = document.querySelector("#preview-content textarea")?.value || "";
-            break;
-            case 'uks-oige':
-            quizData.content.options = this.collectSingleChoiceData();
-            break;
-            case 'mitu-oiget':
-            quizData.content.options = this.collectMultipleChoiceData();
-            break;
-            case 'keemia tasakaalustamine':
-            quizData.content.equation = document.getElementById("chemistry-input-field")?.value || "";
-            break;
-            case 'keemia ahelad':
-            {
-                const canvasElem = document.getElementById("chemistry-drawing-canvas");
-                if (canvasElem && window.chemistryDrawingTool) {
-                quizData.content.shapes = window.chemistryDrawingTool.shapes;
-                }
-            }
-            break;
-            case 'interaktiivne':
-            {
-                const imgElem = document.getElementById("uploaded-image");
-                if (imgElem) {
-                quizData.content.imageData = imgElem.src;
-                }
-            }
-            break;
-            case 'joonistamine':
-            {
-                const drawingCanvas = document.getElementById("drawing-canvas");
-                if (drawingCanvas) {
-                quizData.content.drawingData = drawingCanvas.toDataURL();
-                }
-            }
-            break;
-            default:
-            break;
-        }
-
-        // Get the question text.
-        const questionTextElem = document.getElementById("question-text");
-        const questionText = questionTextElem ? questionTextElem.value.trim() : "";
-        if (!questionText) {
-            alert("Palun sisesta küsimuse tekst!");
-            return null;
-        }
-
-        // -- Points Handling --
-        // Get the checkbox and input elements.
-        const pointsCheckbox = document.getElementById("additional-points");
-        const pointsInput = document.getElementById("points-input");
-        
-        // If the checkbox is unchecked then points will be null.
-        // If checked, convert the value (if any) to a number; if the field is empty, leave it null.
-        let ptsStr = pointsInput.value.trim();
-        const points = pointsCheckbox.checked && ptsStr !== "" ? Number(ptsStr) : null;
-
-        // Determine answer type from the dropdown.
-        // The dropdown's span carries a data-value representing the answer type string.
-        const dropdown = document.getElementById("dropdown-selected");
-        const answerTypeStr = dropdown && dropdown.querySelector("span")
-                ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
-                : "luhike-tekst";
-
-        // Convert the answer type string into a code, per your API.
-        // "one_correct" -> 0,
-        // "many_correct" -> 1,
-        // "text" -> 2,
-        // "matrix" -> 3,
-        // "picture" -> 4,
-        // "chemistry" -> 5,
-        // "drawing" -> 6.
-        let answerTypeCode;
-        switch (answerTypeStr) {
-            case "uks-oige":
-            answerTypeCode = 0;
-            break;
-            case "mitu-oiget":
-            answerTypeCode = 1;
-            break;
-            case "luhike-tekst":
-            case "pikk-tekst":
-            answerTypeCode = 2;
-            break;
-            case "maatriks-uks":
-            case "maatriks-mitu":
-            answerTypeCode = 3;
-            break;
-            case "interaktiivne":
-            answerTypeCode = 4;
-            break;
-            case "keemia tasakaalustamine":
-            answerTypeCode = 5;
-            break;
-            case "joonistamine":
-            answerTypeCode = 6;
-            break;
-            default:
-            answerTypeCode = 2;
-        }
-
-        // Collect answer variables depending on the answer type.
-        let answerVariables = [];
-        if (answerTypeStr === "uks-oige") {
-            const optionRows = document.querySelectorAll("#single-options .option-row");
-            optionRows.forEach(row => {
-            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
-            const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null;
-            answerVariables.push({ answer: optText, correct: isCorrect });
-            });
-        } else if (answerTypeStr === "mitu-oiget") {
-            const optionRows = document.querySelectorAll("#multiple-options .option-row");
-            optionRows.forEach(row => {
-            const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
-            const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
-            answerVariables.push({ answer: optText, correct: isCorrect });
-            });
-        } else {
-            // For text or similar types, try to get the answer from the preview input or textarea.
-            const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
-            if (answerInput) {
-            answerVariables.push({ answer: answerInput.value.trim(), correct: true });
-            }
-        }
-
-        // Add the built question object to the first block.
-        quizData.block[0].blockQuestions.push({
-            question: questionText,
-            points: points,
-            answerType: answerTypeCode,
-            answerVariables: answerVariables
-        });
-
-        return quizData;
-        }
-
-
+  
     getCurrentQuizType() {
         const dropdown = document.getElementById('dropdown-selected');
         return dropdown?.querySelector('span')?.dataset?.value || 'luhike-tekst';
@@ -713,9 +642,7 @@ class QuizBuilder {
             });
             });
         }
-
-    // Lisa see kood QuizBuilder klassi sisse, näiteks init() meetodi järele
-
+      
     setupQuestionImageUpload() {
     // Find the element that should respond to the click across its entire area.
     const uploadArea = document.querySelector('.image-upload-area'); // Use the whole container instead of just the text element
@@ -2317,37 +2244,44 @@ QuizBuilder.prototype.collectQuizData = function() {
       blockQuestions: []
     }]
   };
+
   // Determine the answer type from dropdown
   const dropdown = document.getElementById("dropdown-selected");
   let answerTypeStr = dropdown && dropdown.querySelector("span") ? dropdown.querySelector("span").dataset.value || "luhike-tekst" : "luhike-tekst";
   let answerTypeCode;
   switch (answerTypeStr) {
-    case "uks-oige":
-      answerTypeCode = 0;
-      break;
-    case "mitu-oiget":
-      answerTypeCode = 1;
-      break;
-    case "luhike-tekst":
-    case "pikk-tekst":
-      answerTypeCode = 2;
-      break;
-    case "maatriks-uks":
-    case "maatriks-mitu":
-      answerTypeCode = 3;
-      break;
-    case "interaktiivne":
-      answerTypeCode = 4;
-      break;
-    case "keemia tasakaalustamine":
-      answerTypeCode = 5;
-      break;
-    case "joonistamine":
-      answerTypeCode = 6;
-      break;
-    default:
-      answerTypeCode = 2;
-  }
+      case "uks-oige":
+          answerTypeCode = 0; // one_correct
+          break;
+      case "mitu-oiget":
+          answerTypeCode = 1; // many_correct
+          break;
+      case "luhike-tekst":
+      case "pikk-tekst":
+          answerTypeCode = 2; // text
+          break;
+      case "maatriks-uks":
+      case "maatriks-mitu":
+          answerTypeCode = 3; // matrix
+          break;
+      case "interaktiivne":
+          answerTypeCode = 4; // picture
+          break;
+      case "keemia_tasakaalustamine":
+          answerTypeCode = 5; // chemistry
+          break;
+      case "joonistamine":
+          answerTypeCode = 6; // drawing
+          break;
+      case "kalkulaator":
+          answerTypeCode = 7; // calculator
+          break;
+      case "keemia_ahelad":
+          answerTypeCode = 8; // calculator
+          break;  
+      default:
+          answerTypeCode = 2; // default to text
+}
   // Collect answer variables as needed (example for single choice)
   let answerVariables = [];
   if (answerTypeStr === "uks-oige") {

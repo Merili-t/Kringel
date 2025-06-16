@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = form.email.value.trim();
     const password = form.password.value;
     const confirmPassword = form.confirm_password.value;
+    const userType = form.userType.value; // read from the dropdown using its name "userType"
 
-    console.log("Form Data:", { email, password, confirmPassword });
+    console.log("Form Data:", { email, password, confirmPassword, userType });
 
     if (!email || !password || !confirmPassword) {
       alert("Kõik väljad peavad olema täidetud.");
@@ -35,10 +36,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       console.log("Sending registration request...");
+      // Send the payload with the key "userType"
       const result = await createFetch("/auth/register", "POST", {
-        email: email.toString(),
-        password: password.toString()
+        email,
+        password,
+        userType
       });
+      
       console.log("Response received:", result);
 
       if (result.message) {

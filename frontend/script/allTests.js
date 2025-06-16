@@ -110,16 +110,11 @@ function renderTests(tests) {
     answersContainer.style.cursor = "pointer";
     answersContainer.classList.add("text-icon-container", "nav-btn");
     answersContainer.setAttribute("data-target", "testAnswers.html");
-<<<<<<< HEAD
     
     answersContainer.addEventListener("click", function() {
       window.location.href = "testAnswers.html";
     });
 
-=======
-    answersContainer.setAttribute("data-test-id", test.id);
-    
->>>>>>> 4710983689ed1baf141ae96cd6772fb1f6d41c76
     const keyIcon = document.createElement("img");
     keyIcon.src = "../images/keyIcon.png";
     keyIcon.alt = "key icon";

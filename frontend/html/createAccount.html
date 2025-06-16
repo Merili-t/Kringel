@@ -16,7 +16,6 @@
     <div class="logo-container">
       <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo" />
     </div>
-    <!-- You can add additional admin-specific navigation here if desired -->
     <br />
     <div class="logout-btn-container">
       <button class="admin-btn poppins-semibold nav-btn" data-target="admin.html">ADMIN PANEL</button>
@@ -50,7 +49,7 @@
           <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
         </div>
         <h5 class="poppins-regular">
-          Kasuta vähemalt 8 tahemarki, mis sisaldavad tähti, numbreid ja sümboleid.
+          Kasuta vähemalt 8 tähemärki, mis sisaldavad tähti, numbreid ja sümboleid.
         </h5>
         <h3 class="poppins-medium">Korda parooli<sup>*</sup></h3>
         <div class="password-field">
@@ -61,6 +60,15 @@
             required
           />
           <span class="toggle-password" onclick="toggleVisibility(this)" style="cursor: pointer;">👁</span>
+        </div>
+        <!-- Dropdown for user type -->
+        <h3 class="poppins-medium">Vali kasutaja tüüp<sup>*</sup></h3>
+        <div class="dropdown-field">
+          <select name="userType" id="userType">
+            <option value="admin">Admin</option>
+            <option value="teacher" selected>Teacher</option>
+            <option value="guest">Guest</option>
+          </select>
         </div>
       </div>
       <div>

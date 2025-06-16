@@ -21,11 +21,8 @@ const elements = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  testId = getTestIdFromUrl();
-  if (!testId) {
-    testId = "0197684d-940e-767c-ad69-ed440fba0e45";
-    console.log("Using fallback testId:", testId);
-  }
+  // Get the test ID from the URL or fallback to a default value.
+  testId = getTestIdFromUrl() || "01976907-0aad-775e-acc5-a2b5f1f60426";
   await loadTestData(testId);
 });
 
@@ -52,7 +49,17 @@ async function loadTestData(testId) {
   try {
     showLoading();
 
-    const testData = await createFetch(`/test/${testId}`, "GET", "");
+    const token = localStorage.getItem("token") || "";
+
+    // Fetch test details using the same testId.
+    const testData = await createFetch(
+      `/test/${testId}`, 
+      "GET", 
+      "", 
+      { headers: { "Authorization": `Bearer ${token}` } }
+    );
+
+    // Fetch block data using the same testId.
     const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
 
     if (!testData || !Array.isArray(blockData.blocks)) {
@@ -87,8 +94,11 @@ async function loadTestData(testId) {
     renderBlocks();
     updateProgressBar();
 
+    // Start timer using the timeLimit from testData, converted to seconds.
     if (testData.timeLimit) {
       startTimer(testData.timeLimit * 60);
+    } else {
+      console.warn("No timeLimit provided in test data. Timer will not start.");
     }
 
     showMainContent();
@@ -100,7 +110,7 @@ async function loadTestData(testId) {
 
 function populateTestData(testData, count) {
   elements.testTitle.textContent = testData.name || "Nimetu test";
-  elements.testDuration.textContent = formatDuration(testData.timeLimit || 0);
+  elements.testDuration.textContent = formatDuration(testData.timeLimit);
   elements.questionCount.textContent = count || "0";
   document.title = testData.name || "Testi lahendamine";
 }
@@ -233,7 +243,9 @@ function endTest() {
 }
 
 function formatDuration(minutes) {
-  if (minutes < 60) return `${minutes} minutit`;
+  if (minutes < 60) {
+    return `${minutes} minutit`;
+  }
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return m === 0
@@ -265,5 +277,10 @@ elements.nextButton.addEventListener("click", moveToNextBlock);
 elements.endButton.addEventListener("click", endTest);
 
 function triggerTimeUpPopup() {
-  alert("Aeg on otsas! Test lõpetatakse.");
+  // Call the global function from timeOut.js.
+  if (typeof initTimeOut === 'function') {
+    initTimeOut();
+  } else {
+    console.warn("initTimeOut() not found.");
+  }
 }

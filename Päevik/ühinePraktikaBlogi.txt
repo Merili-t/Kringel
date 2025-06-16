@@ -1,8 +1,0 @@
-Esmaspäev 09.06.2025
-
-- loeng sissejuhatus praktikasse
-- loeng tarkvaraarendus SCRUMi näitel 
-- plaan paigaldada Docker ja see kasutusele võtta - kiirkursus neile, kes seda ei oska
-- suhtlus kliendiga: infovahetus, et domeeni kool ei paku ja me anname praktika lõpus neile koodi.
-- esialgne praktika plaan
-

@@ -55,9 +55,6 @@ async function loadTestData(testId) {
     const testData = await createFetch(`/test/${testId}`, "GET", "");
     const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
 
-    console.log("testData:", testData);
-    console.log("blockData:", blockData);
-
     if (!testData || !Array.isArray(blockData.blocks)) {
       throw new Error("Vigased andmed");
     }
@@ -70,11 +67,10 @@ async function loadTestData(testId) {
         ? response.blockQuestions
         : [];
 
-      console.log("Küsimused plokis", block.block_number, questions);
-
       const formattedQuestions = questions.map((q) => ({
         type: mapQuestionType(q.type),
         text: q.description || "",
+        points: q.points ?? 0,
       }));
 
       allBlocks.push({
@@ -83,7 +79,6 @@ async function loadTestData(testId) {
       });
     }
 
-    // ÕIGE KOHT blocks muutujale väärtuse andmiseks
     blocks = allBlocks
       .sort((a, b) => a.blockOrder - b.blockOrder)
       .map((b) => b.questions);
@@ -110,13 +105,33 @@ function populateTestData(testData, count) {
   document.title = testData.name || "Testi lahendamine";
 }
 
+function renderBlockIndicators() {
+  const container = document.getElementById("block-indicator");
+  container.innerHTML = "";
+
+  blocks.forEach((_, index) => {
+    const circle = document.createElement("div");
+    circle.classList.add("circle");
+
+    if (index < currentBlock) {
+      circle.classList.add("completed");
+    } else if (index === currentBlock) {
+      circle.classList.add("active");
+    }
+
+    circle.textContent = index + 1;
+    container.appendChild(circle);
+  });
+}
+
 function renderBlocks() {
   const container = elements.questionsWrapper;
   container.innerHTML = "";
 
+  let globalQuestionNumber = 1;
+
   blocks.forEach((block, index) => {
     const blockDiv = document.createElement("div");
-    console.log("Plokk", index, block);
     blockDiv.className = "block";
     if (index === currentBlock) blockDiv.classList.add("active");
 
@@ -130,25 +145,47 @@ function renderBlocks() {
       const qDiv = document.createElement("div");
       qDiv.className = "question-card";
 
+      const questionHeader = `
+        <div class="question-header">
+          <strong>${globalQuestionNumber}.</strong> ${q.text}
+          <span class="points-badge">${q.points}p</span>
+        </div>
+      `;
+
       if (["text", "one_correct", "short"].includes(q.type)) {
         qDiv.innerHTML = `
-          <label>${q.text}</label><br/>
+          ${questionHeader}
           <input type="text" placeholder="Vastus..." />
+        `;
+      } else if (q.type === "calculator") {
+        qDiv.innerHTML = `
+          ${questionHeader}
+          <iframe 
+            src="../calculator/calculator.html"
+            class="calculator-iframe"
+            width="100%" 
+            height="300" 
+            style="border: none; margin-top: 10px;"></iframe>
+          <input type="hidden" class="calculator-answer" />
         `;
       } else {
         qDiv.innerHTML = `
-          <label>${q.text}</label><br/>
+          ${questionHeader}
           <textarea placeholder="Pikk vastus..." rows="4"></textarea>
         `;
       }
 
       questionWrapper.appendChild(qDiv);
       questionContainer.appendChild(questionWrapper);
+      globalQuestionNumber++;
     });
 
     blockDiv.appendChild(questionContainer);
     container.appendChild(blockDiv);
   });
+
+  renderBlockIndicators();
+  updateProgressBar();
 }
 
 function updateProgressBar() {
@@ -165,6 +202,7 @@ function moveToNextBlock() {
     currentBlock++;
     allBlocks[currentBlock].classList.add("active");
     updateProgressBar();
+    renderBlockIndicators();
 
     if (currentBlock === allBlocks.length - 1) {
       elements.nextButton.style.display = "none";

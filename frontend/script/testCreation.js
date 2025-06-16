@@ -391,33 +391,6 @@ class DrawingTool {
       }
     }
   }
-
-
-class ChemistryKeyboard extends Keyboard {
-    constructor(targetElement, inputField) {
-        super(targetElement);
-        this.inputField = inputField;
-        this.initializeKeys();
-    }
-    
-    initializeKeys() {
-        const symbols = ['₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉', '₀', '→', '⇌', '↑', '↓', '+', '(', ')', 'Δ', '⁺', '⁻', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹', '⁰'];
-        symbols.forEach(symbol => {
-            this.addButton(symbol, this.addToInputField.bind(this));
-        });
-    }
-    
-    addToInputField(symbol) {
-        const input = this.inputField.inputElement;
-        const start = input.selectionStart;
-        const end = input.selectionEnd;
-        const text = input.value;
-        input.value = text.slice(0, start) + symbol + text.slice(end);
-        input.selectionStart = input.selectionEnd = start + symbol.length;
-        input.focus();
-    }
-}
-
 class InputField {
     constructor(inputElement) {
         this.inputElement = inputElement;
@@ -813,28 +786,42 @@ class QuizBuilder {
         calcFrame.src = '';
         console.log("Before condition, calcFrame.src reset to:", calcFrame.src);
 
-        // If the selected answer type calls for the LaTeX calculator
         if (value === 'latex-kalkulaator') {
             console.log("Value indicates LaTeX calculator. Setting iframe source.");
             calcWrap.style.display = 'block';
-            // Check if calculator.html is accessible at the expected path.
             calcFrame.src = 'calculator.html';
             console.log("calcFrame.src set to:", calcFrame.src);
-        }
-        // Otherwise, show the generic preview and use the corresponding renderer
-        else {
+        } else if (value === 'keemia_tasakaalustamine') {
+            console.log("Value indicates chemistry balance. Setting iframe source.");
+
+            // Eemaldame vana eelvaate ja loome keemia klaviatuuri eelvaate HTML
+            previewContent.innerHTML = `
+                <div id="chemistry-keyboard-iframe-wrapper" style="margin-top: 1rem; padding: 1rem;">
+                    <iframe
+                        id="chemistry-keyboard-iframe"
+                        src="chemistryKeyboard.html"
+                        width="100%"
+                        height="400"
+                        style="border: none;">
+                    </iframe>
+                    <p class="poppins-regular">
+                      <strong>Saadetud valem:</strong>
+                      <span id="chemistry-keyboard-answer-preview"></span>
+                    </p>
+                </div>
+            `;
+        } else {
             genWrap.style.display = 'block';
             const renderers = {
-                'luhike-tekst':            () => this.renderShortText(),
-                'pikk-tekst':              () => this.renderLongText(),
-                'uks-oige':                () => this.renderSingleChoice(),
-                'mitu-oiget':              () => this.renderMultipleChoice(),
-                'maatriks-uks':            () => this.renderMatrixSingle(),
-                'maatriks-mitu':           () => this.renderMatrixMultiple(),
-                'joonistamine':            () => this.renderDrawingCanvas(),
-                'interaktiivne':           () => this.renderImageUpload(),
-                'keemia_tasakaalustamine': () => this.renderChemistryBalance(),
-                'keemia_ahelad':           () => this.renderChemistryChains()
+                'luhike-tekst':    () => this.renderShortText(),
+                'pikk-tekst':      () => this.renderLongText(),
+                'uks-oige':        () => this.renderSingleChoice(),
+                'mitu-oiget':      () => this.renderMultipleChoice(),
+                'maatriks-uks':    () => this.renderMatrixSingle(),
+                'maatriks-mitu':   () => this.renderMatrixMultiple(),
+                'joonistamine':    () => this.renderDrawingCanvas(),
+                'interaktiivne':   () => this.renderImageUpload(),
+                'keemia_ahelad':   () => this.renderChemistryChains() // ainult keemia_ahelad jääb renderisse
             };
             if (renderers[value]) {
                 console.log("Found renderer for value:", value);
@@ -844,6 +831,7 @@ class QuizBuilder {
                 genWrap.innerHTML = `<p>${value} eelvaade pole veel seadistatud.</p>`;
             }
         }
+
     }
 
 
@@ -1013,80 +1001,6 @@ class QuizBuilder {
         
         // Initialize drawing after DOM is updated
         setTimeout(() => this.initializeDrawing(), 100);
-    }
-
-    renderChemistryBalance() {
-        const container = this.createContainer('Keemia tasakaalustamine:');
-        
-        const equationContainer = this.createElement('div', 'chemistry-equation');
-        equationContainer.style.cssText = 'background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;';
-        
-        // Input field for chemistry equation
-        const inputField = this.createElement('textarea');
-        inputField.id = 'chemistry-input-field';
-        inputField.placeholder = 'Sisesta keemiline võrrand...';
-        inputField.style.cssText = `
-            width: 100%; 
-            padding: 12px; 
-            font-size: 16px; 
-            border: 2px solid #ddd; 
-            border-radius: 8px; 
-            resize: none; 
-            min-height: 60px; 
-            font-family: 'Courier New', monospace;
-            margin-bottom: 15px;
-            overflow: hidden;
-            text-transform: uppercase;
-        `;
-        
-        // Chemistry keyboard container
-        const keyboardContainer = this.createElement('div', '', 'chemistry-keyboard');
-        keyboardContainer.style.cssText = `
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 4px;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        `;
-        
-        equationContainer.appendChild(inputField);
-        equationContainer.appendChild(keyboardContainer);
-
-        
-        container.appendChild(equationContainer);
-        document.getElementById('preview-content').appendChild(container);
-        
-        // Initialize chemistry keyboard after DOM is ready
-        setTimeout(() => {
-            const inputFieldObj = new InputField(inputField);
-            const chemistryKeyboard = new ChemistryKeyboard(keyboardContainer, inputFieldObj);
-            
-            // Auto-resize textarea
-            inputField.addEventListener("input", () => {
-                inputField.style.height = "auto";
-                inputField.style.height = inputField.scrollHeight + "px";
-            });
-            
-            // Prevent regular keyboard input and paste
-            document.addEventListener('keydown', (event) => {
-                if (event.target.id === 'chemistry-input-field') return;
-                const validKeys = /^[a-zA-Z0-9+\-/*=() ]$/;
-                if (validKeys.test(event.key)) {
-                    event.preventDefault();
-                    inputFieldObj.append(event.key);
-                }
-            });
-            
-            document.addEventListener('paste', (e) => {
-                if (e.target.id === 'chemistry-input-field') {
-                    e.preventDefault();
-                    alert('Kleepimine on keelatud.');
-                }
-            });
-        }, 100);
     }
 
     renderChemistryChains() {
@@ -2357,7 +2271,6 @@ QuizBuilder.prototype.collectQuizData = function() {
   return quizData;
 
 };
-
 
 // Legacy function support (if needed)
 window.closeDropdown = () => {

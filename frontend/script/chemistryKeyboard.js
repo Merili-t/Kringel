@@ -22,34 +22,10 @@ class KeyboardButton {
     this.buttonElement = document.createElement('div');
     this.buttonElement.classList.add('key');
     this.buttonElement.textContent = this.symbol;
+
     this.buttonElement.onclick = () => this.callback(this.symbol);
+
     return this.buttonElement;
-  }
-}
-
-class ChemistryKeyboard extends Keyboard {
-  constructor(targetElement, inputField) {
-    super(targetElement);
-    this.inputField = inputField;
-    this.initializeKeys();
-  }
-
-  initializeKeys() {
-    const symbols = ['₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉', '₀', '→', '⇌', '↑', '↓', '+', '(', ')', 'Δ', '⁺', '⁻', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹', '⁰'];
-    symbols.forEach(symbol => {
-      this.addButton(symbol, this.addToInputField.bind(this));
-    });
-  }
-
-  addToInputField(symbol) {
-    const input = this.inputField.inputElement;
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    const text = input.value;
-
-    input.value = text.slice(0, start) + symbol + text.slice(end);
-    input.selectionStart = input.selectionEnd = start + symbol.length;
-    input.focus();
   }
 }
 
@@ -57,9 +33,10 @@ class InputField {
   constructor(inputElement) {
     this.inputElement = inputElement;
 
+    // Disable paste
     this.inputElement.addEventListener('paste', (e) => {
       e.preventDefault();
-      alert('Paste is disabled in this input field.');
+      alert('Kleepimine on selles väljas keelatud.');
     });
   }
 
@@ -79,16 +56,60 @@ class InputField {
   }
 }
 
-window.onload = function () {
-  const inputFieldElement = document.getElementById('inputField'); 
+class ChemistryKeyboard extends Keyboard {
+  constructor(targetElement, inputField) {
+    super(targetElement);
+    this.inputField = inputField;
+    this.initializeKeys();
+  }
+
+  initializeKeys() {
+    const symbols = [
+      '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉', '₀',
+      '→', '⇌', '↑', '↓', '+', '(', ')', 'Δ',
+      '⁺', '⁻', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹', '⁰'
+    ];
+
+    symbols.forEach(symbol => {
+      this.addButton(symbol, this.addToInputField.bind(this));
+    });
+  }
+
+  addToInputField(symbol) {
+    this.inputField.append(symbol);
+  }
+}
+
+// Automaatne initsialiseerimine (nt iframe-is)
+window.addEventListener('DOMContentLoaded', () => {
+  const inputFieldElement = document.getElementById('inputField');
+  const keyboardElement = document.getElementById('chemistryKeyboard');
+
+  if (!inputFieldElement || !keyboardElement) return;
+
   const inputField = new InputField(inputFieldElement);
-  const chemistryKeyboardElement = document.getElementById('chemistryKeyboard');
-  const chemistryKeyboard = new ChemistryKeyboard(chemistryKeyboardElement, inputField);
+  const chemistryKeyboard = new ChemistryKeyboard(keyboardElement, inputField);
 
-  chemistryKeyboardElement.style.display = 'grid';
+  keyboardElement.style.display = 'grid';
 
-  document.addEventListener('keydown', function (event) {
-    if (event.target.id === 'inputField') return;
+  // Automaatselt textarea kõrguse muutmine sisestamisel
+  inputFieldElement.addEventListener('input', () => {
+    inputFieldElement.style.height = 'auto';
+    inputFieldElement.style.height = inputFieldElement.scrollHeight + 'px';
+  });
+
+  // Logi blur-hetkel sisend
+  inputFieldElement.addEventListener('blur', () => {
+    const message = {
+    type: 'chemistry-balance-answer',
+    value: inputFieldElement.value
+  };
+  window.parent.postMessage(message, '*');
+  });
+
+  // Välise klaviatuuri sisend
+  document.addEventListener('keydown', (event) => {
+    if (event.target === inputFieldElement) return;
     const validKeys = /^[a-zA-Z0-9+\-/*=() ]$/;
     if (validKeys.test(event.key)) {
       event.preventDefault();
@@ -96,20 +117,11 @@ window.onload = function () {
     }
   });
 
-
+  // Prevent paste outside inputField as well (global)
   document.addEventListener('paste', (e) => {
+    if (e.target === inputFieldElement) return;
     e.preventDefault();
-    alert('Paste is disabled.');
+    alert('Kleepimine on keelatud.');
   });
-
-  inputFieldElement.addEventListener("blur", () => {
-  console.log("Sisestatud keemiline valem:", inputFieldElement.value);
 });
-};
 
-const input = document.getElementById("inputField");
-
-input.addEventListener("input", () => {
-  input.style.height = "auto"; 
-  input.style.height = input.scrollHeight + "px"; 
-});

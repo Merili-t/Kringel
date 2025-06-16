@@ -110,7 +110,10 @@ function renderTests(tests) {
     answersContainer.style.cursor = "pointer";
     answersContainer.classList.add("text-icon-container", "nav-btn");
     answersContainer.setAttribute("data-target", "testAnswers.html");
-    answersContainer.setAttribute("data-test-id", test.id);
+    
+    answersContainer.addEventListener("click", function() {
+      window.location.href = "testAnswers.html";
+    });
 
     const keyIcon = document.createElement("img");
     keyIcon.src = "../images/keyIcon.png";

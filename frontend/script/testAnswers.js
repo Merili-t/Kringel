@@ -3,7 +3,11 @@ import createFetch from "./utils/createFetch";
 //document.getElementById("page-title").innerText = "Test: " + testName;
 
 async function loadTeamsForTest(testId) {
-  return await createFetch(`/tests/${testId}/teams`, 'GET');
+  // Updated route: there's no direct route for teams by test ID
+  // You'll need to get all teams and filter, or add a new route
+  // For now, using the teams endpoint and filtering client-side
+  const allTeams = await createFetch('/team/teams', 'GET');
+  return allTeams.filter(team => team.test_id === testId);
 }
 
 function formatDate(dateString) {
@@ -21,7 +25,7 @@ async function renderTests() {
 
   container.innerHTML = "";
 
-  const tests = await createFetch('/test/tests', 'GET'); // endpoint õige ?
+  const tests = await createFetch('/test/tests', 'GET');
 
   for (const test of tests) {
     const testDiv = document.createElement("div");
@@ -88,28 +92,32 @@ function navigate(pageId, teamId = null) {
   }
 }
 
-
 async function loadTeamAnswer(teamId) {
-  const data = await createFetch(`/team/${teamId}/answers`, 'GET');
+  // Fixed route: was '/team/${teamId}/answers', now using available endpoints
+  // You'll need to get team data, attempts, and answers separately
+  const team = await createFetch(`/team/team/${teamId}`, 'GET');
+  const answers = await createFetch('/team/answers', 'GET');
+  
+  // Filter answers for this specific team
+  const teamAnswers = answers.filter(answer => answer.team_id === teamId);
 
   const page = document.getElementById("teamanswer");
   if (!page) return;
 
-  // Eeldus: kõik read on sama tiimi kohta
-  const team = data[0];
   const tableBody = page.querySelector("tbody");
   const nameHeader = page.querySelector("h2");
   const desc = page.querySelector(".description");
   const videoLinkContainer = page.querySelector(".details .detail-item");
 
-  nameHeader.textContent = team.team_name;
-  desc.textContent = `Tiimi liikmed: ${[...new Set(data.map(d => d.member_name))].join(", ")}`;
-  videoLinkContainer.innerHTML = `<a href="${team.video_url}" target="_blank">${team.video_url}</a>`;
+  nameHeader.textContent = team.name;
+  // You'll need to adjust this based on your actual team data structure
+  desc.textContent = `Tiimi liikmed: ${team.members ? team.members.join(", ") : "N/A"}`;
+  videoLinkContainer.innerHTML = `<a href="${team.video_url || '#'}" target="_blank">${team.video_url || 'Video puudub'}</a>`;
 
   let totalPoints = 0;
   tableBody.innerHTML = "";
 
-  data.forEach(row => {
+  teamAnswers.forEach(row => {
     const question = row.question_text;
     const answer = row.answer || "<em>(puudub)</em>";
     const isManual = row.type === 3; // nt kui 3 = manuaalne
@@ -122,8 +130,8 @@ async function loadTeamAnswer(teamId) {
     tableBody.innerHTML += `
       <tr>
         <td>${question}</td>
-        <td>style="cursor: pointer; color: #B81434;"
-        onclick="window.location.href='oneAnswer.html?teamId=${teamId}&questionId=${question_id}'">
+        <td style="cursor: pointer; color: #B81434;"
+        onclick="window.location.href='oneAnswer.html?teamId=${teamId}&questionId=${row.question_id}'">
         ${answer}</td>
         <td>${points}</td>
       </tr>

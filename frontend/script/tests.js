@@ -7,12 +7,9 @@ let tests = [];
 
 // Load tests from API
 async function loadTests() {
-  try {
-    const response = await fetch("http://localhost:3006/tests");
-    if (!response.ok) {
-      throw new Error("Network response was not ok: " + response.status);
-    }
-    const testsData = await response.json();
+    try {
+    // Fixed: Use correct route /test/tests and createFetch for authentication
+    const testsData = await createFetch('/test/tests', 'GET');
     tests = testsData;
     renderTests();
   } catch (error) {

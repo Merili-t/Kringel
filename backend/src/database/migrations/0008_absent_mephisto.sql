@@ -1,0 +1,2 @@
+ALTER TABLE `team_answer` ADD `variant_id` char(36) DEFAULT null;--> statement-breakpoint
+ALTER TABLE `team_answer` ADD CONSTRAINT `team_answer_variant_id_question_id_fk` FOREIGN KEY (`variant_id`) REFERENCES `question`(`id`) ON DELETE cascade ON UPDATE no action;

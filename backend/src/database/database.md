@@ -19,22 +19,22 @@
 
 ## team
 
-| Name       | Type         | Key   | Notes                         |
-| ---------- | ------------ | ----- | ----------------------------- |
-| id         | CHAR(36)     | PK, N | UUID                          |
-| attempt_id | CHAR(36)     | FK    | References `test_attempt(id)` |
-| email      | VARCHAR(255) | N     | Required                      |
-| name       | text         | N     | Required                      |
-| created_at | TIMESTAMP    |       | Set automatically             |
-| updated_at | TIMESTAMP    |       | Updated automatically         |
+| Name       | Type         | Key   | Notes                 |
+| ---------- | ------------ | ----- | --------------------- |
+| id         | CHAR(36)     | PK, N | UUID                  |
+| email      | VARCHAR(255) | N     | Required              |
+| name       | text         | N     | Required              |
+| created_at | TIMESTAMP    |       | Set automatically     |
+| updated_at | TIMESTAMP    |       | Updated automatically |
 
 ## team_answer
 
 | Name        | Type      | Key   | Notes                     |
 | ----------- | --------- | ----- | ------------------------- |
 | id          | CHAR(36)  | PK, N | UUID                      |
-| team_id     | CHAR(36)  | FK, N | References `team(id)`     |
+| attempt_id  | CHAR(36)  | FK, N | References `attempt(id)`  |
 | question_id | CHAR(36)  | FK, N | References `question(id)` |
+| variant_id  | CHAR(36)  | FK    | References `variant(id)`  |
 | answer      | TEXT      |       |                           |
 | points      | INTEGER   | N     | DEFAULT 0                 |
 | created_at  | TIMESTAMP |       | Set automatically         |

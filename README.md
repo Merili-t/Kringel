@@ -29,9 +29,13 @@ Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal
 ## Instituut
 
 ## Kasutatud tehnoloogiad ja nende versioonid
+Vite – Frontend tooling for faster builds
+Express.js – Web framework for Node.js
+DrizzleORM – TypeScript-first ORM for SQL databases
+Prettier – Code formatter for consistent style
 
 ## Autorid
 
 ## Paigaldusjuhised
-
+SVEN
 ## 

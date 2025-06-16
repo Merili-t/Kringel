@@ -61,7 +61,7 @@ export const getByTestId = async (req, res) => {
   const testId = result.data;
 
   try {
-    const test = await db.select().from(testModel).where(eq(testModel.id, testId));
+    const test = await db.select({ id: testModel.id, name: testModel.name, description: testModel.description, start: testModel.start, end: testModel.end, timeLimit: testModel.timeLimit }).from(testModel).where(eq(testModel.id, testId));
 
     try {
       const result = await db

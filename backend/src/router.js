@@ -23,7 +23,7 @@ router.get('/auth/logout', checkToken, access.level1, auth.logout);
 // Test routes
 router.post('/test/upload', checkToken, access.level2, test.upload);
 router.get('/test/tests', checkToken, access.level2, test.getTests);
-router.get('/test/:id', checkToken, access.level1, test.getByTestId);
+router.get('/test/:id', checkToken, test.getByTestId);
 router.delete('/test/delete/:id', checkToken, access.level2, test.deleteTest);
 
 // Block routes

@@ -8,7 +8,7 @@ import db from '../database/drizzle.js';
 import user from '../database/models/user.js';
 import team from '../database/models/team.js';
 
-const createSession = (res, id, userType, message, userTypeMessage) => {
+const createSession = (res, id, userType, message) => {
   const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '7d' });
   res
     .cookie('token', token, {
@@ -17,7 +17,7 @@ const createSession = (res, id, userType, message, userTypeMessage) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     })
-    .json({ message, userTypeMessage });
+    .json({ message, userType });
 };
 
 export const login = async (req, res) => {
@@ -41,13 +41,12 @@ export const login = async (req, res) => {
         foundUser[0].id,
         foundUser[0].userType,
         'Logged in',
-        foundUser[0].userType
       );
     } else {
       res.status(401).json({ error: 'Wrong email or password given' });
     }
-  } else if (serverUserData.isLoggedIn && serverUserData.userType === 'teacher') {
-    res.json({ message: 'Logged in', userType: 'teacher' });
+  } else if (serverUserData.isLoggedIn && serverUserData.userType === 'teacher' || serverUserData.userType === 'admin') {
+    res.json({ message: 'Logged in', userType: serverUserData.userType });
   } else {
     res.status(400).json({ error: 'Email and password are required' });
   }
@@ -75,7 +74,7 @@ export const register = async (req, res) => {
     // Guest registration
     try {
       await db.insert(team).values({ id, email, name });
-      return createSession(res, id, userType, 'Guest account created and logged in', 'guest');
+      return createSession(res, id, userType, 'Guest account created and logged in');
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to create guest account' });

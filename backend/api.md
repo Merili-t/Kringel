@@ -536,6 +536,7 @@ Deletes question.
 ```
 
 ---
+
 ## /variant
 
 ### DELETE /variant/delete/:id
@@ -547,6 +548,127 @@ Deletes answer variant.
 ```json
 {
   "message": "Answer variant deleted"
+}
+```
+
+---
+
+## /team
+
+### GET /team/team/:id
+
+Get team by id.
+
+#### Responses
+
+```json
+{
+  "id": "uuid-v7-string",
+  "email": "team1@kringel.ee",
+  "name": "Jhon, Joe, Peter",
+  "createdAt": "2025-06-16T08:43:42.000Z",
+  "updatedAt": "2025-06-16T08:43:42.000Z"
+}
+```
+
+### GET /team/attempt/:id
+
+Get attempt by id.
+
+#### Responses
+
+```json
+{
+  "id": "uuid-v7-string",
+  "testId": "uuid-v7-string",
+  "teamId": "uuid-v7-string",
+  "start": "2025-06-16T08:43:42.000Z",
+  "end": "2025-06-16T08:43:42.000Z",
+  "score": 0,
+  "createdAt": "2025-06-16T08:43:42.000Z",
+  "updatedAt": "2025-06-16T08:43:42.000Z"
+}
+```
+
+### GET /team/answer/:id
+
+Get answer by id.
+
+#### Responses
+
+```json
+{
+  "id": "uuid-v7-string",
+  "attemptId": "uuid-v7-string",
+  "questionId": "uuid-v7-string",
+  "variantId": "uuid-v7-string",
+  "answer": null,
+  "points": 0,
+  "createdAt": "2025-06-16T08:43:42.000Z",
+  "updatedAt": "2025-06-16T08:43:42.000Z"
+}
+```
+
+### GET /team/teams
+
+Get teams.
+
+#### Responses
+
+```json
+{
+  "teams": [
+    {
+      "id": "uuid-v7-string",
+      "email": "team1@kringel.ee",
+      "name": "Jhon, Joe, Peter",
+      "createdAt": "2025-06-16T08:43:42.000Z",
+      "updatedAt": "2025-06-16T08:43:42.000Z"
+    }
+}
+```
+
+### GET /team/attempts
+
+Get attempts.
+
+#### Responses
+
+```json
+{
+  "attempts": [
+    {
+      "id": "uuid-v7-string",
+      "testId": "uuid-v7-string",
+      "teamId": "uuid-v7-string",
+      "start": "2025-06-16T08:43:42.000Z",
+      "end": "2025-06-16T08:43:42.000Z",
+      "score": 0,
+      "createdAt": "2025-06-16T08:43:42.000Z",
+      "updatedAt": "2025-06-16T08:43:42.000Z"
+    }
+}
+```
+
+### GET /team/answers
+
+Get answers.
+
+#### Responses
+
+```json
+{
+  "answers": [
+    {
+      "id": "uuid-v7-string",
+      "attemptId": "uuid-v7-string",
+      "questionId": "uuid-v7-string",
+      "variantId": "uuid-v7-string",
+      "answer": null,
+      "points": 0,
+      "createdAt": "2025-06-16T08:43:42.000Z",
+      "updatedAt": "2025-06-16T08:43:42.000Z"
+    }
 }
 ```
 

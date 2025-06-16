@@ -415,6 +415,22 @@ class InputField {
     }
 }
 
+async function getFirstBlockIdByTestId(testId) {
+  try {
+    const result = await createFetch(`/block/test/${testId}`, "GET");
+    if (result && result.length > 0) {
+      console.log("Fetched blocks:", result);
+      return result[0].id; // Use the ID of the first block
+    } else {
+      console.warn("No blocks found for testId", testId);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching block by testId:", error);
+    return null;
+  }
+}
+
 async function saveQuiz(questionData) {
   try {
       console.log("API URL:", import.meta.env.VITE_API_URL);
@@ -445,8 +461,10 @@ async function saveQuiz(questionData) {
   }
 }
 
+// ...existing code...
+
 function collectQuizData(blockId) {
-  // Get and log the question text
+  // Get the question text.
   const questionTextElem = document.getElementById("question-text");
   const question = questionTextElem ? questionTextElem.value.trim() : "";
   console.log("Question:", question);
@@ -455,19 +473,26 @@ function collectQuizData(blockId) {
     return null;
   }
 
-  // Points: convert input to a number
+  // --- FIX: Check for blockId existence and handle error ---
+  if (!blockId) {
+    alert("Ploki ID puudub! Palun loo või vali plokk enne küsimuse salvestamist.");
+    throw new Error("Block ID is undefined in collectQuizData");
+  }
+
+  // ...rest of the function unchanged...
+  // Process the points input.
   const pointsCheckbox = document.getElementById("additional-points");
   const pointsInput = document.getElementById("points-input");
   const ptsStr = pointsInput ? pointsInput.value.trim() : "";
-  const points = pointsCheckbox && pointsCheckbox.checked && ptsStr !== "" ? Number(ptsStr) : 0;
+  const points =
+    pointsCheckbox && pointsCheckbox.checked && ptsStr !== "" ? Number(ptsStr) : 0;
   console.log("Points:", points, "Raw:", ptsStr);
 
-  // Get answer type from dropdown and map it to a numeric code.
-  const dropdown = document.getElementById("dropdown-selected");
+  // Get the answer type and map to a numeric code.
+  const dropdownSelected = document.getElementById("dropdown-selected");
+  // Use the logical OR (||) to supply a default.
   const answerTypeStr =
-    dropdown && dropdown.querySelector("span")
-      ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
-      : "luhike-tekst";
+    dropdownSelected?.getAttribute("data-value")?.trim() || "luhike-tekst";
   console.log("Answer type (string):", answerTypeStr);
 
   let answerTypeCode;
@@ -506,14 +531,15 @@ function collectQuizData(blockId) {
   }
   console.log("Mapped answer type code:", answerTypeCode);
 
-  // Build answerVariables array.
+  // For multiple-choice questions (one or many correct answers), build answerVariables.
   let answerVariables = [];
   if (answerTypeStr === "uks-oige") {
     const optionRows = document.querySelectorAll("#single-options .option-row");
     optionRows.forEach(row => {
       const optTextElem = row.querySelector(".option-input");
       const optText = optTextElem ? optTextElem.value.trim() : "";
-      const isCorrect = row.querySelector('input[name="correct-single"]:checked') !== null ? 1 : 0;
+      const isCorrect =
+        row.querySelector('input[name="correct-single"]:checked') !== null ? 1 : 0;
       if (optText) {
         answerVariables.push({ answer: optText, correct: isCorrect });
       }
@@ -523,28 +549,23 @@ function collectQuizData(blockId) {
     optionRows.forEach(row => {
       const optTextElem = row.querySelector(".option-input");
       const optText = optTextElem ? optTextElem.value.trim() : "";
-      const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null ? 1 : 0;
+      const isCorrect =
+        row.querySelector('input[name="correct-multiple"]:checked') !== null ? 1 : 0;
       if (optText) {
         answerVariables.push({ answer: optText, correct: isCorrect });
       }
     });
-  } else {
-    // For text answers (or other types where you take a single value)
-    const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
-    if (answerInput) {
-      answerVariables.push({ answer: answerInput.value.trim(), correct: 1 });
-    }
   }
   console.log("Answer variables:", answerVariables);
 
-  // Determine orderNumber: assume the existence of a global quizData variable.
+  // Determine the order number for the new question.
   const orderNumber =
-    (window.quizData &&
-      window.quizData.block &&
-      window.quizData.block[0] &&
-      window.quizData.block[0].blockQuestions
-        ? window.quizData.block[0].blockQuestions.length + 1
-        : 1);
+    window.quizData &&
+    window.quizData.block &&
+    window.quizData.block[0] &&
+    window.quizData.block[0].blockQuestions
+      ? window.quizData.block[0].blockQuestions.length + 1
+      : 1;
   console.log("Order number:", orderNumber);
 
   // Build the final payload.
@@ -556,12 +577,16 @@ function collectQuizData(blockId) {
     orderNumber: orderNumber
   };
 
+  // Only include for specific answer types (for example, multiple choice)
   if (answerTypeCode === 0 || answerTypeCode === 1) {
     finalData.answerVariables = answerVariables;
   }
   console.log("Final question data payload:", finalData);
   return finalData;
 }
+
+// ...existing code...
+
 
 class QuizBuilder {
     constructor() {
@@ -1832,6 +1857,35 @@ document.getElementById("add-block").addEventListener("click", async () => {
 
 // --- Save Current Question ---
 async function saveCurrentQuestion() {
+  // 1. Get current test ID
+  const testId = getCurrentTestId();
+
+  // 2. Fetch blocks for this test
+  let blockId = null;
+  try {
+    const blocks = await createFetch(`/block/test/${testId}`, "GET");
+    if (blocks && blocks.length > 0) {
+      blockId = blocks[0].id; // Use the first block's ID
+      updateBlockInfo(blockId, blocks[0].name || `Plokk 1`);
+    } else {
+      // No blocks exist, create a new one
+      const newBlockResponse = await createFetch("/block/create", "POST", {
+        name: `Plokk 1`,
+        testId: testId
+      });
+      if (newBlockResponse.error) {
+        alert("Viga ploki loomisel: " + newBlockResponse.error);
+        return false;
+      }
+      blockId = newBlockResponse.blockId;
+      updateBlockInfo(blockId, newBlockResponse.name);
+    }
+  } catch (err) {
+    alert("Viga ploki leidmisel või loomisel!");
+    return false;
+  }
+
+  // 3. Continue as before
   const question = document.getElementById("question-text").value.trim();
   if (!question) {
     alert("Palun sisesta küsimuse tekst!");
@@ -1845,6 +1899,7 @@ async function saveCurrentQuestion() {
   if (imageFile) {
     // Build FormData payload (for image uploads)
     const formData = new FormData();
+    formData.append("blockId", blockId.toString());
     formData.append("question", question);
 
     const ptsStr = document.getElementById("points-input").value.trim();
@@ -1917,7 +1972,7 @@ async function saveCurrentQuestion() {
     result = await response.json();
   } else {
     // No image: build and send JSON data.
-    const payload = collectQuizData(getCurrentBlockId());
+    const payload = collectQuizData(blockId);
     console.log("JSON payload being sent:", payload);
     result = await createFetch("/question/upload", "POST", payload);
   }
@@ -2015,7 +2070,13 @@ function updateBlockInfo(blockId, blockName) {
 
 function getCurrentBlockId() {
   // Return current block ID
-  return window.currentBlockId || 1; // Default fallback
+  return window.currentBlockId;// Default fallback
+}
+
+const blockId = getCurrentBlockId();
+if (!blockId) {
+  console.log("Block ID not available. Please try again or refresh.");
+  //return;
 }
 
 function getNextBlockNumber() {
@@ -2137,48 +2198,12 @@ document.querySelector('.next-question').addEventListener('click', async () => {
 
 // --- Dropdown Setup ---
 // In your QuizBuilder class, you likely have something like:
-QuizBuilder.prototype.setupDropdown = function() {
-  const dropdown = document.getElementById('answer-type-dropdown');
-  const dropdownSelected = document.getElementById('dropdown-selected');
-  const dropdownOptions = document.getElementById('dropdown-options');
-  if (!dropdown || !dropdownSelected || !dropdownOptions) return;
+// ...existing code...
 
-  // Toggle dropdown on clicking the selected area
-  dropdownSelected.addEventListener('click', (e) => {
-    e.stopPropagation();
-    // Toggle visible state
-    dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
-  });
-  
-  // Handle selection from dropdown options
-  dropdownOptions.addEventListener('click', e => {
-    const opt = e.target;
-    if (!opt.classList.contains('dropdown-option')) return;
-    const value = opt.getAttribute('data-value');
-    const text = opt.textContent;
-    // Update the displayed text and optionally store value in data- attributes
-    dropdownSelected.querySelector('span').textContent = text;
-    dropdownOptions.style.display = 'none';
-    // Render the preview for the selected answer type
-    this.showPreview(value);
-  });
-  
-  // Close dropdown if clicking outside
-  document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target)) {
-      dropdownOptions.style.display = 'none';
-      dropdown.classList.remove('open');
-    }
-  });
-};
-
-// --- Note on answer types ---
-// When collecting quiz data (in collectQuizData), ensure that the answer type is set as a number:
-// For example:
 QuizBuilder.prototype.collectQuizData = function() {
   const quizData = {
     name: "Temporary Test Name",
-    descripion: "Temporary Description",  // Note: typo intentionally matching your API if needed.
+    description: "Temporary Description", // Fixed typo from 'descripion'
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     timelimit: 60,
@@ -2220,12 +2245,13 @@ QuizBuilder.prototype.collectQuizData = function() {
           answerTypeCode = 7; // calculator
           break;
       case "keemia_ahelad":
-          answerTypeCode = 8; // calculator
+          answerTypeCode = 8; // chemistry chains
           break;  
       default:
           answerTypeCode = 2; // default to text
-}
-  // Collect answer variables as needed (example for single choice)
+  }
+
+  // Collect answer variables as needed
   let answerVariables = [];
   if (answerTypeStr === "uks-oige") {
       const optionRows = document.querySelectorAll("#single-options .option-row");
@@ -2240,17 +2266,13 @@ QuizBuilder.prototype.collectQuizData = function() {
     const optionRows = document.querySelectorAll("#multiple-options .option-row");
     optionRows.forEach(row => {
       const optText = row.querySelector(".option-input") ? row.querySelector(".option-input").value.trim() : "";
-      const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null;
-      answerVariables.push({ answer: optText, correct: isCorrect });
+      const isCorrect = row.querySelector('input[name="correct-multiple"]:checked') !== null ? 1 : 0;
+      if (optText) {
+        answerVariables.push({ answer: optText, correct: isCorrect });
+      }
     });
-  } else {
-    // For text and others, for instance:
-    const answerInput = document.querySelector("#preview-content input, #preview-content textarea");
-    if (answerInput) {
-      answerVariables.push({ answer: answerInput.value.trim(), correct: true });
-    }
-  }
-  
+  } // Do not push answerVariables for text/other types
+
   // Get the question text from your textarea
   const questionElem = document.getElementById("question-text");
   const question = questionElem ? questionElem.value.trim() : "";
@@ -2259,17 +2281,15 @@ QuizBuilder.prototype.collectQuizData = function() {
     return null;
   }
 
-  
   // Add the question object to the block
   quizData.block[0].blockQuestions.push({
     question: question,
     points: Number(document.getElementById("points-input").value.trim()) || 0,
     answerType: answerTypeCode,
-    answerVariables: answerVariables
+    answerVariables: (answerTypeCode === 0 || answerTypeCode === 1) ? answerVariables : undefined
   });
 
   return quizData;
-
 };
 
 // Legacy function support (if needed)

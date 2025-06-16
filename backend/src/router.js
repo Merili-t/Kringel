@@ -4,7 +4,7 @@ import * as auth from './controllers/authController.js';
 import * as block from './controllers/blockController.js';
 import * as question from './controllers/questionController.js';
 import * as variant from './controllers/variantController.js';
-import * as team from './controllers/teamController.js'
+import * as team from './controllers/teamController.js';
 import * as admin from './controllers/adminController.js';
 import checkToken from './middleware/authMiddleware.js';
 import * as access from './middleware/accessControllMiddleware.js';
@@ -49,7 +49,6 @@ router.get('/team/answer/:id', checkToken, access.level2, team.getAnswer);
 router.get('/team/teams', checkToken, access.level2, team.getTeams);
 router.get('/team/attempts', checkToken, access.level2, team.getAttempts);
 router.get('/team/answers', checkToken, access.level2, team.getAnswers);
-
 
 // Admin routes
 router.get('/admin/users', checkToken, access.level3, admin.getUsers);

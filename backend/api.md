@@ -155,7 +155,8 @@ Deletes user.
 ```json
 {
   "message": "Test created",
-  "id": "uuid-v7-string"
+  "id": "uuid-v7-string",
+  "blockId": "uuid-v7-string"
 }
 ```
 

@@ -21,6 +21,7 @@ export const upload = async (req, res) => {
   const { name, description, start, end, timeLimit } = result.data;
   const testId = uuidv7();
   const userId = serverUserData.userId;
+  const blockId = uuidv7();
 
   try {
     await db
@@ -35,7 +36,13 @@ export const upload = async (req, res) => {
         timeLimit,
       });
 
-    return res.status(200).json({ message: 'Test created', id: testId });
+    try {
+      await db.insert(blockModel).values({ id: blockId, testId, blockNumber: 1 });
+    } catch (err) {
+      return res.status(500).json({ error: 'Failed to create block' });
+    }
+
+    return res.status(200).json({ message: 'Test created', id: testId, blockId });
   } catch (err) {
     return res.status(500).json({ error: 'Failed to create test' });
   }

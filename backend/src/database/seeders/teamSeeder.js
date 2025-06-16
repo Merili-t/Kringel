@@ -25,21 +25,13 @@ export default async () => {
     const attempt2Id = uuidv7();
 
     await db.insert(team).values([
-      {
-        id: team1Id,
-        email: 'team1@kringel.ee',
-        name: 'Jhon, Joe, Peter',
-      },
-      {
-        id: team2Id,
-        email: 'team2@kringel.ee',
-        name: 'James, Ben',
-      },
+      { id: team1Id, email: 'team1@kringel.ee', name: 'Jhon, Joe, Peter' },
+      { id: team2Id, email: 'team2@kringel.ee', name: 'James, Ben' },
     ]);
 
     let testId = await db.query.test.findFirst();
 
-    if(!testId){
+    if (!testId) {
       await testSeeder();
 
       testId = await db.query.test.findFirst();
@@ -61,14 +53,16 @@ export default async () => {
         start: new Date(),
         end: new Date(),
         score: 0,
-      }
+      },
     ]);
 
     const testBlocks = await db.query.block.findMany({ where: eq(block.testId, testId.id) });
     let testQuestions = [];
 
     for (const testBlock of testBlocks) {
-      const blockQuestions = await db.query.question.findMany({ where: eq(question.blockId, testBlock.id) });
+      const blockQuestions = await db.query.question.findMany({
+        where: eq(question.blockId, testBlock.id),
+      });
       for (const blockQuestion of blockQuestions) {
         if (!blockQuestion.matrixId) {
           testQuestions.push(blockQuestion);
@@ -78,7 +72,9 @@ export default async () => {
 
     for (const testQuestion of testQuestions) {
       if ([0, 1, 5, 7].includes(testQuestion.type)) {
-        const questionVariant = await db.query.answerVariant.findFirst(eq(answerVariant.questionId, testQuestion.id));
+        const questionVariant = await db.query.answerVariant.findFirst(
+          eq(answerVariant.questionId, testQuestion.id)
+        );
 
         await db.insert(answerModel).values([
           {
@@ -92,7 +88,7 @@ export default async () => {
             attemptId: attempt2Id,
             questionId: testQuestion.id,
             variantId: questionVariant.id,
-          }
+          },
         ]);
       }
     }

@@ -8,22 +8,16 @@ import answerModel from '../database/models/teamAnswer.js';
 import attemptModel from '../database/models/testAttempt.js';
 
 // Upload
-export const teamUpload = async (req, res) => {
+export const teamUpload = async (req, res) => {};
 
-};
+export const attemptUpload = async (req, res) => {};
 
-export const attemptUpload = async (req, res) => {
-
-};
-
-export const answerUpload = async (req, res) => {
-
-};
+export const answerUpload = async (req, res) => {};
 
 // Get one
 export const getTeam = async (req, res) => {
   const serverUserData = req.serverUserData;
-  
+
   const result = zod.idSchema.safeParse(req.params.id);
 
   if (!result.success) {
@@ -35,10 +29,10 @@ export const getTeam = async (req, res) => {
 
   try {
     const team = await db.select().from(teamModel).where(eq(teamModel.id, teamId));
-  
+
     res.status(200).json(team[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to get team'});
+    res.status(500).json({ error: 'Failed to get team' });
   }
 };
 
@@ -56,16 +50,16 @@ export const getAttempt = async (req, res) => {
 
   try {
     const attempt = await db.select().from(attemptModel).where(eq(attemptModel.id, attemptId));
-  
+
     res.status(200).json(attempt[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to get test attempt'});
+    res.status(500).json({ error: 'Failed to get test attempt' });
   }
-}
+};
 
 export const getAnswer = async (req, res) => {
   const serverUserData = req.serverUserData;
-  
+
   const result = zod.idSchema.safeParse(req.params.id);
 
   if (!result.success) {
@@ -77,10 +71,10 @@ export const getAnswer = async (req, res) => {
 
   try {
     const answer = await db.select().from(answerModel).where(eq(answerModel.id, answerId));
-  
+
     res.status(200).json(answer[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to get team answer'});
+    res.status(500).json({ error: 'Failed to get team answer' });
   }
 };
 
@@ -89,7 +83,7 @@ export const getTeams = async (req, res) => {
   try {
     const teams = await db.select().from(teamModel);
 
-    console.log(teams)
+    console.log(teams);
 
     return res.status(200).json({ teams });
   } catch (err) {
@@ -105,7 +99,7 @@ export const getAttempts = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: 'Failed to get test attempts' });
   }
-}
+};
 
 export const getAnswers = async (req, res) => {
   try {

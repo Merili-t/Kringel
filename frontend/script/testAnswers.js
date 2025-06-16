@@ -1,6 +1,6 @@
 import createFetch from "./utils/createFetch";
 
-document.getElementById("page-title").innerText = "Test: " + testiNimi;
+//document.getElementById("page-title").innerText = "Test: " + testName;
 
 async function loadTeamsForTest(testId) {
   return await createFetch(`/tests/${testId}/teams`, 'GET');
@@ -21,7 +21,7 @@ async function renderTests() {
 
   container.innerHTML = "";
 
-  const tests = await createFetch('/tests', 'GET'); // eeldan, et sul on selline endpoint
+  const tests = await createFetch('/test/tests', 'GET'); // endpoint õige ?
 
   for (const test of tests) {
     const testDiv = document.createElement("div");
@@ -122,7 +122,9 @@ async function loadTeamAnswer(teamId) {
     tableBody.innerHTML += `
       <tr>
         <td>${question}</td>
-        <td>${answer}</td>
+        <td>style="cursor: pointer; color: #B81434;"
+        onclick="window.location.href='oneAnswer.html?teamId=${teamId}&questionId=${question_id}'">
+        ${answer}</td>
         <td>${points}</td>
       </tr>
     `;

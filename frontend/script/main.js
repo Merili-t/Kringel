@@ -1,5 +1,5 @@
 //Main application functionality
-
+/* 
 //Logout function
 function logout() {
     if (confirm('Kas olete kindel, et soovite välja logida?')) {
@@ -8,7 +8,7 @@ function logout() {
         // window.location.href = '/login';
     }
 }
-
+ */
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Application initializing...');

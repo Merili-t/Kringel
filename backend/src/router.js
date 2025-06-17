@@ -40,6 +40,7 @@ router.get('/question/:id', checkToken, access.level1, question.getByQuestionId)
 router.delete('/question/delete/:id', checkToken, access.level2, question.deleteQuestion);
 
 // Answer variant routes
+router.get('/variant/:id', checkToken, access.level2, variant.getVariantById);
 router.delete('/variant/delete/:id', checkToken, access.level2, variant.deleteVariant);
 
 // Team routes

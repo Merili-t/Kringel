@@ -44,13 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const result = await createFetch('/test/upload', 'POST', payload);
 
+      // Assuming your result includes properties for testId and blockId.
       if (result.message || result.success) {
+        // Save test and block IDs into sessionStorage.
+        // The property names (e.g., result.testId and result.blockId) must match those returned from your backend.
+        sessionStorage.setItem("testId", result.testId || result.id);
+        sessionStorage.setItem("blockId", result.blockId);
         alert("Test edukalt loodud!");
         form.reset();
-        const shouldRedirect = true;
-        if (shouldRedirect) {
-          window.location.href = "../html/testCreation.html";
-        }
+
+        // Redirect to next page where you'll create questions.
+        window.location.href = "../html/testCreation.html";
       } else {
         alert(result.error || "Midagi läks valesti.");
       }

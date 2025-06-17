@@ -23,7 +23,9 @@ For guests:
 ```json
 {
   "email": "guest@kringel.ee",
-  "name": "guest1, guest2",
+  "teamName": "cool team name",
+  "names": "guest1, guest2",
+  "school": "cool school name",
   "userType": "guest"
 }
 ```

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
   // If no testId is provided in the URL, use the manual test ID.
   if (!testId) {
-    testId = "9f8c7e6d-5b4a-3c2d-1e0f-123456789abc";
+    testId = "01977cd0-2d31-769f-af23-d28af0f4af87";
     console.log("Using fallback testId:", testId);
   }
   loadTestData(testId);

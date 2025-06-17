@@ -338,6 +338,8 @@ Deletes block.
 }
 ```
 
+The `answerVariables` is optional.
+
 ##### Matrix question
 
 ```json

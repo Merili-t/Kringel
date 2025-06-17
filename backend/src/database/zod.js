@@ -42,7 +42,7 @@ export const questionSchema = z.object({
   points: z.number().min(0),
   answerType: z.number().min(0).max(6),
   orderNumber: z.number().min(1),
-  answerVariables: z.union([z.array(answerVariable), z.lazy(() => z.array(questionSchema))]),
+  answerVariables: z.optional(z.union([z.array(answerVariable), z.lazy(() => z.array(questionSchema))])),
 });
 
 export const testUploadSchema = z.object({

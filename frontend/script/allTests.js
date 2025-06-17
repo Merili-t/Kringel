@@ -4,6 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
   loadTests();
 });
 
+function getDateEE() {
+  const months = [
+    "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni",
+    "juuli", "august", "september", "oktoober", "november", "detsember"
+  ];
+  
+  const today = new Date();
+  const day = today.getDate();
+  const month = months[today.getMonth()];
+  const year = today.getFullYear();
+  
+  return `${day}. ${month} ${year}`;
+}
+
 async function loadTests() {
   try {
     const result = await createFetch("/test/tests", "GET");
@@ -59,6 +73,12 @@ async function addQuestionCounts(tests) {
 function renderTests(tests) {
   const testSectionContainer = document.querySelector(".test-content");
   testSectionContainer.innerHTML = "";
+
+  const dateDiv = document.createElement("div");
+  dateDiv.classList.add("date", "poppins-medium");
+  dateDiv.textContent = getDateEE();
+  testSectionContainer.appendChild(dateDiv);
+
   if (!tests || tests.length === 0) {
     const noTestsMsg = document.createElement("div");
     noTestsMsg.classList.add("poppins-regular");

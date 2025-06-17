@@ -1,32 +1,43 @@
-import createFetch from "./utils/createFetch"; // Import in your file
+import createFetch from "./utils/createFetch"; // Import your fetch utility
 
-document.addEventListener("DOMContentLoaded", function () { // This is inportat to have 
+document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");
-  form.addEventListener("submit", handleLogin); // handleLogin has to be a function where you use fetch
+  if (!form) {
+    console.error("Error: Form with id 'createForm' not found.");
+    return;
+  }
+  form.addEventListener("submit", handleLogin);
 });
- 
-async function handleLogin(e) { // Needs to have async to be able to use fetch
-  e.preventDefault();
-  const form = document.getElementById("createForm");
 
+async function handleLogin(e) {
+  e.preventDefault();
+
+  const form = document.getElementById("createForm");
   const data = {
     email: form.email.value.trim(),
-    password: form.password.value
+    password: form.password.value,
   };
 
-  try {
-    const result = await createFetch('/auth/login', 'POST', data); // createFetch wants (route, method, data) in this order. For POST data is an object and for GET a string
+  console.log("Form data being submitted:", data);
 
-    console.log("Login result:", result); // Debug: Check the complete result
-    console.log("User type fetched:", result.user_type, "Type:", typeof result.user_type);
-    
-    // If the login message exists, then determine the user type.
-    // Adjusting for the backend returning the key either as user_type or userTypeMessage.
-    if (result.message) {
-      const userType = result.user_type || result.userTypeMessage;
-      window.location.href = userType === "admin" ? "admin.html" : "allTests.html";
+  try {
+    const result = await createFetch("/auth/login", "POST", data);
+    console.log("Full login result received from server:", result);
+
+    // Normalize user type from possible keys (checking user_type, userType, and userTypeMessage)
+    const rawUserType = result.user_type || result.userType || result.userTypeMessage || "";
+    const normalizedUserType = rawUserType.trim().toLowerCase();
+    console.log("Raw user type from response:", rawUserType);
+    console.log("Normalized user type for checking:", normalizedUserType);
+
+    if (result.message || normalizedUserType) {
+      const redirectUrl = normalizedUserType === "admin" ? "admin.html" : "allTests.html";
+      console.log("Redirecting user to:", redirectUrl);
+      window.location.href = redirectUrl;
     } else {
-      alert(result.error || "Sisselogimine ebaõnnestus.");
+      const errorMsg = result.error || "Sisselogimine ebaõnnestus.";
+      console.error("Login error:", errorMsg);
+      alert(errorMsg);
     }
   } catch (error) {
     console.error("Fetch error:", error);
@@ -45,5 +56,5 @@ function toggleVisibility(icon) {
   }
 }
 
-// Expose toggleVisibility globally so inline onclick handlers can find it.
+// Expose toggleVisibility globally so inline onclick handlers can use it.
 window.toggleVisibility = toggleVisibility;

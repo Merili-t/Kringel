@@ -4,7 +4,7 @@ import createFetch from "./utils/createFetch";
 sessionStorage.setItem(
   "currentTest",
   JSON.stringify({
-    testId: "01976907-0aad-775e-acc5-a2b5f1f60426",
+    testId: "01977cd0-2d31-769f-af23-d28af0f4af87",
     // You can add other properties here if needed, e.g., teamId if already known.
   })
 );
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
   // If no testId is provided in the URL, use the fallback test ID.
   if (!testId) {
-    testId = "01976907-0aad-775e-acc5-a2b5f1f60426";
+    testId = "01977cd0-2d31-769f-af23-d28af0f4af87";
     console.log("No testId from URL; using fallback:", testId);
   } else {
     console.log("Retrieved testId from URL:", testId);
@@ -78,10 +78,10 @@ function populateTestData(testData, questionCount) {
   } else {
     elements.testDescriptionSection.style.display = "none";
   }
-  const startDate = new Date(testData.start);
-  const endDate = new Date(testData.end);
-  elements.testStartDate.textContent = formatDate(startDate);
-  elements.testEndDate.textContent = formatDate(endDate);
+  const startDate = parseLocalDateTime(testData.start);
+  const endDate = parseLocalDateTime(testData.end);
+  elements.testStartDate.textContent = formatDateRaw(testData.start);
+  elements.testEndDate.textContent = formatDateRaw(testData.end);
   updateTestStatus(startDate, endDate);
   updateContinueButton(startDate, endDate);
 }
@@ -98,21 +98,30 @@ function formatDuration(minutes) {
   }
 }
 
-function formatDate(date) {
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
-  return date.toLocaleDateString("et-EE", options);
+function formatDateRaw(isoString) {
+  const dateObj = new Date(isoString);
+  const dateParts = isoString.split("T");
+  const [year, month, day] = dateParts[0].split("-");
+  const time = dateParts[1].slice(0, 5); // hh:mm
+
+  const kuud = [
+    "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni",
+    "juuli", "august", "september", "oktoober", "november", "detsember"
+  ];
+
+  const kuuNimi = kuud[parseInt(month, 10) - 1];
+
+  return `${parseInt(day, 10)}. ${kuuNimi} ${year}, kell ${time}`;
 }
 
-function updateTestStatus(startDate, endDate) {
+function updateTestStatus(startIso, endIso) {
   const now = new Date();
+  const startDate = parseLocalDateTime(startIso);
+  const endDate = parseLocalDateTime(endIso);
+
   let statusText = "";
   let statusClass = "";
+
   if (now < startDate) {
     statusText = "Test pole veel alanud";
     statusClass = "status-upcoming";
@@ -123,6 +132,7 @@ function updateTestStatus(startDate, endDate) {
     statusText = "Test on hetkel aktiivne";
     statusClass = "status-active";
   }
+
   elements.statusIndicator.textContent = statusText;
   elements.testStatus.className = `test-status ${statusClass}`;
 }
@@ -167,8 +177,33 @@ function showMainContent() {
   elements.mainContent.style.display = "block";
 }
 
+function parseLocalDateTime(dateTimeStr) {
+  if (dateTimeStr instanceof Date) {
+    return dateTimeStr;
+  }
+
+  if (typeof dateTimeStr !== "string") {
+    throw new Error("Invalid date string: " + dateTimeStr);
+  }
+
+  let datePart, timePart;
+
+  if (dateTimeStr.includes("T")) {
+    [datePart, timePart] = dateTimeStr.split("T");
+  } else if (dateTimeStr.includes(" ")) {
+    [datePart, timePart] = dateTimeStr.split(" ");
+  } else {
+    throw new Error("Unknown date format: " + dateTimeStr);
+  }
+
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute] = timePart.split(":").map(Number);
+
+  return new Date(year, month - 1, day, hour, minute);
+}
+
 window.TestGuide = {
   loadTestData,
-  formatDate,
+  formatDateRaw,
   formatDuration,
 };

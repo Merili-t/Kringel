@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
         name: title,
         description,
         timeLimit: parseInt(duration),
-        start: `${startDate} ${startTime}`,
-        end: `${endDate} ${endTime}`,
+        start: `${startDate}T${startTime}`,
+        end: `${endDate}T${endTime}`,
       };
 
       const result = await createFetch('/test/upload', 'POST', payload);

@@ -70,6 +70,11 @@ export const answerUploadScehma = z.object({
   variantId: z.optional(z.string()),
   answer: z.optional(z.string()),
   questionType: z.number(),
-})
+});
+
+export const testAnswerUpdateSchema = z.object({
+  id: z.string(),
+  points: z.number()
+});
 
 export const zodSchemas = { ...insertSchemas, ...selectSchemas };

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
   // If no testId is provided in the URL, use the manual test ID.
   if (!testId) {
-    testId = "019767edc0a191ca10f2-4f37-7168-99ab-";
+    testId = "9f8c7e6d-5b4a-3c2d-1e0f-123456789abc";
     console.log("Using fallback testId:", testId);
   }
   loadTestData(testId);
@@ -36,8 +36,7 @@ async function loadTestData(testId) {
   try {
     showLoading();
     const testData = await fetchTestData(testId);
-    const questionCountData = await fetchQuestionCount(testId);
-    const questionCount = questionCountData.count || 0;
+    const questionCount = testData.questions || 0;
     populateTestData(testData, questionCount);
     showMainContent();
   } catch (error) {
@@ -47,22 +46,22 @@ async function loadTestData(testId) {
 }
 
 async function fetchTestData(testId) {
-  const result = await createFetch(`/test/${testId}`, "GET", "");
+  const result = await createFetch(`/test/${testId}`, "GET", undefined);
   if (!result) {
     throw new Error("Unable to fetch test data");
   }
   return result;
 }
 
-async function fetchQuestionCount(testId) {
-  try {
-    const result = await createFetch(`/test/${testId}/questions/count`, "GET", "");
-    return result;
-  } catch (error) {
-    console.warn("Error fetching question count:", error);
-    return { count: 0 };
-  }
-}
+// async function fetchQuestionCount(testId) {
+//   try {
+//     const result = await createFetch(`/test/${testId}/questions/count`, "GET", undefined);
+//     return result;
+//   } catch (error) {
+//     console.warn("Error fetching question count:", error);
+//     return { count: 0 };
+//   }
+// }
 
 function populateTestData(testData, questionCount) {
   elements.testTitle.textContent = testData.name || "Nimetu test";

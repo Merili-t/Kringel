@@ -1,4 +1,4 @@
-import { createFetch } from "./utils/createFetch.js";
+import createFetch from "./utils/createFetch";
 
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadLeaderboard(attemptId) {
     try {
         // 1. Fetch attempt data to get teamId and testId
-        const attemptResult = await createFetch(`/team/attempt/${attemptId}`, "GET", "");
+        const attemptResult = await createFetch(`/team/attempt/${attemptId}`, "GET");
         
-        if (attemptResult.error || !attemptResult.teamId || !attemptResult.testId) {
-            console.error("Katse andmete laadimine ebaõnnestus:", attemptResult.error);
+        if (!attemptResult || attemptResult.error || !attemptResult.teamId || !attemptResult.testId) {
+            console.error("Katse andmete laadimine ebaõnnestus:", attemptResult?.error);
             alert("Katse andmete laadimine ebaõnnestus.");
             return;
         }
@@ -26,26 +26,29 @@ async function loadLeaderboard(attemptId) {
         const { testId, teamId } = attemptResult;
         
         // 2. Fetch test details
-        const testResult = await createFetch(`/test/${testId}`, "GET", "");
+        const testResult = await createFetch(`/test/${testId}`, "GET");
         
-        if (testResult.error || !testResult.id) {
-            console.error("Testi andmete laadimine ebaõnnestus:", testResult.error);
+        if (!testResult || testResult.error || !testResult.id) {
+            console.error("Testi andmete laadimine ebaõnnestus:", testResult?.error);
             alert("Testi andmete laadimine ebaõnnestus.");
             return;
         }
         
         renderTestInfo(testResult);
         
-        // 3. Fetch leaderboard (assuming this is the correct endpoint)
-        const leaderboardResult = await createFetch(`/leaderboard/${testId}`, "GET", "");
+        // 3. Fetch leaderboard
+        const leaderboardResult = await createFetch(`/leaderboard/${testId}`, "GET");
         
-        if (leaderboardResult.error || !Array.isArray(leaderboardResult)) {
-            console.error("Edetabeli andmete laadimine ebaõnnestus:", leaderboardResult.error);
+        if (!leaderboardResult || leaderboardResult.error) {
+            console.error("Edetabeli andmete laadimine ebaõnnestus:", leaderboardResult?.error);
             alert("Edetabeli andmete laadimine ebaõnnestus.");
             return;
         }
         
-        renderLeaderboard(leaderboardResult);
+        // Handle different response formats
+        const teams = Array.isArray(leaderboardResult) ? leaderboardResult : leaderboardResult.teams || [];
+        
+        renderLeaderboard(teams);
         setupPdfDownload(testId);
         
     } catch (error) {

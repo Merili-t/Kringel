@@ -62,18 +62,18 @@ export const register = async (req, res) => {
     return res.status(400).json({ error: 'Bad data given' });
   }
 
-  const { email, name, password, userType } = result.data;
+  const { email, teamName, names, school, link, password, userType } = result.data;
 
-  if (serverUserData.isLoggedIn) {
+  if (serverUserData.isLoggedIn && serverUserData.userType !== 'admin') {
     return res.status(400).json({ error: 'Already logged in' });
   }
 
   const id = uuidv7();
 
-  if (userType === 'guest' && email && name) {
+  if (userType === 'guest' && email && teamName && names && school && link) {
     // Guest registration
     try {
-      await db.insert(team).values({ id, email, name });
+      await db.insert(team).values({ id, email, teamName, names, school, link });
       return createSession(res, id, userType, 'Guest account created and logged in');
     } catch (err) {
       console.error(err);

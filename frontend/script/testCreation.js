@@ -1,5 +1,12 @@
 import createFetch from "./utils/createFetch"; // Import createFetch
 
+if (!sessionStorage.getItem("testId")) {
+  alert("Testi ID puudub. Palun loo test kõigepealt.");
+  window.location.href = "../html/detailsTest.html";
+}
+console.log("sessionStorage testId:", sessionStorage.getItem("testId"));
+console.log("sessionStorage blockId:", sessionStorage.getItem("blockId"));
+
 // Quiz Builder JavaScript - Cleaned and Fixed Version
 class Keyboard {
     constructor(targetElement) {
@@ -413,22 +420,6 @@ class InputField {
         input.selectionStart = input.selectionEnd = start + value.length;
         input.focus();
     }
-}
-
-async function getFirstBlockIdByTestId(testId) {
-  try {
-    const result = await createFetch(`/block/test/${testId}`, "GET");
-    if (result && result.length > 0) {
-      console.log("Fetched blocks:", result);
-      return result[0].id; // Use the ID of the first block
-    } else {
-      console.warn("No blocks found for testId", testId);
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching block by testId:", error);
-    return null;
-  }
 }
 
 async function saveQuiz(questionData) {
@@ -1857,65 +1848,44 @@ document.getElementById("add-block").addEventListener("click", async () => {
 
 // --- Save Current Question ---
 async function saveCurrentQuestion() {
-  // 1. Get current test ID
-  const testId = getCurrentTestId();
-
-  // 2. Fetch blocks for this test
-  let blockId = null;
+  // 1. Get current test ID (using our no-fallback getter)
+  let testId;
   try {
-    const blocks = await createFetch(`/block/test/${testId}`, "GET");
-    if (blocks && blocks.length > 0) {
-      blockId = blocks[0].id; // Use the first block's ID
-      updateBlockInfo(blockId, blocks[0].name || `Plokk 1`);
-    } else {
-      // No blocks exist, create a new one
-      const newBlockResponse = await createFetch("/block/create", "POST", {
-        name: `Plokk 1`,
-        testId: testId
-      });
-      if (newBlockResponse.error) {
-        alert("Viga ploki loomisel: " + newBlockResponse.error);
-        return false;
-      }
-      blockId = newBlockResponse.blockId;
-      updateBlockInfo(blockId, newBlockResponse.name);
-    }
-  } catch (err) {
-    alert("Viga ploki leidmisel või loomisel!");
-    return false;
+    testId = getCurrentTestId();
+  } catch (e) {
+    alert(e.message);
+    throw e;
   }
 
-  // 3. Continue as before
-  const question = document.getElementById("question-text").value.trim();
+  // 3. Continue to save the question using the block ID, which should now exist.
+  const questionElem = document.getElementById("question-text");
+  const question = questionElem ? questionElem.value.trim() : "";
   if (!question) {
-    alert("Palun sisesta küsimuse tekst!");
-    return false;
+    const errorMsg = "Palun sisesta küsimuse tekst!";
+    alert(errorMsg);
+    throw new Error(errorMsg);
   }
 
+  let result;
   const fileInput = document.getElementById("file-input");
   const imageFile = fileInput && fileInput.files.length > 0 ? fileInput.files[0] : null;
 
-  let result;
   if (imageFile) {
-    // Build FormData payload (for image uploads)
     const formData = new FormData();
     formData.append("blockId", blockId.toString());
     formData.append("question", question);
-
     const ptsStr = document.getElementById("points-input").value.trim();
-    const points = Number(ptsStr) || 0;
+    const points = ptsStr !== "" ? Number(ptsStr) : 0;
     formData.append("points", points);
-
     const autoControl = document.getElementById("auto-control")?.checked;
     formData.append("autoControl", autoControl);
-
-    // Retrieve and map answer type as before.
+    
+    // Retrieve and set answer type
     const dropdown = document.getElementById("dropdown-selected");
     const answerTypeStr =
-      dropdown && dropdown.querySelector("span")
-        ? dropdown.querySelector("span").dataset.value || "luhike-tekst"
-        : "luhike-tekst";
-
+      (dropdown && dropdown.querySelector("span")
+        ? dropdown.querySelector("span").dataset.value
+        : "luhike-tekst") || "luhike-tekst";
     let answerTypeCode;
     switch (answerTypeStr) {
       case "uks-oige":
@@ -1950,37 +1920,29 @@ async function saveCurrentQuestion() {
       default:
         answerTypeCode = 2;
     }
-    console.log("Answer type in FormData (code):", answerTypeCode);
     formData.append("answerType", answerTypeCode);
-
-    // Append blockId (as a string)
-    if (getCurrentBlockId()) {
-      formData.append("blockId", getCurrentBlockId().toString());
-    }
-
-    // Log FormData keys and values for debugging.
+    // Optional: add blockId again if needed
+    formData.append("blockId", blockId.toString());
+    
+    // Debug log
     for (let pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
     }
-
-    // Use fetch directly for FormData.
     const response = await fetch(import.meta.env.VITE_API_URL + "/question/upload", {
       method: "POST",
       credentials: "include",
-      body: formData
+      body: formData,
     });
     result = await response.json();
   } else {
-    // No image: build and send JSON data.
     const payload = collectQuizData(blockId);
     console.log("JSON payload being sent:", payload);
     result = await createFetch("/question/upload", "POST", payload);
   }
-
   console.log("API result:", result);
   if (result.error) {
     alert("Küsimuse salvestamine ebaõnnestus: " + result.error);
-    return false;
+    throw new Error(result.error);
   } else {
     console.log(result.message || "Küsimus salvestatud edukalt!");
     return true;
@@ -2060,17 +2022,21 @@ function clearQuestionForm() {
 }
 
 function updateBlockInfo(blockId, blockName) {
-  // Update header to show new block
   const headerSubtitle = document.querySelector('.header-subtitle');
-  headerSubtitle.textContent = `Uus küsimus - ${blockName}`;
-  
-  // Store current block ID for future use
+  if (headerSubtitle) {
+    headerSubtitle.textContent = `Uus küsimus - ${blockName}`;
+  }
+  // Save the block id required for subsequent questions.
   window.currentBlockId = blockId;
+  sessionStorage.setItem("blockId", blockId);
 }
 
 function getCurrentBlockId() {
-  // Return current block ID
-  return window.currentBlockId;// Default fallback
+  const blockId = sessionStorage.getItem("blockId");
+  if (!blockId) {
+    throw new Error("Block ID not found. Please create/select a block first.");
+  }
+  return blockId;
 }
 
 const blockId = getCurrentBlockId();
@@ -2091,8 +2057,11 @@ function getNextBlockNumber() {
 }
 
 function getCurrentTestId() {
-  // This should come from your application state/URL/localStorage
-  return window.currentTestId || 1; // Default fallback
+  const testId = sessionStorage.getItem("testId");
+  if (!testId) {
+    throw new Error("Test ID not found. Please create a test first.");
+  }
+  return testId;
 }
 
 function showSuccessMessage(message) {

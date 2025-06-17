@@ -55,14 +55,17 @@ document.addEventListener("DOMContentLoaded", function () {
   startButton.addEventListener("click", async function (e) {
     e.preventDefault();
 
-    // Gather team data.
+    // Gather form data.
     const email = document.getElementById("email").value.trim();
-    const teamName = document.getElementById("team").value.trim();
-    console.log("Team data gathered:", { email, teamName });
+    const teamName = document.getElementById("team").value.trim(); // actual team name
+    const participantNames = document.getElementById("names").value.trim(); // names of team members
+    const school = document.getElementById("school").value.trim() || "";
+    const videoLink = document.querySelector(".video-link-input").value.trim() || "";
+    console.log("Team data gathered:", { email, teamName, participantNames, school, videoLink });
 
     // Validate required fields.
-    if (!email || !teamName) {
-      alert("Palun täida email ja meeskonna nimi!");
+    if (!email || !teamName || !participantNames) {
+      alert("Palun täida email, meeskonna nimi ja meeskonna liikmete nimed!");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,29 +79,37 @@ document.addEventListener("DOMContentLoaded", function () {
       startButton.disabled = true;
 
       // --- STEP 1: Register the Team ---
+      // Prepare payload. Note: name is for team members (one long string),
+      // while team_name is the actual team name.
       const registrationPayload = {
         email: email,
-        name: teamName,
+        names: participantNames,  // team members' names
+        teamName: teamName,     // actual team name
+        school: school,
+        link: videoLink,
         userType: "guest"
       };
       console.log("Registering team with payload:", registrationPayload);
-      // Notice the change to include the correct backend port.
+      
+      // Use a relative endpoint so that createFetch picks up the base URL if configured.
       const registrationResult = await createFetch("http://localhost:3006/auth/register", "POST", registrationPayload);
       if (registrationResult.error) {
         throw new Error(registrationResult.error);
       }
       console.log("Team successfully registered:", registrationResult);
+      
+      // Extract team ID from the response.
       const teamId = registrationResult.id || registrationResult.teamId;
       console.log("Obtained teamId:", teamId);
 
-      // Update session storage with the new teamId if desired.
+      // Update session storage with the new teamId.
       currentTest.teamId = teamId;
       sessionStorage.setItem("currentTest", JSON.stringify(currentTest));
 
       // --- STEP 2: Create the Attempt ---
-      // Using native fetch with FormData to handle multipart data correctly.
+      // Using native fetch with FormData to handle multipart data.
       const formData = new FormData();
-      // Ensure the correct test ID is used from session storage.
+      // Retrieve testId from session storage.
       const testId = currentTest.testId || "defaultTestId";
       console.log("Appending required fields to FormData:", { testId, teamId });
       formData.append("testId", testId);
@@ -106,9 +117,10 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("start", "true");
 
       // Append team data.
+      // Note: Here we add the email and the team_name (actual team name).
       formData.append("email", email);
-      formData.append("name", teamName);
-      console.log("Appended email and team name to FormData.");
+      formData.append("team_name", teamName);
+      console.log("Appended email and team_name to FormData.");
 
       // Append video file if available.
       if (videoUpload.files && videoUpload.files.length > 0) {
@@ -117,9 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Optionally append additional fields.
-      const participantNames = document.getElementById("names").value.trim() || "";
-      const school = document.getElementById("school").value.trim() || "";
-      const videoLink = document.querySelector(".video-link-input").value.trim() || "";
       if (participantNames) {
         formData.append("participantNames", participantNames);
         console.log("Appended participantNames:", participantNames);
@@ -134,11 +143,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       console.log("Sending FormData to /team/attempt/upload...");
-      // Change the URL to include the correct backend port.
       const attemptResponse = await fetch("http://localhost:3006/team/attempt/upload", {
         method: "POST",
         body: formData,
-        credentials: "include"
+        credentials: "include"  // ensure cookies/tokens are sent if needed
       });
 
       const attemptResult = await attemptResponse.json();
@@ -155,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
             participantNames,
             school,
             videoLink,
-            teamId: attemptResult.id  // assuming the backend returns the created team ID within the attempt result.
+            teamId: attemptResult.id  // assuming the backend sends the team/attempt id here
           })
         );
         console.log("Saved additional team data to localStorage.");

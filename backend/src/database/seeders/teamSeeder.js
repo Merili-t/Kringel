@@ -25,8 +25,8 @@ export default async () => {
     const attempt2Id = uuidv7();
 
     await db.insert(team).values([
-      { id: team1Id, email: 'team1@kringel.ee', name: 'Jhon, Joe, Peter' },
-      { id: team2Id, email: 'team2@kringel.ee', name: 'James, Ben' },
+      { id: team1Id, email: 'team1@kringel.ee', teamName: 'team1', names: 'Jhon, Joe, Peter', school: 'school1', link: 'empty' },
+      { id: team2Id, email: 'team2@kringel.ee', teamName: 'team2', names: 'James, Ben', school: 'school2', link: 'empty' },
     ]);
 
     let testId = await db.query.test.findFirst();

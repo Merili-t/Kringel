@@ -1,0 +1,1 @@
+ALTER TABLE `team` ADD `team_name` varchar(255) NOT NULL;

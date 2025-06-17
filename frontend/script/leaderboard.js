@@ -46,7 +46,7 @@ async function loadLeaderboard(attemptId) {
     }
 
     // Define the manual test id to use.
-    const manualTestId = "01976907-0aad-775e-acc5-a2b5f1f60426";
+    const manualTestId = "0197684d-940e-767c-ad69-ed440fba0e45";
     console.log("[loadLeaderboard] Manual Test ID:", manualTestId);
 
     // Filter the fetched attempts to only include those for the manual test id.

@@ -62,7 +62,7 @@
 | test_id    | CHAR(36)  | FK, N | Referances `test(id)` |
 | team_id    | CHAR(36)  | FK, N | Referance `team(id)`  |
 | start      | DATETIME  | N     | Required              |
-| end        | DATETIME  | N     | Required              |
+| end        | DATETIME  |       |                       |
 | score      | INTEGER   | N     | DEFAULT 0             |
 | created_at | TIMESTAMP |       | Set automatically     |
 | updated_at | TIMESTAMP |       | Updated automatically |

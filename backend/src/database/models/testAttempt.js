@@ -16,7 +16,7 @@ export default table('test_attempt', {
     .references(() => team.id)
     .notNull(),
   start: t.datetime('start').notNull(),
-  end: t.datetime('end').notNull(),
+  end: t.datetime('end').default(null),
   score: t.int('score').default(0).notNull(),
   ...timestamps,
 });

@@ -53,4 +53,23 @@ export const testUploadSchema = z.object({
   timeLimit: z.number(),
 });
 
+export const testAttemptSchema = z.object({
+  testId: z.string(),
+  teamId: z.string(),
+  start: z.string(),
+});
+
+export const testAttemptUpdateSchema = z.object({
+  id: z.string(),
+  end: z.string()
+});
+
+export const answerUploadScehma = z.object({
+  attemptId: z.string(),
+  questionId: z.string(),
+  variantId: z.optional(z.string()),
+  answer: z.optional(z.string()),
+  questionType: z.number(),
+})
+
 export const zodSchemas = { ...insertSchemas, ...selectSchemas };

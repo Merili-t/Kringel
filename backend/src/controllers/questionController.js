@@ -5,7 +5,6 @@ import questionModel from '../database/models/question.js';
 import questionMatrix from '../database/models/questionMatrix.js';
 import answerVariant from '../database/models/answerVariant.js';
 import * as zod from '../database/zod.js';
-import { block } from '../database/schema.js';
 
 export const upload = async (req, res) => {
   const serverUserData = req.serverUserData;

@@ -620,6 +620,24 @@ The `variantId`, `answer`, `questionType` are optional.
 }
 ```
 
+### PATCH /team/answer/update
+
+#### Request Body (JSON)
+```json
+{
+  "id": "uuid-v7-string",
+  "points": 10
+}
+```
+
+#### Responses
+
+```json
+{
+  "message": "Test answer updated"
+}
+```
+
 ### GET /team/team/:id
 
 Get team by id.

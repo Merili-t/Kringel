@@ -103,6 +103,27 @@ export const updateAttempt = async (req, res) => {
   }
 }
 
+export const updateAnswer = async (req, res) => {
+  const serverUserData = req.serverUserData;
+
+  const result = zod.testAnswerUpdateSchema.safeParse(req.body);
+
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return res.status(400).json({ error: 'Bad data given' });
+  }
+
+  const {id, points} = result.data;
+
+  try {
+    await db.update(answerModel).set({ points }).where(eq(answerModel.id, id));
+
+    return res.status(200).json({ message: 'Test answer updated' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update test answer' });
+  }
+}
+
 // Get one
 export const getTeam = async (req, res) => {
   const serverUserData = req.serverUserData;

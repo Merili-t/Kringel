@@ -47,6 +47,7 @@ router.post('/team/attempt/upload', checkToken, access.level1, team.attemptUploa
 router.post('/team/answer/upload', checkToken, access.level1, multer.single('file'), team.answerUpload);
 
 router.patch('/team/attempt/update', checkToken, access.level1, team.updateAttempt);
+router.patch('/team/answer/update', checkToken, access.level2, team.updateAnswer);
 
 router.get('/team/team/:id', checkToken, access.level2, team.getTeam);
 router.get('/team/attempt/:id', checkToken, access.level2, team.getAttempt);

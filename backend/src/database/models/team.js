@@ -10,5 +10,6 @@ export default table('team', {
   teamName: t.varchar('email', { length: 255 }).notNull(),
   names: t.text('name').notNull(),
   school: t.varchar('school', { length: 255 }).notNull(),
+  link: t.varchar('link', { length: 255 }).notNull(),
   ...timestamps,
 });

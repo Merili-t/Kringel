@@ -26,6 +26,7 @@
 | teamName   | text         | N     | Required              |
 | names      | text         | N     | Required              |
 | school     | VARCHAR(255) | N     | Required              |
+| link       | VARCHAR(255) | N     | Required              |
 | created_at | TIMESTAMP    |       | Set automatically     |
 | updated_at | TIMESTAMP    |       | Updated automatically |
 

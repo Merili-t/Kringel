@@ -26,6 +26,7 @@ export const registerSchema = z.object({
   teamName: z.string().optional(),
   names: z.string().optional(),
   school: z.string().optional(),
+  link: z.string().optional(),
   password: z.string().optional(),
   userType: z.enum(['teacher', 'guest']),
 });

@@ -1,5 +1,15 @@
 import createFetch from "./utils/createFetch";
 
+// Set current test data into session storage.
+sessionStorage.setItem(
+  "currentTest",
+  JSON.stringify({
+    testId: "01976907-0aad-775e-acc5-a2b5f1f60426",
+    // You can add other properties here if needed, e.g., teamId if already known.
+  })
+);
+console.log("Session storage set for currentTest:", sessionStorage.getItem("currentTest"));
+
 let testId = null;
 const elements = {
   loading: document.getElementById("loading"),
@@ -19,10 +29,12 @@ const elements = {
 
 document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
-  // If no testId is provided in the URL, use the manual test ID.
+  // If no testId is provided in the URL, use the fallback test ID.
   if (!testId) {
-    testId = "01977cd0-2d31-769f-af23-d28af0f4af87";
-    console.log("Using fallback testId:", testId);
+    testId = "01976907-0aad-775e-acc5-a2b5f1f60426";
+    console.log("No testId from URL; using fallback:", testId);
+  } else {
+    console.log("Retrieved testId from URL:", testId);
   }
   loadTestData(testId);
 });
@@ -34,34 +46,26 @@ function getTestIdFromUrl() {
 
 async function loadTestData(testId) {
   try {
+    console.log("Loading test data for testId:", testId);
     showLoading();
     const testData = await fetchTestData(testId);
     const questionCount = testData.questions || 0;
+    console.log("Fetched test data:", testData);
     populateTestData(testData, questionCount);
     showMainContent();
   } catch (error) {
-    console.error("Error while loading test data:", error);
+    console.error("Error loading test data:", error);
     showError("An error occurred while loading test data");
   }
 }
 
 async function fetchTestData(testId) {
-  const result = await createFetch(`/test/${testId}`, "GET", undefined);
+  const result = await createFetch(`/test/${testId}`, "GET");
   if (!result) {
     throw new Error("Unable to fetch test data");
   }
   return result;
 }
-
-// async function fetchQuestionCount(testId) {
-//   try {
-//     const result = await createFetch(`/test/${testId}/questions/count`, "GET", undefined);
-//     return result;
-//   } catch (error) {
-//     console.warn("Error fetching question count:", error);
-//     return { count: 0 };
-//   }
-// }
 
 function populateTestData(testData, questionCount) {
   elements.testTitle.textContent = testData.name || "Nimetu test";
@@ -88,11 +92,9 @@ function formatDuration(minutes) {
   } else {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    if (remainingMinutes === 0) {
-      return `${hours} tund${hours !== 1 ? "i" : ""}`;
-    } else {
-      return `${hours} tund${hours !== 1 ? "i" : ""} ja ${remainingMinutes} minutit`;
-    }
+    return remainingMinutes === 0
+      ? `${hours} tund${hours !== 1 ? "i" : ""}`
+      : `${hours} tund${hours !== 1 ? "i" : ""} ja ${remainingMinutes} minutit`;
   }
 }
 

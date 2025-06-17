@@ -1,0 +1,1 @@
+ALTER TABLE `team` ADD `link` varchar(255) NOT NULL;

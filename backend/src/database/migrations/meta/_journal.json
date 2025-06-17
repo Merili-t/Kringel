@@ -85,6 +85,13 @@
       "when": 1750149720131,
       "tag": "0011_steady_agent_zero",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1750150918683,
+      "tag": "0012_stale_maverick",
+      "breakpoints": true
     }
   ]
 }

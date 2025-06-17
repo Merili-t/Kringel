@@ -546,9 +546,26 @@ Deletes question.
 
 ## /variant
 
+### GET /variant/:id
+
+Get answer variant.
+
+#### Responses
+
+```json
+{
+  "id": "uuid-v7-string",
+  "questionId": "uuid-v7-string",
+  "correct": false,
+  "answer": "This is the third answer",
+  "createdAt": "2025-06-17T10:20:54.000Z",
+  "updatedAt": "2025-06-17T10:20:54.000Z"
+}
+```
+
 ### DELETE /variant/delete/:id
 
-Deletes answer variant.
+Deletes answer variant"points": 10.
 
 #### Responses
 

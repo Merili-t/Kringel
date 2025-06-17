@@ -23,7 +23,9 @@
     "express": "^4.21.2",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
+    "minio": "^7.1.2",
     "morgan": "~1.9.1",
+    "multer": "^2.0.1",
     "mysql2": "^3.14.1",
     "uuid": "^11.1.0",
     "zod": "^3.25.56"

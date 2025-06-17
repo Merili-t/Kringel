@@ -338,6 +338,8 @@ Deletes block.
 }
 ```
 
+The `answerVariables` is optional.
+
 ##### Matrix question
 
 ```json
@@ -394,7 +396,8 @@ Deletes block.
   "picture": 4,
   "chemistry": 5,
   "drawing": 6,
-  "calculator": 7
+  "calculator": 7,
+  "chemisrtyPicture": 8
 }
 ```
 
@@ -555,6 +558,67 @@ Deletes answer variant.
 ---
 
 ## /team
+
+### POST /team/attempt/upload
+
+#### Request Body (JSON)
+```json
+{
+  "testId": "uuid-v7-string",
+  "teamId": "uuid-v7-string",
+  "start": "2025-06-13T23:15:54.000Z"
+}
+```
+
+#### Responses
+
+```json
+{
+  "message": "Test attempt created",
+  "id": "uuid-v7-string"
+}
+```
+
+### POST /team/answer/upload
+
+#### Request Body (JSON)
+```json
+{
+  "attemptId": "uuid-v7-string",
+  "questionId": "uuid-v7-string",
+  "variantId": "uuid-v7-string",
+  "answer": "Tihis is as test answer",
+  "questionType": 2
+}
+```
+
+The `variantId`, `answer`, `questionType` are optional.
+
+#### Responses
+
+```json
+{
+  "message": "Team answer uploaded"
+}
+```
+
+### PATCH /team/attempt/update
+
+#### Request Body (JSON)
+```json
+{
+  "id": "uuid-v7-string",
+  "end": "2025-06-13T23:19:28.000Z"
+}
+```
+
+#### Responses
+
+```json
+{
+  "message": "Test attempt updated"
+}
+```
 
 ### GET /team/team/:id
 

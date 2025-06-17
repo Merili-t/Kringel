@@ -42,7 +42,7 @@ export const questionSchema = z.object({
   points: z.number().min(0),
   answerType: z.number().min(0).max(6),
   orderNumber: z.number().min(1),
-  answerVariables: z.union([z.array(answerVariable), z.lazy(() => z.array(questionSchema))]),
+  answerVariables: z.optional(z.union([z.array(answerVariable), z.lazy(() => z.array(questionSchema))])),
 });
 
 export const testUploadSchema = z.object({
@@ -52,5 +52,24 @@ export const testUploadSchema = z.object({
   end: z.string(),
   timeLimit: z.number(),
 });
+
+export const testAttemptSchema = z.object({
+  testId: z.string(),
+  teamId: z.string(),
+  start: z.string(),
+});
+
+export const testAttemptUpdateSchema = z.object({
+  id: z.string(),
+  end: z.string()
+});
+
+export const answerUploadScehma = z.object({
+  attemptId: z.string(),
+  questionId: z.string(),
+  variantId: z.optional(z.string()),
+  answer: z.optional(z.string()),
+  questionType: z.number(),
+})
 
 export const zodSchemas = { ...insertSchemas, ...selectSchemas };

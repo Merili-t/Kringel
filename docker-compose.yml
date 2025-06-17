@@ -13,6 +13,25 @@ services:
       - app_dev
       - app_db
 
+  minio:
+    image: docker.io/bitnami/minio:2022
+    container_name: kringel-minio
+    env_file:
+      - ./.env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_DEFAULT_BUCKETS: ${MINIO_DEFAULT_BUCKETS}
+    volumes:
+      - 'minio_data:/data'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    profiles:
+      - app
+      - app_dev
+      - app_db
+
   backend:
     build: 
       context: ./backend/
@@ -65,3 +84,4 @@ services:
 
 volumes:
   db-data:
+  minio_data:

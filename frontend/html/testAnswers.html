@@ -1,39 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="et">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Testi vastused</title> <!-- lisada testi nimi andmebaasist -->
+  <title>Testi vastused</title>
   <link rel="stylesheet" href="../style/testAnswers.css">
   <link rel="stylesheet" href="../style/buttons.css">
   <link rel="stylesheet" href="../style/main.css">
   <link rel="stylesheet" href="../style/popups.css">
 </head>
 <body>
-  <!-- Menu Component -->
+  <!-- Menüüpaneel -->
   <div class="menu">
     <div class="logo-container">
       <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
     </div>
     <br>
-    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
-      TESTI KOOSTAMINE
-    </button>
+    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">TESTI KOOSTAMINE</button>
     <br>
-    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html"> 
-      AVALEHELE
-    </button>
+    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html">AVALEHELE</button>
     <br>
-    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
-      JUHEND
-    </button>
+    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">JUHEND</button>
     <br>
-    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">
-      KONTAKTANDMED
-    </button>
+    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">KONTAKTANDMED</button>
   </div>
 
-  <!-- Test Answers Page -->
+  <!-- Testi vastused -->
   <div id="testanswers" class="page active">
     <div class="main">
       <div class="logout-btn-container">
@@ -41,140 +33,37 @@
       </div>
       <h1>Vastused</h1>
       <div id="tests-container">
-        <!-- Tests will be loaded here -->
+        <!-- JavaScript lisab testid siia -->
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th><input type="checkbox" onchange="toggleAllCheckboxes(this)"></th>
-            <th>Tiim</th>
-            <th>Vastatud küsimused</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody _id="teams-tbody"></tbody>
-      </table>
     </div>
     <div class="res-btn-container">
       <button class="res-btn" onclick="navigate('leaderboard')">TULEMUSTE EDETABEL</button>
     </div>
   </div>
 
-  <!-- Leaderboard Page -->
-  <div id="leaderboard" class="page">
-    <div class="main">
-      <div class="logout-btn-container">
-        <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
-      </div>
-      <h1>Tulemuste edetabel</h1>
-      <div class="infoContainer">
-        <h2>Testi nimi</h2>
-        <div class="description">Kirjeldus ...</div>
-        <div class="details">
-          <div class="detail-item">
-            <span class="icon questions-icon"></span>
-            <span>5 küsimust</span>
-          </div>
-          <div class="detail-item">
-            <span class="icon date-icon"></span>
-            <span>12/04/2025</span>
-          </div>
-          <div class="detail-item">
-            <span class="icon participants-icon"></span>
-            <span>Osalejaid: 6 tiimi</span>
-          </div>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Koht</th>
-            <th>Tiim</th>
-            <th>Vastatud küsimused</th>
-            <th>Punktid</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1.</td>
-            <td>Nimi 1</td>
-            <td>5/5</td>
-            <td>100%</td>
-          </tr>
-          <tr>
-            <td>2.</td>
-            <td>Nimi 2</td>
-            <td>5/5</td>
-            <td>95%</td>
-          </tr>
-          <tr>
-            <td>3.</td>
-            <td>Nimi 3</td>
-            <td>5/5</td>
-            <td>91%</td>
-          </tr>
-          <tr>
-            <td>4.</td>
-            <td>Nimi 4</td>
-            <td>4/5</td>
-            <td>85%</td>
-          </tr>
-          <tr>
-            <td>5.</td>
-            <td>Nimi 5</td>
-            <td>3/5</td>
-            <td>60%</td>
-          </tr>
-          <tr>
-            <td>6.</td>
-            <td>Nimi 6</td>
-            <td>2/5</td>
-            <td>45%</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="pdf-download">
-        <a href="#" class="pdf-link">Laadi alla PDF</a> <!-- pdf?? -->
-      </div>
-      <!-- New Button Container for navigating back to "Vastused" -->
-      <div class="res-btn-container">
-        <button class="res-btn wider-btn" onclick="navigate('testanswers')">TAGASI VASTUSTE JUURDE</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Team Answer Page -->
-  <div id="teamanswer" class="page">
+  <!-- Tiimi vastuste leht -->
+  <div id="teamanswer" class="page" style="display: none;">
     <div class="main">
       <div class="logout-btn-container">
         <button class="logout-btn poppins-semibold" data-popup="logout">LOGI VÄLJA</button>
       </div>
       <div class="infoContainer">
-        <h2>Tiimi nimi</h2>
-        <div class="description">Tiimi liikmete nimed ...</div>
+        <h2></h2> <!-- Tiimi nimi -->
+        <div class="description"></div> <!-- Tiimi liikmed -->
         <div class="details">
-          <div class="detail-item">
-            <span>videolink</span>
-          </div>
+          <div class="detail-item"></div> <!-- Videolink -->
         </div>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Küsimused</th>
-            <th>Vastused</th>
+            <th>Küsimus</th>
+            <th>Vastus</th>
             <th>Punktid</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>küs 1</td>
-            <td>vastus</td>
-            <td>20p</td>
-          </tr>
-          <tr>
-            <td colspan="3"><strong>Punktid kokku</strong></td>
-          </tr>
+          <!-- JavaScript lisab vastused siia -->
         </tbody>
       </table>
     </div>
@@ -191,7 +80,6 @@
   <script src="../popups/popupHelper.js" defer></script>
   <script src="../popups/logout.js" defer></script>
   <script src="../popups/delete.js" defer></script>
-
 
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">

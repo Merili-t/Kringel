@@ -5,7 +5,6 @@ import questionModel from '../database/models/question.js';
 import questionMatrix from '../database/models/questionMatrix.js';
 import answerVariant from '../database/models/answerVariant.js';
 import * as zod from '../database/zod.js';
-import { block } from '../database/schema.js';
 
 export const upload = async (req, res) => {
   const serverUserData = req.serverUserData;
@@ -18,7 +17,7 @@ export const upload = async (req, res) => {
     return res.status(400).json({ error: 'Bad data given' });
   }
 
-  const { blockId, question, points, answerType, orderNumber, answerVariables } = result.data;
+  const { blockId, question, points, answerType, orderNumber, answerVariables = null } = result.data;
   const questionId = uuidv7();
 
   const insertQuestion = async (
@@ -97,13 +96,15 @@ export const upload = async (req, res) => {
       return res.satus(500).json({ error: 'Failed to create question' });
     }
 
-    answerVariables.forEach(async answer => {
-      try {
-        insertAnswer(uuidv7(), questionId, answer.question, answer.correct, answer.answer);
-      } catch (err) {
-        return res.satus(500).json({ error: 'Failed to answer variant' });
-      }
-    });
+    if(answerVariables){
+      answerVariables.forEach(async answer => {
+        try {
+          insertAnswer(uuidv7(), questionId, answer.question, answer.correct, answer.answer);
+        } catch (err) {
+          return res.satus(500).json({ error: 'Failed to answer variant' });
+        }
+      });
+    }
 
     return res.status(200).json({ message: 'Question created', id: questionId });
   }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="et">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,30 +10,22 @@
   <link rel="stylesheet" href="../style/popups.css">
 </head>
 <body>
-  <!-- Menu Component -->
+  <!-- Menüüpaneel -->
   <div class="menu">
     <div class="logo-container">
       <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
     </div>
     <br>
-    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
-      TESTI KOOSTAMINE
-    </button>
+    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">TESTI KOOSTAMINE</button>
     <br>
-    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html"> 
-      AVALEHELE
-    </button>
+    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html">AVALEHELE</button>
     <br>
-    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
-      JUHEND
-    </button>
+    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">JUHEND</button>
     <br>
-    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">
-      KONTAKTANDMED
-    </button>
+    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">KONTAKTANDMED</button>
   </div>
 
-  <!-- Leaderboard Page -->
+  <!-- Edetabeli sisu -->
   <div id="leaderboard" class="page active">
     <div class="main">
       <div class="logout-btn-container">
@@ -41,20 +33,20 @@
       </div>
       <h1>Tulemuste edetabel</h1>
       <div class="infoContainer">
-        <h2 id="test-name">Testi nimi</h2>
-        <div class="description" id="test-description">Kirjeldus ...</div>
+        <h2 id="test-name"></h2>
+        <div class="description" id="test-description"></div>
         <div class="details">
           <div class="detail-item">
             <span class="icon questions-icon"></span>
-            <span id="question-count">5 küsimust</span>
+            <span id="question-count"></span>
           </div>
           <div class="detail-item">
             <span class="icon date-icon"></span>
-            <span id="test-date">12/04/2025</span>
+            <span id="test-date"></span>
           </div>
           <div class="detail-item">
             <span class="icon participants-icon"></span>
-            <span id="participant-count">Osalejaid: 6 tiimi</span>
+            <span id="participant-count"></span>
           </div>
         </div>
       </div>
@@ -68,7 +60,7 @@
           </tr>
         </thead>
         <tbody id="leaderboard-tbody">
-          <!-- Leaderboard data will be loaded here from database -->
+          <!-- Andmed laetakse JavaScripti kaudu -->
         </tbody>
       </table>
       <div class="pdf-download">
@@ -80,12 +72,14 @@
     </div>
   </div>
 
+  <!-- Skriptid -->
   <script src="../script/router.js"></script>
   <script src="../script/buttons.js"></script>
-  <script src="../script/leaderboard.js"></script> <!-- New separate JS file for leaderboard functionality -->
+  <script src="../script/leaderboard.js"></script>
   <script src="../popups/popupHelper.js" defer></script>
   <script src="../popups/logout.js" defer></script>
 
+  <!-- Hüpikaken -->
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">
     <h3 id="popup-title" class="poppins-medium"></h3>
@@ -94,9 +88,7 @@
   </div>
 
   <script>
-    // Basic navigation function until leaderboard.js is created
     function goBack() {
-      // This will be implemented in leaderboard.js
       window.history.back();
     }
   </script>

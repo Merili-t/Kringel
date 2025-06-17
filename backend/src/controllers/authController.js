@@ -17,7 +17,7 @@ const createSession = (res, id, userType, message) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     })
-    .json({ message, userType });
+    .json({ message, id, userType });
 };
 
 export const login = async (req, res) => {

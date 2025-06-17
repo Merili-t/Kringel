@@ -83,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // while team_name is the actual team name.
       const registrationPayload = {
         email: email,
-        names: participantNames,  // team members' names
         teamName: teamName,     // actual team name
+        names: participantNames,  // team members' names
         school: school,
         link: videoLink,
         userType: "guest"
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Registering team with payload:", registrationPayload);
       
       // Use a relative endpoint so that createFetch picks up the base URL if configured.
-      const registrationResult = await createFetch("http://localhost:3006/auth/register", "POST", registrationPayload);
+      const registrationResult = await createFetch("/auth/register", "POST", registrationPayload);
       if (registrationResult.error) {
         throw new Error(registrationResult.error);
       }
@@ -142,15 +142,17 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Appended videoLink:", videoLink);
       }
 
-      console.log("Sending FormData to /team/attempt/upload...");
-      const attemptResponse = await fetch("http://localhost:3006/team/attempt/upload", {
-        method: "POST",
-        body: formData,
-        credentials: "include"  // ensure cookies/tokens are sent if needed
-      });
+      const attemptData = {
+        testId: currentTest.testId,
+        teamId: registrationResult.id,
+        start: new Date(),
+      }
 
-      const attemptResult = await attemptResponse.json();
-      if (!attemptResponse.ok) {
+      console.log("Sending FormData to /team/attempt/upload...");
+      const attemptResponse = await createFetch("/team/attempt/upload", 'POST', attemptData);
+
+      const attemptResult = attemptResponse;
+      if (!attemptResponse) {
         throw new Error(attemptResult.error || "Attempt upload failed");
       }
       console.log("Team and attempt created successfully:", attemptResult);

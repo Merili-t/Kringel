@@ -43,11 +43,16 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       const result = await createFetch('/test/upload', 'POST', payload);
+      console.log("Backend result:", result);  // Debug: Check the structure
 
       // Assuming your result includes properties for testId and blockId.
       if (result.message || result.success) {
-        // Save test and block IDs into sessionStorage.
-        // The property names (e.g., result.testId and result.blockId) must match those returned from your backend.
+        // Ensure result.blockId exists.
+        if (!result.blockId) {
+          alert("Test loodud, kuid ploki ID pole saadud. Kontrolli backend vastust.");
+          return;
+        }
+        
         sessionStorage.setItem("testId", result.testId || result.id);
         sessionStorage.setItem("blockId", result.blockId);
         alert("Test edukalt loodud!");

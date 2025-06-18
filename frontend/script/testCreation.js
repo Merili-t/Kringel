@@ -442,7 +442,7 @@ async function saveQuiz(questionData) {
           id: result.questionId || result.id
       });
       
-      alert("Küsimus salvestatud!");
+      //alert("Küsimus salvestatud!");
       return result.questionId || result.id;
       
   } catch (error) {
@@ -452,9 +452,57 @@ async function saveQuiz(questionData) {
   }
 }
 
-// ...existing code...
+// Retrieves the current question order from session storage or initializes it to 1
+// --- QUESTION ORDER HELPERS ---
+function getQuestionOrder() {
+  let order = sessionStorage.getItem("questionOrder");
+  if (!order) {
+    order = 1; // default value
+    sessionStorage.setItem("questionOrder", order);
+  } else {
+    order = parseInt(order, 10);
+  }
+  return order;
+}
 
-function collectQuizData(blockId) {
+// --- BLOCK NUMBER HELPERS ---
+function getBlockNumber() {
+  let blockNumber = sessionStorage.getItem("blockNumber");
+  if (!blockNumber) {
+    blockNumber = 1; // default value
+    sessionStorage.setItem("blockNumber", blockNumber);
+  } else {
+    blockNumber = parseInt(blockNumber, 10);
+  }
+  return blockNumber;
+}
+
+function incrementBlockNumber() {
+  let number = getBlockNumber();
+  number++;
+  sessionStorage.setItem("blockNumber", number);
+  return number;
+}
+
+// After creating a new block, update the stored block number.
+function updateBlockNumber(newBlockNum) {
+  sessionStorage.setItem("blockNumber", newBlockNum);
+}
+
+// Increments the question order in session storage after successfully saving a question
+function incrementQuestionOrder() {
+  let order = getQuestionOrder();
+  order++;
+  sessionStorage.setItem("questionOrder", order);
+}
+
+// Resets the question order back to 1 when a new block is created
+function resetQuestionOrder() {
+  sessionStorage.setItem("questionOrder", 1);
+}
+
+function collectQuizData() {
+  const blockId = getCurrentBlockId();
   // Get the question text.
   const questionTextElem = document.getElementById("question-text");
   const question = questionTextElem ? questionTextElem.value.trim() : "";
@@ -553,33 +601,24 @@ function collectQuizData(blockId) {
   console.log("Answer variables:", answerVariables);
 
   // Determine the order number for the new question.
-  const orderNumber =
-    window.quizData &&
-    window.quizData.block &&
-    window.quizData.block[0] &&
-    window.quizData.block[0].blockQuestions
-      ? window.quizData.block[0].blockQuestions.length + 1
-      : 1;
-  console.log("Order number:", orderNumber);
+  // Determine the order number for the new question using our helper
+  const orderNumber = getQuestionOrder();
 
-  // Build the final payload.
   const finalData = {
-    blockId:     blockId.toString(),
-    question:    question,
-    points:      points,
-    answerType:  answerTypeCode,
+    blockId: blockId.toString(),
+    question: question,
+    points: points,
+    answerType: answerTypeCode,
     orderNumber: orderNumber,
-    // Always send an array of answerVariables (empty for non–MC types)
-    answerVariables: answerVariables
+    answerVariables: answerVariables,
   };
+  return finalData;
+
 
   console.log("Final question data payload:", finalData);
   return finalData;
 
 }
-
-// ...existing code...
-
 
 class QuizBuilder {
     constructor() {
@@ -1795,6 +1834,7 @@ document.getElementById('add-question').addEventListener('click', async () => {
     
     if (questionSaved) {
       // Only show popup if question was saved successfully
+      incrementQuestionOrder();
       document.getElementById("add-popup").style.display = "block";
     }
   } catch (error) {
@@ -1814,46 +1854,45 @@ document.getElementById("add-question-option").addEventListener("click", () => {
   
   // Clear form and prepare for new question
   clearQuestionForm();
-  
-  // Show success message
-  showSuccessMessage("Küsimus salvestatud! Koosta järgmine küsimus.");
 });
 
 // --- "Lisa plokk" functionality ---
 document.getElementById("add-block").addEventListener("click", async () => {
   try {
-    // Create new block in database
-    const blockNumber = getNextBlockNumber(); // This should return a NUMBER
+    const currentBlockNumber = getBlockNumber();
+    const testId = getCurrentTestId();
+    const payload = { testId, blockNumber: currentBlockNumber };
 
-    const newBlockResponse = await createFetch("/block/upload", "POST", {
-      testId: getCurrentTestId(),
-      blockNumber: blockNumber
-    });
+    console.log("Creating block with payload:", payload);
+    const newBlockResponse = await createFetch("/block/upload", "POST", payload);
+    console.log("Response from /block/upload:", newBlockResponse);
 
     if (newBlockResponse.error) {
       alert("Viga ploki loomisel: " + newBlockResponse.error);
       return;
     }
 
-    console.log(newBlockResponse);
+    // Update session storage with the new block ID
+    sessionStorage.setItem("blockId", newBlockResponse.blockId);
 
-    // Close popup
-    document.getElementById("add-popup").style.display = "none";
-    
-    // Update UI to show new block
-    updateBlockInfo(newBlockResponse.blockId, newBlockResponse.blockNumber);
-    
-    // Clear form and prepare for new question in new block
+    // Increment the block number for the next time
+    incrementBlockNumber();
+
+    // Reset the question order for the new block
+    resetQuestionOrder();
+
+    // Update the heading UI using a helper function
+    updateBlockInfo(newBlockResponse.blockId, currentBlockNumber);
+
     clearQuestionForm();
-    
-    // Show success message
-    showSuccessMessage("Küsimus salvestatud ja uus plokk loodud! Koosta esimene küsimus uuele plokile.");
-
   } catch (error) {
     console.error("Error adding block:", error);
     alert("Viga ploki lisamisel!");
   }
 });
+
+
+
 
 // --- Save Current Question ---
 async function saveCurrentQuestion() {
@@ -2034,12 +2073,11 @@ function clearQuestionForm() {
 function updateBlockInfo(blockId, blockNumber) {
   const headerSubtitle = document.querySelector('.header-subtitle');
   if (headerSubtitle) {
-    headerSubtitle.textContent = `Uus küsimus - ${blockNumber}`;
+    headerSubtitle.textContent = `Uus küsimus - Plokk ${blockNumber}`;
   }
-  // Save the block id required for subsequent questions.
-  window.currentBlockId = blockId;
-  sessionStorage.setItem("blockId", blockId);
 }
+
+const blockId = sessionStorage.getItem("blockId");
 
 function getCurrentBlockId() {
   const blockId = sessionStorage.getItem("blockId");
@@ -2049,22 +2087,21 @@ function getCurrentBlockId() {
   return blockId;
 }
 
-const blockId = getCurrentBlockId();
+//const blockId = getCurrentBlockId();
 if (!blockId) {
   console.log("Block ID not available. Please try again or refresh.");
   //return;
 }
 
 function getNextBlockNumber() {
-  // Extract current block number from header and increment
   const headerSubtitle = document.querySelector('.header-subtitle');
   const match = headerSubtitle.textContent.match(/Plokk (\d+)/);
-  
   if (match) {
-    return parseInt(match[1]) + 1;
+    return parseInt(match[1], 10) + 1;
   }
-  return 2; // Default to block 2 if we can't determine current
+  return 2;
 }
+
 
 function getCurrentTestId() {
   const testId = sessionStorage.getItem("testId");
@@ -2074,57 +2111,6 @@ function getCurrentTestId() {
   return testId;
 }
 
-function showSuccessMessage(message) {
-  // Create and show a temporary success message
-  const successDiv = document.createElement('div');
-  successDiv.className = 'success-message';
-  successDiv.textContent = message;
-  successDiv.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #E9CDCC;
-    border: 1px solid #d3d3d3;
-    padding: 20px;
-    z-index: 1000;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    max-width: 400px;
-    text-align: center;
-  `;
-  
-  // Add slide-in animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  document.body.appendChild(successDiv);
-  
-  // Remove after 4 seconds with fade out
-  setTimeout(() => {
-    successDiv.style.animation = 'slideIn 0.3s ease-out reverse';
-    setTimeout(() => {
-      if (successDiv.parentNode) {
-        successDiv.parentNode.removeChild(successDiv);
-      }
-      if (style.parentNode) {
-        style.parentNode.removeChild(style);
-      }
-    }, 300);
-  }, 4000);
-}
 
 document.querySelector('.next-question').addEventListener('click', async () => {
   //  Save the current question in the form

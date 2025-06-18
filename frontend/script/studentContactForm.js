@@ -53,28 +53,33 @@ videoUpload.addEventListener("change", function () {
 async function handleTeam(e) {
   e.preventDefault();
 
-  const form = document.getElementById('teamUpload');
+  const form = document.getElementById("teamUpload");
   const formData = new FormData(form);
-
+  
   formData.append("userType", "guest");
 
+  // Register the team.
   const registrationResult = await createFetch("/auth/register", "POST", formData);
   if (registrationResult.error) {
     throw new Error(registrationResult.error);
   }
   
+  // Create the attempt.
   const attemptData = {
     testId: currentTest.testId,
     teamId: registrationResult.id,
     start: new Date(),
-  }
+  };
 
-  const attemptResponse = await createFetch("/team/attempt/upload", 'POST', attemptData);
-
+  const attemptResponse = await createFetch("/team/attempt/upload", "POST", attemptData);
   const attemptResult = attemptResponse;
   if (!attemptResponse) {
     throw new Error(attemptResult.error || "Attempt upload failed");
   }
 
+  // NEW: Save attempt id in session storage.
+  sessionStorage.setItem("attemptId", attemptResult.id);
+
+  // Redirect to the next page.
   window.location.href = "solvingTest.html";
 }

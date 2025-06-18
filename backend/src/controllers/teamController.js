@@ -77,6 +77,7 @@ export const answerUpload = async (req, res) => {
 
     return res.status(200).json({ message: 'Team answer uploaded' })
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ error: 'Failed to upload team answer' });
   }
 };

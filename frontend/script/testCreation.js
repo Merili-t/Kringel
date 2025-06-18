@@ -1835,11 +1835,13 @@ document.getElementById("add-block").addEventListener("click", async () => {
       return;
     }
 
+    console.log(newBlockResponse);
+
     // Close popup
     document.getElementById("add-popup").style.display = "none";
     
     // Update UI to show new block
-    updateBlockInfo(newBlockResponse.blockId, newBlockResponse.name);
+    updateBlockInfo(newBlockResponse.blockId, newBlockResponse.blockNumber);
     
     // Clear form and prepare for new question in new block
     clearQuestionForm();
@@ -2029,10 +2031,10 @@ function clearQuestionForm() {
   }
 }
 
-function updateBlockInfo(blockId, blockName) {
+function updateBlockInfo(blockId, blockNumber) {
   const headerSubtitle = document.querySelector('.header-subtitle');
   if (headerSubtitle) {
-    headerSubtitle.textContent = `Uus küsimus - ${blockName}`;
+    headerSubtitle.textContent = `Uus küsimus - ${blockNumber}`;
   }
   // Save the block id required for subsequent questions.
   window.currentBlockId = blockId;
@@ -2158,7 +2160,7 @@ document.querySelector('.next-question').addEventListener('click', async () => {
       testId:      testResult.id,
       blockNumber: 1
     });
-    if (!blockResult.id) throw new Error("Bloki loomine ebaõnnestus");
+    if (!blockResult.id) throw new Error("Ploki loomine ebaõnnestus");
 
     // 3. Upload any remaining questions
     const questions = quizData.block[0].blockQuestions;

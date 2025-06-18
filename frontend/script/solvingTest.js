@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("[DEBUG] DOMContentLoaded event fired.");
   testId = getTestIdFromUrl() || "01977d6c-6084-7329b550-5ae9c632bd01";
   console.log("[DEBUG] Test ID:", testId);
-  // Store the testId if not already in sessionStorage.
+  // Store the testId if not already in sessionStorage
   if (!sessionStorage.getItem("testId")) {
     sessionStorage.setItem("testId", testId);
   }
@@ -44,19 +44,15 @@ async function loadTestData(testId) {
     showLoading();
     const token = localStorage.getItem("token");
     console.log("[DEBUG] Token:", token);
-
     // Fetch test details.
     const testData = await createFetch(`/test/${testId}`, "GET");
     console.log("[DEBUG] Test data received:", testData);
-
     // Fetch blocks for the test.
     const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
     console.log("[DEBUG] Block data received:", blockData);
-
     if (!testData || !Array.isArray(blockData.blocks)) {
       throw new Error("Vigased andmed");
     }
-
     const allBlocks = [];
     for (const block of blockData.blocks) {
       console.log("[DEBUG] Processing block:", block);
@@ -66,8 +62,8 @@ async function loadTestData(testId) {
         ? response.blockQuestions
         : [];
       const formattedQuestions = questions.map(q => ({
-        id: q.id,           // Use provided id
-        type: q.type,       // Numeric value expected by backend
+        id: q.id,
+        type: q.type,
         text: q.description,
         points: q.points ?? 0
       }));
@@ -76,21 +72,13 @@ async function loadTestData(testId) {
         questions: formattedQuestions
       });
     }
-
-    blocks = allBlocks
-      .sort((a, b) => a.blockOrder - b.blockOrder)
-      .map(b => b.questions);
+    blocks = allBlocks.sort((a, b) => a.blockOrder - b.blockOrder).map(b => b.questions);
     console.log("[DEBUG] Final blocks array:", blocks);
-
     populateTestData(testData, blocks.flat().length);
     renderBlocks();
     updateProgressBar();
-
     if (testData.timeLimit) {
-      console.log(
-        "[DEBUG] Starting timer with timeLimit (sec):",
-        testData.timeLimit * 60
-      );
+      console.log("[DEBUG] Starting timer with timeLimit (sec):", testData.timeLimit * 60);
       startTimer(testData.timeLimit * 60);
     } else {
       console.warn("No timeLimit provided in test data. Timer will not start.");
@@ -128,27 +116,21 @@ function renderBlocks() {
   const container = elements.questionsWrapper;
   container.innerHTML = "";
   let globalQuestionNumber = 1;
-
   blocks.forEach((block, blockIndex) => {
     const blockDiv = document.createElement("div");
     blockDiv.className = "block";
     if (blockIndex === currentBlock) blockDiv.classList.add("active");
-
     const questionContainer = document.createElement("div");
     questionContainer.className = "question-grid";
-
     block.forEach(q => {
       const questionWrapper = document.createElement("div");
       questionWrapper.className = "question";
-
       const qDiv = document.createElement("div");
       qDiv.className = "question-card";
-
       // Prepare hidden inputs and header.
       const hiddenId = `<input type="hidden" class="question-id" value="${q.id}" />`;
       const hiddenType = `<input type="hidden" class="question-type" value="${q.type}" />`;
       const questionHeader = `<div class="question-header"><strong>${globalQuestionNumber}. </strong>${q.text} <span class="points-badge">${q.points}p</span></div>`;
-
       // Render input fields based on question type.
       if (["text", "one_correct", "short"].includes(q.type.toString())) {
         qDiv.innerHTML = `
@@ -170,7 +152,6 @@ function renderBlocks() {
           <iframe src="../html/calculator.html" class="calculator-iframe" width="100%" height="300" style="border: none; margin-top: 10px;"></iframe>
           <input type="hidden" class="calculator-answer" />
         `;
-        // Optionally attach event listeners if the calculator triggers changes.
       } else {
         // For longer text answers.
         qDiv.innerHTML = `
@@ -184,16 +165,13 @@ function renderBlocks() {
           await saveSingleAnswer(qDiv);
         });
       }
-
       questionWrapper.appendChild(qDiv);
       questionContainer.appendChild(questionWrapper);
       globalQuestionNumber++;
     });
-
     blockDiv.appendChild(questionContainer);
     container.appendChild(blockDiv);
   });
-
   renderBlockIndicators();
   updateProgressBar();
   console.log("[DEBUG] Blocks rendered. Current block index:", currentBlock);
@@ -235,7 +213,6 @@ function startTimer(duration) {
     if (--time < 0) {
       clearInterval(interval);
       console.log("[DEBUG] Time expired - initiating auto-save.");
-      // Optionally auto-save remaining answers here.
       triggerTimeUpPopup();
       elements.nextButton.disabled = true;
     }
@@ -252,9 +229,7 @@ function formatDuration(minutes) {
   if (minutes < 60) return `${minutes} minutit`;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-  return m > 0
-    ? `${h} tund${h !== 1 ? "i" : ""} ja ${m} minutit`
-    : `${h} tund${h !== 1 ? "i" : ""}`;
+  return m > 0 ? `${h} tund${h !== 1 ? "i" : ""} ja ${m} minutit` : `${h} tund${h !== 1 ? "i" : ""}`;
 }
 
 function showLoading() {
@@ -282,12 +257,13 @@ function showMainContent() {
 // New function to save a single question's answer on blur using FormData.
 async function saveSingleAnswer(card) {
   try {
-    // Pull the attempt ID from sessionStorage (set elsewhere during team/attempt creation).
+    // Retrieve the attempt ID from sessionStorage.
     const attemptId = sessionStorage.getItem("attemptId");
     if (!attemptId) {
       console.error("[DEBUG] Attempt ID not found in sessionStorage.");
       return;
     }
+
     let answer = "";
     const textInput = card.querySelector("input[type='text']");
     if (textInput) answer = textInput.value.trim();
@@ -300,30 +276,32 @@ async function saveSingleAnswer(card) {
     const idInput = card.querySelector(".question-id");
     const typeInput = card.querySelector(".question-type");
     const questionId = idInput ? idInput.value : "";
-    const questionType = typeInput ? typeInput.value : "";
+    // Convert question type to a number.
+    const questionType = typeInput ? Number(typeInput.value) : "";
 
     // Build the FormData payload.
+    // Note: testId is no longer sent.
     const formData = new FormData();
-    formData.append("testId", testId);
     formData.append("attemptId", attemptId);
     formData.append("questionId", questionId);
     formData.append("questionType", questionType);
     formData.append("answer", answer);
 
     console.log("[DEBUG] Saving single question answer using FormData:", {
-      testId,
       attemptId,
       questionId,
       questionType,
       answer
     });
 
-    // Post the FormData to the backend.
+    // Post the FormData to the backend using your createFetch helper.
     const response = await createFetch("/team/answer/upload", "POST", formData);
     console.log("[DEBUG] Single question answer upload response:", response);
   } catch (error) {
     console.error("[DEBUG] Single answer saving failed:", error);
-    const qId = (card.querySelector(".question-id") && card.querySelector(".question-id").value) || "";
+    const qId =
+      (card.querySelector(".question-id") && card.querySelector(".question-id").value) ||
+      "";
     showError("Answer saving failed for question " + qId);
   }
 }

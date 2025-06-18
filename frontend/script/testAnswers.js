@@ -33,6 +33,12 @@ async function renderTests() {
   const { attempts } = await createFetch('/team/attempts', 'GET');
   const { answers } = await createFetch('/team/answers', 'GET');
 
+  if (tests.length > 0 && tests[0].createdAt) {
+    tests.sort((a, b) =>
+      new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  }
+
   const answerCountsByAttempt = {};
   answers.forEach(answer => {
     if (!answerCountsByAttempt[answer.attemptId]) {

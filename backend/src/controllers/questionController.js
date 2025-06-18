@@ -130,6 +130,7 @@ export const getByBlockId = async (req, res) => {
 
     return res.status(200).json({ blockQuestions });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ error: 'Failed to get questions' });
   }
 };

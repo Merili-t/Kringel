@@ -52,10 +52,10 @@ export class VisualCalculator {
         document.querySelectorAll('.calc-button').forEach((el) => {
             const button = el;
             button.addEventListener('click', () => {
-                const content = button.getAttribute('data-content');
-                if (content) {
-                    this.insertToInput(content);
-                }
+            let content = button.getAttribute('data-content') || '';
+            // Fix: when button is "*", insert "\cdot" instead
+            if (content === '*') content = '\\cdot';
+            this.insertToInput(content);
             });
         });
         let shiftActive = false;

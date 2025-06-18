@@ -1,7 +1,7 @@
 import createFetch from "./utils/createFetch";
 
 // Retrieve current test data from session storage.
-const currentTest = JSON.parse(sessionStorage.getItem("currentTest") || "{}");
+const currentTest = JSON.parse(sessionStorage.getItem("currentTest") || "01978236-b468-7408-af44-e0ebba1370e2	");
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("teamUpload");
@@ -55,7 +55,8 @@ async function handleTeam(e) {
 
   const form = document.getElementById("teamUpload");
   const formData = new FormData(form);
-  
+
+  // Append a fixed value for userType.
   formData.append("userType", "guest");
 
   // Register the team.
@@ -63,23 +64,24 @@ async function handleTeam(e) {
   if (registrationResult.error) {
     throw new Error(registrationResult.error);
   }
-  
-  // Create the attempt.
+
+  // Build attemptData using the testId from currentTest.
   const attemptData = {
     testId: currentTest.testId,
     teamId: registrationResult.id,
     start: new Date(),
   };
 
+  // Create an attempt.
   const attemptResponse = await createFetch("/team/attempt/upload", "POST", attemptData);
   const attemptResult = attemptResponse;
   if (!attemptResponse) {
     throw new Error(attemptResult.error || "Attempt upload failed");
   }
 
-  // NEW: Save attempt id in session storage.
+  // NEW: Save the returned attempt id into session storage.
   sessionStorage.setItem("attemptId", attemptResult.id);
 
-  // Redirect to the next page.
+  // Redirect to the solving test page.
   window.location.href = "solvingTest.html";
 }

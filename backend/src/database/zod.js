@@ -72,7 +72,7 @@ export const answerUploadScehma = z.object({
   questionId: z.string(),
   variantId: z.optional(z.string()),
   answer: z.optional(z.string()),
-  questionType: z.number(),
+  questionType: z.coerce.number().int(),
 });
 
 export const testAnswerUpdateSchema = z.object({

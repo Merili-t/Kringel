@@ -1818,9 +1818,11 @@ document.getElementById("add-question-option").addEventListener("click", () => {
 document.getElementById("add-block").addEventListener("click", async () => {
   try {
     // Create new block in database
-    const newBlockResponse = await createFetch("/block/create", "POST", {
-      name: `Plokk ${getNextBlockNumber()}`,
-      testId: getCurrentTestId()
+    const blockNumber = getNextBlockNumber(); // This should return a NUMBER
+
+    const newBlockResponse = await createFetch("/block/upload", "POST", {
+      testId: getCurrentTestId(),
+      blockNumber: blockNumber
     });
 
     if (newBlockResponse.error) {

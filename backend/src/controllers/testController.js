@@ -84,27 +84,34 @@ export const getByTestId = async (req, res) => {
 
 export const getTests = async (req, res) => {
   try {
+    // Step 1: Get all tests
     const tests = await db.select().from(testModel);
 
-    for (let i = 0; i < tests.length; i++) {
-      try {
-        const result = await db
-          .select({ questionCount: count(questionModel.id) })
-          .from(testModel)
-          .leftJoin(blockModel, eq(blockModel.testId, testModel.id))
-          .leftJoin(questionModel, eq(questionModel.blockId, blockModel.id))
-          .where(eq(testModel.id, tests[i].id));
+    // Step 2: Get question counts per test (efficiently)
+    const questionCounts = await db
+      .select({
+        testId: blockModel.testId,
+        questionCount: count(),
+      })
+      .from(questionModel)
+      .leftJoin(blockModel, eq(questionModel.blockId, blockModel.id))
+      .groupBy(blockModel.testId);
 
-        tests[i].questions = Number(result[0].questionCount);
-      } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'Failed to get question count' });
-      }
-    }
+    // Step 3: Map testId -> count
+    const countMap = Object.fromEntries(
+      questionCounts.map(row => [row.testId, Number(row.questionCount)])
+    );
 
-    return res.status(200).json({ tests });
+    // Step 4: Add `questions` to each test
+    const testsWithQuestions = tests.map(test => ({
+      ...test,
+      questions: countMap[test.id] || 0,
+    }));
+
+    return res.status(200).json({ tests: testsWithQuestions });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed to get tests' });
+    console.error(err);
+    return res.status(500).json({ error: 'Failed to get tests with question counts' });
   }
 };
 

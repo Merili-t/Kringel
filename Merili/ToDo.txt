@@ -1,6 +1,0 @@
-1. testi lahendaja avaleht ✅
-2. juhend sisselogimata ✅
-3. kontakt sisselogimata ✅
-5. detailid ✅
-6. küsimuste koostamine ✅
-7. interaktiivne pilt ✅

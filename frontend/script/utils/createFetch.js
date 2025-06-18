@@ -13,11 +13,18 @@ const createFetch = async (route, method, data) => {
     url += route + (data !== undefined ? `/${data}` : '');
   }
   
-  if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && data && data instanceof Object) {
+  if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && data) {
     url += route;
     fetchOptions.method = method.toUpperCase();
-    fetchOptions.headers = { 'Content-Type': 'application/json' };
-    fetchOptions.body = JSON.stringify(data);
+
+    if(data instanceof FormData){
+      fetchOptions.body = data;
+      console.log('form')
+    } else if(data instanceof Object){
+      fetchOptions.headers = { 'Content-Type': 'application/json' };
+      fetchOptions.body = JSON.stringify(data);
+      console.log('obj')
+    }
   }
 
   try {

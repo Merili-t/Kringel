@@ -72,29 +72,31 @@
 
 ## question
 
-| Name         | Type      | Key   | Notes                   |
-| ------------ | --------- | ----- | ----------------------- |
-| id           | CHAR(36)  | PK, N | UUID                    |
-| block_id     | CHAR(36)  | FK, N | Referances `block(id)`  |
-| matrix_id    | CHAR(36)  | FK    | Referances `matrix(id)` |
-| type         | INTEGER   | N     | Required                |
-| order_number | INTEGER   | N     | Required                |
-| description  | TEXT      | N     | Required                |
-| points       | INTEGER   | N     | DEFAULT 0               |
-| created_at   | TIMESTAMP |       | Set automatically       |
-| updated_at   | TIMESTAMP |       | Updated automatically   |
+| Name         | Type        | Key   | Notes                   |
+| ------------ | ----------- | ----- | ----------------------- |
+| id           | CHAR(36)    | PK, N | UUID                    |
+| block_id     | CHAR(36)    | FK, N | Referances `block(id)`  |
+| matrix_id    | CHAR(36)    | FK    | Referances `matrix(id)` |
+| type         | INTEGER     | N     | Required                |
+| order_number | INTEGER     | N     | Required                |
+| description  | TEXT        | N     | Required                |
+| points       | INTEGER     | N     | DEFAULT 0               |
+| link         | VARCAR(255) |       | DEFAULT null            |
+| created_at   | TIMESTAMP   |       | Set automatically       |
+| updated_at   | TIMESTAMP   |       | Updated automatically   |
 
 ## question_matrix
 
-| Name         | Type      | Key   | Notes                  |
-| ------------ | --------- | ----- | ---------------------- |
-| id           | CHAR(36)  | PK, N | UUID                   |
-| block_id     | CHAR(36)  | FK, N | Referances `block(id)` |
-| order_number | INTEGER   | N     | Required               |
-| description  | TEXT      |       |                        |
-| points       | INTEGER   | N     | DEFAULT 0              |
-| created_at   | TIMESTAMP |       | Set automatically      |
-| updated_at   | TIMESTAMP |       | Updated automatically  |
+| Name         | Type        | Key   | Notes                  |
+| ------------ | ----------- | ----- | ---------------------- |
+| id           | CHAR(36)    | PK, N | UUID                   |
+| block_id     | CHAR(36)    | FK, N | Referances `block(id)` |
+| order_number | INTEGER     | N     | Required               |
+| description  | TEXT        |       |                        |
+| points       | INTEGER     | N     | DEFAULT 0              |
+| link         | VARCAR(255) |       | DEFAULT null           |
+| created_at   | TIMESTAMP   |       | Set automatically      |
+| updated_at   | TIMESTAMP   |       | Updated automatically  |
 
 ## block
 

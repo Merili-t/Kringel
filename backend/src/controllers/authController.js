@@ -5,8 +5,10 @@ import jwt from 'jsonwebtoken';
 
 import * as zod from '../database/zod.js';
 import db from '../database/drizzle.js';
+import minio from '../database/minio.js';
 import user from '../database/models/user.js';
 import team from '../database/models/team.js';
+import { json } from 'drizzle-orm/gel-core';
 
 const createSession = (res, id, userType, message) => {
   const token = jwt.sign({ id, userType }, process.env.TOKEN_SECRET, { expiresIn: '7d' });
@@ -27,6 +29,7 @@ export const login = async (req, res) => {
 
   if (!result.success) {
     console.log(result.error.flatten());
+    console.log(req.body)
     return res.status(400).json({ error: 'Bad data given' });
   }
 
@@ -55,14 +58,22 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
   const serverUserData = req.serverUserData;
 
-  const result = zod.registerSchema.safeParse(req.body);
+  const data = {
+    ...req.body
+  }
+
+  if(req.file){
+    data.link = req.file.originalname;
+  }
+
+  const result = zod.registerSchema.safeParse(data);
 
   if (!result.success) {
     console.log(result.error.flatten());
     return res.status(400).json({ error: 'Bad data given' });
   }
 
-  const { email, teamName, names, school, link, password, userType } = result.data;
+  let { email, teamName, names, school, link, password, userType } = result.data;
 
   if (serverUserData.isLoggedIn && serverUserData.userType !== 'admin') {
     return res.status(400).json({ error: 'Already logged in' });
@@ -70,8 +81,18 @@ export const register = async (req, res) => {
 
   const id = uuidv7();
 
-  if (userType === 'guest' && email && teamName && names && school && link) {
+  if (userType === 'guest' && email && teamName && names && school && link && req.file) {
     // Guest registration
+    try {
+      const objectName = Date.now() + '-' + req.file.originalname;
+      link = objectName;
+
+      await minio.putObject('kringel', objectName, req.file.buffer);
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Failed to upload file' });
+    }
+
     try {
       await db.insert(team).values({ id, email, teamName, names, school, link });
       return createSession(res, id, userType, 'Guest account created and logged in');

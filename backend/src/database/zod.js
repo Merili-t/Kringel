@@ -43,7 +43,7 @@ export const questionSchema = z.object({
   blockId: z.string(),
   question: z.string(),
   points: z.number().min(0),
-  answerType: z.number().min(0).max(6),
+  answerType: z.number().min(0).max(8),
   orderNumber: z.number().min(1),
   answerVariables: z.optional(z.union([z.array(answerVariable), z.lazy(() => z.array(questionSchema))])),
 });

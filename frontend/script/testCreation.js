@@ -487,7 +487,7 @@ function collectQuizData(blockId) {
   console.log("Answer type (string):", answerTypeStr);
 
   let answerTypeCode;
-  switch (answerTypeStr) {
+    switch (answerTypeStr) {
     case "uks-oige":
       answerTypeCode = 0;
       break;
@@ -511,7 +511,9 @@ function collectQuizData(blockId) {
     case "joonistamine":
       answerTypeCode = 6;
       break;
+    // accept both possible keys for your calculator dropdown:
     case "kalkulaator":
+    case "latex-kalkulaator":
       answerTypeCode = 7;
       break;
     case "keemia_ahelad":
@@ -520,6 +522,7 @@ function collectQuizData(blockId) {
     default:
       answerTypeCode = 2;
   }
+
   console.log("Mapped answer type code:", answerTypeCode);
 
   // For multiple-choice questions (one or many correct answers), build answerVariables.
@@ -561,19 +564,18 @@ function collectQuizData(blockId) {
 
   // Build the final payload.
   const finalData = {
-    blockId: blockId.toString(),
-    question: question,
-    points: points,
-    answerType: answerTypeCode,
-    orderNumber: orderNumber
+    blockId:     blockId.toString(),
+    question:    question,
+    points:      points,
+    answerType:  answerTypeCode,
+    orderNumber: orderNumber,
+    // Always send an array of answerVariables (empty for non–MC types)
+    answerVariables: answerVariables
   };
 
-  // Only include for specific answer types (for example, multiple choice)
-  if (answerTypeCode === 0 || answerTypeCode === 1) {
-    finalData.answerVariables = answerVariables;
-  }
   console.log("Final question data payload:", finalData);
   return finalData;
+
 }
 
 // ...existing code...
@@ -732,17 +734,20 @@ class QuizBuilder {
             dropdownOptions.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Handle clicks *inside* the options panel
         dropdownOptions.addEventListener('click', e => {
-            const opt = e.target;
-            if (!opt.classList.contains('dropdown-option')) return;
+          const opt = e.target;
+          if (!opt.classList.contains('dropdown-option')) return;
 
-            const value = opt.getAttribute('data-value');
-            const text  = opt.textContent;
+          const value = opt.getAttribute('data-value');
+          const text  = opt.textContent;
 
-            dropdownSelected.querySelector('span').textContent = text;
-            dropdownOptions.style.display = 'none';
-            this.showPreview(value);
+          // update the visible label…
+          dropdownSelected.querySelector('span').textContent = text;
+          // …and store the raw value so getAttribute("data-value") later returns it:
+          dropdownSelected.setAttribute('data-value', value);
+
+          dropdownOptions.style.display = 'none';
+          this.showPreview(value);
         });
 
         // close if you click outside
@@ -1884,6 +1889,7 @@ async function saveCurrentQuestion() {
     
     // Retrieve and set answer type
     const dropdown = document.getElementById("dropdown-selected");
+    console.log("Dropdown value data-value attribute:", dropdownSelected?.getAttribute("data-value"));
     const answerTypeStr =
       (dropdown && dropdown.querySelector("span")
         ? dropdown.querySelector("span").dataset.value
@@ -1913,7 +1919,7 @@ async function saveCurrentQuestion() {
       case "joonistamine":
         answerTypeCode = 6;
         break;
-      case "kalkulaator":
+      case "latex-kalkulaator":
         answerTypeCode = 7;
         break;
       case "keemia_ahelad":
@@ -2118,59 +2124,66 @@ function showSuccessMessage(message) {
   }, 4000);
 }
 
-// --- "Lõpeta testi koostamine" Button: Full Save Procedure ---
 document.querySelector('.next-question').addEventListener('click', async () => {
-  const quizData = quizBuilder.collectQuizData();
+  //  Save the current question in the form
+  try {
+    const ok = await saveCurrentQuestion();
+    if (!ok) throw new Error("Ei õnnestunud salvestada");
+  } catch (err) {
+    console.error("Viimane küsimus salvestamisel ebaõnnestus:", err);
+    alert("Viimane küsimus salvestamine ebaõnnestus, palun proovi uuesti.");
+    return;
+  }
+
+  //Gather the rest of the quiz data and upload test+blocks+questions
+  const quizData = quizBuilder.collectQuizData(blockId);
   if (!quizData) {
     alert("Palun sisesta küsimuse andmed enne testi lõpetamist!");
     return;
   }
-  
+
   try {
     // 1. Create the Test
     const testResult = await createFetch('/test/upload', 'POST', {
-        name: quizData.name || "Nimetu test",
-        description: quizData.description || "Kirjeldus puudub",
-        start: quizData.start,
-        end: quizData.end,
-        timeLimit: quizData.timelimit
+      name:       quizData.name || "Nimetu test",
+      description: quizData.description || "Kirjeldus puudub",
+      start:      quizData.start,
+      end:        quizData.end,
+      timeLimit:  quizData.timelimit
     });
     if (!testResult.id) throw new Error("Testi loomine ebaõnnestus");
 
     // 2. Create the Block
     const blockResult = await createFetch('/block/upload', 'POST', {
-        testId: testResult.id,
-        blockNumber: 1
+      testId:      testResult.id,
+      blockNumber: 1
     });
     if (!blockResult.id) throw new Error("Bloki loomine ebaõnnestus");
 
-    // 3. Upload questions
+    // 3. Upload any remaining questions
     const questions = quizData.block[0].blockQuestions;
     for (let i = 0; i < questions.length; i++) {
-        const q = questions[i];
-        await createFetch('/question/upload', 'POST', {
-        blockId: blockResult.id,
-        question: q.question,
-        points: q.points,
-        answerType: q.answerType,
-        orderNumber: i + 1,
-        answerVariables: q.answerVariables
-        });
+      const q = questions[i];
+      await createFetch('/question/upload', 'POST', {
+        blockId:        blockResult.id,
+        question:       q.question,
+        points:         q.points,
+        answerType:     q.answerType,
+        orderNumber:    i + 1,
+        answerVariables:q.answerVariables
+      });
     }
 
     alert("Test salvestatud edukalt!");
     window.location.href = `/test/${testResult.id}`;
-
-    } catch (err) {
+  } catch (err) {
     console.error("Viga lõpliku salvestusega:", err);
     alert("Midagi läks valesti salvestamisel, proovi uuesti.");
-    }
+  }
 });
 
-// --- Dropdown Setup ---
-// In your QuizBuilder class, you likely have something like:
-// ...existing code...
 
+// --- Dropdown Setup ---
 QuizBuilder.prototype.collectQuizData = function() {
   const quizData = {
     name: "Temporary Test Name",
@@ -2212,7 +2225,7 @@ QuizBuilder.prototype.collectQuizData = function() {
       case "joonistamine":
           answerTypeCode = 6; // drawing
           break;
-      case "kalkulaator":
+      case "latex-kalkulaator":
           answerTypeCode = 7; // calculator
           break;
       case "keemia_ahelad":

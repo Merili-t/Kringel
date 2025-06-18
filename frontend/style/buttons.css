@@ -2,10 +2,8 @@
 .startpage-btn, 
 .guide-btn, 
 .contact-btn, 
-.login-btn, 
-.logout-btn, 
+.login-btn,  
 .create-account-btn,
-.contact-btn,
 .save-new-pwd-btn,
 .admin-btn{
     font-size: 16px;
@@ -20,10 +18,8 @@
 
 .create-test-btn, 
 .startpage-btn, 
-.guide-btn, 
-.contact-btn, 
+.guide-btn,  
 .login-btn, 
-.logout-btn, 
 .create-account-btn,
 .admin-btn{
     box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
@@ -32,7 +28,6 @@
 .create-test-btn, 
 .startpage-btn, 
 .guide-btn, 
-.contact-btn,
 .admin-btn,
 .create-account-btn{
     margin-bottom: 1rem;
@@ -40,17 +35,15 @@
 }
 
 .create-test-btn, 
-.logout-btn, 
 .login-btn,
 .save-new-pwd-btn,
 .form-btn{
-    background-color: #B81434;
+    background-color: #821b25;
     color: #fff;
 }
 
 .startpage-btn, 
 .guide-btn, 
-.contact-btn,
 .create-account-btn,
 .admin-btn{
     background-color: #fff;
@@ -66,24 +59,11 @@
 }
 
 .create-test-btn:hover, 
-.login-btn:hover, 
-.logout-btn:hover, 
+.login-btn:hover,  
 .save-new-pwd-btn:hover,
 .form-btn:hover,
 .save-btn:hover{
     background-color: #97102a;
-}
-
-.form-btn{
-    font-size: 16px;
-    width: 8rem;
-    height: fit-content;
-    padding: .75rem;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0px 4px 12px rgba(184, 20, 52, .5);
-    border-radius: 50px;
-    text-align: center;
 }
 
 .red-btn {
@@ -115,4 +95,29 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+
+.logout-btn {
+  position: fixed;
+  bottom: 2rem;
+  left: 5.6rem;
+  cursor: pointer;
+  color: #821b25;
+  gap: 8px;
+  font-size: 14px;
+  background-color: #F6E6E6;
+  border: none;
+  padding: 0;
+  border-bottom: 2px solid #821b25;
+}
+
+.logout-btn:hover {
+  color: #97102a;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+  filter: invert(15%) sepia(89%) saturate(1847%) hue-rotate(340deg) brightness(89%) contrast(90%);
+  /* This filter creates the #B81434 color for the icon */
 }

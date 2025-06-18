@@ -4,35 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Testi vastused</title>
-  <link rel="stylesheet" href="../style/testAnswers.css">
-  <link rel="stylesheet" href="../style/oneAnswers.css">
+  <link rel="stylesheet" href="../style/oneAnswer.css">
   <link rel="stylesheet" href="../style/buttons.css">
   <link rel="stylesheet" href="../style/main.css">
   <link rel="stylesheet" href="../style/popups.css">
 </head>
 <body>
-  <!-- Menu Component -->
-  <div class="menu">
-    <div class="logo-container">
-      <img src="../images/logoTransparent.png" alt="KRINGEL" class="logo">
+  <section class="navigation-buttons">
+    <div class="nav-container">
+      <div class="logo-wrapper">
+        <img src="../images/logoTransparent.png" alt="logo KRINGEL" class="logo">
+      </div>
+      <br>
+      <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
+        TESTI KOOSTAMINE
+      </button>
+      <br>
+      <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html">
+        AVALEHELE
+      </button>
+      <br>
+      <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
+        JUHEND
+      </button>
+      <br>
+      <button class="logout-btn poppins-semibold nav-btn" data-popup="logout">
+        <img src="../images/logout.png" alt="logout" class="logout-icon">
+        LOGI VÄLJA
+      </button>
     </div>
-    <br>
-    <button class="create-test-btn poppins-semibold nav-btn" data-target="details.html">
-      TESTI KOOSTAMINE
-    </button>
-    <br>
-    <button class="startpage-btn poppins-semibold nav-btn" data-target="allTests.html"> 
-      AVALEHELE
-    </button>
-    <br>
-    <button class="guide-btn poppins-semibold nav-btn" data-target="guide.html">
-      JUHEND
-    </button>
-    <br>
-    <button class="contact-btn poppins-semibold nav-btn" data-target="contacts.html">
-      KONTAKTANDMED
-    </button>
-  </div>
+  </section>
 
   <div id="teamName" class="teamName">
     <h1 class="poppins-bold">Tiimi nimi</h1>
@@ -48,10 +49,6 @@
     </div>
 
     <div class="meta poppins-light" style="margin-top: 15px; color: #666;"></div>
-  </div>
-
-  <div class="res-btn-container">
-    <button class="res-btn wider-btn" onclick="navigate('testanswers')">TAGASI VASTUSTE JUURDE</button>
   </div>
 
   <script type="module" src="../script/router.js"></script>

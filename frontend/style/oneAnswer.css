@@ -1,11 +1,144 @@
-h1{
-    font-size: 32px;
+
+
+/* Tiimi nimi pealkiri */
+.teamName {
+    grid-column: 2;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    text-align: center;
 }
 
+.teamName h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #710A14;
+}
+
+
+/* Küsimuse stiil - kasutab värvipaletti */
+.question {
+    font-size: 1.3rem;
+    color: #710A14;
+    margin-bottom: 1.2rem;
+    margin-left: 20rem;
+    margin-right: 3rem;
+    padding: 1rem;
+    background-color: #F6E6E6;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #821b25;
+}
+
+/* Vastuse kuvamise ala */
+.answer-display {
+    background-color: #fff;
+    margin-left: 20rem;
+    margin-right: 3rem;
+    padding: 1.2rem;
+    border-radius: 8px;
+    border: 2px solid #F6E6E6;
+    margin-bottom: 1rem;
+    box-shadow: 0px 2px 8px rgba(184, 20, 52, 0.1);
+}
+
+#answer-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #F6E6E6;
+}
+
+#answer-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background-color: #fafafa;
+    margin-right: 5rem;
+    border-radius: 6px;
+    border-left: 3px solid #b52634;
+}
+
+/* Meta informatsiooni stiil */
+.meta {
+    font-size: 0.85rem;
+    color: #666;
+    padding: 0.8rem;
+    margin-left: 20rem;
+    margin-right: 3rem;
+    background-color: #F6E6E6;
+    border-radius: 6px;
+    border-left: 3px solid #821b25;
+}
+
+/* Navigatsiooni nuppude kohandamine väiksemaks ekraaniks - EEMALDATUD */
+
+/* Kompaktne layout väikestele ekraanidele */
+@media (max-width: 1200px) {
+    
+    .answer-container {
+        padding: 1rem;
+    }
+    
+    .teamName h1 {
+        font-size: 1.8rem;
+    }
+    
+    .question {
+        font-size: 1.2rem;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    
+    .teamName,
+    .answer-container {
+        grid-column: 1;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .teamName h1 {
+        font-size: 1.6rem;
+    }
+    
+    .question {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .answer-display {
+        padding: 1rem;
+    }
+    
+    #answer-text {
+        font-size: 0.95rem;
+        padding: 0.8rem;
+    }
+    
+    .meta {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+    }
+}
+
+/* Sujuv sissetulek */
 .answer-container {
-    background-color: #FFF5F5;
-    border-radius: 15px;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-    border: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

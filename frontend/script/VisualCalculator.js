@@ -119,4 +119,3 @@ export class VisualCalculator {
     }
 }
 
-console.log("VisualCalculator initialized");

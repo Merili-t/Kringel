@@ -22,198 +22,182 @@ const elements = {
 
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("[DEBUG] DOMContentLoaded event fired.");
-  testId = getTestIdFromUrl() || "01977d6c-6084-7329b550-5ae9c632bd01";
-  console.log("[DEBUG] Test ID:", testId);
-  // Store the testId if not already in sessionStorage
-  if (!sessionStorage.getItem("testId")) {
-    sessionStorage.setItem("testId", testId);
+
+  const urlId = getTestIdFromUrl();
+  if (urlId) {
+    testId = urlId;
+  } else {
+    const stored = sessionStorage.getItem("currentTest");
+    try {
+      const current = stored ? JSON.parse(stored) : {};
+      testId = current.testId;
+    } catch {
+      testId = null;
+    }
   }
+
+  if (!testId) {
+    console.error("[DEBUG] testId puudub!");
+    showError("Testi ID puudub. Proovi uuesti.");
+    return;
+  }
+
+  console.log("[DEBUG] Test ID:", testId);
+  sessionStorage.setItem("testId", testId);
   await loadTestData(testId);
 });
 
 function getTestIdFromUrl() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("testId");
-  console.log("[DEBUG] Retrieved testId from URL:", id);
-  return id;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("testId");
 }
 
 async function loadTestData(testId) {
   try {
     console.log("[DEBUG] Loading test data...");
     showLoading();
-    const token = localStorage.getItem("token");
-    console.log("[DEBUG] Token:", token);
-    // Fetch test details.
+
     const testData = await createFetch(`/test/${testId}`, "GET");
-    console.log("[DEBUG] Test data received:", testData);
-    // Fetch blocks for the test.
-    const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
-    console.log("[DEBUG] Block data received:", blockData);
-    if (!testData || !Array.isArray(blockData.blocks)) {
-      throw new Error("Vigased andmed");
-    }
+    console.log("[DEBUG] Test data:", testData);
+
+    const blockRes = await createFetch(`/block/test/${testId}`, "GET");
+    console.log("[DEBUG] Block data:", blockRes);
+
+    let blockList = Array.isArray(blockRes.blocks) ? blockRes.blocks : Array.isArray(blockRes) ? blockRes : [];
+
+    const relevantBlocks = blockList.filter(b => b.testId === testId);
+
     const allBlocks = [];
-    for (const block of blockData.blocks) {
-      console.log("[DEBUG] Processing block:", block);
-      const response = await createFetch(`/question/block/${block.id}`, "GET", "");
-      console.log("[DEBUG] Block questions response:", response);
-      const questions = Array.isArray(response.blockQuestions)
-        ? response.blockQuestions
-        : [];
-      const formattedQuestions = questions.map(q => ({
+    for (const block of relevantBlocks) {
+      const qRes = await createFetch(`/question/block/${block.id}`, "GET");
+      const rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
+
+      // Filtreeri ainult selle ploki küsimused
+      const qs = rawQs.filter(q => q.blockId === block.id);
+
+      const formatted = qs.map(q => ({
         id: q.id,
         type: q.type,
         text: q.description,
         points: q.points ?? 0
       }));
-      allBlocks.push({
-        blockOrder: block.block_number ?? 0,
-        questions: formattedQuestions
-      });
+
+      allBlocks.push({ order: block.block_number ?? 0, questions: formatted });
     }
-    blocks = allBlocks.sort((a, b) => a.blockOrder - b.blockOrder).map(b => b.questions);
-    console.log("[DEBUG] Final blocks array:", blocks);
+
+    blocks = allBlocks.sort((a, b) => a.order - b.order).map(b => b.questions);
+    console.log("[DEBUG] Final blocks:", blocks);
+
     populateTestData(testData, blocks.flat().length);
     renderBlocks();
     updateProgressBar();
+
     if (testData.timeLimit) {
-      console.log("[DEBUG] Starting timer with timeLimit (sec):", testData.timeLimit * 60);
       startTimer(testData.timeLimit * 60);
-    } else {
-      console.warn("No timeLimit provided in test data. Timer will not start.");
     }
+
     showMainContent();
-  } catch (error) {
-    console.error("[DEBUG] Test loading failed:", error);
-    showError("Testi laadimine ebaonnestus");
+  } catch (e) {
+    console.error("[DEBUG] loadTestData error:", e);
+    showError("Testi laadimine ebaõnnestus");
   }
 }
 
 function populateTestData(testData, count) {
-  elements.testTitle.textContent = testData.name || "Nimetu test";
+  elements.testTitle.textContent = testData.name || "";
   elements.testDuration.textContent = formatDuration(testData.timeLimit);
-  elements.questionCount.textContent = count || "0";
-  document.title = testData.name || "Testi lahendamine";
-  console.log("[DEBUG] Populated test data:", testData, "Total questions:", count);
-}
-
-function renderBlockIndicators() {
-  const container = document.getElementById("block-indicator");
-  container.innerHTML = "";
-  blocks.forEach((_, index) => {
-    const circle = document.createElement("div");
-    circle.classList.add("circle");
-    if (index < currentBlock) circle.classList.add("completed");
-    else if (index === currentBlock) circle.classList.add("active");
-    circle.textContent = index + 1;
-    container.appendChild(circle);
-  });
-  console.log("[DEBUG] Rendered block indicators; Current block:", currentBlock);
+  elements.questionCount.textContent = count.toString();
+  document.title = testData.name;
 }
 
 function renderBlocks() {
-  const container = elements.questionsWrapper;
-  container.innerHTML = "";
-  let globalQuestionNumber = 1;
-  blocks.forEach((block, blockIndex) => {
-    const blockDiv = document.createElement("div");
-    blockDiv.className = "block";
-    if (blockIndex === currentBlock) blockDiv.classList.add("active");
-    const questionContainer = document.createElement("div");
-    questionContainer.className = "question-grid";
-    block.forEach(q => {
-      const questionWrapper = document.createElement("div");
-      questionWrapper.className = "question";
-      const qDiv = document.createElement("div");
-      qDiv.className = "question-card";
-      // Prepare hidden inputs and header.
-      const hiddenId = `<input type="hidden" class="question-id" value="${q.id}" />`;
-      const hiddenType = `<input type="hidden" class="question-type" value="${q.type}" />`;
-      const questionHeader = `<div class="question-header"><strong>${globalQuestionNumber}. </strong>${q.text} <span class="points-badge">${q.points}p</span></div>`;
-      // Render input fields based on question type.
+  const c = elements.questionsWrapper;
+  c.innerHTML = "";
+  let num = 1;
+  blocks.forEach((blk, idx) => {
+    const div = document.createElement("div");
+    div.className = "block";
+    if (idx === currentBlock) div.classList.add("active");
+    const grid = document.createElement("div");
+    grid.className = "question-grid";
+    blk.forEach(q => {
+      const wrap = document.createElement("div");
+      wrap.className = "question";
+      const card = document.createElement("div");
+      card.className = "question-card";
+      const header = `<div class="question-header"><strong>${num}. </strong>${q.text} <span class="points-badge">${q.points}p</span></div>`;
+      const hidId = `<input type="hidden" class="question-id" value="${q.id}"/>`;
+      const hidTyp = `<input type="hidden" class="question-type" value="${q.type}"/>`;
+
       if (["text", "one_correct", "short"].includes(q.type.toString())) {
-        qDiv.innerHTML = `
-          ${questionHeader}
-          ${hiddenId}
-          ${hiddenType}
-          <input type="text" placeholder="Vastus..." class="auto-save-input" />
-        `;
-        const inputField = qDiv.querySelector('input[type="text"]');
-        inputField.addEventListener("blur", async () => {
-          await saveSingleAnswer(qDiv);
-        });
+        card.innerHTML = `${header}${hidId}${hidTyp}<input type="text" class="auto-save-input" placeholder="Vastus..."/>`;
+        card.querySelector("input").addEventListener("blur", () => saveSingleAnswer(card));
       } else if (q.type === 7) {
-        // Calculator type question.
-        qDiv.innerHTML = `
-          ${questionHeader}
-          ${hiddenId}
-          ${hiddenType}
-          <iframe src="../html/calculator.html" class="calculator-iframe" width="100%" height="300" style="border: none; margin-top: 10px;"></iframe>
-          <input type="hidden" class="calculator-answer" />
-        `;
+        card.innerHTML = `${header}${hidId}${hidTyp}<iframe src="../html/calculator.html" class="calculator-iframe"></iframe><input type="hidden" class="calculator-answer"/>`;
       } else {
-        // For longer text answers.
-        qDiv.innerHTML = `
-          ${questionHeader}
-          ${hiddenId}
-          ${hiddenType}
-          <textarea placeholder="Pikk vastus..." rows="4" class="auto-save-input"></textarea>
-        `;
-        const textareaField = qDiv.querySelector("textarea");
-        textareaField.addEventListener("blur", async () => {
-          await saveSingleAnswer(qDiv);
-        });
+        card.innerHTML = `${header}${hidId}${hidTyp}<textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>`;
+        card.querySelector("textarea").addEventListener("blur", () => saveSingleAnswer(card));
       }
-      questionWrapper.appendChild(qDiv);
-      questionContainer.appendChild(questionWrapper);
-      globalQuestionNumber++;
+
+      wrap.appendChild(card);
+      grid.appendChild(wrap);
+      num++;
     });
-    blockDiv.appendChild(questionContainer);
-    container.appendChild(blockDiv);
+    div.appendChild(grid);
+    c.appendChild(div);
   });
   renderBlockIndicators();
-  updateProgressBar();
-  console.log("[DEBUG] Blocks rendered. Current block index:", currentBlock);
+}
+
+function renderBlockIndicators() {
+  const cont = document.getElementById("block-indicator");
+  cont.innerHTML = "";
+  blocks.forEach((_, i) => {
+    const circ = document.createElement("div");
+    circ.classList.add("circle");
+    if (i < currentBlock) circ.classList.add("completed");
+    else if (i === currentBlock) circ.classList.add("active");
+    circ.textContent = (i + 1).toString();
+    cont.appendChild(circ);
+  });
 }
 
 function updateProgressBar() {
-  const percent = Math.round(((currentBlock + 1) / blocks.length) * 100);
-  elements.progressBar.style.width = `${percent}%`;
-  elements.progressText.textContent = `${percent}%`;
-  console.log("[DEBUG] Progress bar updated:", percent + "%");
+  const pct = Math.round(((currentBlock + 1) / blocks.length) * 100);
+  elements.progressBar.style.width = `${pct}%`;
+  elements.progressText.textContent = `${pct}%`;
 }
 
 function moveToNextBlock() {
-  const allBlocks = document.querySelectorAll(".block");
-  if (currentBlock < allBlocks.length - 1) {
-    console.log("[DEBUG] Moving from block", currentBlock, "to block", currentBlock + 1);
-    allBlocks[currentBlock].classList.remove("active");
+  const all = document.querySelectorAll(".block");
+
+  if (currentBlock < all.length - 1) {
+    all[currentBlock].classList.remove("active");
     currentBlock++;
-    allBlocks[currentBlock].classList.add("active");
+    all[currentBlock].classList.add("active");
+
     updateProgressBar();
     renderBlockIndicators();
-    if (currentBlock === allBlocks.length - 1) {
-      elements.nextButton.style.display = "none";
-      elements.endButton.style.display = "inline-block";
-      console.log("[DEBUG] Last block reached, hiding next button, showing finish button.");
+
+    if (currentBlock === all.length - 1) {
+      elements.nextButton.textContent = "Lõpeta";
     }
   } else {
-    console.warn("[DEBUG] Already at last block; cannot move to next block.");
+    console.log("[DEBUG] Viimane plokk täidetud – lõpetan testi automaatselt");
+    endTest();
   }
 }
 
-function startTimer(duration) {
-  let time = duration;
-  console.log("[DEBUG] Timer started with duration:", duration, "seconds");
-  interval = setInterval(async () => {
-    const minutes = String(Math.floor(time / 60)).padStart(2, "0");
-    const seconds = String(time % 60).padStart(2, "0");
-    elements.timer.textContent = `${minutes} : ${seconds}`;
-    if (--time < 0) {
+
+
+function startTimer(sec) {
+  let t = sec;
+  interval = setInterval(() => {
+    const m = String(Math.floor(t / 60)).padStart(2, '0');
+    const s = String(t % 60).padStart(2, '0');
+    elements.timer.textContent = `${m} : ${s}`;
+    if (--t < 0) {
       clearInterval(interval);
-      console.log("[DEBUG] Time expired - initiating auto-save.");
-      triggerTimeUpPopup();
       elements.nextButton.disabled = true;
     }
   }, 1000);
@@ -221,95 +205,62 @@ function startTimer(duration) {
 
 function endTest() {
   clearInterval(interval);
-  console.log("[DEBUG] Test ended manually.");
-  alert("Test lopetatud! Aitäh vastamast.");
+  alert("Test lõpetatud!");
 }
 
-function formatDuration(minutes) {
-  if (minutes < 60) return `${minutes} minutit`;
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return m > 0 ? `${h} tund${h !== 1 ? "i" : ""} ja ${m} minutit` : `${h} tund${h !== 1 ? "i" : ""}`;
+function formatDuration(min) {
+  if (min < 60) return `${min} minutit`;
+  const h = Math.floor(min / 60), m = min % 60;
+  return m ? `${h} tund${h !== 1 ? 'i' : ''} ja ${m} minutit` : `${h} tund${h !== 1 ? 'i' : ''}`;
 }
 
 function showLoading() {
-  elements.loading.style.display = "block";
-  elements.errorMessage.style.display = "none";
-  elements.mainContent.style.display = "none";
+  elements.loading.style.display = 'block';
+  elements.errorMessage.style.display = 'none';
+  elements.mainContent.style.display = 'none';
 }
 
 function showError(msg) {
-  elements.loading.style.display = "none";
-  elements.errorMessage.style.display = "block";
-  elements.mainContent.style.display = "none";
-  const p = elements.errorMessage.querySelector("p");
+  elements.loading.style.display = 'none';
+  elements.errorMessage.style.display = 'block';
+  elements.mainContent.style.display = 'none';
+  const p = elements.errorMessage.querySelector('p');
   if (p) p.textContent = msg;
-  console.error("[DEBUG] Error shown:", msg);
 }
 
 function showMainContent() {
-  elements.loading.style.display = "none";
-  elements.errorMessage.style.display = "none";
-  elements.mainContent.style.display = "block";
-  console.log("[DEBUG] Main content displayed.");
+  elements.loading.style.display = 'none';
+  elements.errorMessage.style.display = 'none';
+  elements.mainContent.style.display = 'block';
 }
 
-// New function to save a single question's answer on blur using FormData.
 async function saveSingleAnswer(card) {
   try {
-    // Retrieve the attempt ID from sessionStorage.
-    const attemptId = sessionStorage.getItem("attemptId");
-    if (!attemptId) {
-      console.error("[DEBUG] Attempt ID not found in sessionStorage.");
-      return;
-    }
+    const attemptId = sessionStorage.getItem('attemptId');
+    if (!attemptId) return;
 
-    let answer = "";
-    const textInput = card.querySelector("input[type='text']");
-    if (textInput) answer = textInput.value.trim();
-    const textarea = card.querySelector("textarea");
-    if (textarea) answer = textarea.value.trim();
-    const calcInput = card.querySelector(".calculator-answer");
-    if (calcInput) answer = calcInput.value.trim();
+    let ans = '';
+    const ti = card.querySelector("input[type='text']");
+    if (ti) ans = ti.value.trim();
+    const ta = card.querySelector('textarea');
+    if (ta) ans = ta.value.trim();
+    const ci = card.querySelector('.calculator-answer');
+    if (ci) ans = ci.value.trim();
 
-    // Retrieve hidden fields for question identification.
-    const idInput = card.querySelector(".question-id");
-    const typeInput = card.querySelector(".question-type");
-    const questionId = idInput ? idInput.value : "";
-    // Convert question type to a number.
-    const questionType = typeInput ? Number(typeInput.value) : "";
+    const qId = card.querySelector('.question-id').value;
+    const qType = Number(card.querySelector('.question-type').value);
 
-    // Build the FormData payload.
-    // Note: testId is no longer sent.
-    const formData = new FormData();
-    formData.append("attemptId", attemptId);
-    formData.append("questionId", questionId);
-    formData.append("questionType", questionType);
-    formData.append("answer", answer);
+    const fd = new FormData();
+    fd.append('attemptId', attemptId);
+    fd.append('questionId', qId);
+    fd.append('questionType', qType);
+    fd.append('answer', ans);
 
-    console.log("[DEBUG] Saving single question answer using FormData:", {
-      attemptId,
-      questionId,
-      questionType,
-      answer
-    });
-
-    // Post the FormData to the backend using your createFetch helper.
-    const response = await createFetch("/team/answer/upload", "POST", formData);
-    console.log("[DEBUG] Single question answer upload response:", response);
-  } catch (error) {
-    console.error("[DEBUG] Single answer saving failed:", error);
-    const qId =
-      (card.querySelector(".question-id") && card.querySelector(".question-id").value) ||
-      "";
-    showError("Answer saving failed for question " + qId);
+    await createFetch('/team/answer/upload', 'POST', fd);
+  } catch (e) {
+    console.error(e);
   }
 }
 
-// Navigation button event listeners.
-elements.nextButton.addEventListener("click", () => {
-  moveToNextBlock();
-});
-elements.endButton.addEventListener("click", () => {
-  endTest();
-});
+elements.nextButton.addEventListener('click', moveToNextBlock);
+elements.endButton.addEventListener('click', endTest);

@@ -74,6 +74,17 @@
     border-left: 3px solid #821b25;
 }
 
+.back-arrow{
+    position: relative;
+    top: 3.7rem;
+    margin-left: 20rem;
+    text-decoration: none;
+    color:  #710A14;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: "Poppins", sans-serif;
+}
+
 /* Navigatsiooni nuppude kohandamine väiksemaks ekraaniks - EEMALDATUD */
 
 /* Kompaktne layout väikestele ekraanidele */
@@ -142,3 +153,4 @@
         transform: translateY(0);
     }
 }
+

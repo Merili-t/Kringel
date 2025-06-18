@@ -32,11 +32,6 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-.logout-btn{
-  margin-bottom: 1rem;
-  margin-left: 2.7rem;
-}
-
 h1 {
   margin-top: 2rem;
   margin-left: 3rem;
@@ -78,7 +73,7 @@ tbody tr:last-child td {
 
 /* Action Button styles for Reset and Delete */
 .reset-btn, .delete-btn {
-  background-color: #B81434;
+  background-color: #821b25;
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -90,7 +85,7 @@ tbody tr:last-child td {
 }
 
 .reset-btn:hover, .delete-btn:hover {
-  background-color: #97102a;
+  background-color: #821b25;
 }
 
 /* Container for bottom button */
@@ -124,9 +119,6 @@ tbody tr:last-child td {
   h1 {
     font-size: 2rem;
     margin-left: 1rem;
-  }
-  .logout-btn-container {
-    margin-right: 1rem;
   }
   .res-btn-container {
     padding: 0px 1rem;

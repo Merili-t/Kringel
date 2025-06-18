@@ -10,41 +10,33 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    async function loadFirstQuestion(teamId, attemptId) {
+    async function loadFirstQuestion(teamId, attemptIdFromURL) {
         try {
-            // Lae kõik vajalikud andmed
             const { answers } = await createFetch('/team/answers', 'GET');
             const { tests } = await createFetch('/test/tests', 'GET');
             const { attempts } = await createFetch('/team/attempts', 'GET');
-            
-            // Leia õige attempt
-            const attempt = attempts.find(a => a.teamId === teamId);
-            if (!attempt) {
-                throw new Error("Attempt not found");
-            }
 
-            // Leia test
+            // Leia attempt vastavalt teamId-le
+            let attempt = attempts.find(a => a.teamId === teamId);
+            if (!attempt) throw new Error("Attempt not found");
+
+            const attemptId = attemptIdFromURL || attempt.id;
+
             const test = tests.find(t => t.id === attempt.testId);
-            if (!test) {
-                throw new Error("Test not found");
-            }
+            if (!test) throw new Error("Test not found");
 
-            // Leia selle attempt'i kõik vastused
-            const teamAnswers = answers.filter(answer => answer.attempt_id === attemptId);
-            
+            const teamAnswers = answers.filter(answer => answer.attemptId === attemptId);
+            console.log("Laekunud answers:", answers);
+            console.log("Kasutatav attemptId:", attemptId);
+
             if (teamAnswers.length === 0) {
                 document.querySelector(".answer-container").innerHTML = "<p>Sellel tiimil ei ole vastuseid.</p>";
                 return;
             }
 
-            // Võta esimene vastus
             const firstAnswer = teamAnswers[0];
-            
             await displayAnswer(firstAnswer, teamId, test.name);
-            
-            // Lisa navigeerimise nupud
             createNavigationButtons(teamAnswers, 0, teamId);
-            
         } catch (err) {
             console.error("❌ Viga andmete laadimisel:", err);
             document.querySelector(".answer-container").innerHTML = "<p>Viga andmete laadimisel.</p>";
@@ -54,11 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadSingleAnswer(teamId, questionId) {
         try {
             const { answers } = await createFetch('/team/answers', 'GET');
-            
-            // Leia vastus question_id või variant_id järgi
-            let answer = answers.find(item =>
-                String(item.team_id) === teamId &&
-                (String(item.question_id) === questionId || String(item.variant_id) === questionId)
+
+            const answer = answers.find(item =>
+                String(item.teamId) === teamId &&
+                (String(item.questionId) === questionId || String(item.variantId) === questionId)
             );
 
             if (!answer) {
@@ -67,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             await displayAnswer(answer, teamId);
-            
         } catch (err) {
             console.error("❌ Viga vastuse laadimisel:", err);
             document.querySelector(".answer-container").innerHTML = "<p>Viga vastuse laadimisel.</p>";
@@ -75,71 +65,81 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function displayAnswer(answer, teamId, testName = null) {
-        try {
-            // Lae tiimi nimi
-            let teamName = answer.team_name;
-            if (!teamName) {
-                try {
-                    const teamData = await createFetch(`/team/team/${teamId}`, 'GET');
-                    teamName = teamData?.name || "Tiimi nimi";
-                } catch {
-                    teamName = "Tiimi nimi";
-                }
+    try {
+        let teamName = answer.team_name;
+        if (!teamName) {
+            try {
+                const teamData = await createFetch(`/team/team/${teamId}`, 'GET');
+                teamName = teamData?.name || "Tiimi nimi";
+            } catch {
+                teamName = "Tiimi nimi";
             }
-
-            let questionText = answer.question_text;
-            if (!questionText) {
-                try {
-                    const questionData = await createFetch(`/question/${answer.question_id}`, 'GET');
-                    questionText = questionData?.description || "Küsimus";
-                } catch {
-                    questionText = "Küsimus";
-                }
-            }
-
-            const teamNameElement = document.querySelector("#teamName h1");
-            if (teamNameElement) {
-                teamNameElement.textContent = testName ? `${teamName} - ${testName}` : teamName;
-            }
-
-            const questionElement = document.querySelector(".question");
-            if (questionElement) {
-                questionElement.textContent = `1. ${questionText}`;
-            }
-
-            const answerText = document.getElementById("answer-text");
-            const answerImg = document.getElementById("answer-image");
-
-            if (answerText && answerImg) {
-                if (answer.answer?.startsWith("data:image")) {
-                    answerImg.src = answer.answer;
-                    answerImg.style.display = "block";
-                    answerText.textContent = "";
-                } else {
-                    answerImg.style.display = "none";
-                    answerText.textContent = answer.answer || "(puudub)";
-                }
-            }
-
-            const metaElement = document.querySelector(".meta");
-            if (metaElement) {
-                const metaText = `Punktid: ${answer.points ?? "hindamata"}`;
-                metaElement.textContent = metaText;
-            }
-
-        } catch (err) {
-            console.error("❌ Viga vastuse kuvamisel:", err);
         }
+
+        let questionText = answer.question_text;
+        if (!questionText) {
+            try {
+                const questionData = await createFetch(`/question/${answer.questionId}`, 'GET');
+                questionText = questionData?.description || "Küsimus";
+            } catch {
+                questionText = "Küsimus";
+            }
+        }
+
+        const teamNameElement = document.querySelector("#teamName h1");
+        if (teamNameElement) {
+            teamNameElement.textContent = testName ? `${teamName} - ${testName}` : teamName;
+        }
+
+        const questionElement = document.querySelector(".question");
+        if (questionElement) {
+            questionElement.textContent = `1. ${questionText}`;
+        }
+
+        const answerText = document.getElementById("answer-text");
+        const answerImg = document.getElementById("answer-image");
+
+        // 1. Proovi otse answer.answer väärtust
+        let finalAnswer = answer.answer;
+
+        // 2. Kui tühi, proovi variantId kaudu
+        if (!finalAnswer && answer.variantId) {
+            try {
+                const variantData = await createFetch(`/variant/${answer.variantId}`, 'GET');
+                finalAnswer = variantData?.content || variantData?.value || null;
+            } catch (err) {
+                console.warn("❗ Ei saanud varianti kätte:", err);
+            }
+        }
+
+        // 3. Kuvamine
+        if (answerText && answerImg) {
+            if (finalAnswer?.startsWith("data:image")) {
+                answerImg.src = finalAnswer;
+                answerImg.style.display = "block";
+                answerText.textContent = "";
+            } else {
+                answerImg.style.display = "none";
+                answerText.textContent = finalAnswer ?? "(puudub)";
+            }
+        }
+
+        const metaElement = document.querySelector(".meta");
+        if (metaElement) {
+            metaElement.textContent = `Punktid: ${answer.points ?? "hindamata"}`;
+        }
+
+    } catch (err) {
+        console.error("❌ Viga vastuse kuvamisel:", err);
     }
+}
+
 
     function createNavigationButtons(answers, currentIndex, teamId) {
         const container = document.querySelector(".answer-container");
         if (!container) return;
 
-        const existingNav = container.querySelector(".navigation-buttons");
-        if (existingNav) {
-            existingNav.remove();
-        }
+        container.querySelector(".navigation-buttons")?.remove();
 
         const navDiv = document.createElement("div");
         navDiv.className = "navigation-buttons";
@@ -172,12 +172,13 @@ document.addEventListener("DOMContentLoaded", () => {
         navDiv.appendChild(prevBtn);
         navDiv.appendChild(counter);
         navDiv.appendChild(nextBtn);
-        
+
         container.appendChild(navDiv);
     }
 
     const { teamId, questionId, attemptId } = getParams();
-    
+    console.log("Param:", { teamId, questionId, attemptId });
+
     if (!teamId) {
         document.querySelector(".answer-container").innerHTML = "<p>URL-is puudub tiimi ID.</p>";
         return;
@@ -186,6 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (questionId) {
         loadSingleAnswer(teamId, questionId);
     } else {
-        loadFirstQuestion(teamId, attemptId);
+        loadFirstQuestion(teamId, attemptId); // attemptId võib olla undefined – sel juhul leitakse automaatselt
     }
 });

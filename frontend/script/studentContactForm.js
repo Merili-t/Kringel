@@ -59,6 +59,12 @@ async function handleTeam(e) {
   // Append a fixed value for userType.
   formData.append("userType", "guest");
 
+  const videoFile = document.getElementById("video-upload").files[0];
+  
+  if(!videoFile){
+    formData.delete('file');
+  }
+
   // Register the team.
   const registrationResult = await createFetch("/auth/register", "POST", formData);
   if (registrationResult.error) {

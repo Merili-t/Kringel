@@ -19,11 +19,9 @@ const createFetch = async (route, method, data) => {
 
     if(data instanceof FormData){
       fetchOptions.body = data;
-      console.log('form')
     } else if(data instanceof Object){
       fetchOptions.headers = { 'Content-Type': 'application/json' };
       fetchOptions.body = JSON.stringify(data);
-      console.log('obj')
     }
   }
 

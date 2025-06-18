@@ -29,7 +29,6 @@ export const login = async (req, res) => {
 
   if (!result.success) {
     console.log(result.error.flatten());
-    console.log(req.body)
     return res.status(400).json({ error: 'Bad data given' });
   }
 
@@ -81,23 +80,23 @@ export const register = async (req, res) => {
 
   const id = uuidv7();
 
-  if (userType === 'guest' && email && teamName && names && school && link && req.file) {
+  if (userType === 'guest' && email && teamName && names && school && link) {
     // Guest registration
-    try {
-      const objectName = Date.now() + '-' + req.file.originalname;
-      link = objectName;
+    if(req.file){
+      try {
+        const objectName = Date.now() + '-' + req.file.originalname;
+        link = objectName;
 
-      await minio.putObject('kringel', objectName, req.file.buffer);
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Failed to upload file' });
+        await minio.putObject('kringel', objectName, req.file.buffer);
+      } catch (err) {
+        return res.status(500).json({ error: 'Failed to upload file' });
+      }
     }
 
     try {
       await db.insert(team).values({ id, email, teamName, names, school, link });
       return createSession(res, id, userType, 'Guest account created and logged in');
     } catch (err) {
-      console.error(err);
       return res.status(500).json({ error: 'Failed to create guest account' });
     }
   }
@@ -112,7 +111,6 @@ export const register = async (req, res) => {
           .values({ id, email: lowEmail, password: await argon2.hash(password) });
         return res.status(200).json({ message: 'Teacher account crated' });
       } catch (err) {
-        console.error(err);
         return res.status(500).json({ error: 'Failed to create user' });
       }
     } else {

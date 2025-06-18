@@ -1,9 +1,0 @@
-vaja teha need vahelehed: 
-- testi lahendamine
-
-MATH/FÜÜSIKA kalkulaator (esialgselt tehtud)
-
-- disable mathlive sounds (vaja leida fix)
-- fix calc
-
-- lisada testi lahendamisele millises blokis oled 

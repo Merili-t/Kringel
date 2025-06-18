@@ -108,7 +108,7 @@ export const register = async (req, res) => {
       try {
         await db
           .insert(user)
-          .values({ id, email: lowEmail, password: await argon2.hash(password) });
+          .values({ id, email: lowEmail, password: await argon2.hash(password), userType });
         return res.status(200).json({ message: 'Teacher account crated' });
       } catch (err) {
         return res.status(500).json({ error: 'Failed to create user' });

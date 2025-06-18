@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 
 // Auth routes
 router.post('/auth/login', checkToken, auth.login);
-router.post('/auth/register', checkToken, auth.register);
+router.post('/auth/register', checkToken, multer.single('file'), auth.register);
 router.get('/auth/logout', checkToken, access.level1, auth.logout);
 
 // Test routes

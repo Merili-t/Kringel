@@ -13,5 +13,6 @@ export default table('question_matrix', {
   orderNumber: t.int('order_number').notNull(),
   description: t.text('description').notNull(),
   points: t.int('points').default(0).notNull(),
+  link: t.varchar('link', { length: 255 }).default(null),
   ...timestamps,
 });

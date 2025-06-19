@@ -613,11 +613,6 @@ function collectQuizData() {
     answerVariables: answerVariables,
   };
   return finalData;
-
-
-  console.log("Final question data payload:", finalData);
-  return finalData;
-
 }
 
 class QuizBuilder {
@@ -2113,61 +2108,7 @@ function getCurrentTestId() {
 
 
 document.querySelector('.next-question').addEventListener('click', async () => {
-  //  Save the current question in the form
-  try {
-    const ok = await saveCurrentQuestion();
-    if (!ok) throw new Error("Ei õnnestunud salvestada");
-  } catch (err) {
-    console.error("Viimane küsimus salvestamisel ebaõnnestus:", err);
-    alert("Viimane küsimus salvestamine ebaõnnestus, palun proovi uuesti.");
-    return;
-  }
-
-  //Gather the rest of the quiz data and upload test+blocks+questions
-  const quizData = quizBuilder.collectQuizData(blockId);
-  if (!quizData) {
-    alert("Palun sisesta küsimuse andmed enne testi lõpetamist!");
-    return;
-  }
-
-  try {
-    // 1. Create the Test
-    const testResult = await createFetch('/test/upload', 'POST', {
-      name:       quizData.name || "Nimetu test",
-      description: quizData.description || "Kirjeldus puudub",
-      start:      quizData.start,
-      end:        quizData.end,
-      timeLimit:  quizData.timelimit
-    });
-    if (!testResult.id) throw new Error("Testi loomine ebaõnnestus");
-
-    // 2. Create the Block
-    const blockResult = await createFetch('/block/upload', 'POST', {
-      testId:      testResult.id,
-      blockNumber: 1
-    });
-    if (!blockResult.id) throw new Error("Ploki loomine ebaõnnestus");
-
-    // 3. Upload any remaining questions
-    const questions = quizData.block[0].blockQuestions;
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      await createFetch('/question/upload', 'POST', {
-        blockId:        blockResult.id,
-        question:       q.question,
-        points:         q.points,
-        answerType:     q.answerType,
-        orderNumber:    i + 1,
-        answerVariables:q.answerVariables
-      });
-    }
-
-    alert("Test salvestatud edukalt!");
-    window.location.href = `/test/${testResult.id}`;
-  } catch (err) {
-    console.error("Viga lõpliku salvestusega:", err);
-    alert("Midagi läks valesti salvestamisel, proovi uuesti.");
-  }
+  window.location.href = '/html/preview.html';
 });
 
 

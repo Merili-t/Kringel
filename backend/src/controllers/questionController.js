@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
 import db from '../database/drizzle.js';
+import minio from '../database/minio.js';
 import questionModel from '../database/models/question.js';
 import questionMatrix from '../database/models/questionMatrix.js';
 import answerVariant from '../database/models/answerVariant.js';

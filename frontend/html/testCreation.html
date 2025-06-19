@@ -26,79 +26,81 @@
             </div>
         </header>
 
-        <div class="content">
-            <div class="left-column">
-                <div class="form-group">
-                    <label for="question-text" class="poppins-semibold" style="font-size: 22px;">Küsimus</label>
-                    <textarea id="question-text" placeholder="tekst" class="poppins-regular"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="image-upload" class="poppins-semibold" style="font-size: 22px;">Soovi korral lisa pilt</label>
-                    <div class="image-upload-area" id="image-upload">
-                        <div class="image-icon">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <polyline points="21,15 16,10 5,21"/>
-                            </svg>
-                        </div>
-                        <div class="upload-pic poppins-regular">Vajuta kastikesele, et laadida pilt üles</div>
+        <form id="createTest">
+            <div class="content">
+                <div class="left-column">
+                    <div class="form-group">
+                        <label for="question-text" class="poppins-semibold" style="font-size: 22px;">Küsimus</label>
+                        <textarea id="question-text" placeholder="tekst" class="poppins-regular" name="question"></textarea>
                     </div>
-                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+                    <div class="form-group">
+                        <label for="image-upload" class="poppins-semibold" style="font-size: 22px;">Soovi korral lisa pilt</label>
+                        <div class="image-upload-area" id="image-upload">
+                            <div class="image-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21,15 16,10 5,21"/>
+                                </svg>
+                            </div>
+                            <div class="upload-pic poppins-regular">Vajuta kastikesele, et laadida pilt üles</div>
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="additional-points">
+                        <label for="additional-points" class="poppins-bold">Kas soovid lisada küsimusele punktkisumma?</label>
+                        <input type="text" class="points-input poppins-regular" placeholder="20p" id="points-input">
+                    </div>
+
+                    <!-- <div class="form-group checkbox-group">
+                        <input type="checkbox" id="auto-control">
+                        <label for="auto-control">Automaatkontroll?</label>
+                    </div> -->
                 </div>
 
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="additional-points">
-                    <label for="additional-points" class="poppins-bold">Kas soovid lisada küsimusele punktkisumma?</label>
-                    <input type="text" class="points-input poppins-regular" placeholder="20p" id="points-input">
-                </div>
+                <div class="right-column">
+                    <div class="form-group">
+                        <label for="answer-type" class="poppins-semibold" style="font-size: 22px;">Vali vastusetüüp</label>
+                        <div class="dropdown" id="answer-type-dropdown">
+                            <div class="dropdown-selected poppins-semibold" id="dropdown-selected">
+                                <span>Vali vastusetüüp...</span>
+                                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="dropdown-options" id="dropdown-options">
+                                <div class="dropdown-option poppins-medium" data-value="luhike-tekst">Lühike tekst</div>
+                                <div class="dropdown-option poppins-medium" data-value="pikk-tekst">Pikk tekst</div>
+                                <div class="dropdown-option poppins-medium" data-value="mitu-oiget">Mitu õiget</div>
+                                <div class="dropdown-option poppins-medium" data-value="uks-oige">Üks õige</div>
+                                <div class="dropdown-option poppins-medium" data-value="maatriks-uks">Maatriks - üks õige</div>
+                                <div class="dropdown-option poppins-medium" data-value="maatriks-mitu">Maatriks - mitu õiget</div>
+                                <div class="dropdown-option poppins-medium" data-value="joonistamine">Joonistamine</div>
+                                <div class="dropdown-option poppins-medium" data-value="interaktiivne">Interaktiivne pilt</div>
+                                <div class="dropdown-option poppins-medium" data-value="keemia_tasakaalustamine">Keemia tasakaalustamine</div>
+                                <div class="dropdown-option poppins-medium" data-value="keemia_ahelad">Keemia ahelad</div>
+                                <div class="dropdown-option poppins-medium" data-value="latex-kalkulaator">Matemaatiline kalkulaator</div>
 
-                <!-- <div class="form-group checkbox-group">
-                    <input type="checkbox" id="auto-control">
-                    <label for="auto-control">Automaatkontroll?</label>
-                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-section" id="preview-section" style="display: none;">
+                        <h3 class="poppins-bold">Eelvaade</h3>
+                        <div class="preview-content" id="preview-content">
+                            <div id="calculator-wrapper" style="display:none; margin-top: 1rem;">
+                                <iframe id="calculator-iframe" src="" width="100%" height="600" style="border:1px solid #ccc;"></iframe>
+                                <p class="poppins-regular"><strong>Saadetud vastus:</strong> <span id="calculator-answer-preview"></span></p>
+                            </div>
+                            <div id="generic-preview-wrapper" style="display:none;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="right-column">
-                <div class="form-group">
-                    <label for="answer-type" class="poppins-semibold" style="font-size: 22px;">Vali vastusetüüp</label>
-                    <div class="dropdown" id="answer-type-dropdown">
-                        <div class="dropdown-selected poppins-semibold" id="dropdown-selected">
-                            <span>Vali vastusetüüp...</span>
-                            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="dropdown-options" id="dropdown-options">
-                            <div class="dropdown-option poppins-medium" data-value="luhike-tekst">Lühike tekst</div>
-                            <div class="dropdown-option poppins-medium" data-value="pikk-tekst">Pikk tekst</div>
-                            <div class="dropdown-option poppins-medium" data-value="mitu-oiget">Mitu õiget</div>
-                            <div class="dropdown-option poppins-medium" data-value="uks-oige">Üks õige</div>
-                            <div class="dropdown-option poppins-medium" data-value="maatriks-uks">Maatriks - üks õige</div>
-                            <div class="dropdown-option poppins-medium" data-value="maatriks-mitu">Maatriks - mitu õiget</div>
-                            <div class="dropdown-option poppins-medium" data-value="joonistamine">Joonistamine</div>
-                            <div class="dropdown-option poppins-medium" data-value="interaktiivne">Interaktiivne pilt</div>
-                            <div class="dropdown-option poppins-medium" data-value="keemia_tasakaalustamine">Keemia tasakaalustamine</div>
-                            <div class="dropdown-option poppins-medium" data-value="keemia_ahelad">Keemia ahelad</div>
-                            <div class="dropdown-option poppins-medium" data-value="latex-kalkulaator">Matemaatiline kalkulaator</div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="preview-section" id="preview-section" style="display: none;">
-                    <h3 class="poppins-bold">Eelvaade</h3>
-                    <div class="preview-content" id="preview-content">
-                        <div id="calculator-wrapper" style="display:none; margin-top: 1rem;">
-                            <iframe id="calculator-iframe" src="" width="100%" height="600" style="border:1px solid #ccc;"></iframe>
-                            <p class="poppins-regular"><strong>Saadetud vastus:</strong> <span id="calculator-answer-preview"></span></p>
-                        </div>
-                        <div id="generic-preview-wrapper" style="display:none;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
 
         <div class="footer">
             <button class="btn-secondary poppins-semibold" id="delete-question">Kustuta küsimus</button>

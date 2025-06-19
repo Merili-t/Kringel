@@ -1,6 +1,6 @@
 # Kringel 🥨
 <p align="right">
-  <img src="images/kringel.png" alt="Kringel" width="200">
+  <img src="frontend/images/kringel.png" alt="Kringel" width="200">
 </p>
 korralikult vormistatud lähtekood; NB! Lisa kindlasti GitHubi README.md:
 README.md fail peab sisaldama järgmist:

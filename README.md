@@ -22,14 +22,22 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
  </p>
  
  ### Õpilase vaade
+<p float="left">
+  <img src="frontend/images/homepage.png" width="400" />
+  <img src="frontend/images/guide.png" width="400" />
+  <img src="frontend/images/contacts.png" width="400" />
+  <img src="frontend/images/solving.png" width="400" />
+</p>
 
- ### Adminni vaade
+
+ ### Admini vaade
 <p align="left">
   <img src="frontend/images/admin.png" alt="kõik testid" width="400">
   <img src="frontend/images/new_account.png" alt="kõik vastused" width="400">
  </p>
 
-## Töötava tarkvara link
+
+## Töötava tarkvara link🚀
 
 
 ## Kasutusjuhend

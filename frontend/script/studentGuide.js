@@ -4,7 +4,7 @@ import createFetch from "./utils/createFetch";
 sessionStorage.setItem(
   "currentTest",
   JSON.stringify({
-    testId: "0197875c-958f-7438-80ee-6a551f932893",
+    testId: "01978702-38ca-75b7-8bd3-6af9156f44d9",
     // You can add other properties here if needed, e.g., teamId if already known.
   })
 );
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   testId = getTestIdFromUrl();
   // If no testId is provided in the URL, use the fallback test ID.
   if (!testId) {
-    testId = "0197875c-958f-7438-80ee-6a551f932893";
+    testId = "01978702-38ca-75b7-8bd3-6af9156f44d9";
     console.log("No testId from URL; using fallback:", testId);
   } else {
     console.log("Retrieved testId from URL:", testId);

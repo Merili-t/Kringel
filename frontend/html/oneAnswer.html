@@ -10,9 +10,7 @@
   <link rel="stylesheet" href="../style/popups.css">
 </head>
 <body>
-  <a href="testAnswers.html" class="back-arrow">
-    &#8592; Tagasi
-  </a>
+  <a href="testAnswers.html" class="back-arrow">&#8592; Tagasi</a>
   <section class="navigation-buttons">
     <div class="nav-container">
       <div class="logo-wrapper">
@@ -38,19 +36,22 @@
     </div>
   </section>
 
+  <!-- Team heading -->
   <div id="teamName" class="teamName">
     <h1 class="poppins-bold">Tiimi nimi</h1>
   </div>
+  
+  <!-- Answer display container -->
   <div class="answer-container">
     <h2 class="question poppins-semibold">KÜSIMUS</h2>
     <div class="answer-display">
       <img id="answer-image" src="" alt="Vastuse pilt" style="max-width: 100%; display: none; border-radius: 8px;" />
       <p id="answer-text" class="poppins-regular" style="margin-top: 10px;"></p>
     </div>
-
     <div class="meta poppins-light" style="margin-top: 15px; color: #666;"></div>
   </div>
 
+  <!-- Module-scripts -->
   <script type="module" src="../script/router.js"></script>
   <script src="../popups/popupHelper.js" defer></script>
   <script src="../script/buttons.js"></script>
@@ -58,7 +59,7 @@
   <script type="module" src="../script/testAnswers.js"></script>
   <script type="module" src="../popups/logout.js" defer></script>
 
-
+  <!-- Popup elements -->
   <div id="overlay" class="popup-overlay" onclick="closePopup()"></div>
   <div id="custom-popup" class="popup">
     <h3 id="popup-title" class="poppins-medium"></h3>

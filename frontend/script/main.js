@@ -1,53 +1,48 @@
-//Main application functionality
-/* 
-//Logout function
-function logout() {
-    if (confirm('Kas olete kindel, et soovite välja logida?')) {
-        alert('Välja logitud');
-        // Here you would typically redirect to login page
-        // window.location.href = '/login';
-    }
+// main.js
+
+// Stub for tests initialization (you can extend this as required)
+function initializeTests(){
+    console.log("Tests initialized in main.js");
+    // For example, you could call renderTests here if it weren't already auto‑triggered in testAnswers.js.
 }
- */
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Application initializing...');
-    
-    // Initialize router
+
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Application initializing...");
+
+    // Initialize router via function from testAnswers.js
     initializeRouter();
-    
-    // Initialize tests
+
+    // Initialize tests (stub function)
     initializeTests();
-    
-    console.log('Application initialized successfully');
+
+    console.log("Application initialized successfully");
 });
 
 // Global error handler
-window.addEventListener('error', function(event) {
-    console.error('Global error:', event.error);
+window.addEventListener("error", function(event) {
+    console.error("Global error:", event.error);
 });
 
 // Global unhandled promise rejection handler
-window.addEventListener('unhandledrejection', function(event) {
-    console.error('Unhandled promise rejection:', event.reason);
+window.addEventListener("unhandledrejection", function(event) {
+    console.error("Unhandled promise rejection:", event.reason);
 });
 
 // Utility functions
 function formatDate(date) {
-    if (!date) return '';
+    if (!date) return "";
     const d = new Date(date);
-    return d.toLocaleDateString('et-EE');
+    return d.toLocaleDateString("et-EE");
 }
 
 function formatTime(date) {
-    if (!date) return '';
+    if (!date) return "";
     const d = new Date(date);
-    return d.toLocaleTimeString('et-EE');
+    return d.toLocaleTimeString("et-EE");
 }
 
-// Export functions for potential use in other scripts
+// Expose utilities globally
 window.appUtils = {
     formatDate,
-    formatTime,
-    logout
+    formatTime
 };

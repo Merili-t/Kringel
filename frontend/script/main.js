@@ -1,7 +1,5 @@
 // main.js
 
-import { logout, initializeRouter } from "./testAnswers.js";
-
 // Stub for tests initialization (you can extend this as required)
 function initializeTests(){
     console.log("Tests initialized in main.js");
@@ -45,7 +43,6 @@ function formatTime(date) {
 
 // Expose utilities globally
 window.appUtils = {
-    logout,
     formatDate,
     formatTime
 };

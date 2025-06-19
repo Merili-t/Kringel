@@ -59,38 +59,56 @@ async function loadTestData(testId) {
 
     const token = localStorage.getItem("token") || "";
 
-    // Fetch test details using the same testId.
     const testData = await createFetch(
-      `/test/${testId}`, 
-      "GET", 
-      "", 
+      `/test/${testId}`,
+      "GET",
+      "",
       { headers: { "Authorization": `Bearer ${token}` } }
     );
 
-    // Fetch block data using the same testId.
-    const blockData = await createFetch(`/block/test/${testId}`, "GET", "");
+    const blockRes = await createFetch(`/block/test/${testId}`, "GET", "");
+    const blockList = Array.isArray(blockRes.blocks)
+      ? blockRes.blocks
+      : Array.isArray(blockRes)
+        ? blockRes
+        : [];
 
-    if (!testData || !Array.isArray(blockData.blocks)) {
-      throw new Error("Vigased andmed");
-    }
+    const relevantBlocks = blockList.filter(b => b.testId === testId);
 
     const allBlocks = [];
 
-    for (const block of blockData.blocks) {
-      const response = await createFetch(`/question/block/${block.id}`, "GET", "");
-      const questions = Array.isArray(response.blockQuestions)
-        ? response.blockQuestions
-        : [];
+    for (const block of relevantBlocks) {
+      const qRes = await createFetch(`/question/block/${block.id}`, "GET", "");
+      let rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
 
-      const formattedQuestions = questions.map((q) => ({
-        type: mapQuestionType(q.type),
-        text: q.description || "",
-        points: q.points ?? 0,
+      rawQs = rawQs.filter(q => q.blockId === block.id);
+
+      const sortedQs = rawQs.sort((a, b) => (a.question_order ?? 0) - (b.question_order ?? 0));
+
+      const formattedQuestions = await Promise.all(sortedQs.map(async (q) => {
+        let answerVariables = [];
+        if (q.type === 0 || q.type === 1) {
+          try {
+            const aRes = await createFetch(`/answer/question/${q.id}`, "GET");
+            answerVariables = aRes?.answers ?? [];
+          } catch (err) {
+            console.warn("Vastusevariantide laadimine ebaõnnestus küsimusele", q.id);
+          }
+        }
+
+        return {
+          id: q.id,
+          type: mapQuestionType(q.type),
+          rawType: q.type,
+          text: q.description || "",
+          points: q.points ?? 0,
+          answerVariables
+        };
       }));
 
       allBlocks.push({
         blockOrder: block.block_number ?? 0,
-        questions: formattedQuestions,
+        questions: formattedQuestions
       });
     }
 
@@ -101,9 +119,8 @@ async function loadTestData(testId) {
     populateTestData(testData, blocks.flat().length);
     renderBlocks();
     updateProgressBar();
-
-  
     showMainContent();
+
   } catch (error) {
     console.error("Testi laadimine ebaõnnestus:", error);
     showError("Testi laadimine ebaõnnestus");

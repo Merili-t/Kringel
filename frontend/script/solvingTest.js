@@ -69,21 +69,32 @@ async function loadTestData(testId) {
 
     const allBlocks = [];
     for (const block of relevantBlocks) {
-      const qRes = await createFetch(`/question/block/${block.id}`, "GET");
-      const rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
+    const qRes = await createFetch(`/question/block/${block.id}`, "GET");
+    const rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
 
-      // Filtreeri ainult selle ploki küsimused
-      const qs = rawQs.filter(q => q.blockId === block.id);
+    const qs = await Promise.all(rawQs.map(async q => {
+      let answerVariables = [];
+      if (q.type === 0 || q.type === 1) {
+        try {
+          const aRes = await createFetch(`/answer/question/${q.id}`, "GET");
+          answerVariables = aRes?.answers ?? [];
+        } catch (err) {
+          console.warn("[DEBUG] answerVariables fetch failed for question", q.id);
+        }
+      }
 
-      const formatted = qs.map(q => ({
+      return {
         id: q.id,
         type: q.type,
         text: q.description,
-        points: q.points ?? 0
-      }));
+        points: q.points ?? 0,
+        answerVariables
+      };
+    }));
 
-      allBlocks.push({ order: block.block_number ?? 0, questions: formatted });
-    }
+    allBlocks.push({ order: block.block_number ?? 0, questions: qs });
+  }
+
 
     blocks = allBlocks.sort((a, b) => a.order - b.order).map(b => b.questions);
     console.log("[DEBUG] Final blocks:", blocks);
@@ -114,40 +125,76 @@ function renderBlocks() {
   const c = elements.questionsWrapper;
   c.innerHTML = "";
   let num = 1;
+
   blocks.forEach((blk, idx) => {
     const div = document.createElement("div");
     div.className = "block";
     if (idx === currentBlock) div.classList.add("active");
+
     const grid = document.createElement("div");
     grid.className = "question-grid";
+
     blk.forEach(q => {
       const wrap = document.createElement("div");
       wrap.className = "question";
       const card = document.createElement("div");
       card.className = "question-card";
+
       const header = `<div class="question-header"><strong>${num}. </strong>${q.text} <span class="points-badge">${q.points}p</span></div>`;
       const hidId = `<input type="hidden" class="question-id" value="${q.id}"/>`;
       const hidTyp = `<input type="hidden" class="question-type" value="${q.type}"/>`;
 
-      if (["text", "one_correct", "short"].includes(q.type.toString())) {
-        card.innerHTML = `${header}${hidId}${hidTyp}<input type="text" class="auto-save-input" placeholder="Vastus..."/>`;
-        card.querySelector("input").addEventListener("blur", () => saveSingleAnswer(card));
+      if (q.type === 0 || q.type === 1) {
+        // Üks või mitu õiget
+        const inputType = q.type === 0 ? "radio" : "checkbox";
+        const nameAttr = `question-${q.id}`;
+
+        const options = q.answerVariables || [];
+        const optionsHTML = options.length > 0
+          ? options.map((opt, idx) => `
+              <label style="display:block;margin:4px 0;">
+                <input type="${inputType}" name="${nameAttr}" value="${opt.answer}" data-index="${idx}">
+                ${opt.answer}
+              </label>
+            `).join("")
+          : "<p><i>Vastusevariandid puuduvad</i></p>";
+
+        card.innerHTML = `${header}${hidId}${hidTyp}<div class="choice-options">${optionsHTML}</div>`;
+
+        const inputs = card.querySelectorAll(`input[type="${inputType}"]`);
+        inputs.forEach(input => {
+          input.addEventListener("change", () => saveChoiceAnswer(card));
+        });
+
       } else if (q.type === 7) {
-        card.innerHTML = `${header}${hidId}${hidTyp}<iframe src="../html/calculator.html" class="calculator-iframe"></iframe><input type="hidden" class="calculator-answer"/>`;
+        // Kalkulaator
+        card.innerHTML = `${header}${hidId}${hidTyp}
+          <iframe src="../html/calculator.html" class="calculator-iframe"></iframe>
+          <input type="hidden" class="calculator-answer"/>`;
+
       } else if (q.type === 5) {
-        card.innerHTML = `${header}${hidId}${hidTyp}<iframe src="../html/chemistryKeyboard.html" class="chemistry-iframe"></iframe><input type="hidden" class="chemistry-answer"/>`;
+        // Keemia tasakaalustamine
+        card.innerHTML = `${header}${hidId}${hidTyp}
+          <iframe src="../html/chemistryKeyboard.html" class="chemistry-iframe"></iframe>
+          <input type="hidden" class="chemistry-answer"/>`;
+
       } else {
-        card.innerHTML = `${header}${hidId}${hidTyp}<textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>`;
-        card.querySelector("textarea").addEventListener("blur", () => saveSingleAnswer(card));
+        // Pikk või lühike tekst
+        card.innerHTML = `${header}${hidId}${hidTyp}
+          <textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>`;
+        const ta = card.querySelector("textarea");
+        ta.addEventListener("blur", () => saveSingleAnswer(card));
       }
 
       wrap.appendChild(card);
       grid.appendChild(wrap);
       num++;
     });
+
     div.appendChild(grid);
     c.appendChild(div);
   });
+
   renderBlockIndicators();
 }
 
@@ -269,6 +316,36 @@ async function saveSingleAnswer(card) {
     console.error(e);
   }
 }
+
+async function saveChoiceAnswer(card) {
+  try {
+    const attemptId = sessionStorage.getItem('attemptId');
+    if (!attemptId) return;
+
+    const qId = card.querySelector('.question-id').value;
+    const qType = Number(card.querySelector('.question-type').value);
+
+    // Leia kõik valikud (checkboxid või raadionupud)
+    const selectedInputs = card.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
+    const selectedValues = Array.from(selectedInputs).map(input => input.value);
+    const ans = selectedValues.join("||"); // või JSON.stringify([...]) kui eelistad
+
+    // Ära salvesta uuesti kui vastus pole muutunud
+    if (lastSavedAnswers.get(qId) === ans) return;
+    lastSavedAnswers.set(qId, ans);
+
+    const fd = new FormData();
+    fd.append('attemptId', attemptId);
+    fd.append('questionId', qId);
+    fd.append('questionType', qType);
+    fd.append('answer', ans);
+
+    await createFetch('/team/answer/upload', 'POST', fd);
+  } catch (e) {
+    console.error("Error saving choice answer:", e);
+  }
+}
+
 
 window.addEventListener("message", function(event) {
   if (event.data && event.data.type === "CALCULATOR_ANSWER") {

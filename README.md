@@ -1,5 +1,5 @@
 # Kringel 🥨
-<img src="images/banner.png" alt="Kringel" width="300">
+<img src="frontend/images/banner.png" alt="Kringel" width="300">
 korralikult vormistatud lähtekood; NB! Lisa kindlasti GitHubi README.md:
 README.md fail peab sisaldama järgmist:
 - projekti või lahenduse (toote/teenuse) nime;

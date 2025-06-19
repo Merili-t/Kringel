@@ -1,7 +1,7 @@
 import createFetch from "./utils/createFetch";
 
 // Retrieve current test data from session storage.
-const currentTest = JSON.parse(sessionStorage.getItem("currentTest") || "01978709-182a-777d-936e-e89b7c6c692c");
+const currentTest = JSON.parse(sessionStorage.getItem("currentTest") || "01978760-961e-709f-8245-7717015e12f7");
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("teamUpload");

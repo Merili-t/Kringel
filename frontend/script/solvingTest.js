@@ -21,8 +21,6 @@ const elements = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[DEBUG] DOMContentLoaded event fired.");
-
   const urlId = getTestIdFromUrl();
   if (urlId) {
     testId = urlId;
@@ -37,12 +35,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (!testId) {
-    console.error("[DEBUG] testId puudub!");
     showError("Testi ID puudub. Proovi uuesti.");
     return;
   }
 
-  console.log("[DEBUG] Test ID:", testId);
   sessionStorage.setItem("testId", testId);
   await loadTestData(testId);
 });
@@ -54,50 +50,63 @@ function getTestIdFromUrl() {
 
 async function loadTestData(testId) {
   try {
-    console.log("[DEBUG] Loading test data...");
     showLoading();
 
     const testData = await createFetch(`/test/${testId}`, "GET");
-    console.log("[DEBUG] Test data:", testData);
-
     const blockRes = await createFetch(`/block/test/${testId}`, "GET");
-    console.log("[DEBUG] Block data:", blockRes);
 
-    let blockList = Array.isArray(blockRes.blocks) ? blockRes.blocks : Array.isArray(blockRes) ? blockRes : [];
+    let blockList = Array.isArray(blockRes.blocks)
+      ? blockRes.blocks
+      : Array.isArray(blockRes)
+        ? blockRes
+        : [];
 
-    const relevantBlocks = blockList.filter(b => b.testId === testId);
-
+    const relevantBlocks = blockList.filter(b => String(b.testId) === String(testId));
     const allBlocks = [];
+
     for (const block of relevantBlocks) {
-    const qRes = await createFetch(`/question/block/${block.id}`, "GET");
-    const rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
+      const qRes = await createFetch(`/question/block/${block.id}`, "GET");
+      let rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
 
-    const qs = await Promise.all(rawQs.map(async q => {
-      let answerVariables = [];
-      if (q.type === 0 || q.type === 1) {
-        try {
-          const aRes = await createFetch(`/answer/question/${q.id}`, "GET");
-          answerVariables = aRes?.answers ?? [];
-        } catch (err) {
-          console.warn("[DEBUG] answerVariables fetch failed for question", q.id);
+      rawQs = rawQs.filter(q => String(q.blockId) === String(block.id));
+
+      const qs = await Promise.all(rawQs.map(async q => {
+        let answerVariables = [];
+        if ((q.type === 0 || q.type === 1) && (!Array.isArray(q.answerVariables) || q.answerVariables.length === 0)) {
+          // Kui andmebaas ei anna kaasa answerVariables, proovi laadida eraldi
+          try {
+            const vRes = await createFetch(`/variant/question/${q.id}`, "GET");
+            if (Array.isArray(vRes)) {
+              answerVariables = vRes.map(av => ({
+                answer: av.answer,
+                correct: av.correct === true
+              }));
+            }
+          } catch (err) {
+            console.warn(`Ei saanud laadida vastusevariante küsimusele ${q.id}`);
+          }
+        } else if (Array.isArray(q.answerVariables)) {
+          answerVariables = q.answerVariables.map(av => ({
+            answer: av.answer,
+            correct: av.correct === true
+          }));
         }
-      }
 
-      return {
-        id: q.id,
-        type: q.type,
-        text: q.description,
-        points: q.points ?? 0,
-        answerVariables
-      };
-    }));
+        return {
+          id: q.id,
+          type: q.type,
+          text: q.description,
+          points: q.points ?? 0,
+          answerVariables
+        };
+      }));
 
-    allBlocks.push({ order: block.block_number ?? 0, questions: qs });
-  }
+      allBlocks.push({ order: block.block_number ?? 0, questions: qs });
+    }
 
-
-    blocks = allBlocks.sort((a, b) => a.order - b.order).map(b => b.questions);
-    console.log("[DEBUG] Final blocks:", blocks);
+    blocks = allBlocks
+      .sort((a, b) => a.order - b.order)
+      .map(b => b.questions);
 
     populateTestData(testData, blocks.flat().length);
     renderBlocks();
@@ -145,7 +154,7 @@ function renderBlocks() {
       const hidTyp = `<input type="hidden" class="question-type" value="${q.type}"/>`;
 
       if (q.type === 0 || q.type === 1) {
-        // Üks või mitu õiget
+        // Ühe- või mitme valikvastusega küsimus
         const inputType = q.type === 0 ? "radio" : "checkbox";
         const nameAttr = `question-${q.id}`;
 
@@ -237,8 +246,6 @@ function moveToNextBlock() {
   }
 }
 
-
-
 function startTimer(sec) {
   let t = sec;
   interval = setInterval(() => {
@@ -301,7 +308,6 @@ async function saveSingleAnswer(card) {
     const qId = card.querySelector('.question-id').value;
     const qType = Number(card.querySelector('.question-type').value);
 
-    // dont save again if no change
     if (lastSavedAnswers.get(qId) === ans) return;
     lastSavedAnswers.set(qId, ans);
 
@@ -328,9 +334,8 @@ async function saveChoiceAnswer(card) {
     // Leia kõik valikud (checkboxid või raadionupud)
     const selectedInputs = card.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
     const selectedValues = Array.from(selectedInputs).map(input => input.value);
-    const ans = selectedValues.join("||"); // või JSON.stringify([...]) kui eelistad
+    const ans = selectedValues.join("||"); 
 
-    // Ära salvesta uuesti kui vastus pole muutunud
     if (lastSavedAnswers.get(qId) === ans) return;
     lastSavedAnswers.set(qId, ans);
 

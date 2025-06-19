@@ -183,3 +183,22 @@ body {
   background-color: #999;
   color: black;
 }
+
+
+.chemistry-iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  resize: none;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.calculator-iframe{
+  width: 100%;
+  height: 600px;
+  border: none;
+  resize: none;
+  overflow: hidden;
+  border-radius: 8px;
+}

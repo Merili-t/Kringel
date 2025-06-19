@@ -134,6 +134,8 @@ function renderBlocks() {
         card.querySelector("input").addEventListener("blur", () => saveSingleAnswer(card));
       } else if (q.type === 7) {
         card.innerHTML = `${header}${hidId}${hidTyp}<iframe src="../html/calculator.html" class="calculator-iframe"></iframe><input type="hidden" class="calculator-answer"/>`;
+      } else if (q.type === 5) {
+        card.innerHTML = `${header}${hidId}${hidTyp}<iframe src="../html/chemistryKeyboard.html" class="chemistry-iframe"></iframe><input type="hidden" class="chemistry-answer"/>`;
       } else {
         card.innerHTML = `${header}${hidId}${hidTyp}<textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>`;
         card.querySelector("textarea").addEventListener("blur", () => saveSingleAnswer(card));
@@ -246,9 +248,15 @@ async function saveSingleAnswer(card) {
     if (ta) ans = ta.value.trim();
     const ci = card.querySelector('.calculator-answer');
     if (ci) ans = ci.value.trim();
+    const chem = card.querySelector('.chemistry-answer');
+    if (chem) ans = chem.value.trim();
 
     const qId = card.querySelector('.question-id').value;
     const qType = Number(card.querySelector('.question-type').value);
+
+    // dont save again if no change
+    if (lastSavedAnswers.get(qId) === ans) return;
+    lastSavedAnswers.set(qId, ans);
 
     const fd = new FormData();
     fd.append('attemptId', attemptId);
@@ -261,6 +269,50 @@ async function saveSingleAnswer(card) {
     console.error(e);
   }
 }
+
+window.addEventListener("message", function(event) {
+  if (event.data && event.data.type === "CALCULATOR_ANSWER") {
+    const answer = String(event.data.payload || '');
+
+    // ainult aktiivse ploki sees oleva esimese kalkulaatori salvestamine
+    const activeBlock = document.querySelector(".block.active");
+    if (!activeBlock) return;
+
+    const iframe = activeBlock.querySelector(".calculator-iframe");
+    if (!iframe) return;
+
+    const card = iframe.closest(".question-card");
+    if (!card) return;
+
+    const hiddenInput = card.querySelector(".calculator-answer");
+    if (!hiddenInput) return;
+
+    hiddenInput.value = answer;
+    saveSingleAnswer(card);
+  }
+});
+
+window.addEventListener("message", function(event) {
+  if (event.data && event.data.type === "chemistry-balance-answer") {
+    const answer = String(event.data.value || '');
+
+    const activeBlock = document.querySelector(".block.active");
+    if (!activeBlock) return;
+
+    const iframe = activeBlock.querySelector(".chemistry-iframe");
+    if (!iframe) return;
+
+    const card = iframe.closest(".question-card");
+    if (!card) return;
+
+    const hiddenInput = card.querySelector(".chemistry-answer");
+    if (!hiddenInput) return;
+
+    hiddenInput.value = answer;
+    saveSingleAnswer(card);
+  }
+});
+
 
 elements.nextButton.addEventListener('click', moveToNextBlock);
 elements.endButton.addEventListener('click', endTest);

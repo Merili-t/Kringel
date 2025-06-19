@@ -1875,7 +1875,7 @@ document.getElementById("add-block").addEventListener("click", async () => {
     }
 
     // Update session storage with the new block ID
-    sessionStorage.setItem("blockId", newBlockResponse.blockId);
+    sessionStorage.setItem("blockId", newBlockResponse.id);
 
     // Increment the block number for the next time
     incrementBlockNumber();

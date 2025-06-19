@@ -1693,135 +1693,147 @@ class QuizBuilder {
     }
 
         // Drawing canvas methods
-    initializeDrawing() {
-        const canvas = document.getElementById('drawing-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        let mode = 'draw'; // Modes: "draw" or "erase"
-        const eraserSize = 20; // You can base this off your brush-size input if desired
-        
-        // Create and insert a simple eraser toggle button into your existing controls.
-        const colorInput = document.getElementById('drawing-color');
-        const brushSize = document.getElementById('brush-size');
-        const controlsContainer = canvas.previousElementSibling;
-        
-        const eraserBtn = document.createElement('button');
-        eraserBtn.textContent = 'Kustutama';
-        eraserBtn.style.margin = '5px';
-        eraserBtn.style.padding = '8px 12px';
-        eraserBtn.style.background = '#9e9e9e';
-        eraserBtn.style.color = 'white';
-        eraserBtn.style.border = 'none';
-        eraserBtn.style.borderRadius = '4px';
-        eraserBtn.style.cursor = 'pointer';
-        
-        eraserBtn.addEventListener('click', () => {
-            // Toggle mode between drawing and erasing.
-            mode = mode === 'draw' ? 'erase' : 'draw';
-            eraserBtn.textContent = mode === 'erase' ? 'Joonistama' : 'Kustutama';
-        });
-        
-        // Append the eraser button to your drawing controls.
-        if (controlsContainer) {
-            controlsContainer.appendChild(eraserBtn);
-        }
-        
-        // Helper to get mouse position relative to the canvas.
-        const getMousePos = (canvas, e) => {
-            const rect = canvas.getBoundingClientRect();
-            return [e.clientX - rect.left, e.clientY - rect.top];
-        };
-        
-        // Start drawing (or erasing)
-        const startDrawing = (e) => {
-            isDrawing = true;
-            [lastX, lastY] = getMousePos(canvas, e);
-        };
-        
-        // Stop drawing when the mouse is released or leaves the canvas.
-        const stopDrawing = () => {
-            isDrawing = false;
-        };
-        
-        // The drawing (or erasing) function.
-        const draw = (e) => {
-            if (!isDrawing) return;
-            const [currentX, currentY] = getMousePos(canvas, e);
-            
-            if (mode === 'draw') {
-            // Drawing mode: draw a line from last position to current
-            const color = colorInput ? colorInput.value : '#000000';
-            const size = brushSize ? brushSize.value : 3;
-            ctx.strokeStyle = color;
-            ctx.lineWidth = size;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(currentX, currentY);
-            ctx.stroke();
-            } else if (mode === 'erase') {
-            // Eraser mode: clear a rectangle around the current position
-            // (You can adjust eraserSize as needed)
-            ctx.clearRect(currentX - eraserSize / 2, currentY - eraserSize / 2, eraserSize, eraserSize);
-            }
-            
-            [lastX, lastY] = [currentX, currentY];
-        };
-        
-        // Attach mouse events to the canvas.
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        
-        // Also add simple touch events for mobile devices.
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            // Convert touch to a synthetic mouse event
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousedown', {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        });
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const mouseEvent = new MouseEvent('mouseup', {});
-            canvas.dispatchEvent(mouseEvent);
-        });
-        }
+  initializeDrawing() {
+    const canvas = document.getElementById('drawing-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
-    getMousePos(canvas, e) {
-        const rect = canvas.getBoundingClientRect();
-        return [
-            e.clientX - rect.left,
-            e.clientY - rect.top
-        ];
+    let isDrawing = false;
+    let lastX = 0, lastY = 0;
+    let mode = 'draw'; // Modes: "draw" or "erase"
+    const eraserSize = 20; // Adjust as needed
+
+    // Retrieve control elements.
+    const colorInput = document.getElementById('drawing-color');
+    const brushSize = document.getElementById('brush-size');
+    const controlsContainer = canvas.previousElementSibling;
+
+    // Create an eraser toggle button.
+    const eraserBtn = document.createElement('button');
+    eraserBtn.textContent = 'Kustutama';
+    eraserBtn.type = 'button'; // Prevents default form submission or navigation.
+    eraserBtn.style.margin = '5px';
+    eraserBtn.style.padding = '8px 12px';
+    eraserBtn.style.background = '#9e9e9e';
+    eraserBtn.style.color = 'white';
+    eraserBtn.style.border = 'none';
+    eraserBtn.style.borderRadius = '4px';
+    eraserBtn.style.cursor = 'pointer';
+
+    eraserBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Toggle between draw and erase modes.
+      mode = mode === 'draw' ? 'erase' : 'draw';
+      eraserBtn.textContent = mode === 'erase' ? 'Joonistama' : 'Kustutama';
+    });
+
+    if (controlsContainer) {
+      controlsContainer.appendChild(eraserBtn);
     }
 
-    clearCanvas() {
-        const canvas = document.getElementById('drawing-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+    // Helper: Computes the mouse position relative to the canvas.
+    function getMousePos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return [e.clientX - rect.left, e.clientY - rect.top];
     }
+
+    // Begin drawing or erasing.
+    function startDrawing(e) {
+      isDrawing = true;
+      [lastX, lastY] = getMousePos(e);
+    }
+
+    // End the stroke.
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    // Draw (or erase) with a continuous stroke.
+    function draw(e) {
+      if (!isDrawing) return;
+      const [currentX, currentY] = getMousePos(e);
+
+      if (mode === 'draw') {
+        // Normal drawing stroke.
+        ctx.save();
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        const color = colorInput ? colorInput.value : '#000000';
+        const size = brushSize ? Number(brushSize.value) : 3;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = size;
+        ctx.stroke();
+        ctx.restore();
+      } else if (mode === 'erase') {
+        // Eraser-pen mode: use "destination-out" to remove pixels.
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Draw the line between the last and current positions.
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY);
+        ctx.strokeStyle = 'rgba(0,0,0,1)'; // Color is irrelevant.
+        ctx.lineWidth = eraserSize;
+        ctx.stroke();
+
+        // Draw a circle at the current position to cover any gaps.
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, eraserSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      [lastX, lastY] = [currentX, currentY];
+    }
+
+    // Attach mouse events.
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch events for mobile devices.
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousedown', {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    });
+
+    canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      const mouseEvent = new MouseEvent('mouseup', {});
+      canvas.dispatchEvent(mouseEvent);
+    });
+  }
+
+  clearCanvas() {
+    const canvas = document.getElementById('drawing-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
 }
 
 // Initialize the quiz builder

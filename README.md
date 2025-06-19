@@ -2,19 +2,20 @@
 
 # KRINGEL 🥨
 
-Oleme loomas rakendust, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärk on pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
-Testide sees peab olema võimalik:
-- lahendada keemiaülesandeid, sh reaktsioonivõrrandite tasakaalustamine,
+Lõime rakenduse, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärgiks oli pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
+
+**Testide sees oli võimalik:**
+- lahendada keemiaülesandeid, sh tasakaalustada reaktsioonivõrrandeid,
 - visuaalselt kuvada keemilisi ahelaid,
 - kasutada spetsiaalset sümbolitega klaviatuuri füüsikaülesannete lahendamiseks.
 
-Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal test on nähtav) kui ka lahendamise ajale.
+Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui ka lahendamise kestuse osas..
 
 
 ## Instituut 🏛️
-KRINGEL on Tallinna Ülikooli teadusköögi korraldatav gümnaasiumiõpilastele suunatud teadus- ja loovusvõistlus. Teadusköök tegeleb teaduse ja hariduse ühendamisega, pakkudes õpilastele praktilisi võimalusi katsetamiseks, uurimiseks ja uute lahenduste leidmiseks. 
-TLÜ teadusköök korraldab õpilasvõistlust KRINGEL, mille eelvoor toimus seni Google Vormi elektroonilises keskkonnas, kuid olemasolev lahendus ei vastanud täielikult tehnilistele vajadustele. Google’i vormis saavad õpilased vajalikke vastuseid esitada, kuid see piirab teatud sisuelementide, näiteks valemite ja jooniste, lisamist. Samuti puudub ajapiiranguga vastuste esitamise võimalus.
-Meie projekti eesmärk on välja töötada parem lahendus, mis võimaldab õpilastel edastada keerukamaid vastuseid, sh valemeid ja erisümboleid, ilma et peaks neid piltidena üles laadima. Lisaks peab uus lahendus toetama ajapiiranguga vastamise süsteemi, näiteks et vastuste esitamise periood kestaks ühe nädala (7 päeva novembris) ja iga osaleja saab oma vastused esitada kindla ajaraami (nt 1,5 tunni) jooksul.
+
+**KRINGEL** on Tallinna Ülikooli teadusköögi poolt ellu kutsutud gümnaasiumiõpilastele suunatud teadus- ja gastronoomiavõistlus, mis ühendab loovalt loodusteadused ja toidukultuuri.  
+Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete ja maitseelamuste kaudu.
 
 ## Pildid 📷
 ### Õpetaja vaade

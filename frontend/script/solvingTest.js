@@ -76,7 +76,7 @@ async function loadTestData(testId) {
       let answerVariables = [];
       if (q.type === 0 || q.type === 1) {
         try {
-          const aRes = await createFetch(`/answer/question/${q.id}`, "GET");
+          const aRes = await createFetch(`/team/answer/${q.id}`, "GET");
           answerVariables = aRes?.answers ?? [];
         } catch (err) {
           console.warn("[DEBUG] answerVariables fetch failed for question", q.id);

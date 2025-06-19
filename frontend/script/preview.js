@@ -21,13 +21,22 @@ const elements = {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Get the test ID from the URL or fallback to a default value.
-  testId = getTestIdFromUrl() || "01976907-0aad-775e-acc5-a2b5f1f60426";
+  //testId = getTestIdFromUrl() || "01976907-0aad-775e-acc5-a2b5f1f60426";
+  testId = getCurrentTestId();
   await loadTestData(testId);
 });
 
 function getTestIdFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get("testId");
+}
+
+function getCurrentTestId() {
+  const testId = sessionStorage.getItem("testId");
+  if (!testId) {
+    throw new Error("Test ID not found. Please create a test first.");
+  }
+  return testId;
 }
 
 function mapQuestionType(type) {
@@ -102,10 +111,10 @@ async function loadTestData(testId) {
 }
 
 function populateTestData(testData, count) {
-  elements.testTitle.textContent = testData.name || "Nimetu test";
+  elements.testTitle.textContent = `${testData.name || "Nimetu test"} (eelvaade)`;
   elements.testDuration.textContent = formatDuration(testData.timeLimit);
   elements.questionCount.textContent = count || "0";
-  document.title = testData.name || "Testi lahendamine";
+  document.title = testData.name || "Testi koostamise eelvaade";
 }
 
 function renderBlockIndicators() {
@@ -232,7 +241,8 @@ function startTimer(duration) {
 
 function endTest() {
   clearInterval(interval);
-  alert("Test lõpetatud! Aitäh vastamast.");
+  alert("Test koostatud!");
+  window.location.href = '/html/allTests.html';
 }
 
 function formatDuration(minutes) {

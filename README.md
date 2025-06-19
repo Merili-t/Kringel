@@ -1,7 +1,16 @@
-# Kringel 🥨
-<p align="right">
-  <img src="frontend/images/kringel.png" alt="Kringel" width="200">
-</p>
+<p align="right"> <img src="frontend/images/banner.png" alt="Kringel" width="800"> </p>
+
+# KRINGEL 🥨
+
+Oleme loomas rakendust, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärk on pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
+Testide sees peab olema võimalik:
+- lahendada keemiaülesandeid, sh reaktsioonivõrrandite tasakaalustamine,
+- visuaalselt kuvada keemilisi ahelaid,
+- kasutada spetsiaalset sümbolitega klaviatuuri füüsikaülesannete lahendamiseks.
+
+Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal test on nähtav) kui ka lahendamise ajale.
+
+##
 korralikult vormistatud lähtekood; NB! Lisa kindlasti GitHubi README.md:
 README.md fail peab sisaldama järgmist:
 - projekti või lahenduse (toote/teenuse) nime;
@@ -19,6 +28,14 @@ loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla)
 Vaata ka siit häid näiteid: https://github.com/matiassingers/awesome-readme
 
 ## Pildid
+
+<p float="left">
+  <img src="/frontend/images/koik_testid.png" width="200"/>
+  <img src="frontend/images/koik_vastused.png" width="200"/>
+  <img src="frontend/images/yks_vastus.png" width="200"/>
+  <img src="frontend/images/detailid.png" width="200"/>
+  <img src="frontend/images/koostamine.png" width="200"/>
+</p>
 
 ## Eesmärk
 Oleme loomas rakendust, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärk on pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
@@ -46,8 +63,6 @@ Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal
   *Kasutatud sisendi valideerimiseks (nt API päringud ja vormid), tagades andmete korrektsuse juba enne serverisse jõudmist.*
 
 
-## Autorid
-
 ## Paigaldusjuhised arenduseks
 1. Paigalda Docker (Paigaldusprotsess oleneb operatsioonisüsteemist — vt [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/))
 
@@ -66,4 +81,9 @@ Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal
    * Vajuta `Ctrl+C`
    * Seejärel käivita: `docker compose --profile (app_dev või app) down`
 
-## 
+## Autorid 🧑‍💻
+| [@triinu-klein](https://github.com/triinu-klein) | [@agetoomet](https://github.com/agetoomet) | [@coolysn](https://github.com/coolysn) | [@Merili-t](https://github.com/Merili-t) |[@HappySven06](https://github.com/HappySven06) |
+|:--:|:--:|:--:|:--:|:--:|  
+| <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/104273841?v=4" width="100"> | 
+| Triinu Klein | Age Toomet | Sophia Nikolajevski | Merili Tiik | Sven Laht |
+

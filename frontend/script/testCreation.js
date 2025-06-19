@@ -580,8 +580,8 @@ function collectQuizData() {
     optionRows.forEach(row => {
       const optTextElem = row.querySelector(".option-input");
       const optText = optTextElem ? optTextElem.value.trim() : "";
-      const isCorrect =
-        row.querySelector('input[name="correct-single"]:checked') !== null ? 1 : 0;
+      const radio = row.querySelector('input[name="correct-single"]');
+      const isCorrect = radio && radio.checked ? true : false;
       if (optText) {
         answerVariables.push({ answer: optText, correct: isCorrect });
       }
@@ -591,8 +591,8 @@ function collectQuizData() {
     optionRows.forEach(row => {
       const optTextElem = row.querySelector(".option-input");
       const optText = optTextElem ? optTextElem.value.trim() : "";
-      const isCorrect =
-        row.querySelector('input[name="correct-multiple"]:checked') !== null ? 1 : 0;
+      const checkbox = row.querySelector('input[name="correct-multiple"]');
+      const isCorrect = checkbox && checkbox.checked ? true : false;
       if (optText) {
         answerVariables.push({ answer: optText, correct: isCorrect });
       }
@@ -612,6 +612,13 @@ function collectQuizData() {
     orderNumber: orderNumber,
     answerVariables: answerVariables,
   };
+  const correctCount = answerVariables.filter(v => v.correct === true).length;
+  if (answerTypeCode === 0 && correctCount !== 1) {
+    throw new Error("Tüüp on ‘üks õige’, aga leidub " + correctCount + " märgitud.");
+  }
+  if (answerTypeCode === 1 && correctCount < 1) {
+    throw new Error("Tüüp on ‘mitu õiget’, aga pole ühtegi märgitud.");
+  }
   return finalData;
 }
 

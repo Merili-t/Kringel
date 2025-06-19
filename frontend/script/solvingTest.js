@@ -3,7 +3,7 @@ import createFetch from "./utils/createFetch";
 let testId = null;
 let blocks = [];
 let currentBlock = 0;
-let interval;
+let timerInterval = null;
 
 const elements = {
   loading: document.getElementById("loading"),
@@ -53,60 +53,45 @@ async function loadTestData(testId) {
     showLoading();
 
     const testData = await createFetch(`/test/${testId}`, "GET");
-    const blockRes = await createFetch(`/block/test/${testId}`, "GET");
+    const blockResponse = await createFetch(`/block/test/${testId}`, "GET");
 
-    let blockList = Array.isArray(blockRes.blocks)
-      ? blockRes.blocks
-      : Array.isArray(blockRes)
-        ? blockRes
+    const allBlockEntries = [];
+    const blockList = Array.isArray(blockResponse.blocks)
+      ? blockResponse.blocks
+      : [];
+
+    // Filter only blocks belonging to this test
+    const filteredBlocks = blockList.filter(block => String(block.testId) === String(testId));
+
+    for (const blockEntry of filteredBlocks) {
+      const questionResponse = await createFetch(`/question/block/${blockEntry.id}`, "GET");
+      const rawQuestions = Array.isArray(questionResponse.blockQuestions)
+        ? questionResponse.blockQuestions.filter(q => String(q.blockId) === String(blockEntry.id))
         : [];
 
-    const relevantBlocks = blockList.filter(b => String(b.testId) === String(testId));
-    const allBlocks = [];
-
-    for (const block of relevantBlocks) {
-      const qRes = await createFetch(`/question/block/${block.id}`, "GET");
-      let rawQs = Array.isArray(qRes.blockQuestions) ? qRes.blockQuestions : [];
-
-      rawQs = rawQs.filter(q => String(q.blockId) === String(block.id));
-
-      const qs = await Promise.all(rawQs.map(async q => {
-        let answerVariables = [];
-        if ((q.type === 0 || q.type === 1) && (!Array.isArray(q.answerVariables) || q.answerVariables.length === 0)) {
-          // Kui andmebaas ei anna kaasa answerVariables, proovi laadida eraldi
-          try {
-            const vRes = await createFetch(`/variant/question/${q.id}`, "GET");
-            if (Array.isArray(vRes)) {
-              answerVariables = vRes.map(av => ({
-                answer: av.answer,
-                correct: av.correct === true
-              }));
-            }
-          } catch (err) {
-            console.warn(`Ei saanud laadida vastusevariante küsimusele ${q.id}`);
-          }
-        } else if (Array.isArray(q.answerVariables)) {
-          answerVariables = q.answerVariables.map(av => ({
-            answer: av.answer,
-            correct: av.correct === true
-          }));
-        }
-
-        return {
-          id: q.id,
-          type: q.type,
-          text: q.description,
-          points: q.points ?? 0,
-          answerVariables
-        };
+      const mappedQuestions = rawQuestions.map(item => ({
+        id: item.id,
+        type: item.type,
+        text: item.description,
+        points: item.points ?? 0,
+        answerOptions: Array.isArray(item.answerVariables)
+          ? item.answerVariables.map(opt => ({
+              text: String(opt.answer),      // ensure it's a string
+              isCorrect: opt.correct === true
+            }))
+          : []
       }));
 
-      allBlocks.push({ order: block.block_number ?? 0, questions: qs });
+      allBlockEntries.push({
+        order: blockEntry.block_number ?? 0,
+        questions: mappedQuestions
+      });
     }
 
-    blocks = allBlocks
+    // Sort blocks by their order number and extract question arrays
+    blocks = allBlockEntries
       .sort((a, b) => a.order - b.order)
-      .map(b => b.questions);
+      .map(entry => entry.questions);
 
     populateTestData(testData, blocks.flat().length);
     renderBlocks();
@@ -117,281 +102,292 @@ async function loadTestData(testId) {
     }
 
     showMainContent();
-  } catch (e) {
-    console.error("[DEBUG] loadTestData error:", e);
+  } catch (error) {
+    console.error("[DEBUG] loadTestData error:", error);
     showError("Testi laadimine ebaõnnestus");
   }
 }
 
-function populateTestData(testData, count) {
+function populateTestData(testData, totalQuestions) {
   elements.testTitle.textContent = testData.name || "";
   elements.testDuration.textContent = formatDuration(testData.timeLimit);
-  elements.questionCount.textContent = count.toString();
+  elements.questionCount.textContent = String(totalQuestions);
   document.title = testData.name;
 }
 
 function renderBlocks() {
-  const c = elements.questionsWrapper;
-  c.innerHTML = "";
-  let num = 1;
+  const container = elements.questionsWrapper;
+  container.innerHTML = "";
+  let questionCounter = 1;
 
-  blocks.forEach((blk, idx) => {
-    const div = document.createElement("div");
-    div.className = "block";
-    if (idx === currentBlock) div.classList.add("active");
+  blocks.forEach((questionList, blockIndex) => {
+    const blockDiv = document.createElement("div");
+    blockDiv.className = "block";
+    if (blockIndex === currentBlock) blockDiv.classList.add("active");
 
-    const grid = document.createElement("div");
-    grid.className = "question-grid";
+    const gridDiv = document.createElement("div");
+    gridDiv.className = "question-grid";
 
-    blk.forEach(q => {
-      const wrap = document.createElement("div");
-      wrap.className = "question";
-      const card = document.createElement("div");
-      card.className = "question-card";
+    questionList.forEach(question => {
+      const wrapperDiv = document.createElement("div");
+      wrapperDiv.className = "question";
 
-      const header = `<div class="question-header"><strong>${num}. </strong>${q.text} <span class="points-badge">${q.points}p</span></div>`;
-      const hidId = `<input type="hidden" class="question-id" value="${q.id}"/>`;
-      const hidTyp = `<input type="hidden" class="question-type" value="${q.type}"/>`;
+      const cardDiv = document.createElement("div");
+      cardDiv.className = "question-card";
 
-      if (q.type === 0 || q.type === 1) {
-        // Ühe- või mitme valikvastusega küsimus
-        const inputType = q.type === 0 ? "radio" : "checkbox";
-        const nameAttr = `question-${q.id}`;
+      const headerHTML = `
+        <div class="question-header">
+          <strong>${questionCounter}. </strong>${question.text}
+          <span class="points-badge">${question.points}p</span>
+        </div>
+      `;
+      const hiddenIdInput = `<input type="hidden" class="question-id" value="${question.id}" />`;
+      const hiddenTypeInput = `<input type="hidden" class="question-type" value="${question.type}" />`;
 
-        const options = q.answerVariables || [];
-        const optionsHTML = options.length > 0
-          ? options.map((opt, idx) => `
-              <label style="display:block;margin:4px 0;">
-                <input type="${inputType}" name="${nameAttr}" value="${opt.answer}" data-index="${idx}">
-                ${opt.answer}
+      if (question.type === 0 || question.type === 1) {
+        const inputType = question.type === 0 ? "radio" : "checkbox";
+        const inputName = `question-${question.id}`;
+
+        const optionsHTML = question.answerOptions.length > 0
+          ? question.answerOptions.map((opt, idx) => `
+              <label style="display:block; margin:4px 0;">
+                <input
+                  type="${inputType}"
+                  name="${inputName}"
+                  value="${opt.text}"
+                  data-index="${idx}"
+                />
+                ${opt.text}
               </label>
             `).join("")
           : "<p><i>Vastusevariandid puuduvad</i></p>";
 
-        card.innerHTML = `${header}${hidId}${hidTyp}<div class="choice-options">${optionsHTML}</div>`;
+        cardDiv.innerHTML = `
+          ${headerHTML}
+          ${hiddenIdInput}
+          ${hiddenTypeInput}
+          <div class="choice-options">${optionsHTML}</div>
+        `;
 
-        const inputs = card.querySelectorAll(`input[type="${inputType}"]`);
+        const inputs = cardDiv.querySelectorAll(`input[type="${inputType}"]`);
         inputs.forEach(input => {
-          input.addEventListener("change", () => saveChoiceAnswer(card));
+          input.addEventListener("change", () => saveChoiceAnswer(cardDiv));
         });
 
-      } else if (q.type === 7) {
-        // Kalkulaator
-        card.innerHTML = `${header}${hidId}${hidTyp}
+      } else if (question.type === 7) {
+        cardDiv.innerHTML = `
+          ${headerHTML}
+          ${hiddenIdInput}
+          ${hiddenTypeInput}
           <iframe src="../html/calculator.html" class="calculator-iframe"></iframe>
-          <input type="hidden" class="calculator-answer"/>`;
+          <input type="hidden" class="calculator-answer" />
+        `;
 
-      } else if (q.type === 5) {
-        // Keemia tasakaalustamine
-        card.innerHTML = `${header}${hidId}${hidTyp}
+      } else if (question.type === 5) {
+        cardDiv.innerHTML = `
+          ${headerHTML}
+          ${hiddenIdInput}
+          ${hiddenTypeInput}
           <iframe src="../html/chemistryKeyboard.html" class="chemistry-iframe"></iframe>
-          <input type="hidden" class="chemistry-answer"/>`;
+          <input type="hidden" class="chemistry-answer" />
+        `;
 
       } else {
-        // Pikk või lühike tekst
-        card.innerHTML = `${header}${hidId}${hidTyp}
-          <textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>`;
-        const ta = card.querySelector("textarea");
-        ta.addEventListener("blur", () => saveSingleAnswer(card));
+        cardDiv.innerHTML = `
+          ${headerHTML}
+          ${hiddenIdInput}
+          ${hiddenTypeInput}
+          <textarea class="auto-save-input" placeholder="Pikk vastus..."></textarea>
+        `;
+        const textAreaElement = cardDiv.querySelector("textarea");
+        textAreaElement.addEventListener("blur", () => saveSingleAnswer(cardDiv));
       }
 
-      wrap.appendChild(card);
-      grid.appendChild(wrap);
-      num++;
+      wrapperDiv.appendChild(cardDiv);
+      gridDiv.appendChild(wrapperDiv);
+      questionCounter++;
     });
 
-    div.appendChild(grid);
-    c.appendChild(div);
+    blockDiv.appendChild(gridDiv);
+    container.appendChild(blockDiv);
   });
 
   renderBlockIndicators();
 }
 
 function renderBlockIndicators() {
-  const cont = document.getElementById("block-indicator");
-  cont.innerHTML = "";
-  blocks.forEach((_, i) => {
-    const circ = document.createElement("div");
-    circ.classList.add("circle");
-    if (i < currentBlock) circ.classList.add("completed");
-    else if (i === currentBlock) circ.classList.add("active");
-    circ.textContent = (i + 1).toString();
-    cont.appendChild(circ);
+  const indicatorContainer = document.getElementById("block-indicator");
+  indicatorContainer.innerHTML = "";
+  blocks.forEach((_, index) => {
+    const circleDiv = document.createElement("div");
+    circleDiv.classList.add("circle");
+    if (index < currentBlock) circleDiv.classList.add("completed");
+    if (index === currentBlock) circleDiv.classList.add("active");
+    circleDiv.textContent = String(index + 1);
+    indicatorContainer.appendChild(circleDiv);
   });
 }
 
 function updateProgressBar() {
-  const pct = Math.round(((currentBlock + 1) / blocks.length) * 100);
-  elements.progressBar.style.width = `${pct}%`;
-  elements.progressText.textContent = `${pct}%`;
+  const percentage = Math.round(((currentBlock + 1) / blocks.length) * 100);
+  elements.progressBar.style.width = `${percentage}%`;
+  elements.progressText.textContent = `${percentage}%`;
 }
 
 function moveToNextBlock() {
-  const all = document.querySelectorAll(".block");
-
-  if (currentBlock < all.length - 1) {
-    all[currentBlock].classList.remove("active");
+  const allBlocks = document.querySelectorAll(".block");
+  if (currentBlock < allBlocks.length - 1) {
+    allBlocks[currentBlock].classList.remove("active");
     currentBlock++;
-    all[currentBlock].classList.add("active");
-
+    allBlocks[currentBlock].classList.add("active");
     updateProgressBar();
     renderBlockIndicators();
-
   } else {
-    console.log("[DEBUG] Viimane plokk täidetud – lõpetan testi automaatselt");
     endTest();
   }
 }
 
-function startTimer(sec) {
-  let t = sec;
-  interval = setInterval(() => {
-    const m = String(Math.floor(t / 60)).padStart(2, '0');
-    const s = String(t % 60).padStart(2, '0');
-    elements.timer.textContent = `${m} : ${s}`;
-    if (--t < 0) {
-      clearInterval(interval);
+function startTimer(totalSeconds) {
+  let remainingSeconds = totalSeconds;
+  timerInterval = setInterval(() => {
+    const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
+    const seconds = String(remainingSeconds % 60).padStart(2, "0");
+    elements.timer.textContent = `${minutes} : ${seconds}`;
+    if (--remainingSeconds < 0) {
+      clearInterval(timerInterval);
       elements.nextButton.disabled = true;
     }
   }, 1000);
 }
 
 function endTest() {
-  clearInterval(interval);
+  clearInterval(timerInterval);
   alert("Test lõpetatud!");
 }
 
-function formatDuration(min) {
-  if (min < 60) return `${min} minutit`;
-  const h = Math.floor(min / 60), m = min % 60;
-  return m ? `${h} tund${h !== 1 ? 'i' : ''} ja ${m} minutit` : `${h} tund${h !== 1 ? 'i' : ''}`;
+function formatDuration(minutesTotal) {
+  if (minutesTotal < 60) return `${minutesTotal} minutit`;
+  const hours = Math.floor(minutesTotal / 60);
+  const minutes = minutesTotal % 60;
+  return minutes
+    ? `${hours} tund${hours !== 1 ? "i" : ""} ja ${minutes} minutit`
+    : `${hours} tund${hours !== 1 ? "i" : ""}`;
 }
 
 function showLoading() {
-  elements.loading.style.display = 'block';
-  elements.errorMessage.style.display = 'none';
-  elements.mainContent.style.display = 'none';
+  elements.loading.style.display = "block";
+  elements.errorMessage.style.display = "none";
+  elements.mainContent.style.display = "none";
 }
 
-function showError(msg) {
-  elements.loading.style.display = 'none';
-  elements.errorMessage.style.display = 'block';
-  elements.mainContent.style.display = 'none';
-  const p = elements.errorMessage.querySelector('p');
-  if (p) p.textContent = msg;
+function showError(message) {
+  elements.loading.style.display = "none";
+  elements.errorMessage.style.display = "block";
+  elements.mainContent.style.display = "none";
+  const paragraph = elements.errorMessage.querySelector("p");
+  if (paragraph) paragraph.textContent = message;
 }
 
 function showMainContent() {
-  elements.loading.style.display = 'none';
-  elements.errorMessage.style.display = 'none';
-  elements.mainContent.style.display = 'block';
+  elements.loading.style.display = "none";
+  elements.errorMessage.style.display = "none";
+  elements.mainContent.style.display = "block";
 }
 
-async function saveSingleAnswer(card) {
+// Keep track of last-saved answers to prevent duplicate saves
+const lastSavedAnswers = new Map();
+
+async function saveSingleAnswer(cardElement) {
   try {
-    const attemptId = sessionStorage.getItem('attemptId');
+    const attemptId = sessionStorage.getItem("attemptId");
     if (!attemptId) return;
 
-    let ans = '';
-    const ti = card.querySelector("input[type='text']");
-    if (ti) ans = ti.value.trim();
-    const ta = card.querySelector('textarea');
-    if (ta) ans = ta.value.trim();
-    const ci = card.querySelector('.calculator-answer');
-    if (ci) ans = ci.value.trim();
-    const chem = card.querySelector('.chemistry-answer');
-    if (chem) ans = chem.value.trim();
+    let answerText = "";
+    const textArea = cardElement.querySelector("textarea");
+    const calculatorInput = cardElement.querySelector(".calculator-answer");
+    const chemistryInput = cardElement.querySelector(".chemistry-answer");
 
-    const qId = card.querySelector('.question-id').value;
-    const qType = Number(card.querySelector('.question-type').value);
+    if (textArea) answerText = textArea.value.trim();
+    if (calculatorInput) answerText = calculatorInput.value.trim();
+    if (chemistryInput) answerText = chemistryInput.value.trim();
 
-    if (lastSavedAnswers.get(qId) === ans) return;
-    lastSavedAnswers.set(qId, ans);
+    const questionId = cardElement.querySelector(".question-id").value;
+    const questionType = Number(cardElement.querySelector(".question-type").value);
 
-    const fd = new FormData();
-    fd.append('attemptId', attemptId);
-    fd.append('questionId', qId);
-    fd.append('questionType', qType);
-    fd.append('answer', ans);
+    if (lastSavedAnswers.get(questionId) === answerText) return;
+    lastSavedAnswers.set(questionId, answerText);
 
-    await createFetch('/team/answer/upload', 'POST', fd);
-  } catch (e) {
-    console.error(e);
+    const formData = new FormData();
+    formData.append("attemptId", attemptId);
+    formData.append("questionId", questionId);
+    formData.append("questionType", questionType);
+    formData.append("answer", answerText);
+
+    await createFetch("/team/answer/upload", "POST", formData);
+  } catch (error) {
+    console.error("[ERROR] Saving single answer failed:", error);
   }
 }
 
-async function saveChoiceAnswer(card) {
+async function saveChoiceAnswer(cardElement) {
   try {
-    const attemptId = sessionStorage.getItem('attemptId');
+    const attemptId = sessionStorage.getItem("attemptId");
     if (!attemptId) return;
 
-    const qId = card.querySelector('.question-id').value;
-    const qType = Number(card.querySelector('.question-type').value);
+    const questionId = cardElement.querySelector(".question-id").value;
+    const questionType = Number(cardElement.querySelector(".question-type").value);
 
-    // Leia kõik valikud (checkboxid või raadionupud)
-    const selectedInputs = card.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
-    const selectedValues = Array.from(selectedInputs).map(input => input.value);
-    const ans = selectedValues.join("||"); 
+    const selectedInputs = cardElement.querySelectorAll(
+      'input[type="checkbox"]:checked, input[type="radio"]:checked'
+    );
+    const selectedValues = Array.from(selectedInputs).map(input => input.value.trim());
+    const answerText = selectedValues.join("||");
 
-    if (lastSavedAnswers.get(qId) === ans) return;
-    lastSavedAnswers.set(qId, ans);
+    if (lastSavedAnswers.get(questionId) === answerText) return;
+    lastSavedAnswers.set(questionId, answerText);
 
-    const fd = new FormData();
-    fd.append('attemptId', attemptId);
-    fd.append('questionId', qId);
-    fd.append('questionType', qType);
-    fd.append('answer', ans);
+    const formData = new FormData();
+    formData.append("attemptId", attemptId);
+    formData.append("questionId", questionId);
+    formData.append("questionType", questionType);
+    formData.append("answer", answerText);
 
-    await createFetch('/team/answer/upload', 'POST', fd);
-  } catch (e) {
-    console.error("Error saving choice answer:", e);
+    await createFetch("/team/answer/upload", "POST", formData);
+  } catch (error) {
+    console.error("[ERROR] Saving choice answer failed:", error);
   }
 }
 
+// Handle calculator and chemistry iframe messages
+window.addEventListener("message", event => {
+  if (event.data?.type === "CALCULATOR_ANSWER") {
+    const answerText = String(event.data.payload || "");
+    const cardElement = document
+      .querySelector(".block.active .calculator-iframe")
+      ?.closest(".question-card");
+    if (cardElement) {
+      const inputElement = cardElement.querySelector(".calculator-answer");
+      if (inputElement) {
+        inputElement.value = answerText;
+        saveSingleAnswer(cardElement);
+      }
+    }
+  }
 
-window.addEventListener("message", function(event) {
-  if (event.data && event.data.type === "CALCULATOR_ANSWER") {
-    const answer = String(event.data.payload || '');
-
-    // ainult aktiivse ploki sees oleva esimese kalkulaatori salvestamine
-    const activeBlock = document.querySelector(".block.active");
-    if (!activeBlock) return;
-
-    const iframe = activeBlock.querySelector(".calculator-iframe");
-    if (!iframe) return;
-
-    const card = iframe.closest(".question-card");
-    if (!card) return;
-
-    const hiddenInput = card.querySelector(".calculator-answer");
-    if (!hiddenInput) return;
-
-    hiddenInput.value = answer;
-    saveSingleAnswer(card);
+  if (event.data?.type === "chemistry-balance-answer") {
+    const answerText = String(event.data.value || "");
+    const cardElement = document
+      .querySelector(".block.active .chemistry-iframe")
+      ?.closest(".question-card");
+    if (cardElement) {
+      const inputElement = cardElement.querySelector(".chemistry-answer");
+      if (inputElement) {
+        inputElement.value = answerText;
+        saveSingleAnswer(cardElement);
+      }
+    }
   }
 });
 
-window.addEventListener("message", function(event) {
-  if (event.data && event.data.type === "chemistry-balance-answer") {
-    const answer = String(event.data.value || '');
-
-    const activeBlock = document.querySelector(".block.active");
-    if (!activeBlock) return;
-
-    const iframe = activeBlock.querySelector(".chemistry-iframe");
-    if (!iframe) return;
-
-    const card = iframe.closest(".question-card");
-    if (!card) return;
-
-    const hiddenInput = card.querySelector(".chemistry-answer");
-    if (!hiddenInput) return;
-
-    hiddenInput.value = answer;
-    saveSingleAnswer(card);
-  }
-});
-
-
-elements.nextButton.addEventListener('click', moveToNextBlock);
-elements.endButton.addEventListener('click', endTest);
+elements.nextButton.addEventListener("click", moveToNextBlock);
+elements.endButton.addEventListener("click", endTest);

@@ -33,7 +33,16 @@ Meie projekti eesmärk on välja töötada parem lahendus, mis võimaldab õpila
   <img src="frontend/images/admin.png" alt="kõik testid" width="400">
   <img src="frontend/images/new_account.png" alt="kõik vastused" width="400">
  </p>
+ 
+## Kasutusjuhend
 
+- 👨‍🎓 **Õpilase vaade (avaleht):**  
+  http://localhost:3000  
+  _Vaikimisi kuvatav kasutajaliides õpilasele._
+
+- 👩‍🏫 **Õpetaja / Administraatori vaade:**  
+  http://localhost:3000/html/login.html  
+  _Ligipääs haldusliidesele. Vajalik sisselogimine._
 
 ## Kasutatud tehnoloogiad ja nende versioonid ⚙️
 <img src="frontend/images/used_tech.png" alt="kõik testid">

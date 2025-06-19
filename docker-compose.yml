@@ -28,7 +28,6 @@ services:
       - '9000:9000'
       - '9001:9001'
     profiles:
-      - app
       - app_dev
       - app_db
 

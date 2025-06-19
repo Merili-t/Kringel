@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export default new Client({
-  endPoint: 'minio',
+  endPoint: '4.207.0.187',
   port: 9000,
   useSSL: false,
   accessKey: process.env.MINIO_ROOT_USER,

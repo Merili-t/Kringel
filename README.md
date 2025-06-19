@@ -90,7 +90,7 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
 ## Autorid 🧑‍💻
 | [@triinu-klein](https://github.com/triinu-klein) | [@agetoomet](https://github.com/agetoomet) | [@coolysn](https://github.com/coolysn) | [@Merili-t](https://github.com/Merili-t) |[@HappySven06](https://github.com/HappySven06) |
 |:--:|:--:|:--:|:--:|:--:|  
-| <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/104273841?v=4" width="100"> | 
+| <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://media.licdn.com/dms/image/v2/D4D03AQF33Xb8WF46jA/profile-displayphoto-shrink_200_200/B4DZYpbELxHIAY-/0/1744451683426?e=1755734400&v=beta&t=I8aXXGgW_MSuXxtTNcWejgG6FBvBlINSbqojZxbz03E" width="100"> | 
 | Triinu Klein | Age Toomet | Sophia Nikolajevski | Merili Tiik | Sven Laht |
 
 ## Instituut 🏛️

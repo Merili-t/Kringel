@@ -14,8 +14,8 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
 
 ## Instituut 🏛️
 
-**KRINGEL** on Tallinna Ülikooli teadusköögi poolt ellu kutsutud gümnaasiumiõpilastele suunatud teadus- ja gastronoomiavõistlus, mis ühendab loovalt loodusteadused ja toidukultuuri.  
-Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete ja maitseelamuste kaudu.
+**KRINGEL** on Tallinna Ülikooli teadusköögi poolt ellu kutsutud gümnaasiumiõpilastele suunatud teadus- ja gastronoomiavõistlus, mis ühendab loovalt teaduse ja toidukultuuri.  
+Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete ja maitseelamuste kaudu. Meie eesmärgiks oli luua testikeskkond eelvooru läbiviimiseks.
 
 ## Pildid 📷
 ### Õpetaja vaade

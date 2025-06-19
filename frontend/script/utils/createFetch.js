@@ -11,6 +11,10 @@ const createFetch = async (route, method, data) => {
 
   if (['GET', 'DELETE'].includes(method.toUpperCase()) && ['string', 'number', 'undefined'].includes(typeof data)) {
     url += route + (data !== undefined ? `/${data}` : '');
+
+    if(method.toUpperCase() === 'DELETE') {
+      fetchOptions.method = 'DELETE';
+    }
   }
   
   if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && data) {

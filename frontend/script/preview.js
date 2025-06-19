@@ -242,6 +242,7 @@ function startTimer(duration) {
 function endTest() {
   clearInterval(interval);
   alert("Test koostatud!");
+  window.location.href = '/html/allTests.html';
 }
 
 function formatDuration(minutes) {

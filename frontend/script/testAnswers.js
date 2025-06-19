@@ -1,12 +1,24 @@
 import createFetch from "./utils/createFetch";
 
+// Define logout function (stub for popup trigger)
+export function logout() {
+  // Replace this with your actual logout popup logic if needed.
+  alert("Logout triggered!");
+}
+
+// Define router initialization function (stub)
+export function initializeRouter() {
+  console.log("Router initialized.");
+  // Add your router initialization logic here.
+}
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("et-EE");
 }
 
 function toggleAllCheckboxes(source) {
-  document.querySelectorAll(".team-checkbox").forEach(cb => cb.checked = source.checked);
+  document.querySelectorAll(".team-checkbox").forEach(cb => (cb.checked = source.checked));
 }
 
 function navigateToTeamAnswers(teamId) {
@@ -28,15 +40,14 @@ async function renderTests() {
 
   container.innerHTML = "";
 
-  const { tests } = await createFetch('/test/tests', 'GET');
-  const { teams } = await createFetch('/team/teams', 'GET');
-  const { attempts } = await createFetch('/team/attempts', 'GET');
-  const { answers } = await createFetch('/team/answers', 'GET');
+  const { tests } = await createFetch("/test/tests", "GET");
+  const { teams } = await createFetch("/team/teams", "GET");
+  const { attempts } = await createFetch("/team/attempts", "GET");
+  const { answers } = await createFetch("/team/answers", "GET");
+  
 
   if (tests.length > 0 && tests[0].createdAt) {
-    tests.sort((a, b) =>
-      new Date(b.createdAt) - new Date(a.createdAt)
-    );
+    tests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
   const answerCountsByAttempt = {};
@@ -52,15 +63,28 @@ async function renderTests() {
   for (const test of tests) {
     const testAttempts = attempts.filter(a => a.testId === test.id);
     const testTeams = testAttempts.map(attempt => {
-      const team = teams.find(t => t.id === attempt.teamId);
+      const team = teams.find(t => {
+        return String(t.id) === String(attempt.teamId);
+      });      // Ensure type consistency by converting IDs to strings.
+      if (!team) {
+        console.warn(`Team not found for teamId: ${attempt.teamId}`);
+        return {
+          id: attempt.teamId,
+          name: "N/A",
+          attemptId: attempt.id,
+          answered_questions: answerCountsByAttempt[attempt.id] || 0,
+        };
+      }
       return {
         ...team,
         attemptId: attempt.id,
-        answered_questions: answerCountsByAttempt[attempt.id] || 0
+        answered_questions: answerCountsByAttempt[attempt.id] || 0,
+        // If actual property is teamName, override as follows:
+        name: team.name || team.teamName || "Unnamed Team"
       };
     });
 
-    // Test info eraldi
+    // Test info container
     const testInfo = document.createElement("div");
     testInfo.className = "infoContainer";
     testInfo.innerHTML = `
@@ -82,7 +106,7 @@ async function renderTests() {
       </div>
     `;
 
-    // Tiimide tabel eraldi
+    // Teams table container
     const teamTable = document.createElement("div");
     teamTable.className = "team-table-container";
     teamTable.innerHTML = `
@@ -96,7 +120,9 @@ async function renderTests() {
           </tr>
         </thead>
         <tbody>
-          ${testTeams.map(team => `
+          ${testTeams
+            .map(
+              team => `
             <tr>
               <td><input type="checkbox" class="team-checkbox"></td>
               <td style="cursor: pointer;" onclick="navigateToTeamAnswers('${team.id}')">${team.name}</td>
@@ -107,7 +133,9 @@ async function renderTests() {
                 </button>
               </td>
             </tr>
-          `).join("")}
+          `
+            )
+            .join("")}
         </tbody>
       </table>
     `;
@@ -117,12 +145,17 @@ async function renderTests() {
   }
 }
 
-// Käivita renderdamine kohe
+// Run renderTests on document ready
 document.addEventListener("DOMContentLoaded", () => {
   renderTests();
+
+  // Initialize router after DOM is ready.
+  initializeRouter();
 });
 
-// Optionally expose globally
+// Expose functions globally for inline HTML event handlers
 window.toggleAllCheckboxes = toggleAllCheckboxes;
 window.navigateToTeamAnswers = navigateToTeamAnswers;
 window.deleteTeam = deleteTeam;
+window.logout = logout;
+window.initializeRouter = initializeRouter;

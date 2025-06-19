@@ -228,16 +228,11 @@ function moveToNextBlock() {
     updateProgressBar();
     renderBlockIndicators();
 
-    if (currentBlock === all.length - 1) {
-      elements.nextButton.textContent = "Lõpeta";
-    }
   } else {
     console.log("[DEBUG] Viimane plokk täidetud – lõpetan testi automaatselt");
     endTest();
   }
 }
-
-
 
 function startTimer(sec) {
   let t = sec;

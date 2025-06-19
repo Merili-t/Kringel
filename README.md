@@ -11,12 +11,6 @@ Lõime rakenduse, mis võimaldab koostada ja lahendada teste kindlate kriteerium
 
 Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui ka lahendamise kestuse osas..
 
-
-## Instituut 🏛️
-
-**KRINGEL** on Tallinna Ülikooli teadusköögi poolt ellu kutsutud gümnaasiumiõpilastele suunatud teadus- ja gastronoomiavõistlus, mis ühendab loovalt teaduse ja toidukultuuri.  
-Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete ja maitseelamuste kaudu. Meie eesmärgiks oli luua testikeskkond eelvooru läbiviimiseks.
-
 ## Pildid 📷
 ### Õpetaja vaade
  <p align="left">
@@ -87,4 +81,7 @@ Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete j
 |:--:|:--:|:--:|:--:|:--:|  
 | <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/104273841?v=4" width="100"> | 
 | Triinu Klein | Age Toomet | Sophia Nikolajevski | Merili Tiik | Sven Laht |
+
+## Instituut 🏛️
+Projekt valmis Tallinna Ülikooli Digitehnoloogiate instituudi esimese kursuse tudengite poolt suvepraktika raames.
 

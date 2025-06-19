@@ -78,15 +78,15 @@ export const upload = async (req, res) => {
             try {
               insertAnswer(uuidv7(), questionId, answer.question, answer.answer);
             } catch (err) {
-              return res.satus(500).json({ error: 'Failed to answer variant' });
+              return res.status(500).json({ error: 'Failed to answer variant' });
             }
           });
         } catch (err) {
-          return res.satus(500).json({ error: 'Failed to create question' });
+          return res.status(500).json({ error: 'Failed to create question' });
         }
       });
     } catch (err) {
-      return res.satus(500).json({ error: 'Failed to create matrix question' });
+      return res.status(500).json({ error: 'Failed to create matrix question' });
     }
 
     return res.status(200).json({ message: 'Matrix question created', id: questionId });
@@ -94,7 +94,7 @@ export const upload = async (req, res) => {
     try {
       insertQuestion(questionId, blockId, null, answerType, orderNumber, question, points);
     } catch (err) {
-      return res.satus(500).json({ error: 'Failed to create question' });
+      return res.status(500).json({ error: 'Failed to create question' });
     }
 
     if(answerVariables){
@@ -102,7 +102,7 @@ export const upload = async (req, res) => {
         try {
           insertAnswer(uuidv7(), questionId, answer.question, answer.correct, answer.answer);
         } catch (err) {
-          return res.satus(500).json({ error: 'Failed to answer variant' });
+          return res.status(500).json({ error: 'Failed to answer variant' });
         }
       });
     }

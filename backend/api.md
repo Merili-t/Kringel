@@ -351,7 +351,7 @@ The `answerVariables` is optional.
   "question": "This is a matrix question",
   "points": 10,
   "answerType": 3,
-  "orederNumber": 2,
+  "orderNumber": 2,
   "answerVariables": [
     {
       "blockId": "uuid-v7-string",

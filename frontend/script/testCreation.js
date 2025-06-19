@@ -1873,7 +1873,7 @@ document.getElementById("add-question-option").addEventListener("click", () => {
 // --- "Lisa plokk" functionality ---
 document.getElementById("add-block").addEventListener("click", async () => {
   try {
-    const currentBlockNumber = getBlockNumber();
+    let currentBlockNumber = getBlockNumber();
     const testId = getCurrentTestId();
     const payload = { testId, blockNumber: currentBlockNumber };
 
@@ -1891,6 +1891,8 @@ document.getElementById("add-block").addEventListener("click", async () => {
 
     // Increment the block number for the next time
     incrementBlockNumber();
+
+    currentBlockNumber = sessionStorage.getItem("blockNumber")
 
     // Reset the question order for the new block
     resetQuestionOrder();

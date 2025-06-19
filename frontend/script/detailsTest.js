@@ -55,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
         
         sessionStorage.setItem("testId", result.testId || result.id);
         sessionStorage.setItem("blockId", result.blockId);
+        sessionStorage.setItem("blockNumber", 1);
+
         alert("Test edukalt loodud!");
         form.reset();
 

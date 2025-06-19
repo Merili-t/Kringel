@@ -78,15 +78,15 @@ export const upload = async (req, res) => {
             try {
               insertAnswer(uuidv7(), questionId, answer.question, answer.answer);
             } catch (err) {
-              return res.satus(500).json({ error: 'Failed to answer variant' });
+              return res.status(500).json({ error: 'Failed to answer variant' });
             }
           });
         } catch (err) {
-          return res.satus(500).json({ error: 'Failed to create question' });
+          return res.status(500).json({ error: 'Failed to create question' });
         }
       });
     } catch (err) {
-      return res.satus(500).json({ error: 'Failed to create matrix question' });
+      return res.status(500).json({ error: 'Failed to create matrix question' });
     }
 
     return res.status(200).json({ message: 'Matrix question created', id: questionId });
@@ -94,7 +94,7 @@ export const upload = async (req, res) => {
     try {
       insertQuestion(questionId, blockId, null, answerType, orderNumber, question, points);
     } catch (err) {
-      return res.satus(500).json({ error: 'Failed to create question' });
+      return res.status(500).json({ error: 'Failed to create question' });
     }
 
     if(answerVariables){
@@ -102,7 +102,7 @@ export const upload = async (req, res) => {
         try {
           insertAnswer(uuidv7(), questionId, answer.question, answer.correct, answer.answer);
         } catch (err) {
-          return res.satus(500).json({ error: 'Failed to answer variant' });
+          return res.status(500).json({ error: 'Failed to answer variant' });
         }
       });
     }
@@ -124,10 +124,25 @@ export const getByBlockId = async (req, res) => {
   const blockId = result.data;
 
   try {
-    const blockQuestions = await db
+    let blockQuestions = await db
       .select()
       .from(questionModel)
-      .where(questionModel.blockId, blockId);
+      .where(eq(questionModel.blockId, blockId));
+
+    try {
+      blockQuestions = await Promise.all(
+        blockQuestions.map(async question => {
+          const answerVariables = await db
+            .select()
+            .from(answerVariant)
+            .where(eq(answerVariant.questionId, question.id));
+
+          return { ...question, answerVariables };
+        })
+      );
+    } catch (err) {
+      return res.status(500).json({ error: 'Failed to get question variables' });
+    }
 
     return res.status(200).json({ blockQuestions });
   } catch (err) {
@@ -149,9 +164,19 @@ export const getByQuestionId = async (req, res) => {
   const questionId = result.data;
 
   try {
-    const question = await db.select().from(questionModel).where(eq(questionModel.id, questionId));
+    let question = await db.select().from(questionModel).where(eq(questionModel.id, questionId));
+    question = question[0];
 
-    return res.status(200).json(question[0]);
+    try {
+      const answerVariables = await db.select().from(answerVariant).where(eq(answerVariant.questionId, question.id));
+
+      question.answerVariables = answerVariables;
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Failed to get question variables' });
+    }
+
+    return res.status(200).json(question);
   } catch (err) {
     return res.status(500).json({ error: 'Failed to get question' });
   }

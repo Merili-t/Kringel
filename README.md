@@ -2,53 +2,57 @@
 
 # KRINGEL 🥨
 
-Oleme loomas rakendust, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärk on pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
-Testide sees peab olema võimalik:
-- lahendada keemiaülesandeid, sh reaktsioonivõrrandite tasakaalustamine,
+Lõime rakenduse, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärgiks oli pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
+
+**Testide sees oli võimalik:**
+- lahendada keemiaülesandeid, sh tasakaalustada reaktsioonivõrrandeid,
 - visuaalselt kuvada keemilisi ahelaid,
 - kasutada spetsiaalset sümbolitega klaviatuuri füüsikaülesannete lahendamiseks.
 
-Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal test on nähtav) kui ka lahendamise ajale.
+Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui ka lahendamise kestuse osas..
 
-##
-korralikult vormistatud lähtekood; NB! Lisa kindlasti GitHubi README.md:
-README.md fail peab sisaldama järgmist:
-- projekti või lahenduse (toote/teenuse) nime;
-- ekraanipilti või eraldi loodud pilti lahendusest – ekraanipilt peab olema samas repos, et nad üks hetk ära ei
-kaoks (ära tee väga suuri pilte!);
-- eesmärki ja lühikirjeldust (3-4 lauset, mis probleemi rakendus lahendab);
-- viidet instituudile ja paar sõna sellest, mille raames projekt loodud (tehtud selle ja selle raames....);
-- kasutatud tehnoloogiad ja nende versioonid(!);
-- projekti autorite nimed;
-- selgeid paigaldusjuhiseid ja arenduskeskkonna ülesseadmise juhised, et kes iganes saaks selle
-vajadusel käima (näiteks andmebaasi tabelid jm info peaks olema teksti kujul, et saaks kopeerida, aga
-loomulikult ei saa suure andmebaasi loomise skript tervikuna README-failis olla), juhendi abil saab
-"toote" peale koodi allalaadimist sobilikus kohas käima panna;
-- viidet litsentsile ning litsentsifail oleks repositooriumis (soovitavalt MIT litsents).
-Vaata ka siit häid näiteid: https://github.com/matiassingers/awesome-readme
-
-## Pildid
-
+## Pildid 📷
+### Õpetaja vaade
+ <p align="left">
+  <img src="frontend/images/koik_testid.png" alt="kõik testid" width="400">
+  <img src="frontend/images/koik_vastused.png" alt="kõik vastused" width="400">
+  <img src="frontend/images/yks_vastus.png" alt="üks vastus" width="400">
+  <img src="frontend/images/detailid.png" alt="detailid" width="400">
+  <img src="frontend/images/koostamine.png" alt="testi koostamine" width="400">
+ </p>
+ 
+ ### Õpilase vaade
 <p float="left">
-  <img src="/frontend/images/koik_testid.png" width="200"/>
-  <img src="frontend/images/koik_vastused.png" width="200"/>
-  <img src="frontend/images/yks_vastus.png" width="200"/>
-  <img src="frontend/images/detailid.png" width="200"/>
-  <img src="frontend/images/koostamine.png" width="200"/>
+  <img src="frontend/images/homepage.png" width="400" />
+  <img src="frontend/images/guide.png" width="400" />
+  <img src="frontend/images/contacts.png" width="400" />
+  <img src="frontend/images/solving.png" width="400" />
 </p>
 
-## Eesmärk
-Oleme loomas rakendust, mis võimaldab koostada ja lahendada teste kindlate kriteeriumite alusel. Eesmärk on pakkuda paindlikku ja funktsionaalset lahendust nii õpetajatele kui ka õppijatele.
-Testide sees peab olema võimalik:
-- lahendada keemiaülesandeid, sh reaktsioonivõrrandite tasakaalustamine,
-- visuaalselt kuvada keemilisi ahelaid,
-- kasutada spetsiaalset sümbolitega klaviatuuri füüsikaülesannete lahendamiseks.
 
-Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal test on nähtav) kui ka lahendamise ajale.
+ ### Admini vaade
+<p align="left">
+  <img src="frontend/images/admin.png" alt="kõik testid" width="400">
+  <img src="frontend/images/new_account.png" alt="kõik vastused" width="400">
+ </p>
 
-## Instituut
 
-## Kasutatud tehnoloogiad ja nende versioonid
+## Töötava tarkvara link🚀
+
+
+## Kasutusjuhend
+
+- 👨‍🎓 **Õpilase vaade (avaleht):**  
+  http://localhost:3000  
+  _Vaikimisi kuvatav kasutajaliides õpilasele._
+
+- 👩‍🏫 **Õpetaja / Administraatori vaade:**  
+  http://localhost:3000/html/login.html  
+  _Ligipääs haldusliidesele. Vajalik sisselogimine._
+
+## Kasutatud tehnoloogiad ja nende versioonid ⚙️
+<img src="frontend/images/used_tech.png" alt="kõik testid">
+
 - [Vite](https://vite.dev/) – Esipaneeli arendustööriist, mis võimaldab kiiret arendust ja optimeeritud build’e
   *Kasutatud projekti frontend’i kiireks arendamiseks ja build’imiseks.*
 - [Express.js](https://expressjs.com/) – Node.js-i veebiraamistik
@@ -63,7 +67,7 @@ Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal
   *Kasutatud sisendi valideerimiseks (nt API päringud ja vormid), tagades andmete korrektsuse juba enne serverisse jõudmist.*
 
 
-## Paigaldusjuhised arenduseks
+## Paigaldusjuhised arenduseks 🛠️
 1. Paigalda Docker (Paigaldusprotsess oleneb operatsioonisüsteemist — vt [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/))
 
 2. Klooni fail `.env.example` ja nimeta see ümber `.env`-iks, seejärel muuda väärtusi vastavalt vajadusele (vaikimisi väärtused on mõeldud kohaliku andmebaasi jaoks).
@@ -81,9 +85,14 @@ Lisaks rakenduvad testidele ajapiirangud – nii testi kättesaadavusele (millal
    * Vajuta `Ctrl+C`
    * Seejärel käivita: `docker compose --profile (app_dev või app) down`
 
+[Andmebaasi dokumentatsioon](./backend/src/database/database.md)
+
 ## Autorid 🧑‍💻
 | [@triinu-klein](https://github.com/triinu-klein) | [@agetoomet](https://github.com/agetoomet) | [@coolysn](https://github.com/coolysn) | [@Merili-t](https://github.com/Merili-t) |[@HappySven06](https://github.com/HappySven06) |
 |:--:|:--:|:--:|:--:|:--:|  
-| <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/104273841?v=4" width="100"> | 
+| <img src="https://avatars.githubusercontent.com/u/182907546?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494489?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494429?v=4" width="100"> | <img src="https://avatars.githubusercontent.com/u/182494521?v=4" width="100"> | <img src="https://media.licdn.com/dms/image/v2/D4D03AQF33Xb8WF46jA/profile-displayphoto-shrink_200_200/B4DZYpbELxHIAY-/0/1744451683426?e=1755734400&v=beta&t=I8aXXGgW_MSuXxtTNcWejgG6FBvBlINSbqojZxbz03E" width="100"> | 
 | Triinu Klein | Age Toomet | Sophia Nikolajevski | Merili Tiik | Sven Laht |
+
+## Instituut 🏛️
+Projekt valmis Tallinna Ülikooli Digitehnoloogiate instituudi esimese kursuse tudengite poolt suvepraktika raames.
 

@@ -1,11 +1,5 @@
 import createFetch from "./utils/createFetch";
 
-// Define logout function (stub for popup trigger)
-export function logout() {
-  // Replace this with your actual logout popup logic if needed.
-  alert("Logout triggered!");
-}
-
 // Define router initialization function (stub)
 export function initializeRouter() {
   console.log("Router initialized.");
@@ -157,5 +151,4 @@ document.addEventListener("DOMContentLoaded", () => {
 window.toggleAllCheckboxes = toggleAllCheckboxes;
 window.navigateToTeamAnswers = navigateToTeamAnswers;
 window.deleteTeam = deleteTeam;
-window.logout = logout;
 window.initializeRouter = initializeRouter;

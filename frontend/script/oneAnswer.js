@@ -10,6 +10,23 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // Helper: fetch team info and update the heading.
+  async function updateTeamHeading(teamId, testName = null) {
+    try {
+      const teamData = await createFetch(`/team/team/${teamId}`, "GET");
+      console.log("Fetched teamData:", teamData);
+      // Check for both 'name' and 'teamName'
+      const teamName = teamData?.name || teamData?.teamName || "Tiimi nimi";
+      const teamNameElement = document.querySelector("#teamName h1");
+      if (teamNameElement) {
+        teamNameElement.textContent = testName ? `${teamName} - ${testName}` : teamName;
+      }
+    } catch (error) {
+      console.error("Error fetching team info:", error);
+      // Optionally leave default heading.
+    }
+  }
+
   async function loadAllTeamAnswers(teamId, attemptIdFromURL) {
     try {
       const { answers } = await createFetch("/team/answers", "GET");
@@ -18,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let teamAnswers;
       if (attemptIdFromURL) {
-        // If a specific attemptId is provided, use only its answers.
+        // Use the provided attemptId.
         teamAnswers = answers.filter(answer => String(answer.attemptId) === String(attemptIdFromURL));
       } else {
-        // Otherwise, include answers from every attempt that belongs to this team.
+        // Include all answers from attempts belonging to this team.
         teamAnswers = answers.filter(answer => {
           const att = attempts.find(a => a.id === answer.attemptId);
           return att && String(att.teamId) === String(teamId);
@@ -36,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Determine which attempt to use for test info.
+      // Determine an attempt for test info.
       let attemptForTest;
       if (attemptIdFromURL) {
         attemptForTest = attempts.find(a => String(a.id) === String(attemptIdFromURL));
@@ -48,22 +65,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const test = tests.find(t => t.id === attemptForTest.testId);
       if (!test) throw new Error("Test not found");
 
-      // Sort answers by questionId (adjust if you have a dedicated ordering)
+      // Update the team heading.
+      await updateTeamHeading(teamId, test.name);
+
+      // Sort answers by questionId.
       const sortedAnswers = teamAnswers.sort((a, b) => {
         return a.questionId.localeCompare(b.questionId);
       });
 
-      // If the test is supposed to have more questions than the number of answers returned,
-      // we add placeholder (blank) answer objects for the missing questions.
+      // Add placeholders for missing answers if necessary.
       const totalQuestions = test.questions ? Number(test.questions) : sortedAnswers.length;
       if (sortedAnswers.length < totalQuestions) {
         const missingCount = totalQuestions - sortedAnswers.length;
         for (let i = 0; i < missingCount; i++) {
-          // Create a blank placeholder object.
           sortedAnswers.push({
             id: null,
             attemptId: attemptForTest.id,
-            questionId: `missing-${i}`, // a dummy value for identification
+            questionId: `missing-${i}`,
             answer: null,
             team_name: null,
             question_text: "(küsimus puudub või sellele pole vastatud)"
@@ -71,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Now, display the first answer (or placeholder) and create navigation buttons.
+      // Display the first answer (or placeholder) and create navigation buttons.
       await displayAnswer(sortedAnswers[0], teamId, test.name, 1, sortedAnswers.length);
       createNavigationButtons(sortedAnswers, 0, teamId, test.name);
     } catch (err) {
@@ -83,17 +101,16 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadSingleAnswer(teamId, questionId) {
     try {
       const { answers } = await createFetch("/team/answers", "GET");
-
       const answer = answers.find(item =>
         String(item.teamId) === teamId &&
         (String(item.questionId) === questionId || String(item.variantId) === questionId)
       );
-
       if (!answer) {
         document.querySelector(".answer-container").innerHTML = "<p>Vastus ei leitud.</p>";
         return;
       }
-
+      // Update team heading before displaying answer.
+      await updateTeamHeading(teamId);
       await displayAnswer(answer, teamId, null, 1, 1);
     } catch (err) {
       console.error("❌ Error loading answer:", err);
@@ -103,18 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function displayAnswer(answer, teamId, testName = null, questionNumber = 1, totalQuestions = 1) {
     try {
-      // Retrieve the team name from the answer or fetch it if missing.
+      // Retrieve team name (from answer.team_name if available, otherwise fetch team info).
       let teamName = answer.team_name;
       if (!teamName) {
         try {
           const teamData = await createFetch(`/team/team/${teamId}`, "GET");
-          teamName = teamData?.name || "Tiimi nimi";
+          console.log("Fetched teamData in displayAnswer:", teamData);
+          teamName = teamData?.name || teamData?.teamName || "Tiimi nimi";
         } catch {
           teamName = "Tiimi nimi";
         }
       }
-
-      // Retrieve the full question text.
+      // Retrieve question text.
       let questionText = answer.question_text;
       if (!questionText) {
         try {
@@ -124,21 +141,18 @@ document.addEventListener("DOMContentLoaded", () => {
           questionText = "Küsimus";
         }
       }
-
+      // Update the heading (redundant if already updated, but safe).
       const teamNameElement = document.querySelector("#teamName h1");
       if (teamNameElement) {
         teamNameElement.textContent = testName ? `${teamName} - ${testName}` : teamName;
       }
-
+      // Display question.
       const questionElement = document.querySelector(".question");
       if (questionElement) {
         questionElement.textContent = `${questionNumber}. ${questionText}`;
       }
-
       const answerText = document.getElementById("answer-text");
       const answerImg = document.getElementById("answer-image");
-
-      // Choose the answer value:
       let finalAnswer = answer.answer;
       if (!finalAnswer && answer.variantId) {
         try {
@@ -148,8 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
           console.warn("❗ Could not get variant:", err);
         }
       }
-
-      // Display the answer text or image.
       if (answerText && answerImg) {
         if (finalAnswer?.startsWith("data:image")) {
           answerImg.src = finalAnswer;
@@ -160,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
           answerText.textContent = finalAnswer ?? "(puudub)";
         }
       }
-
       const metaElement = document.querySelector(".meta");
       if (metaElement) {
         metaElement.textContent = `Punktid: ${answer.points ?? "hindamata"} | Küsimus ${questionNumber} / ${totalQuestions}`;
@@ -173,14 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function createNavigationButtons(answers, currentIndex, teamId, testName = null) {
     const container = document.querySelector(".answer-container");
     if (!container) return;
-
-    // Remove any existing navigation panel.
+    // Remove any existing navigation buttons.
     container.querySelector(".navigation-buttons")?.remove();
-
     const navDiv = document.createElement("div");
     navDiv.className = "navigation-buttons";
     navDiv.style.cssText = "margin-top: 20px; text-align: center;";
-
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "← Eelmine küsimus";
     prevBtn.disabled = currentIndex === 0;
@@ -190,7 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
         createNavigationButtons(answers, currentIndex - 1, teamId, testName);
       }
     };
-
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Järgmine küsimus →";
     nextBtn.disabled = currentIndex === answers.length - 1;
@@ -200,30 +207,25 @@ document.addEventListener("DOMContentLoaded", () => {
         createNavigationButtons(answers, currentIndex + 1, teamId, testName);
       }
     };
-
     const counter = document.createElement("span");
     counter.textContent = ` Küsimus ${currentIndex + 1} / ${answers.length} `;
     counter.style.margin = "0 15px";
     counter.style.fontWeight = "bold";
-
     navDiv.appendChild(prevBtn);
     navDiv.appendChild(counter);
     navDiv.appendChild(nextBtn);
-
     container.appendChild(navDiv);
   }
 
   const { teamId, questionId, attemptId } = getParams();
   console.log("Params:", { teamId, questionId, attemptId });
-
   if (!teamId) {
     document.querySelector(".answer-container").innerHTML = "<p>URL-is puudub tiimi ID.</p>";
     return;
   }
-
   if (questionId) {
     loadSingleAnswer(teamId, questionId);
   } else {
-    loadAllTeamAnswers(teamId, attemptId); // attemptId may be undefined—if so, we merge answers from all attempts.
+    loadAllTeamAnswers(teamId, attemptId);
   }
 });

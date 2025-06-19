@@ -80,6 +80,8 @@ Võistluse eesmärk on äratada noortes huvi teaduse vastu praktiliste katsete j
    * Vajuta `Ctrl+C`
    * Seejärel käivita: `docker compose --profile (app_dev või app) down`
 
+[Andmebaasi dokumentatsioon](./backend/src/database/database.md)
+
 ## Autorid 🧑‍💻
 | [@triinu-klein](https://github.com/triinu-klein) | [@agetoomet](https://github.com/agetoomet) | [@coolysn](https://github.com/coolysn) | [@Merili-t](https://github.com/Merili-t) |[@HappySven06](https://github.com/HappySven06) |
 |:--:|:--:|:--:|:--:|:--:|  

@@ -37,9 +37,6 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
  </p>
 
 
-## Töötava tarkvara link🚀
-
-
 ## Kasutusjuhend
 
 - 👨‍🎓 **Õpilase vaade (avaleht):**  

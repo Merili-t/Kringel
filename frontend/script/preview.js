@@ -233,9 +233,12 @@ function moveToNextBlock() {
     updateProgressBar();
     renderBlockIndicators();
 
-    if (currentBlock === allBlocks.length - 1) {
+    if (currentBlock === blocks.length - 1) {
       elements.nextButton.style.display = "none";
       elements.endButton.style.display = "inline-block";
+    } else {
+      elements.nextButton.style.display = "inline-block";
+      elements.endButton.style.display = "none";
     }
   }
 }
@@ -256,10 +259,18 @@ function startTimer(duration) {
   }, 1000);
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const endBtn = document.getElementById("end-button");
+
+  if (endBtn) {
+    endBtn.addEventListener("click", endTest);
+  }
+});
+
 function endTest() {
   clearInterval(interval);
   alert("Test koostatud!");
-  window.location.href = '/html/allTests.html';
+  window.location.href = "/html/allTests.html";
 }
 
 function formatDuration(minutes) {

@@ -71,9 +71,9 @@
 .meta {
     font-size: 0.85rem;
     color: #666;
-    padding: 1rem 1.5rem;
+    padding: 0.5rem 2rem;
     margin: 0;
-    background-color: #F6E6E6;
+    background-color: #fdf6f6;
     border: none;
     border-radius: 0;
 }

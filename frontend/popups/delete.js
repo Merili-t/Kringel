@@ -1,4 +1,4 @@
-import createFetch from "../script/utils/createFetch";
+import createFetch from "../script/utils/createFetch.js";
 
 // Listen for clicks on any element that triggers the delete popup.
 document.addEventListener("click", (e) => {

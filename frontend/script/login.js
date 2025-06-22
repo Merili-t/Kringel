@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch"; // Import your fetch utility
+import createFetch from "./utils/createFetch.js"; // Import your fetch utility
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("createForm");

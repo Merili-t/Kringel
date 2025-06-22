@@ -1,7 +1,8 @@
 // Do not toutch this code or you owe me a bottle of Jim Beam
 
 const createFetch = async (route, method, data) => {
-  let url = import.meta.env.VITE_API_URL;
+  // let url = import.meta.env.VITE_API_URL;
+  let url = 'https://ca-kringel-backend.greenrock-bc4cc8f3.northeurope.azurecontainerapps.io';
   let fetchOptions = {
     credentials: 'include',
   };

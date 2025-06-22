@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "./utils/createFetch.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('[data-popup="detailSave"]').forEach(button => {

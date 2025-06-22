@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch"; // Import createFetch
+import createFetch from "./utils/createFetch.js"; // Import createFetch
 
 if (!sessionStorage.getItem("testId")) {
   alert("Testi ID puudub. Palun loo test kõigepealt.");

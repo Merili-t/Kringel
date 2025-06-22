@@ -1,0 +1,6 @@
+FROM docker.io/bitnami/minio:2022
+
+WORKDIR /bitnami/minio
+
+EXPOSE 9000
+EXPOSE 9001

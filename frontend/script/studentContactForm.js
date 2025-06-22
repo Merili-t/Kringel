@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "./utils/createFetch.js";
 
 // Retrieve current test data from session storage.
 const currentTest = JSON.parse(sessionStorage.getItem("currentTest") || "0197887d-b4ec-715d-9f03-8aa2073a868a");

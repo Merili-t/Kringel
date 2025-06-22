@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "./utils/createFetch.js";
 
 // Define router initialization function (stub)
 export function initializeRouter() {

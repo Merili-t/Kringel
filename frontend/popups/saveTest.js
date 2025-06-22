@@ -1,4 +1,4 @@
-import createFetch from "../script/utils/createFetch"; 
+import createFetch from "../script/utils/createFetch.js"; 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("questionForm");
 

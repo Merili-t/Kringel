@@ -1,4 +1,4 @@
-import createFetch from "./utils/createFetch";
+import createFetch from "./utils/createFetch.js";
 
 let testId = null;
 let blocks = [];

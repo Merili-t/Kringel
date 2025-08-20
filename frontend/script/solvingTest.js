@@ -262,7 +262,17 @@ function startTimer(totalSeconds) {
 
 function endTest() {
   clearInterval(timerInterval);
-  alert("Test lõpetatud!");
+  document.getElementById("popup-title").textContent = "Lõpetatud";
+  document.getElementById("popup-message").textContent = "Suundumine avalehele.";
+
+  // Optional: manual confirmation (OK button)
+  document.getElementById("popup-actions").innerHTML = `
+    <button onclick="window.location.href='../index.html'">OK</button>
+  `;
+
+  // Show the popup
+  document.getElementById("overlay").style.display = "block";
+  document.getElementById("custom-popup").style.display = "block";
 }
 
 function formatDuration(minutesTotal) {

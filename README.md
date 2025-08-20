@@ -37,9 +37,6 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
  </p>
 
 
-## Töötava tarkvara link🚀
-
-
 ## Kasutusjuhend
 
 - 👨‍🎓 **Õpilase vaade (avaleht):**  
@@ -49,6 +46,9 @@ Lisaks kehtisid testidele ajapiirangud – nii testi nähtavuse ajavahemiku kui 
 - 👩‍🏫 **Õpetaja / Administraatori vaade:**  
   http://localhost:3000/html/login.html  
   _Ligipääs haldusliidesele. Vajalik sisselogimine._
+
+## Töökorras kringel
+https://ca-kringel-frontend.greenrock-bc4cc8f3.northeurope.azurecontainerapps.io/html/login.html
 
 ## Kasutatud tehnoloogiad ja nende versioonid ⚙️
 <img src="frontend/images/used_tech.png" alt="kõik testid">
